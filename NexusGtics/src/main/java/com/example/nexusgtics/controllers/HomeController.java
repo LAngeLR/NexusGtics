@@ -16,6 +16,9 @@ public class HomeController {
         return "Sistema/registro";
     }
 
-
+    @GetMapping("/olvidarcontra")
+    public String olvidarContra(){
+        return "Sistema/olvidarcontra";
+    }
 
 }

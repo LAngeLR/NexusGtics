@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="utf-8">
@@ -28,14 +28,19 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
-
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Updated: Aug 30 2023 with Bootstrap v5.3.1
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+  <style>
+    img{
+      width: 100%;
+    }
+    body {
+      background-size: cover;
+      background-repeat: no-repeat;
+      margin: 0;
+      height: 135vh;
+      --opacidad-negro: 0.5;
+      background-image: linear-gradient(rgba(0, 0, 0, var(--opacidad-negro)), rgba(0, 0, 0, var(--opacidad-negro))), url(https://images.unsplash.com/photo-1533664488202-6af66d26c44a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dGVsZWNvbXVuaWNhY2lvbnxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80);
+    }
+  </style>
 </head>
 
 <body>
@@ -48,74 +53,102 @@
           <div class="row justify-content-center">
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
-              <div class="d-flex justify-content-center py-4">
-                <a href="index.html" class="logo d-flex align-items-center w-auto">
-                  <img src="assets/img/logo.png" alt="">
-                  <span class="d-none d-lg-block">NiceAdmin</span>
-                </a>
-              </div><!-- End Logo -->
-
-              <div class="card mb-3">
-
+              <div class="card mb-3" style="background-color: #16262D79">
                 <div class="card-body">
-
-                  <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
-                    <p class="text-center small">Enter your personal details to create account</p>
+                  <div class="d-flex justify-content-center py-4">
+                    <a href="index.html" class="logo d-flex align-items-center w-auto">
+                      <img src="assets/img/logo.png" alt="">
+                      <span class="d-none d-lg-block">Nexus</span>
+                    </a>
+                  </div><!-- End Logo -->
+                  <div class="pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4" style="color:white">Registrar Usuario</h5>
+                    <p class="text-center small" style="color:white">Ingrese tus datos personaes para crear la cuenta</p>
                   </div>
 
                   <form class="row g-3 needs-validation" novalidate>
                     <div class="col-12">
-                      <label for="yourName" class="form-label">Your Name</label>
+                      <label for="yourName" class="form-label" style="color:white">Nombre:</label>
                       <input type="text" name="name" class="form-control" id="yourName" required>
-                      <div class="invalid-feedback">Please, enter your name!</div>
+                      <div class="invalid-feedback">Por favor, ingresa tu nombre</div>
                     </div>
 
                     <div class="col-12">
-                      <label for="yourEmail" class="form-label">Your Email</label>
+                      <label for="yourLastName" class="form-label" style="color:white">Apellido:</label>
+                      <input type="text" name="name" class="form-control" id="yourLastName" required>
+                      <div class="invalid-feedback">Por favor, ingresa tu nombre</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourDni" class="form-label" style="color:white">DNI:</label>
+                      <input type="number" name="name" class="form-control" id="yourDni" required>
+                      <div class="invalid-feedback">Por favor, ingresa tu DNI</div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourEmail" class="form-label" style="color:white">Correo:</label>
                       <input type="email" name="email" class="form-control" id="yourEmail" required>
-                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>
+                      <div class="invalid-feedback">Por favor ingresa un correo válido</div>
                     </div>
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Username</label>
+                      <label for="yourUsername" class="form-label" style="color:white">Empresa:</label>
                       <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend">@</span>
                         <input type="text" name="username" class="form-control" id="yourUsername" required>
-                        <div class="invalid-feedback">Please choose a username.</div>
-                      </div>
-                    </div>
-
-                    <div class="col-12">
-                      <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required>
-                      <div class="invalid-feedback">Please enter your password!</div>
-                    </div>
-
-                    <div class="col-12">
-                      <div class="form-check">
-                        <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
-                        <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
-                        <div class="invalid-feedback">You must agree before submitting.</div>
                       </div>
                     </div>
                     <div class="col-12">
-                      <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                        <button class="btn w-100" type="button" data-bs-toggle="modal" style="background-color: #C78728" data-bs-target="#exampleModal">Enviar</button>
+                      <!-- Modal -->
+                      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="exampleModalLabel">Datos recibidos con éxito</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              La central se contactará pronto contigo brindandote tu contraseña.
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                              <a th:href="@{/login}" type="button" class="btn btn-danger">Guardar</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div class="col-12">
-                      <p class="small mb-0">Already have an account? <a href="pages-login.html">Log in</a></p>
+                      <button class="btn w-100" type="button" data-bs-toggle="modal" style="background-color: #C78728" data-bs-target="#exampleModal">Enviar</button>
+                      <!-- Modal -->
+                      <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="exampleModalLabel2">ERROR</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              El correo ingresado no está registrado en el sistema
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                              <a th:href="@{/registro}" type="button" class="btn btn-danger">Regresar</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                    <center><div class="col-12">
+                      <p class="small mb-0" style="color:white">¿Ya tienes una cuenta? <a th:href="@{/login}">Ingresar</a></p>
+                    </div></center>
                   </form>
 
                 </div>
               </div>
 
-              <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+              <div class="credits" style="font-size: x-small;color:#dedede">
+                Contacto: ☎ | 2758403  ✉ | <a href="mailto:nexus.empresatcom@gmail.com" style="color:#dedede"> nexus.empresatcom@gmail.com</a>
               </div>
 
             </div>
