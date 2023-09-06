@@ -13,12 +13,14 @@ public class HomeController {
 
     @GetMapping("/registro")
     public String registro(){
-        return "Sistema/registro";
+        return "Sistema/sistema";
     }
 
 
-    @GetMapping("/plantilla")
-    public String login(){
-        return "login";
+    @GetMapping("/contacto")
+    public String contacto(){
+        return "Sistema/pages-contact";
     }
+
+
 }
