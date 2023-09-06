@@ -21,4 +21,8 @@ public class HomeController {
         return "Sistema/olvidarcontra";
     }
 
+    @GetMapping("/cerrarsesion")
+    public String cerrarsesion(){
+        return "Sistema/cerrarsesion";
+    }
 }
