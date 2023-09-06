@@ -2,20 +2,16 @@ package com.example.nexusgtics.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class HomeController {
+@RequestMapping("/admin")
+public class AdminController {
 
-    @GetMapping("/login")
+    @GetMapping("/")
     public String paginaPrincipal(){
-        return "Sistema/login";
+        return "Administrador/administrador";
     }
-
-    @GetMapping("/registro")
-    public String registro(){
-        return "Sistema/registro";
-    }
-
 
 
 }
