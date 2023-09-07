@@ -13,6 +13,11 @@ public class AdminController {
         return "Administrador/administrador";
     }
 
+    @GetMapping("/perfil")
+    public String perfilAdmin(){
+        return "Administrador/perfilAdmin";
+    }
+
     // GESTION DE USUARIOS
     @GetMapping("/listaUsuario")
     public String listaUsuario(){
