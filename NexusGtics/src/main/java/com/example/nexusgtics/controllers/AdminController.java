@@ -88,4 +88,22 @@ public class AdminController {
         return "Administrador/editarEquipo";
     }
 
+    //GESTION DE EMPRESAS
+    // GESTION DE EQUIPOS
+    @GetMapping("/listaEmpresa")
+    public String listaEmpresa(){
+        return "Administrador/listaEmpresa";
+    }
+
+    @GetMapping("/crearEmpresa")
+    public String crearEmpresa(){
+        return "Administrador/crearEmpresa";
+    }
+
+    @GetMapping("/verEmpresa")
+    public String verEmpresa(){
+        return "Administrador/vistaEmpresa";
+    }
+
+
 }
