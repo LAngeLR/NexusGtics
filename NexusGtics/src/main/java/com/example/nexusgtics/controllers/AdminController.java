@@ -66,4 +66,26 @@ public class AdminController {
         return "Administrador/mapaInventarioSitio";
     }
 
+
+    // GESTION DE EQUIPOS
+    @GetMapping("/listaEquipo")
+    public String listaEquipo(){
+        return "Administrador/listaEquipo";
+    }
+
+    @GetMapping("/crearEquipo")
+    public String crearEquipo(){
+        return "Administrador/crearEquipo";
+    }
+
+    @GetMapping("/verEquipo")
+    public String verEquipo(){
+        return "Administrador/vistaEquipo";
+    }
+
+    @GetMapping("/editarEquipo")
+    public String editarEquipo(){
+        return "Administrador/editarEquipo";
+    }
+
 }
