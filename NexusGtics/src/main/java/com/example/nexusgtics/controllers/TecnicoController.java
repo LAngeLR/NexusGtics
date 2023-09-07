@@ -55,5 +55,4 @@ public class TecnicoController {
         return "Tecnico/ticket_asignado";
     }
 
-
 }
