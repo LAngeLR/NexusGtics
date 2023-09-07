@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="87763c1f-498d-43b0-a8f3-d52395c50e0c" name="Changes" comment="">
+    <list default="true" id="87763c1f-498d-43b0-a8f3-d52395c50e0c" name="Changes" comment="base html superadmin 3">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/vistaUsuario2.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/administrador.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/administrador.html" afterDir="false" />
