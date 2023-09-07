@@ -13,5 +13,24 @@ public class AdminController {
         return "Administrador/administrador";
     }
 
+    @GetMapping("/listaUsuario")
+    public String listaUsuario(){
+        return "Administrador/listaUsuario";
+    }
+
+    @GetMapping("/crearUsuario")
+    public String crearUsuario(){
+        return "Administrador/crearUsuario";
+    }
+
+    @GetMapping("/verUsuario")
+    public String verUsuario(){
+        return "Administrador/vistaUsuario";
+    }
+
+    @GetMapping("/editarUsuario")
+    public String editarUsuario(){
+        return "Administrador/editarUsuario";
+    }
 
 }
