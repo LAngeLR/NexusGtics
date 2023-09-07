@@ -156,17 +156,17 @@
             </a>
             <ul id="tick-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="#">
+                    <a th:href="@{/analistaDespliegue/ticket}">
                         <i class="bi bi-circle"></i><span>Lista de Tickets</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a th:href="@{/analistaDespliegue/crearTicket}">
                         <i class="bi bi-circle"></i><span>Crear Ticket</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a th:href="@{/analistaDespliegue/dashboard}">
                         <i class="bi bi-circle"></i><span>Dashboard</span>
                     </a>
                 </li>
@@ -292,7 +292,7 @@
                                 <button type="submit" style="background-color: #82DEAC">Agregar</button>
                             </div>
                             <div class="col-md-12 text-center">
-                                <a class="btn btn-danger" th:href="@{/analistaOYM/verTicket}">Regresar</a></center>
+                                <a class="btn btn-danger" th:href="@{/analistaDespliegue/verTicket}">Regresar</a></center>
                             </div>
 
                         </div>

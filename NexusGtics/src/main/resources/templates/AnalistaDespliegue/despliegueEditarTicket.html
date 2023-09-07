@@ -156,17 +156,17 @@
             </a>
             <ul id="tick-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="#">
+                    <a th:href="@{/analistaDespliegue/ticket}">
                         <i class="bi bi-circle"></i><span>Lista de Tickets</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a th:href="@{/analistaDespliegue/crearTicket}">
                         <i class="bi bi-circle"></i><span>Crear Ticket</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a th:href="@{/analistaDespliegue/dashboard}">
                         <i class="bi bi-circle"></i><span>Dashboard</span>
                     </a>
                 </li>
@@ -205,7 +205,7 @@
         <div class="pagetitle">
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/analistaOYM/listaSitio}">Lista de sitios</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/listaSitio}">Lista de sitios</a></li>
                     <li class="breadcrumb-item active">Editar sitio</li>
                 </ol>
             </nav>
@@ -282,8 +282,8 @@
         <br>
 
         <div>
-            <a  type="submit" class="btn btn-outline-primary " th:href="@{/analistaOYM/ticket}">Aceptar</a>
-            <a  type="submit" class="btn btn-outline-danger " th:href="@{/analistaOYM/ticket}">Cancelar</a>
+            <a  type="submit" class="btn btn-outline-primary " th:href="@{/analistaDespliegue/ticket}">Aceptar</a>
+            <a  type="submit" class="btn btn-outline-danger " th:href="@{/analistaDespliegue/ticket}">Cancelar</a>
         </div>
 </main><!-- End #main -->
 
