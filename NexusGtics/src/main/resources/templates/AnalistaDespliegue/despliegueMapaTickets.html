@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Analista de Despliegue</title>
+    <title>Mapa de Tickets</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -28,20 +27,15 @@
 
     <!-- Template Main CSS File -->
     <link th:href="@{/assets/css/style.css}" rel="stylesheet">
-
-
-    <!-- =======================================================
-    * Template Name: NiceAdmin
-    * Updated: Aug 30 2023 with Bootstrap v5.3.1
-    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+        #mi_mapa{
+            min-height: 55rem;
+            min-width: 30rem;
+        }
+    </style>
 </head>
-
 <body>
-
-<!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
@@ -134,22 +128,22 @@
         </li><!-- End Tables Nav -->
 
         <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#sit-nav" data-bs-toggle="collapse" href="#">
-            <i class="bi bi-bar-chart"></i><span>Sitios</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="sit-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-                <a th:href="@{/analistaDespliegue/listaSitio}">
-                    <i class="bi bi-circle"></i><span>Lista de sitios</span>
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/analistaDespliegue/mapaSitios}">
-                    <i class="bi bi-circle"></i><span>Mapa de sitios</span>
-                </a>
-            </li>
-        </ul>
-    </li>
+            <a class="nav-link collapsed" data-bs-target="#sit-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-bar-chart"></i><span>Sitios</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="sit-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/analistaDespliegue/listaSitio}">
+                        <i class="bi bi-circle"></i><span>Lista de sitios</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/analistaDespliegue/mapaSitios}">
+                        <i class="bi bi-circle"></i><span>Mapa de sitios</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#tick-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-card-list"></i><span>Tickets</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -196,51 +190,91 @@
         </li>
     </ul>
 
-</aside><!-- End Sidebar-->
+</aside><!-- End Sidebar--><!-- End Sidebar-->
 
 <main id="main" class="main">
-    <div class="card text-center">
-        <img src="https://www.it2com.net/wp-content/uploads/2022/11/1560132.jpg" class="card-img" alt="fondo">
-        <div class="card-img-overlay" style="background-color: rgba(42,41,41,0.2)">
-            <br><br><br><br><br><br><br><br><br><br>
-            <h1 class="card-text" style="color:white"><b>¡Bienvenido Analista de Despliegue!</b></h1>
-            <br>
-            <p class="card-text" style="color: white">La velocidad de la comunicación depende de nuestra precisión en el análisis. <br> Somos los velocistas del mundo digital.</p>
-        </div>
-    </div>
     <div class="pagetitle">
-        <h1>Inicio</h1>
+        <h1>Mapa de Tickets</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/}">Home</a></li>
-                <li class="breadcrumb-item active">Inicio</li>
+                <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/}">Inicio</a></li>
+                <li class="breadcrumb-item active">Servicio</li>
+                <li class="breadcrumb-item active">Mapa de Tickets</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section">
+    <section class="section profile">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-xl-12">
                 <div class="card">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="https://static.vecteezy.com/system/resources/previews/017/221/641/original/character-people-using-laptop-png.png" class="img-fluid rounded-start" alt="foto">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">¿Qué puedes hacer en esta página?</h5>
-                                <p class="card-text">En el menú encontrarás las siguientes opciones <b>Tickets Asignados, Desplazamiento, Dashboard, Mapa</b>, además encontrarás más opciones a realizar dentro de estas páginas.</p>
-                            </div>
-                        </div>
+                    <center>
+                        <div class="card-body">
+                        <h5 class="card-title">Leyenda</h5>
+                        <table>
+                            <tr>
+                                <td><p style="color: red"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                </svg> <b style="color:black;" class="fw-light">Ubicación real</b></p></td>
+                                <td>
+                                    <p style="color: #F0E108"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                    </svg><b style="color:black;" class="fw-light"> Tickets abiertos</b></p>
+                                </td>
+                                <td>
+                                    <p style="color: rebeccapurple"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                    </svg><b style="color:black;" class="fw-light"> Lugar buscado</b></p>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
+                    </center>
                 </div>
             </div>
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <div id="mi_mapa"></div>
+                        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                        <script>
+                            let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
+                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            }).addTo(map);
+                            L.marker([-12.06802,-77.03462]).addTo(map).bindPopup('Mi búsqueda').openPopup();
+                            L.marker([-12.06224,-77.03417]).addTo(map).bindPopup('Ubicación real').openPopup();
+                            L.marker([-12.06086,-77.03600]).addTo(map).bindPopup('Abierto').openPopup();
+                            L.marker([-12.05177,-77.03461]).addTo(map).bindPopup('Abierto').openPopup();
+                            L.marker([-12.05238,-77.02725]).addTo(map).bindPopup('Abierto').openPopup();
+                            L.marker([-12.06176,-77.04292]).addTo(map).bindPopup('Abierto').openPopup();
+                            L.marker([-12.06180,-77.02531]).addTo(map).bindPopup('Abierto').openPopup();
+                        </script>
+                        <!-- MAPA -->
+
+                    </div>
+                </div>
 
             </div>
         </div>
     </section>
 
 </main><!-- End #main -->
+
+
+<!-- MAPA
+    <div id="mi_mapa"></div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+        <script>
+            let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            L.marker([-12.06802,-77.03462]).addTo(map)
+                .bindPopup('A pretty CSS popup.<br> Easily customizable.')
+                .openPopup();
+        </script>
+MAPA -->
 
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
@@ -264,6 +298,6 @@
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
 
-</body>
 
+</body>
 </html>

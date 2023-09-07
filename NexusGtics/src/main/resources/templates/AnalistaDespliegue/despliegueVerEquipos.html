@@ -45,9 +45,9 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a th:href="@{Administrador/administrador.html}" class="logo d-flex align-items-center">
+      <a th:href="@{/analistaDespliegue/}" class="logo d-flex align-items-center">
         <img th:src="@{/assets/img/logo.png}" alt="">
-        <span class="d-none d-lg-block">exus</span>
+        <span class="d-none d-lg-block">Nexus</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
@@ -88,14 +88,14 @@
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
               <h6>Kevin Anderson</h6>
-              <span>Admin</span>
+              <span>Analista de despliegue</span>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <a class="dropdown-item d-flex align-items-center" th:href="@{/analistaDespliegue/perfil}">
                 <i class="bi bi-person"></i>
                 <span>Mi perfil</span>
               </a>
@@ -128,7 +128,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/tecnico}">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/analistaDespliegue/}">
           <i class="bi bi-layout-text-window-reverse"></i><span>Inicio</span>
         </a>
       </li><!-- End Tables Nav -->
@@ -139,12 +139,12 @@
         </a>
         <ul id="sit-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="#">
+            <a th:href="@{/analistaDespliegue/listaSitio}">
               <i class="bi bi-circle"></i><span>Lista de sitios</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a th:href="@{/analistaDespliegue/mapaSitios}">
               <i class="bi bi-circle"></i><span>Mapa de sitios</span>
             </a>
           </li>
@@ -171,7 +171,7 @@
             </a>
           </li>
           <li>
-            <a href="#">
+            <a th:href="@{/analistaDespliegue/mapaTickets}">
               <i class="bi bi-circle"></i><span>Mapa de Tickets</span>
             </a>
           </li>
@@ -183,12 +183,12 @@
         </a>
         <ul id="map-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="#">
+            <a th:href="@{/analistaDespliegue/mapaSitios}">
               <i class="bi bi-circle"></i><span>Mapa de sitios</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a th:href="@{/analistaDespliegue/mapaTickets}">
               <i class="bi bi-circle"></i><span>Mapa de tickets</span>
             </a>
           </li>
@@ -196,7 +196,7 @@
       </li>
     </ul>
 
-  </aside><!-- End Sidebar-->
+  </aside><!-- End Sidebar--><!-- End Sidebar-->
 
 
   <main id="main" class="main">
@@ -206,7 +206,8 @@
       <div class="pagetitle">
         <nav>
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Gestión de equipos</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/}">Inicio</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/listaSitio}">Lista de Sitios</a></li>
             <li class="breadcrumb-item active">Visualizar equipo</li>
           </ol>
         </nav>
@@ -277,8 +278,8 @@ Escalable hasta 384 puertos</textarea>
         </div>
       </section>
       <br>
-      <a th:href="@{/admin/listaEquipo}" class="btn btn-outline-success">Agregar</a>
-      <a th:href="@{/admin/listaEquipo}" class="btn btn-outline-danger">Regresar</a>
+      <a th:href="@{/analistaDespliegue/listaEquipo}" class="btn btn-outline-success">Agregar</a>
+      <a th:href="@{/analistaDespliegue/listaEquipo}" class="btn btn-outline-danger">Regresar</a>
     </div>
   </main><!-- End #main -->
 

@@ -30,4 +30,16 @@ public class AnalistaDespController {
     public String verEquipo(){
         return "AnalistaDespliegue/despliegueVerEquipos";
     }
+    @GetMapping("/perfil")
+    public String perfilAD(){
+        return "AnalistaDespliegue/perfilAnalistaDespliegue";
+    }
+    @GetMapping("/mapaSitios")
+    public String mapaSitios(){
+        return "AnalistaDespliegue/despliegueMapaSitios";
+    }
+    @GetMapping("/mapaTickets")
+    public String mapaTickets(){
+        return "AnalistaDespliegue/despliegueMapaTickets";
+    }
 }

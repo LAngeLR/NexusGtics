@@ -45,9 +45,9 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a th:href="@{Administrador/administrador.html}" class="logo d-flex align-items-center">
+      <a th:href="@{/analistaDespliegue/}" class="logo d-flex align-items-center">
         <img th:src="@{/assets/img/logo.png}" alt="">
-        <span class="d-none d-lg-block">exus</span>
+        <span class="d-none d-lg-block">Nexus</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
@@ -88,14 +88,14 @@
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
               <h6>Kevin Anderson</h6>
-              <span>Admin</span>
+              <span>Analista de despliegue</span>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <a class="dropdown-item d-flex align-items-center" th:href="@{/analistaDespliegue/perfil}">
                 <i class="bi bi-person"></i>
                 <span>Mi perfil</span>
               </a>
@@ -128,7 +128,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/tecnico}">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/analistaDespliegue/}">
           <i class="bi bi-layout-text-window-reverse"></i><span>Inicio</span>
         </a>
       </li><!-- End Tables Nav -->
@@ -139,12 +139,12 @@
         </a>
         <ul id="sit-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="#">
+            <a th:href="@{/analistaDespliegue/listaSitio}">
               <i class="bi bi-circle"></i><span>Lista de sitios</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a th:href="@{/analistaDespliegue/mapaSitios}">
               <i class="bi bi-circle"></i><span>Mapa de sitios</span>
             </a>
           </li>
@@ -152,7 +152,7 @@
       </li>
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tick-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-bar-chart"></i><span>Tickets</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-card-list"></i><span>Tickets</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="tick-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
@@ -171,7 +171,7 @@
             </a>
           </li>
           <li>
-            <a href="#">
+            <a th:href="@{/analistaDespliegue/mapaTickets}">
               <i class="bi bi-circle"></i><span>Mapa de Tickets</span>
             </a>
           </li>
@@ -179,16 +179,16 @@
       </li>
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#map-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-bar-chart"></i><span>Mapas</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-gem"></i><span>Mapas</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="map-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="#">
+            <a th:href="@{/analistaDespliegue/mapaSitios}">
               <i class="bi bi-circle"></i><span>Mapa de sitios</span>
             </a>
           </li>
           <li>
-            <a href="#">
+            <a th:href="@{/analistaDespliegue/mapaTickets}">
               <i class="bi bi-circle"></i><span>Mapa de tickets</span>
             </a>
           </li>
@@ -204,7 +204,7 @@
       <div class="pagetitle">
         <nav>
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.html">Gestión de sitios</a></li>
+            <li class="breadcrumb-item"><a href="#">Sitios</a></li>
             <li class="breadcrumb-item active">Lista de sitios</li>
           </ol>
         </nav>
@@ -417,17 +417,10 @@
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
-    <div class="copyright">
-      &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+    <div class="credits" style="font-size: x-small;color:#5e5d5d">
+      Contacto: ☎ | 2758403  ✉ | <a href="mailto:nexus.empresatcom@gmail.com" style="color:#5e5d5d"> nexus.empresatcom@gmail.com</a>
     </div>
-    <div class="credits">
-      <!-- All the links in the footer should remain intact. -->
-      <!-- You can delete the links only if you purchased the pro version. -->
-      <!-- Licensing information: https://bootstrapmade.com/license/ -->
-      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-    </div>
-  </footer><!-- End Footer -->
+  </footer><!-- End Footer -->>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
