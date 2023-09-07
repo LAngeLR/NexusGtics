@@ -116,7 +116,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/tecnico}">
+            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/tecnico/}">
                 <i class="bi bi-layout-text-window-reverse"></i><span>Inicio</span>
             </a>
         </li><!-- End Tables Nav -->
@@ -127,27 +127,27 @@
             </a>
             <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="#">
+                    <a th:href="@{/tecnico/comentarios}">
                         <i class="bi bi-circle"></i><span>Comentarios</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a th:href="@{/tecnico/desplazamiento}">
                         <i class="bi bi-circle"></i><span>Desplazamiento</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a th:href="@{/tecnico/dashboard}">
                         <i class="bi bi-circle"></i><span>Mi Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a th:href="@{/tecnico/ticketasignado}">
                         <i class="bi bi-circle"></i><span>Tickets Asignados</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a th:href="@{/tecnico/mapa}">
                         <i class="bi bi-circle"></i><span>Ver Mapa</span>
                     </a>
                 </li>
