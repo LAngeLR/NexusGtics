@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="87763c1f-498d-43b0-a8f3-d52395c50e0c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/SuperadminController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/crearAdministrador.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/editarAdministrador.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/listaUsuario.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="87763c1f-498d-43b0-a8f3-d52395c50e0c" name="Changes" comment="base html superadmin">
+      <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/vistaUsuario.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/superadmin.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/superadmin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/listaUsuario.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/listaUsuario.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,8 +73,16 @@
       <option name="presentableId" value="Default" />
       <updated>1694107493424</updated>
       <workItem from="1694107494556" duration="760000" />
-      <workItem from="1694108271650" duration="7933000" />
+      <workItem from="1694108271650" duration="9181000" />
     </task>
+    <task id="LOCAL-00001" summary="base html superadmin">
+      <created>1694123542661</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1694123542661</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -106,5 +110,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="base html superadmin" />
+    <option name="LAST_COMMIT_MESSAGE" value="base html superadmin" />
   </component>
 </project>
