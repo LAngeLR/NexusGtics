@@ -42,4 +42,35 @@ public class AnalistaDespController {
     public String mapaTickets(){
         return "AnalistaDespliegue/despliegueMapaTickets";
     }
+
+    @GetMapping("/ticket")
+    public String listaTicket(){
+        return "AnalistaDespliegue/despliegueListaTickets";
+    }
+
+    @GetMapping("/crearTicket")
+    public String crearTicket(){
+        return "AnalistaDespliegue/despliegueCrearTicket";
+    }
+
+    @GetMapping("/editarTicket")
+    public String editarTicket(){
+        return "AnalistaDespliegue/despliegueEditarTicket";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(){
+        return "AnalistaDespliegue/despliegueDashboard";
+    }
+
+    @GetMapping("/verTicket")
+    public String verticket(){
+        return "AnalistaDespliegue/despliegueVistaTicket";
+    }
+
+
+    @GetMapping("/comentarios")
+    public String comentarios(){
+        return "AnalistaDespliegue/despliegueComentarios";
+    }
 }

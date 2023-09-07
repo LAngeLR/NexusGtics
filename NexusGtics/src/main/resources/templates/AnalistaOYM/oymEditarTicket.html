@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Mapa de Tickets</title>
+    <title>Nexus</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -27,15 +28,20 @@
 
     <!-- Template Main CSS File -->
     <link th:href="@{/assets/css/style.css}" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <style>
-        #mi_mapa{
-            min-height: 55rem;
-            min-width: 30rem;
-        }
-    </style>
+
+
+    <!-- =======================================================
+    * Template Name: NiceAdmin
+    * Updated: Aug 30 2023 with Bootstrap v5.3.1
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
 </head>
+
 <body>
+
+<!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
@@ -46,21 +52,21 @@
         <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
-    <div class="search-bar">
+   <!-- <div class="search-bar">
         <form class="search-form d-flex align-items-center" method="POST" action="#">
             <input type="text" name="query" placeholder="Search" title="Enter search keyword">
             <button type="submit" title="Search"><i class="bi bi-search"></i></button>
         </form>
-    </div><!-- End Search Bar -->
+    </div>End Search Bar -->
 
     <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">
 
-            <li class="nav-item d-block d-lg-none">
+            <!--<li class="nav-item d-block d-lg-none">
                 <a class="nav-link nav-icon search-bar-toggle " href="#">
                     <i class="bi bi-search"></i>
                 </a>
-            </li><!-- End Search Icon-->
+            </li> End Search Icon-->-->
 
 
             <li class="nav-item dropdown">
@@ -190,91 +196,96 @@
         </li>
     </ul>
 
-</aside><!-- End Sidebar--><!-- End Sidebar-->
+</aside><!-- End Sidebar-->
 
 <main id="main" class="main">
-    <div class="pagetitle">
-        <h1>Mapa de Tickets</h1>
-        <nav>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/analistaOYM/}">Inicio</a></li>
-                <li class="breadcrumb-item active">Servicio</li>
-                <li class="breadcrumb-item active">Mapa de Tickets</li>
-            </ol>
-        </nav>
-    </div><!-- End Page Title -->
+    <div class="container">
 
-    <section class="section profile">
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="card">
-                    <center>
-                        <div class="card-body">
-                        <h5 class="card-title">Leyenda</h5>
-                        <table>
-                            <tr>
-                                <td><p style="color: red"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                                </svg> <b style="color:black;" class="fw-light">Ubicación real</b></p></td>
-                                <td>
-                                    <p style="color: #F0E108"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                                    </svg><b style="color:black;" class="fw-light"> Tickets abiertos</b></p>
-                                </td>
-                                <td>
-                                    <p style="color: rebeccapurple"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                                    </svg><b style="color:black;" class="fw-light"> Lugar buscado</b></p>
-                                </td>
-                            </tr>
-                        </table>
+
+        <div class="pagetitle">
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/analistaOYM/listaSitio}">Lista de sitios</a></li>
+                    <li class="breadcrumb-item active">Editar sitio</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section dashboard">
+            <div class="row">
+                <div class="rounded p-5" style="background-color: #FFFFFF;">
+                    <div class="pagetitle">
+                        <h1 class="card-title">Editar ticket</h1>
                     </div>
-                    </center>
-                </div>
-            </div>
-            <div class="col-xl-12">
-                <div class="card">
-                    <div class="card-body pt-3">
-                        <div id="mi_mapa"></div>
-                        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                        <script>
-                            let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
-                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            }).addTo(map);
-                            L.marker([-12.06802,-77.03462]).addTo(map).bindPopup('Mi búsqueda').openPopup();
-                            L.marker([-12.06224,-77.03417]).addTo(map).bindPopup('Ubicación real').openPopup();
-                            L.marker([-12.06086,-77.03600]).addTo(map).bindPopup('Abierto').openPopup();
-                            L.marker([-12.05177,-77.03461]).addTo(map).bindPopup('Abierto').openPopup();
-                            L.marker([-12.05238,-77.02725]).addTo(map).bindPopup('Abierto').openPopup();
-                            L.marker([-12.06176,-77.04292]).addTo(map).bindPopup('Abierto').openPopup();
-                            L.marker([-12.06180,-77.02531]).addTo(map).bindPopup('Abierto').openPopup();
-                        </script>
-                        <!-- MAPA -->
+                    <form method="POST" action="" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
 
-                    </div>
+                                    <label for="nombre">Id de ticket:</label>
+                                    <input type="text" class="form-control" name="nombre" id="nombre" value="2" disabled>
+                                </div>
+
+                                <div class="mb-3">
+
+                                    <label for="nombre">Tipo de ticket:</label>
+                                    <input type="text" class="form-control" name="nombre" id="nombre" value="Mantenimiento" disabled>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="precio">Sitio Asignado</label>
+                                    <input type="text" class="form-control" name="precio" id="precio" value="Sitio 1">
+                                </div>
+
+
+
+                                <div class="mb-3">
+                                    <label for="precio">Estado</label>
+                                    <select name="consola" id="consola" class="form-control">
+                                        <option value="Cargo1">En proceso</option>
+                                        <option value="Cargo2">Finalizado</option>
+                                    </select>
+                                </div>
+
+
+                            </div>
+                            <br><br>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="nombre">Usuario Creador:</label>
+                                    <input type="text" class="form-control" name="nombre" id="nombre" value="Lima" disabled>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="descripcion">Empresa proveedora</label>
+                                    <input type="text" class="form-control" name="descripcion" id="descripcion" value="Empresa 1">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="precio">Fecha vencimiento</label>
+                                    <input type="text" class="form-control" name="precio" id="precio" value="Sitio 1">
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+
+                    </form>
                 </div>
+                <br><br>
+
 
             </div>
+        </section>
+        <br>
+
+        <div>
+            <a  type="submit" class="btn btn-outline-primary " th:href="@{/analistaOYM/ticket}">Aceptar</a>
+            <a  type="submit" class="btn btn-outline-danger " th:href="@{/analistaOYM/ticket}">Cancelar</a>
         </div>
-    </section>
-
 </main><!-- End #main -->
-
-
-<!-- MAPA
-    <div id="mi_mapa"></div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-        <script>
-            let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-            L.marker([-12.06802,-77.03462]).addTo(map)
-                .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-                .openPopup();
-        </script>
-MAPA -->
 
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
@@ -298,6 +309,6 @@ MAPA -->
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
 
-
 </body>
+
 </html>

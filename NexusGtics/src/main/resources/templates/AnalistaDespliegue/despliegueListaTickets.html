@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Mapa de Tickets</title>
+    <title>Analista de Despliegue</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -27,19 +28,24 @@
 
     <!-- Template Main CSS File -->
     <link th:href="@{/assets/css/style.css}" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <style>
-        #mi_mapa{
-            min-height: 55rem;
-            min-width: 30rem;
-        }
-    </style>
+
+
+    <!-- =======================================================
+    * Template Name: NiceAdmin
+    * Updated: Aug 30 2023 with Bootstrap v5.3.1
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
 </head>
+
 <body>
+
+<!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-        <a th:href="@{/analistaOYM/}" class="logo d-flex align-items-center">
+        <a th:href="@{/analistaDespliegue/}" class="logo d-flex align-items-center">
             <img th:src="@{/assets/img/logo.png}" alt="">
             <span class="d-none d-lg-block">Nexus</span>
         </a>
@@ -82,14 +88,14 @@
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
                         <h6>Kevin Anderson</h6>
-                        <span>Analista de Mantenimiento</span>
+                        <span>Analista de despliegue</span>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" th:href="@{/analistaOYM/perfil}">
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/analistaDespliegue/perfil}">
                             <i class="bi bi-person"></i>
                             <span>Mi perfil</span>
                         </a>
@@ -122,7 +128,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/analistaOYM/}">
+            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/analistaDespliegue/}">
                 <i class="bi bi-layout-text-window-reverse"></i><span>Inicio</span>
             </a>
         </li><!-- End Tables Nav -->
@@ -133,12 +139,12 @@
             </a>
             <ul id="sit-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:href="@{/analistaOYM/listaSitio}">
+                    <a th:href="@{/analistaDespliegue/listaSitio}">
                         <i class="bi bi-circle"></i><span>Lista de sitios</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/analistaOYM/mapaSitios}">
+                    <a th:href="@{/analistaDespliegue/mapaSitios}">
                         <i class="bi bi-circle"></i><span>Mapa de sitios</span>
                     </a>
                 </li>
@@ -150,22 +156,22 @@
             </a>
             <ul id="tick-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:href="@{/analistaOYM/ticket}">
+                    <a href="#">
                         <i class="bi bi-circle"></i><span>Lista de Tickets</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/analistaOYM/crearTicket}">
+                    <a href="#">
                         <i class="bi bi-circle"></i><span>Crear Ticket</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/analistaOYM/dashboard}">
+                    <a href="#">
                         <i class="bi bi-circle"></i><span>Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/analistaOYM/mapaTickets}">
+                    <a th:href="@{/analistaDespliegue/mapaTickets}">
                         <i class="bi bi-circle"></i><span>Mapa de Tickets</span>
                     </a>
                 </li>
@@ -177,12 +183,12 @@
             </a>
             <ul id="map-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:href="@{/analistaOYM/mapaSitios}">
+                    <a th:href="@{/analistaDespliegue/mapaSitios}">
                         <i class="bi bi-circle"></i><span>Mapa de sitios</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/analistaOYM/mapaTickets}">
+                    <a th:href="@{/analistaDespliegue/mapaTickets}">
                         <i class="bi bi-circle"></i><span>Mapa de tickets</span>
                     </a>
                 </li>
@@ -190,67 +196,91 @@
         </li>
     </ul>
 
-</aside><!-- End Sidebar--><!-- End Sidebar-->
+</aside><!-- End Sidebar-->
+
 
 <main id="main" class="main">
+
     <div class="pagetitle">
-        <h1>Mapa de Tickets</h1>
+        <h1>Tabla de Tickets</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/analistaOYM/}">Inicio</a></li>
-                <li class="breadcrumb-item active">Servicio</li>
-                <li class="breadcrumb-item active">Mapa de Tickets</li>
+                <li class="breadcrumb-item"><a th:href="@{/analistaOYM/}">Home</a></li>
+                <li class="breadcrumb-item active">Tickets Asignados</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section profile">
+    <section class="section">
         <div class="row">
-            <div class="col-xl-12">
+            <div class="col-lg-12">
+
                 <div class="card">
-                    <center>
-                        <div class="card-body">
-                        <h5 class="card-title">Leyenda</h5>
-                        <table>
+                    <div class="card-body">
+                        <h5 class="card-title">Lista de tickets</h5>
+
+                        <!-- Table with stripped rows -->
+                        <table class="table datatable">
+                            <thead>
                             <tr>
-                                <td><p style="color: red"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                                </svg> <b style="color:black;" class="fw-light">Ubicación real</b></p></td>
-                                <td>
-                                    <p style="color: #F0E108"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                                    </svg><b style="color:black;" class="fw-light"> Tickets abiertos</b></p>
-                                </td>
-                                <td>
-                                    <p style="color: rebeccapurple"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                                    </svg><b style="color:black;" class="fw-light"> Lugar buscado</b></p>
-                                </td>
+                                <th scope="col">#</th>
+                                <th scope="col">Empresa</th>
+                                <th scope="col">Sitio asignado</th>
+                                <th scope="col">Ubicacion</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Editar</th>
+                                <th scope="col">Ver más</th>
                             </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Empresa 1</td>
+                                <td>Sitio 1</td>
+                                <td><center><a type="button" class="btn btn-primary btn-sm" th:href="@{/analistaOYM/mapaTickets}">Ubicacion</a></center></td>
+                                <td><span class="badge text-bg-info">Baja Prioridad</span></td>
+                                <td><center><a type="button" class="btn btn-primary btn-sm" th:href="@{/analistaOYM/editarTicket}">Editar</a></center></td>
+                                <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/analistaOYM/verTicket}">+</a></center></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Empresa 2</td>
+                                <td>Sitio 2</td>
+                                <td><center><a type="button" class="btn btn-primary btn-sm" th:href="@{/analistaOYM/mapaTickets}">Ubicacion</a></center></td>
+                                <td><span class="badge text-bg-info">Baja Prioridad</span></td>
+                                <td><center><a type="button" class="btn btn-primary btn-sm" th:href="@{/analistaOYM/eitarTicket}">Editar</a></center></td>
+                                <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/analistaOYM/verTicket}">+</a></center></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>Empresa 3</td>
+                                <td>Sitio 3</td>
+                                <td><center><a type="button" class="btn btn-primary btn-sm" th:href="@{/analistaOYM/mapaTickets}">Ubicacion</a></center></td>
+                                <td><span class="badge text-bg-info">Baja Prioridad</span></td>
+                                <td><center><a type="button" class="btn btn-primary btn-sm" th:href="@{/analistaOYM/editarTicket}">Editar</a></center></td>
+                                <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/analistaOYM/verTicket}">+</a></center></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>Empresa 4</td>
+                                <td>Sitio 4</td>
+                                <td><center><a type="button" class="btn btn-primary btn-sm" th:href="@{/analistaOYM/mapaTickets}">Ubicacion</a></center></td>
+                                <td><span class="badge text-bg-info">Baja Prioridad</span></td>
+                                <td><center><a type="button" class="btn btn-primary btn-sm" th:href="@{/analistaOYM/editarTicket}">Editar</a></center></td>
+                                <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/analistaOYM/verTicket}">+</a></center></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">5</th>
+                                <td>Empresa 5</td>
+                                <td>Sitio 5</td>
+                                <td><center><a type="button" class="btn btn-primary btn-sm" th:href="@{/analistaOYM/mapaTickets}">Ubicacion</a></center></td>
+                                <td><span class="badge text-bg-info">Baja Prioridad</span></td>
+                                <td><center><a type="button" class="btn btn-primary btn-sm" th:href="@{/analistaOYM/editarTicket}">Editar</a></center></td>
+                                <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/analistaOYM/verTicket}">+</a></center></td>
+                            </tr>
+                            </tbody>
                         </table>
-                    </div>
-                    </center>
-                </div>
-            </div>
-            <div class="col-xl-12">
-                <div class="card">
-                    <div class="card-body pt-3">
-                        <div id="mi_mapa"></div>
-                        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                        <script>
-                            let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
-                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            }).addTo(map);
-                            L.marker([-12.06802,-77.03462]).addTo(map).bindPopup('Mi búsqueda').openPopup();
-                            L.marker([-12.06224,-77.03417]).addTo(map).bindPopup('Ubicación real').openPopup();
-                            L.marker([-12.06086,-77.03600]).addTo(map).bindPopup('Abierto').openPopup();
-                            L.marker([-12.05177,-77.03461]).addTo(map).bindPopup('Abierto').openPopup();
-                            L.marker([-12.05238,-77.02725]).addTo(map).bindPopup('Abierto').openPopup();
-                            L.marker([-12.06176,-77.04292]).addTo(map).bindPopup('Abierto').openPopup();
-                            L.marker([-12.06180,-77.02531]).addTo(map).bindPopup('Abierto').openPopup();
-                        </script>
-                        <!-- MAPA -->
+                        <!-- End Table with stripped rows -->
 
                     </div>
                 </div>
@@ -261,21 +291,6 @@
 
 </main><!-- End #main -->
 
-
-<!-- MAPA
-    <div id="mi_mapa"></div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-        <script>
-            let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-            L.marker([-12.06802,-77.03462]).addTo(map)
-                .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-                .openPopup();
-        </script>
-MAPA -->
-
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
     <div class="credits" style="font-size: x-small;color:#5e5d5d">
@@ -284,6 +299,7 @@ MAPA -->
 </footer><!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
 
 <!-- Vendor JS Files -->
 <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
@@ -298,6 +314,6 @@ MAPA -->
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
 
-
 </body>
+
 </html>

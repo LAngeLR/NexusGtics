@@ -42,4 +42,41 @@ public class AnalistaOYMController {
     public String mapaTickets(){
         return "AnalistaOYM/oymMapaTickets";
     }
+
+    @GetMapping("/ticket")
+    public String listaTicket(){
+        return "AnalistaOYM/oymListaTickets";
+    }
+
+    @GetMapping("/crearTicket")
+    public String crearTicket(){
+        return "AnalistaOYM/oymCrearTicket";
+    }
+
+    @GetMapping("/editarTicket")
+    public String editarTicket(){
+        return "AnalistaOYM/oymEditarTicket";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(){
+        return "AnalistaOYM/oymDashboard";
+    }
+
+    @GetMapping("/verTicket")
+    public String verticket(){
+        return "AnalistaOYM/oymVistaTicket";
+    }
+
+
+    @GetMapping("/comentarios")
+    public String comentarios(){
+        return "AnalistaOYM/oymComentarios";
+    }
+
+
+
+
+
+
 }
