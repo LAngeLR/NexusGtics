@@ -8,104 +8,103 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @GetMapping("/")
+    @GetMapping({"/","","admin","administrador"})
     public String paginaPrincipal(){
         return "Administrador/administrador";
     }
 
-    @GetMapping("/perfil")
+    @GetMapping({"/perfil","perfilAdmin","perfiladmin"})
     public String perfilAdmin(){
         return "Administrador/perfilAdmin";
     }
 
     // GESTION DE USUARIOS
-    @GetMapping("/listaUsuario")
+    @GetMapping({"/listaUsuario","listausuario"})
     public String listaUsuario(){
         return "Administrador/listaUsuario";
     }
 
-    @GetMapping("/crearUsuario")
+    @GetMapping({"/crearUsuario","crearusuario"})
     public String crearUsuario(){
         return "Administrador/crearUsuario";
     }
 
-    @GetMapping("/verUsuario")
+    @GetMapping({"/verUsuario","verusuario"})
     public String verUsuario(){
         return "Administrador/vistaUsuario";
     }
 
-    @GetMapping("/editarUsuario")
+    @GetMapping({"/editarUsuario","editarusuario"})
     public String editarUsuario(){
         return "Administrador/editarUsuario";
     }
 
 
     // GESTION DE SITIOS
-    @GetMapping("/listaSitio")
+    @GetMapping({"/listaSitio","/listasitio"})
     public String listaSitio(){
         return "Administrador/listaSitio";
     }
 
-    @GetMapping("/crearSitio")
+    @GetMapping({"/crearSitio","/crearsitio"})
     public String crearSitio(){
         return "Administrador/crearSitio";
     }
 
-    @GetMapping("/verSitio")
+    @GetMapping({"/verSitio","/versitio"})
     public String verSitio(){
         return "Administrador/vistaSitio";
     }
 
-    @GetMapping("/editarSitio")
+    @GetMapping({"/editarSitio","/editarsitio"})
     public String editarSitio(){
         return "Administrador/editarSitio";
     }
 
-    @GetMapping("/ubicarSitio")
+    @GetMapping({"/ubicarSitio","/ubicarsitio"})
     public String ubicarSitio(){
         return "Administrador/ubicacionSitio";
     }
 
-    @GetMapping("/inventarioSitio")
+    @GetMapping({"/inventarioSitio","/inventariositio"})
     public String inventarioSitio(){
         return "Administrador/mapaInventarioSitio";
     }
 
 
     // GESTION DE EQUIPOS
-    @GetMapping("/listaEquipo")
+    @GetMapping({"/listaEquipo","/listaequipo"})
     public String listaEquipo(){
         return "Administrador/listaEquipo";
     }
 
-    @GetMapping("/crearEquipo")
+    @GetMapping({"/crearEquipo","/crearequipo"})
     public String crearEquipo(){
         return "Administrador/crearEquipo";
     }
 
-    @GetMapping("/verEquipo")
+    @GetMapping({"/verEquipo","/verequipo"})
     public String verEquipo(){
         return "Administrador/vistaEquipo";
     }
 
-    @GetMapping("/editarEquipo")
+    @GetMapping({"/editarEquipo","/editarequipo"})
     public String editarEquipo(){
         return "Administrador/editarEquipo";
     }
 
     //GESTION DE EMPRESAS
-    // GESTION DE EQUIPOS
-    @GetMapping("/listaEmpresa")
+    @GetMapping({"/listaEmpresa","/listaempresa"})
     public String listaEmpresa(){
         return "Administrador/listaEmpresa";
     }
 
-    @GetMapping("/crearEmpresa")
+    @GetMapping({"/crearEmpresa","/crearempresa"})
     public String crearEmpresa(){
         return "Administrador/crearEmpresa";
     }
 
-    @GetMapping("/verEmpresa")
+    @GetMapping({"/verEmpresa","/verempresa"})
     public String verEmpresa(){
         return "Administrador/vistaEmpresa";
     }

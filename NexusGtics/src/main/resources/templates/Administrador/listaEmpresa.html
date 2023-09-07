@@ -129,16 +129,16 @@
 
     <li class="nav-item">
       <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-layout-text-window-reverse"></i><span>Gestión de Empresas</span><i class="bi bi-chevron-down ms-auto"></i>
+        <i class="bi bi-layout-text-window-reverse"></i><span>Gestión de Usuarios</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
         <li>
-          <a href="#">
+          <a th:href="@{/admin/crearUsuario}">
             <i class="bi bi-circle"></i><span>Crear</span>
           </a>
         </li>
         <li>
-          <a href="#">
+          <a th:href="@{/admin/listaUsuario}">
             <i class="bi bi-circle"></i><span>Lista de Usuarios</span>
           </a>
         </li>
@@ -151,12 +151,12 @@
       </a>
       <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
         <li>
-          <a href="#">
+          <a th:href="@{/admin/crearEmpresa}">
             <i class="bi bi-circle"></i><span>Crear</span>
           </a>
         </li>
         <li>
-          <a href="#">
+          <a th:href="@{/admin/listaEmpresa}">
             <i class="bi bi-circle"></i><span>Lista de empresas</span>
           </a>
         </li>
@@ -169,12 +169,17 @@
       </a>
       <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
         <li>
-          <a href="icons-bootstrap.html">
+          <a th:href="@{/admin/crearSitio}">
+            <i class="bi bi-circle"></i><span>Crear</span>
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/admin/listaSitio}">
             <i class="bi bi-circle"></i><span>Lista de sitios</span>
           </a>
         </li>
         <li>
-          <a href="icons-remix.html">
+          <a th:href="@{/admin/inventarioSitio}">
             <i class="bi bi-circle"></i><span>Mapa de Inventario</span>
           </a>
         </li>
@@ -188,12 +193,12 @@
       </a>
       <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
         <li>
-          <a href="#">
+          <a th:href="@{/admin/crearEquipo}">
             <i class="bi bi-circle"></i><span>Crear</span>
           </a>
         </li>
         <li>
-          <a href="#">
+          <a th:href="@{/admin/listaEquipo}">
             <i class="bi bi-circle"></i><span>Lista de equipos</span>
           </a>
         </li>
