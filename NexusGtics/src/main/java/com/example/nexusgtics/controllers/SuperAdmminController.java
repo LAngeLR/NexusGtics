@@ -16,4 +16,8 @@ public class SuperAdmminController {
         return "Superadmin/perfilsuperadmin";
     }
 
+    @GetMapping("/verusuario")
+    public String verusuario(){
+        return "Superadmin/verusuario";
+    }
 }
