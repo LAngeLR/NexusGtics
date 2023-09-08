@@ -20,4 +20,20 @@ public class SuperAdmminController {
     public String verusuario(){
         return "Superadmin/verusuario";
     }
+
+    @GetMapping("/vermas")
+    public String vermas(){
+        return "Superadmin/vermas";
+    }
+
+    @GetMapping("/suspenderus")
+    public String suspenderusuario(){
+        return "Superadmin/suspenderus";
+    }
+
+    @GetMapping("/eliminadous")
+    public String usuarioeliminado(){
+        return "Superadmin/eliminadous";
+    }
+
 }
