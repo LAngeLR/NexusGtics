@@ -36,4 +36,9 @@ public class SuperAdmminController {
         return "Superadmin/eliminadous";
     }
 
+    @GetMapping("/crearus")
+    public String crearusuario(){
+        return "Superadmin/crearusuario";
+    }
+
 }

@@ -142,13 +142,12 @@
 
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Inicio</h1>
+        <h1>Crear Usuario</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/superadmin/}">Home</a></li>
                 <li class="breadcrumb-item active">Servicios</li>
-                <li class="breadcrumb-item active">Ver Usuarios</li>
-                <li class="breadcrumb-item active">Ver más</li>
+                <li class="breadcrumb-item active">Crear Usuario</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -159,40 +158,31 @@
 
                 <div class="card">
                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                        <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-                        <h2 style="color: #095444">Brandon Jacob</h2> <br>
+                        <img th:src="@{https://assets.stickpng.com/images/585e4beacb11b227491c3399.png}" alt="Profile" class="rounded-circle">
+                        <br>
                         <div class="pt-2">
                             <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
                             <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
-                        </div><br>
-                        <h3>Administrador</h3>
-                        <h3>DNI: 198273984</h3>
-                        <h3>Suspendido: NO</h3>
+                        </div>
                         <br>
-                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                             <a type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                Suspender
+                                Crear
                             </a>
                             <!-- Modal -->
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">¿Está seguro de suspender el usuario?</h1>
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Preciona Aceptar para crear el nuevo usuario</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <a type="button" class="btn btn-primary" th:href="@{/superadmin/suspenderus}">Aceptar</a>
+                                            <a type="button" class="btn btn-primary" th:href="@{/superadmin/verusuario}">Aceptar</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
-
-                            <a type="button" class="btn btn-danger" th:href="@{/superadmin/eliminadous}">Eliminar</a>
-                        </div>
                     </div>
                 </div>
 
@@ -204,43 +194,71 @@
                     <div class="card-body pt-3">
                         <!-- Bordered Tabs -->
                         <ul class="nav nav-tabs nav-tabs-bordered">
-
                             <li class="nav-item">
-                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">General</button>
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Editar Perfil</button>
                             </li>
                         </ul>
                         <div class="tab-content pt-2">
-                            <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                <h5 class="card-title" style="color: #095444">Usuario</h5>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">Nombre y apellidos</div>
-                                    <div class="col-lg-9 col-md-8">Sergio Sanchez</div>
-                                </div>
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">DNI</div>
-                                    <div class="col-lg-9 col-md-8">728963541</div>
-                                </div>
+                            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                                <form>
+                                    <div class="row mb-3">
+                                        <label class="col-md-4 col-lg-3 col-form-label">Foto de Perfil</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile">
+                                            <div class="pt-2">
+                                                <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
+                                                <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                <h5 class="card-title" style="color: #095444">Detalles del Perfil</h5>
+                                    <div class="row mb-3">
+                                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Nombre y apellidos</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="fullName" type="text" class="form-control" id="fullName" placeholder="Escribir nombre y apellidos completos">
+                                        </div>
+                                    </div>
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Correo</div>
-                                    <div class="col-lg-9 col-md-8">segiosanchez.nexus@gmail.com</div>
-                                </div>
+                                    <div class="row mb-3">
+                                        <label for="company" class="col-md-4 col-lg-3 col-form-label">DNI</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="dni" type="text" class="form-control" id="dni" placeholder="Ej. 72589631">
+                                        </div>
+                                    </div>
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Trabajo</div>
-                                    <div class="col-lg-9 col-md-8">Administrador</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Compañía</div>
-                                    <div class="col-lg-9 col-md-8">NEXUS</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Fecha de ingreso</div>
-                                    <div class="col-lg-9 col-md-8">22-07-2011</div>
-                                </div>
+                                    <div class="row mb-3">
+                                        <label for="company" class="col-md-4 col-lg-3 col-form-label">Compañia</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="company" type="text" class="form-control" id="company" placeholder="Ej. Nexus">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Trabajo</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="job" type="text" class="form-control" id="Job" placeholder="Ej. Administrador">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="Date" class="col-md-4 col-lg-3 col-form-label">Fecha de Ingreso</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="date" type="text" class="form-control" id="Date" placeholder="21-08-2023">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="Email" class="col-md-4 col-lg-3 col-form-label">Correo</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="email" type="email" class="form-control" id="Email" placeholder="Ej. luismed.lusseru@gmail.com">
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <a type="submit" class="btn btn-danger" th:href="@{/superadmin/verusuario}">Guardar cambios</a>
+                                    </div>
+                                </form><!-- End Profile Edit Form -->
 
                             </div>
 
