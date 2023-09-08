@@ -32,10 +32,10 @@
 </head>
 
 <body>
-<header id="header" class="header fixed-top d-flex align-items-center" style="background-color: #090B21">
+<header id="header" class="header fixed-top d-flex align-items-center" style="background-color: #005c4e">
 
     <div class="d-flex align-items-center justify-content-between">
-        <a th:href="@{/tecnico/}" class="logo d-flex align-items-center">
+        <a th:href="@{/superadmin/}" class="logo d-flex align-items-center">
             <img th:src="@{/assets/img/logo.png}" alt="">
             <span class="d-none d-lg-block">Nexus</span>
         </a>
@@ -76,15 +76,15 @@
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
-                        <h6>Luis Medina</h6>
-                        <span>Técnico</span>
+                        <h6>Carlos Yataco</h6>
+                        <span>SuperAdmin</span>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" th:href="@{/tecnico/perfiltecnico}">
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/superadmin/perfilsuperadmin}">
                             <i class="bi bi-person"></i>
                             <span>Mi perfil</span>
                         </a>
@@ -114,7 +114,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/tecnico/}">
+            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/superadmin/}">
                 <i class="bi bi-layout-text-window-reverse"></i><span>Inicio</span>
             </a>
         </li><!-- End Tables Nav -->
@@ -125,28 +125,13 @@
             </a>
             <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:href="@{/tecnico/comentarios}">
-                        <i class="bi bi-circle"></i><span>Comentarios</span>
+                    <a th:href="@{/superadmin/verusuario}">
+                        <i class="bi bi-circle"></i><span>Ver Usuario</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/tecnico/desplazamiento}">
-                        <i class="bi bi-circle"></i><span>Desplazamiento</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/tecnico/dashboard}">
-                        <i class="bi bi-circle"></i><span>Mi Dashboard</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/tecnico/ticketasignado}">
-                        <i class="bi bi-circle"></i><span>Tickets Asignados</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/tecnico/mapa}">
-                        <i class="bi bi-circle"></i><span>Ver Mapa</span>
+                    <a th:href="@{/superadmin/crearusuario}">
+                        <i class="bi bi-circle"></i><span>Crear Usuario</span>
                     </a>
                 </li>
             </ul>
@@ -157,19 +142,19 @@
 
 <main id="main" class="main">
     <div class="card text-center">
-        <img src="https://www.it2com.net/wp-content/uploads/2022/11/1560132.jpg" class="card-img" alt="fondo">
-        <div class="card-img-overlay" style="background-color: rgba(42,41,41,0.2)">
-            <br><br><br><br><br><br><br><br><br><br>
-            <h1 class="card-text" style="color:white"><b>¡Bienvenido Técnico!</b></h1>
+        <img src="data:image/jpeg;base64,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" class="card-img" alt="fondo">
+        <div class="card-img-overlay" style="background-color: rgba(42,41,41,0.5)">
             <br>
-            <p class="card-text" style="color: white">Nuestros técnicos son la columna vertebral de nuestra empresa, <br> manteniendo a todos conectados. ¡Gracias por tu dedicación!</p>
+            <h1 class="card-text" style="color:white"><b>¡Bienvenido SuperAdmin!</b></h1>
+            <br>
+            <p class="card-text" style="color: white">El jefe de telecomunicaciones es el capitán de<br> nuestro viaje hacia un mundo cada vez más conectado.</p>
         </div>
     </div>
     <div class="pagetitle">
         <h1>Inicio</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/tecnico/}">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/superadmin/}">Home</a></li>
                 <li class="breadcrumb-item active">Inicio</li>
             </ol>
         </nav>
@@ -181,12 +166,12 @@
                 <div class="card">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            <img src="https://static.vecteezy.com/system/resources/previews/017/221/641/original/character-people-using-laptop-png.png" class="img-fluid rounded-start" alt="foto">
+                            <img src="https://inbestiga.com/wp-content/uploads/2023/03/business-3d-black-businesswoman-in-brown-suit-waving-hello-gigapixel-art-scale-6_00x.png" class="img-fluid rounded-start" alt="foto">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
                                 <h5 class="card-title">¿Qué puedes hacer en esta página?</h5>
-                                <p class="card-text">En el menú encontrarás las siguientes opciones <b>Tickets Asignados, Desplazamiento, Dashboard, Mapa</b>, además encontrarás más opciones a realizar dentro de estas páginas.</p>
+                                <p class="card-text">En el menú encontrarás las siguientes opciones <b>Crear usuario, Ver usuario</b>, además encontrarás más opciones a realizar dentro de estas páginas.</p>
                             </div>
                         </div>
                     </div>
@@ -195,8 +180,8 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">#Mujeres en Red</h5>
-                        <p>Empoderamiento femenino impulsa la transformación de las telecomunicaciones. Hace 3 años, Movistar creó el programa “Mujeres en Red” para promover la participación de mujeres en la labor técnica de telecomunicaciones y vencer los estereotipos de género en el rubro.</p>
+                        <h5 class="card-title">#MTC verifica que antenas de telecomunicaciones no son nocivas</h5>
+                        <p>De acuerdo con la Dirección General de Fiscalizaciones y Sanciones en Comunicaciones del MTC, las mediciones de RNI realizadas durante los últimos 15 años han demostrado que en Perú no se ha superado el límite máximo permisible para los principales servicios de comunicaciones como son la radio, la televisión y la telefonía móvil.</p>
                     </div>
                 </div>
 
