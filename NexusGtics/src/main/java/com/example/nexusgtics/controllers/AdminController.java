@@ -10,7 +10,7 @@ public class AdminController {
 
     @GetMapping({"/","","admin","administrador"})
     public String paginaPrincipal(){
-        return "Administrador/administrador";
+        return "Administrador/listaUsuario";
     }
 
     @GetMapping({"/perfil","perfilAdmin","perfiladmin"})
