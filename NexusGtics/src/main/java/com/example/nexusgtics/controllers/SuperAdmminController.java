@@ -10,4 +10,10 @@ public class SuperAdmminController {
     public String paginaPrincipal(){
         return "Superadmin/superadmin";
     }
+
+    @GetMapping("/perfilsuperadmin")
+    public String perfilsuperadmin(){
+        return "Superadmin/perfilsuperadmin";
+    }
+
 }
