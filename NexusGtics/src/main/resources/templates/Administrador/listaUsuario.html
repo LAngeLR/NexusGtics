@@ -57,23 +57,30 @@
                     <td>Técnico</td>
                     <td>
                       <div class="d-flex justify-content-center align-items-center">
-                        <a th:href="@{/admin/editarUsuario}" class="btn btn-outline-primary me-2">Editar</a>
-                        <button type="button" class="btn btn-outline-danger me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button>
-                        <a th:href="@{/admin/verUsuario}" class="btn btn-outline-dark me-2">Visualizar</a>
-                        <!-- MODAL -->
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                              </div>
-                              <div class="modal-body">
-                                <h3>¿Está seguro de eliminar el usuario?</h3>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                              </div>
+                        <div class="dropdown">
+                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-plus-square"></i>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li><a th:href="@{/admin/editarUsuario}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
+                            <li><a th:href="@{/admin/verUsuario}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <!-- MODAL -->
+                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
+                            </div>
+                            <div class="modal-body">
+                              <h3>¿Está seguro de eliminar el usuario?</h3>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
                             </div>
                           </div>
                         </div>
@@ -89,23 +96,30 @@
                     <td>Analista de OyM</td>
                     <td>
                       <div class="d-flex justify-content-center align-items-center">
-                        <a th:href="@{/admin/editarUsuario}" class="btn btn-outline-primary me-2">Editar</a>
-                        <button type="button" class="btn btn-outline-danger me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button>
-                        <a th:href="@{/admin/verUsuario}" class="btn btn-outline-dark me-2">Visualizar</a>
-                        <!-- MODAL -->
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                              </div>
-                              <div class="modal-body">
-                                <h3>¿Está seguro de eliminar el usuario?</h3>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                              </div>
+                        <div class="dropdown">
+                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-plus-square"></i>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li><a th:href="@{/admin/editarUsuario}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
+                            <li><a th:href="@{/admin/verUsuario}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <!-- MODAL -->
+                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
+                            </div>
+                            <div class="modal-body">
+                              <h3>¿Está seguro de eliminar el usuario?</h3>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
                             </div>
                           </div>
                         </div>
@@ -121,23 +135,30 @@
                     <td>Analista de ingenieria</td>
                     <td>
                       <div class="d-flex justify-content-center align-items-center">
-                        <a th:href="@{/admin/editarUsuario}" class="btn btn-outline-primary me-2">Editar</a>
-                        <button type="button" class="btn btn-outline-danger me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button>
-                        <a th:href="@{/admin/verUsuario}" class="btn btn-outline-dark me-2">Visualizar</a>
-                        <!-- MODAL -->
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                              </div>
-                              <div class="modal-body">
-                                <h3>¿Está seguro de eliminar el usuario?</h3>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                              </div>
+                        <div class="dropdown">
+                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-plus-square"></i>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li><a th:href="@{/admin/editarUsuario}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
+                            <li><a th:href="@{/admin/verUsuario}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <!-- MODAL -->
+                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
+                            </div>
+                            <div class="modal-body">
+                              <h3>¿Está seguro de eliminar el usuario?</h3>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
                             </div>
                           </div>
                         </div>
@@ -153,23 +174,30 @@
                     <td>Técnico</td>
                     <td>
                       <div class="d-flex justify-content-center align-items-center">
-                        <a th:href="@{/admin/editarUsuario}" class="btn btn-outline-primary me-2">Editar</a>
-                        <button type="button" class="btn btn-outline-danger me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button>
-                        <a th:href="@{/admin/verUsuario}" class="btn btn-outline-dark me-2">Visualizar</a>
-                        <!-- MODAL -->
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                              </div>
-                              <div class="modal-body">
-                                <h3>¿Está seguro de eliminar el usuario?</h3>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                              </div>
+                        <div class="dropdown">
+                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-plus-square"></i>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li><a th:href="@{/admin/editarUsuario}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
+                            <li><a th:href="@{/admin/verUsuario}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <!-- MODAL -->
+                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
+                            </div>
+                            <div class="modal-body">
+                              <h3>¿Está seguro de eliminar el usuario?</h3>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
                             </div>
                           </div>
                         </div>
@@ -185,23 +213,30 @@
                     <td>Técnico</td>
                     <td>
                       <div class="d-flex justify-content-center align-items-center">
-                        <a th:href="@{/admin/editarUsuario}" class="btn btn-outline-primary me-2">Editar</a>
-                        <button type="button" class="btn btn-outline-danger me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button>
-                        <a th:href="@{/admin/verUsuario}" class="btn btn-outline-dark me-2">Visualizar</a>
-                        <!-- MODAL -->
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                              </div>
-                              <div class="modal-body">
-                                <h3>¿Está seguro de eliminar el usuario?</h3>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                              </div>
+                        <div class="dropdown">
+                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-plus-square"></i>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li><a th:href="@{/admin/editarUsuario}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
+                            <li><a th:href="@{/admin/verUsuario}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <!-- MODAL -->
+                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
+                            </div>
+                            <div class="modal-body">
+                              <h3>¿Está seguro de eliminar el usuario?</h3>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
                             </div>
                           </div>
                         </div>
@@ -217,23 +252,30 @@
                     <td>Analista de ingenieria</td>
                     <td>
                       <div class="d-flex justify-content-center align-items-center">
-                        <a th:href="@{/admin/editarUsuario}" class="btn btn-outline-primary me-2">Editar</a>
-                        <button type="button" class="btn btn-outline-danger me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button>
-                        <a th:href="@{/admin/verUsuario}" class="btn btn-outline-dark me-2">Visualizar</a>
-                        <!-- MODAL -->
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                              </div>
-                              <div class="modal-body">
-                                <h3>¿Está seguro de eliminar el usuario?</h3>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                              </div>
+                        <div class="dropdown">
+                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-plus-square"></i>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li><a th:href="@{/admin/editarUsuario}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
+                            <li><a th:href="@{/admin/verUsuario}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <!-- MODAL -->
+                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
+                            </div>
+                            <div class="modal-body">
+                              <h3>¿Está seguro de eliminar el usuario?</h3>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
                             </div>
                           </div>
                         </div>
@@ -249,23 +291,30 @@
                     <td>Analista de OyM</td>
                     <td>
                       <div class="d-flex justify-content-center align-items-center">
-                        <a th:href="@{/admin/editarUsuario}" class="btn btn-outline-primary me-2">Editar</a>
-                        <button type="button" class="btn btn-outline-danger me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button>
-                        <a th:href="@{/admin/verUsuario}" class="btn btn-outline-dark me-2">Visualizar</a>
-                        <!-- MODAL -->
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                              </div>
-                              <div class="modal-body">
-                                <h3>¿Está seguro de eliminar el usuario?</h3>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                              </div>
+                        <div class="dropdown">
+                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-plus-square"></i>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li><a th:href="@{/admin/editarUsuario}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
+                            <li><a th:href="@{/admin/verUsuario}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <!-- MODAL -->
+                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
+                            </div>
+                            <div class="modal-body">
+                              <h3>¿Está seguro de eliminar el usuario?</h3>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
                             </div>
                           </div>
                         </div>
@@ -281,23 +330,30 @@
                     <td>Analista de ingenieria</td>
                     <td>
                       <div class="d-flex justify-content-center align-items-center">
-                        <a th:href="@{/admin/editarUsuario}" class="btn btn-outline-primary me-2">Editar</a>
-                        <button type="button" class="btn btn-outline-danger me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button>
-                        <a th:href="@{/admin/verUsuario}" class="btn btn-outline-dark me-2">Visualizar</a>
-                        <!-- MODAL -->
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                              </div>
-                              <div class="modal-body">
-                                <h3>¿Está seguro de eliminar el usuario?</h3>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                              </div>
+                        <div class="dropdown">
+                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-plus-square"></i>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li><a th:href="@{/admin/editarUsuario}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
+                            <li><a th:href="@{/admin/verUsuario}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <!-- MODAL -->
+                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
+                            </div>
+                            <div class="modal-body">
+                              <h3>¿Está seguro de eliminar el usuario?</h3>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
                             </div>
                           </div>
                         </div>

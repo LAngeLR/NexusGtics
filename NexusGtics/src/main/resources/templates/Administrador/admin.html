@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="Fragmentos/head :: head('Administrador')"></head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header th:replace="Fragmentos/header :: header('admin')"><!-- End Header --></header>
+
+<!-- ======= Sidebar ======= -->
+<aside th:replace="Fragmentos/menuAdmin :: menu">
+</aside><!-- End Sidebar-->
+
+
+<main id="main" class="main">
+    <div class="card text-center">
+        <img th:src="@{/assets/img/fondoAdmin.jpg}" class="card-img" alt="fondo">
+        <div class="card-img-overlay" style="background-color: rgba(42,41,41,0.5)">
+            <br>
+            <h1 class="card-text" style="color:white"><b>¡Bienvenido Admin!</b></h1>
+            <br>
+            <p class="card-text" style="color: white">El jefe de telecomunicaciones es el capitán de<br> nuestro viaje hacia un mundo cada vez más conectado.</p>
+        </div>
+    </div>
+    <div class="pagetitle">
+        <h1>Inicio</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin/}">Home</a></li>
+                <li class="breadcrumb-item active">Inicio</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://inbestiga.com/wp-content/uploads/2023/03/business-3d-black-businesswoman-in-brown-suit-waving-hello-gigapixel-art-scale-6_00x.png" class="img-fluid rounded-start" alt="foto">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">¿Qué puedes hacer en esta página?</h5>
+                                <p class="card-text">En el menú encontrarás las siguientes opciones <b>Crear usuario, Ver usuario</b>, además encontrarás más opciones a realizar dentro de estas páginas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">#MTC verifica que antenas de telecomunicaciones no son nocivas</h5>
+                        <p>De acuerdo con la Dirección General de Fiscalizaciones y Sanciones en Comunicaciones del MTC, las mediciones de RNI realizadas durante los últimos 15 años han demostrado que en Perú no se ha superado el límite máximo permisible para los principales servicios de comunicaciones como son la radio, la televisión y la telefonía móvil.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+    <div class="credits" style="font-size: x-small;color:#5e5d5d">
+        Contacto: ☎ | 2758403  ✉ | <a href="mailto:nexus.empresatcom@gmail.com" style="color:#5e5d5d"> nexus.empresatcom@gmail.com</a>
+    </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+</body>
+
+</html>
