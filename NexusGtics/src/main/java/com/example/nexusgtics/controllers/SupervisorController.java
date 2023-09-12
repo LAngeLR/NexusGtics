@@ -43,7 +43,7 @@ public class SupervisorController {
         return "Supervisor/comentariosTickets";
     }
 
-    @GetMapping("/perfilSupervisor")
+    @GetMapping("/perfil")
     public String perfilSupervisor(){
         return "Supervisor/perfilSupervisor";
     }
