@@ -7,257 +7,95 @@
 <!-- ======= Header ======= -->
   <header th:replace="Fragmentos/header :: header('admin')"><!-- End Header --></header>
 
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-
-    <ul class="sidebar-nav" id="sidebar-nav">
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Gestión de Usuarios</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a th:href="@{/admin/crearUsuario}">
-              <i class="bi bi-circle"></i><span>Crear</span>
-            </a>
-          </li>
-          <li>
-            <a th:href="@{/admin/listaUsuario}">
-              <i class="bi bi-circle"></i><span>Lista de Usuarios</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Tables Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-bar-chart"></i><span>Gestión de Empresas</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a th:href="@{/admin/crearEmpresa}">
-              <i class="bi bi-circle"></i><span>Crear</span>
-            </a>
-          </li>
-          <li>
-            <a th:href="@{/admin/listaEmpresa}">
-              <i class="bi bi-circle"></i><span>Lista de empresas</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Charts Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-gem"></i><span>Gestión de Sitios</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a th:href="@{/admin/crearSitio}">
-              <i class="bi bi-circle"></i><span>Crear</span>
-            </a>
-          </li>
-          <li>
-            <a th:href="@{/admin/listaSitio}">
-              <i class="bi bi-circle"></i><span>Lista de sitios</span>
-            </a>
-          </li>
-          <li>
-            <a th:href="@{/admin/inventarioSitio}">
-              <i class="bi bi-circle"></i><span>Mapa de Inventario</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Icons Nav -->
+<!-- ======= Sidebar ======= -->
+<aside th:replace="Fragmentos/menuAdmin :: menu">
 
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-menu-button-wide"></i><span>Gestión de Equipos</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a th:href="@{/admin/crearEquipo}">
-              <i class="bi bi-circle"></i><span>Crear</span>
-            </a>
-          </li>
-          <li>
-            <a th:href="@{/admin/listaEquipo}">
-              <i class="bi bi-circle"></i><span>Lista de equipos</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Components Nav -->
 
-    </ul>
-
-  </aside><!-- End Sidebar-->
-
-    <ul class="sidebar-nav" id="sidebar-nav">
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Gestión de Usuarios</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="#">
-              <i class="bi bi-circle"></i><span>Crear</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="bi bi-circle"></i><span>Lista de Usuarios</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Tables Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-bar-chart"></i><span>Gestión de Empresas</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="#">
-              <i class="bi bi-circle"></i><span>Crear</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="bi bi-circle"></i><span>Lista de empresas</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Charts Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-gem"></i><span>Gestión de Sitios</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="icons-bootstrap.html">
-              <i class="bi bi-circle"></i><span>Lista de sitios</span>
-            </a>
-          </li>
-          <li>
-            <a href="icons-remix.html">
-              <i class="bi bi-circle"></i><span>Mapa de Inventario</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Icons Nav -->
-
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-menu-button-wide"></i><span>Gestión de Equipos</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="#">
-              <i class="bi bi-circle"></i><span>Crear</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="bi bi-circle"></i><span>Lista de equipos</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Components Nav -->
-
-    </ul>
-
-  </aside><!-- End Sidebar-->
-
-  <main id="main" class="main">
+<main id="main" class="main">
     <div class="container">
 
+      <div class="pagetitle">
+        <nav>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Gestión de equipos</a></li>
+            <li class="breadcrumb-item active">Editar equipo</li>
+          </ol>
+        </nav>
+      </div><!-- End Page Title -->
 
-    <div class="pagetitle">
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Gestión de equipos</a></li>
-          <li class="breadcrumb-item active">Editar equipo</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
-
-    <section class="section dashboard">
-      <div class="row">
-        <div class="rounded p-5" style="background-color: #FFFFFF;">
-          <div class="pagetitle">
-            <h1 class="card-title">Edición de equipo</h1>
-          </div>
-          <form method="POST" action="" enctype="multipart/form-data">
-            <div class="row">
-              <div class="col-md-6">
-
-                <div class="mb-3">
-                  <label for="nombre">Nombre:</label>
-                  <input type="text" class="form-control" name="nombre" id="nombre" value="Switch">
-                </div>
-
-                <div class="mb-3">
-                  <label for="descripcion">Marca:</label>
-                  <input type="text" class="form-control" name="descripcion" id="descripcion" value="Cisco">
-                </div>
-
-                <div class="mb-3">
-                  <label for="precio">Modelo:</label>
-                  <input type="text" class="form-control" name="precio" id="precio" value="Catalyst 94000">
-                </div>
-
-                <div class="mb-3">
-                  <label for="descuento">Descripción:</label>
-                  <textarea class="form-control" aria-label="With textarea " style="height: 80px; resize: none;">
-Plataforma modular
-Soporte 9 Tbps de ancho de banda
-Escalable hasta 384 puertos</textarea>
-                </div>
-
-                <div class="mb-3">
-                  <label for="descuento">Cantidad:</label>
-                  <input type="number" class="form-control" name="descuento" id="descuento" value="12">
-                </div>
-
-                <div class="input-group mb-3">
-                  <label for="consola">Sitio de despliegue:</label>
-                  <div class="col-12">
-                    <select name="consola" id="consola" class="form-control">
-                      <option value="Cargo1">Sitio de T. Fija</option>
-                      <option value="Cargo2">Sitio de T. Móvil</option>
-                    </select>
-                  </div>
-                </div>
-
-
-              </div>
-              <br><br>
-              <div class="col-md-6">
-
-                <div class="mb-3">
-                  <label for="descuento">Foto de referencia:</label>
-                  <br>
-                  <br>
-                  <img th:src="@{/assets/img/switch_9400.avif}" style="max-width: 600px;" alt="">
-                </div>
-
-                <button type="submit" class="btn btn-outline-primary float-end">Guardar cambios</button>
-              </div>
+      <section class="section dashboard">
+        <div class="row">
+          <div class="rounded p-5" style="background-color: #FFFFFF;">
+            <div class="pagetitle">
+              <h1 class="card-title">Edición de equipo</h1>
             </div>
-          </form>
+            <form method="POST" action="" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-6">
+
+                  <div class="mb-3">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" class="form-control" name="nombre" id="nombre" value="Switch">
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="descripcion">Marca:</label>
+                    <input type="text" class="form-control" name="descripcion" id="descripcion" value="Cisco">
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="precio">Modelo:</label>
+                    <input type="text" class="form-control" name="precio" id="precio" value="Catalyst 94000">
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="descuento">Descripción:</label>
+                    <textarea class="form-control" aria-label="With textarea " style="height: 80px; resize: none;">
+  Plataforma modular
+  Soporte 9 Tbps de ancho de banda
+  Escalable hasta 384 puertos</textarea>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="descuento">Cantidad:</label>
+                    <input type="number" class="form-control" name="descuento" id="descuento" value="12">
+                  </div>
+
+                  <div class="input-group mb-3">
+                    <label for="consola">Sitio de despliegue:</label>
+                    <div class="col-12">
+                      <select name="consola" id="consola" class="form-control">
+                        <option value="Cargo1">Sitio de T. Fija</option>
+                        <option value="Cargo2">Sitio de T. Móvil</option>
+                      </select>
+                    </div>
+                  </div>
+
+
+                </div>
+                <br><br>
+                <div class="col-md-6">
+
+                  <div class="mb-3">
+                    <label for="descuento">Foto de referencia:</label>
+                    <br>
+                    <br>
+                    <img th:src="@{/assets/img/switch_9400.avif}" style="max-width: 600px;" alt="">
+                  </div>
+
+                  <button type="submit" class="btn btn-outline-primary float-end">Guardar cambios</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <br><br>
+
+
         </div>
-        <br><br>
-
-
-      </div>
-    </section>
-      <br>
-      <a th:href="@{/admin/listaEquipo}" class="btn btn-outline-danger">Regresar</a>
+      </section>
+        <br>
+        <a th:href="@{/admin/listaEquipo}" class="btn btn-outline-danger">Regresar</a>
     </div>
   </main><!-- End #main -->
 
