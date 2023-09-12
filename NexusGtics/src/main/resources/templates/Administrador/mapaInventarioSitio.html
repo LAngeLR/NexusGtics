@@ -1,7 +1,41 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:include="Fragmentos/head :: head('Inventario')"></head>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Sitio</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
+  <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <style>
+    #mi_mapa{
+      min-height: 500px;
+    }
+  </style>
+</head>
+
 
 <body>
 <!-- ======= Header ======= -->
@@ -26,16 +60,59 @@
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
-      <div class="row">
-        <div class="rounded p-5" style="background-color: #FFFFFF;">
-          <div class="pagetitle">
-            <h1 class="card-title">Inventarios</h1>
-          </div>
-          <div>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7803.872626486676!2d-77.03712145971349!3d-12.047902952755804!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c8b674aa3793%3A0xce29b87ea85689ce!2sCentro%20Hist%C3%B3rico%2C%20Lima%2015001!5e0!3m2!1ses-419!2spe!4v1694051855555!5m2!1ses-419!2spe" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <div class="container">
+        <div class="col-xl-12">
+          <div class="card" style="height: 7rem">
+            <center>
+              <div class="card-body">
+                <h5 class="card-title">Leyenda</h5>
+                <table>
+                  <tr>
+                    <td><p style="color: red"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                    </svg> <b style="color:black;" class="fw-light">Ubicación real</b></p></td>
+                    <td>
+                      <p style="color: #F0E108"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                      </svg><b style="color:black;" class="fw-light"> Tickets abiertos</b></p>
+                    </td>
+                    <td>
+                      <p style="color: rebeccapurple"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                      </svg><b style="color:black;" class="fw-light"> Lugar buscado</b></p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </center>
           </div>
         </div>
-        <br><br>
+
+        <div class="col-xl-12">
+          <div class="card">
+            <div class="card-body pt-3">
+              <div id="mi_mapa" ></div>
+              <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+              <script>
+                let map = L.map('mi_mapa').setView([-12.059335, -77.030284],15)
+
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+                L.marker([-12.06802,-77.03462]).addTo(map).bindPopup('Mi búsqueda').openPopup();
+                L.marker([-12.06224,-77.03417]).addTo(map).bindPopup('Ubicación real').openPopup();
+                L.marker([-12.06086,-77.03600]).addTo(map).bindPopup('Abierto').openPopup();
+                L.marker([-12.05177,-77.03461]).addTo(map).bindPopup('Inventario 1').openPopup();
+                L.marker([-12.05238,-77.02725]).addTo(map).bindPopup('2').openPopup();
+                L.marker([-12.06176,-77.04292]).addTo(map).bindPopup('3').openPopup();
+                L.marker([-12.06180,-77.02531]).addTo(map).bindPopup('4').openPopup();
+              </script>
+              <!-- MAPA -->
+
+            </div>
+          </div>
+
+        </div>
 
 
       </div>
