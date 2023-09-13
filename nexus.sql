@@ -104,6 +104,7 @@ CREATE TABLE `cuadrillas` (
   `idSupervisor` int NOT NULL,
   `idTecnico` int NOT NULL,
   `ocupado` tinyint(1) NOT NULL,
+  `fechaCreacion` datetime NOT NULL,
   PRIMARY KEY (`idCuadrillas`),
   KEY `fk_Cuadrillas_Usuarios1_idx` (`idSupervisor`),
   KEY `fk_Cuadrillas_Usuarios2_idx` (`idTecnico`),
@@ -532,4 +533,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-12 11:22:36
+-- Dump completed on 2023-09-13 10:17:12
