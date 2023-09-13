@@ -10,7 +10,7 @@ public class SuperadminController {
 
     @GetMapping("/")
     public String paginaPrincipal(){
-        return "Superadmin/administrador";
+        return "Superadmin/superadmin";
     }
 
     // GESTION DE USUARIOS
@@ -21,7 +21,7 @@ public class SuperadminController {
 
     @GetMapping("/crearUsuario")
     public String crearUsuario(){
-        return "Superadmin/crearUsuario";
+        return "Superadmin/crearAdministrador";
     }
 
     @GetMapping("/verUsuario")
@@ -29,9 +29,14 @@ public class SuperadminController {
         return "Superadmin/vistaUsuario";
     }
 
+    @GetMapping("/verAdministrador")
+    public String verUsuario(){
+        return "Superadmin/vistaAdministrador";
+    }
+
     @GetMapping("/editarUsuario")
     public String editarUsuario(){
-        return "Superadmin/editarUsuario";
+        return "Superadmin/editarAdministrador";
     }
 
 

@@ -6,16 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="87763c1f-498d-43b0-a8f3-d52395c50e0c" name="Changes" comment="todo Analista despliegue vinculacion">
       <changelist_data name="David Llanos" email="david.llanos@pucp.edu.pe" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/SuperadminController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/crearAdministrador.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/editarAdministrador.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/listaUsuario.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/vistaUsuario.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/vistaUsuario2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/vistaAdministrador.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_9_7_2023_6_47_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_9_7_2023_6_47_PM__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/administrador.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/administrador.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/superadmin.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/superadmin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/SuperadminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/SuperadminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/vistaUsuario.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/vistaUsuario.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/vistaUsuario2.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,10 +53,12 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Daniel/IdeaProjects/NexusGtics&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -87,6 +85,8 @@
       <updated>1694107493424</updated>
       <workItem from="1694107494556" duration="760000" />
       <workItem from="1694108271650" duration="9181000" />
+      <workItem from="1694136329160" duration="2414000" />
+      <workItem from="1694524224749" duration="1233000" />
     </task>
     <task id="LOCAL-00001" summary="base html superadmin">
       <created>1694123542661</created>
