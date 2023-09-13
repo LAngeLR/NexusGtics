@@ -108,17 +108,54 @@
                                     <input type="text" class="form-control" name="descuento" id="descuento" >
                                 </div>
 
+                                <div class="mb-3">
+                                    <!-- Combobox con selección múltiple -->
+                                    <label for="descuento">Tecnicos Disponibles:</label>
+                                    <select class="form-select" multiple>
+                                        <option value="option1">Primer Tecnico </option>
+                                        <option value="option2">Segundo Tecnico </option>
+                                        <option value="option3">Tercer Tecnico </option>
+                                        <option value="option4">Cuarto Tecnico </option>
+                                        <option value="option5">Quinto Tecnico </option>
+                                    </select><!-- End Combobox con selección múltiple -->
+                                </div>
                             </div>
                             <br><br>
                             <div class="col-md-6">
 
                                 <div class="mb-3">
                                     <label for="descuento">Foto de la cuadrilla (Opcional):</label>
-                                    <input class="form-control" type="file" id="formFile">
+                                    <input class="form-control" type="file" id="formFile" accept="image/*" onchange="mostrarImagen(this)">
                                 </div>
+                                <div id="imagenMostrada"></div>
+
 
                                 <button type="submit" class="btn btn-outline-primary float-end">Crear</button>
                             </div>
+
+                            <script>
+                                function mostrarImagen(input) {
+                                    var imagenMostrada = document.getElementById('imagenMostrada');
+
+                                    if (input.files && input.files[0]) {
+                                        var reader = new FileReader();
+
+                                        reader.onload = function (e) {
+                                            var imagen = document.createElement('img');
+                                            imagen.src = e.target.result;
+                                            imagen.classList.add('img-thumbnail'); // Estilo opcional para la imagen
+
+                                            // Limpia el contenido actual del div y agrega la imagen
+                                            imagenMostrada.innerHTML = '';
+                                            imagenMostrada.appendChild(imagen);
+                                        };
+
+                                        reader.readAsDataURL(input.files[0]);
+                                    }
+                                }
+                            </script>
+
+
                         </div>
                     </form>
                 </div>
@@ -141,18 +178,7 @@
 <br>
 <br>
 <!-- ======= Footer ======= -->
-<footer id="footer" class="footer">
-    <div class="copyright">
-        &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
-    </div>
-    <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-    </div>
-</footer><!-- End Footer -->
+<footer th:replace="Fragmentos/footer :: footer"></footer><!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

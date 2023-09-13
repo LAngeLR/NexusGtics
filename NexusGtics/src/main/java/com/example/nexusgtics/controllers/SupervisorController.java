@@ -62,4 +62,9 @@ public class SupervisorController {
     public String crearCuadrilla(){
         return "Supervisor/crearCuadrilla";
     }
+
+    @GetMapping("/detallesCuadrilla")
+    public String detallesCuadrilla(){
+        return "Supervisor/detallesCuadrilla";
+    }
 }

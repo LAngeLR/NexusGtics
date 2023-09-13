@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="Fragmentos/head :: head('Perfil')"></head>
+
+<body>
+<!-- ======= Header ======= -->
+<header th:replace="Fragmentos/header :: header('supervisor')"><!-- End Header --></header><!-- End Header -->
+
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+        <li class="nav-item">
+            <a class="nav-link collapse" data-bs-target="#tables-nav" th:href="@{/supervisor/}">
+                <i class="bi bi-layout-text-window-reverse"></i><span>Inicio</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-card-list"></i><span>Tickets</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a th:href="@{/supervisor/listaTickets}">
+                        <i class="bi bi-circle"></i><span>Ver Tickets</span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/supervisor/dashboard}">
+                        <i class="bi bi-circle"></i><span>Dashboard</span>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Tables Nav -->
+        <!-- End Charts Nav -->
+
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/supervisor/listaCuadrillas}">
+                <i class="bi bi-layout-text-window-reverse"></i>
+                <span>Cuadrillas</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/supervisor/mapaTickets}">
+                <i class="bi bi-grid"></i>
+                <span>Mapa</span>
+            </a>
+        </li>
+
+        <!-- End Icons Nav -->
+
+        <!-- End Components Nav -->
+
+    </ul>
+
+</aside><!-- End Sidebar-->
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Detalles</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/supervisor/}">Home</a></li>
+                <li class="breadcrumb-item active">Perfil</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section profile">
+        <div class="row">
+            <div class="col-xl-4">
+
+                <div class="card">
+                    <div class="card-body pt-5 d-flex flex-column align-items-center">
+                        <img th:src="@{/assets/img/fox.jpg}" alt="Profile" width="320" height="325">
+                        <br>
+                        <h2 style="color: #095444">Cuadrilla</h2>
+                        <h3>Nombre Cuadrilla</h3>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-xl-8">
+
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <!-- Bordered Tabs -->
+                        <ul class="nav nav-tabs nav-tabs-bordered">
+
+                            <li class="nav-item">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Informacion</button>
+                            </li>
+
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Integrantes</button>
+                            </li>
+
+
+                        </ul>
+                        <div class="tab-content pt-2">
+
+                            <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                <h5 class="card-title" style="color: #095444">Sobre La Cuadrilla:</h5>
+                                <p class="small fst-italic">Cuadrilla en el rubro de Telecomunicaciones, soy egresado de la Universidad "Universidad". Con 6 años de experiencia en diferentes empresas de telecomunicaciones.</p>
+
+                                <h5 class="card-title" style="color: #095444">Detalles de la Cuadrilla</h5>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">Numero de Cuadrilla</div>
+                                    <div class="col-lg-9 col-md-8">Cuadrilla 7</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Tecnico Lider</div>
+                                    <div class="col-lg-9 col-md-8">Mariano Gonzales</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">fecha de ultimo trabajo</div>
+                                    <div class="col-lg-9 col-md-8">10-12-2023</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Numero de trabajos asignados</div>
+                                    <div class="col-lg-9 col-md-8">10</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Ultimo tipo de ticket atendido</div>
+                                    <div class="col-lg-9 col-md-8">Ticket de Instalacion</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Fecha de Formacion</div>
+                                    <div class="col-lg-9 col-md-8">09-03-2022</div>
+                                </div>
+
+                            </div>
+
+                            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div style="margin-left: 80px;">
+                                                <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="img-fluid">
+                                                <br>
+                                                <br>
+                                                <div>Tec. Hernan Godoy</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div style="margin-left: 60px;">
+                                                <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="img-fluid">
+                                                <br>
+                                                <br>
+                                                <div>Tec. Erick Cruz</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div style="margin-left: 40px;">
+                                                <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="img-fluid">
+                                                <br>
+                                                <br>
+                                                <div>Tec. Arturo Tito</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div style="margin-left: 20px;">
+                                                <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="img-fluid">
+                                                <br>
+                                                <br>
+                                                <div>Tec. Mateo Iglesias</div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="pt-2">
+                                        <style>
+                                            .btn-primary.btn-sm i {
+                                                color: #fff;
+                                            }
+                                        </style>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-6">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Slides only</h5>
+
+                        <!-- Slides only carousel -->
+                        <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                </div>
+                            </div>
+                        </div><!-- End Slides only carousel-->
+
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">With indicators</h5>
+
+                        <!-- Slides with indicators -->
+                        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            </div>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                </div>
+                            </div>
+
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+
+                        </div><!-- End Slides with indicators -->
+
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Carousel with fade transition</h5>
+                        <p>Add <code>.carousel-fade</code> to your carousel to animate slides with a fade transition instead of a slide.</p>
+
+                        <!-- Slides with fade transition -->
+                        <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                </div>
+                            </div>
+
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+
+                        </div><!-- End Slides with fade transition -->
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-6">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">With controls</h5>
+
+                        <!-- Slides with controls -->
+                        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                </div>
+                            </div>
+
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+
+                        </div><!-- End Slides with controls -->
+
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">With captions</h5>
+
+                        <!-- Slides with captions -->
+                        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            </div>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5>First slide label</h5>
+                                        <p>Some representative placeholder content for the first slide.</p>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5>Second slide label</h5>
+                                        <p>Some representative placeholder content for the second slide.</p>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <img th:src="@{/assets/img/fox.jpg}" class="d-block w-100" alt="...">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5>Third slide label</h5>
+                                        <p>Some representative placeholder content for the third slide.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+
+                        </div><!-- End Slides with captions -->
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer th:replace="Fragmentos/footer :: footer"></footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+</body>
+
+</html>
