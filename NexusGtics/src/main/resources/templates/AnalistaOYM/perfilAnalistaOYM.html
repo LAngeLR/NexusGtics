@@ -113,79 +113,7 @@
 </header><!-- End Header -->
 
 <!-- ======= Sidebar ======= -->
-<aside id="sidebar" class="sidebar">
-
-  <ul class="sidebar-nav" id="sidebar-nav">
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/analistaOYM/}">
-        <i class="bi bi-layout-text-window-reverse"></i><span>Inicio</span>
-      </a>
-    </li><!-- End Tables Nav -->
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#sit-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-bar-chart"></i><span>Sitios</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="sit-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-        <li>
-          <a th:href="@{/analistaOYM/listaSitio}">
-            <i class="bi bi-circle"></i><span>Lista de sitios</span>
-          </a>
-        </li>
-        <li>
-          <a th:href="@{/analistaOYM/mapaSitios}">
-            <i class="bi bi-circle"></i><span>Mapa de sitios</span>
-          </a>
-        </li>
-      </ul>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#tick-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-card-list"></i><span>Tickets</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="tick-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-        <li>
-          <a th:href="@{/analistaOYM/ticket}">
-            <i class="bi bi-circle"></i><span>Lista de Tickets</span>
-          </a>
-        </li>
-        <li>
-          <a th:href="@{/analistaOYM/crearTicket}">
-            <i class="bi bi-circle"></i><span>Crear Ticket</span>
-          </a>
-        </li>
-        <li>
-          <a th:href="@{/analistaOYM/dashboard}">
-            <i class="bi bi-circle"></i><span>Dashboard</span>
-          </a>
-        </li>
-        <li>
-          <a th:href="@{/analistaOYM/mapaTickets}">
-            <i class="bi bi-circle"></i><span>Mapa de Tickets</span>
-          </a>
-        </li>
-      </ul>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#map-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-gem"></i><span>Mapas</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="map-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-        <li>
-          <a th:href="@{/analistaOYM/mapaSitios}">
-            <i class="bi bi-circle"></i><span>Mapa de sitios</span>
-          </a>
-        </li>
-        <li>
-          <a th:href="@{/analistaOYM/mapaTickets}">
-            <i class="bi bi-circle"></i><span>Mapa de tickets</span>
-          </a>
-        </li>
-      </ul>
-    </li>
-  </ul>
-
+<aside th:replace="Fragmentos/menuAdmin :: menu">
 </aside>
 <!-- End Sidebar-->
 <main id="main" class="main">
@@ -387,11 +315,8 @@
 </main><!-- End #main -->
 
 <!-- ======= Footer ======= -->
-<footer id="footer" class="footer">
-  <div class="credits" style="font-size: x-small;color:#5e5d5d">
-    Contacto: ☎ | 2758403  ✉ | <a href="mailto:nexus.empresatcom@gmail.com" style="color:#5e5d5d"> nexus.empresatcom@gmail.com</a>
-  </div>
-</footer><!-- End Footer -->
+<footer th:replace="Fragmentos/footer :: footer"></footer>
+<!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
