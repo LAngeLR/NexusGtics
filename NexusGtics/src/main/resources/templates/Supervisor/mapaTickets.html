@@ -6,7 +6,12 @@
 <body>
 <!-- ======= Header ======= -->
 <header th:replace="Fragmentos/header :: header('supervisor')"><!-- End Header --></header><!-- End Header -->
-
+<style>
+    #mi_mapa{
+        min-height: 25rem;
+        min-width: 30rem;
+    }
+</style>
 <!-- ======= Sidebar ======= -->
 <aside id="sidebar" class="sidebar">
 
@@ -107,17 +112,16 @@
 
             <div class="col-xl-12">
                 <div class="card">
-                    <div class="card-body pt-3" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-                        <h5 class="card-title" style="color: #095444">Ubicacion</h5>
-                        <div id="mi_mapa" style="width: 1200px; height: 500px;"></div>
+                    <div class="card-body pt-3">
+                        <div id="mi_mapa" ></div>
                         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
                         <script>
                             let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
                             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             }).addTo(map);
-                            L.marker([-12.06802,-77.03462]).addTo(map).bindPopup('Por Abrir').openPopup();
-                            L.marker([-12.06224,-77.03417]).addTo(map).bindPopup('Por Abrir').openPopup();
+                            L.marker([-12.06802,-77.03462]).addTo(map).bindPopup('Mi búsqueda').openPopup();
+                            L.marker([-12.06224,-77.03417]).addTo(map).bindPopup('Ubicación real').openPopup();
                             L.marker([-12.06086,-77.03600]).addTo(map).bindPopup('Abierto').openPopup();
                             L.marker([-12.05177,-77.03461]).addTo(map).bindPopup('Abierto').openPopup();
                             L.marker([-12.05238,-77.02725]).addTo(map).bindPopup('Abierto').openPopup();
