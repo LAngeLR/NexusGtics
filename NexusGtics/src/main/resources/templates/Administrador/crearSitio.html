@@ -30,7 +30,7 @@
           <div class="pagetitle" style="margin-top: -35px;">
             <h1 class="card-title">Creación de sitio</h1>
           </div>
-          <form method="POST" th:action="@{/Administrador/guardarSitio}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+          <form method="POST" th:action="@{/admin/guardarSitio}" enctype="multipart/form-data" style="margin-bottom: -35px;">
             <div class="row">
               <div class="col-md-6">
 
@@ -67,8 +67,8 @@
                 <div class="mb-3">
                   <label for="tipo">Tipo de sitio:</label>
                   <select name="tipo" id="tipo" class="form-control">
-                    <option value="1">Móvil</option>
-                    <option value="0">Fijo</option>
+                    <option value="True">Móvil</option>
+                    <option value="False">Fijo</option>
                   </select>
                 </div>
 
@@ -76,8 +76,8 @@
                   <label for="tipoZona">Tipo de zona:</label>
                   <select name="tipoZona" id="tipoZona" class="form-control">
                     <option value="Cargo1"></option>
-                    <option value="1">Urbana</option>
-                    <option value="0">Rural</option>
+                    <option value="True">Urbana</option>
+                    <option value="False">Rural</option>
                   </select>
                 </div>
 

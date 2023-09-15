@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,11 +124,22 @@ public class AdminController {
         return "Administrador/mapaInventarioSitio";
     }
 
+
     @PostMapping("/guardarSitio")
-    public String guardarSitio(Sitio sitio, RedirectAttributes attr) {
-        sitioRepository.save(sitio);
-        return "redirect:/Administrador/listaSitio";
+    public String guardarSitio(@RequestParam("departamento") String departamento,
+                               @RequestParam("provincia") String provincia,
+                               @RequestParam("distrito") String distrito,
+                               @RequestParam("ubigeo") Integer ubigeo,
+                               @RequestParam("latitud") BigDecimal latitud,
+                               @RequestParam("longitud") BigDecimal longitud,
+                               @RequestParam("tipo") Boolean tipo,
+                               @RequestParam("tipoZona") Boolean tipoZona, RedirectAttributes attr) {
+
+        sitioRepository.guardarSitio(departamento, provincia, distrito, ubigeo, latitud, longitud, tipo, tipoZona);
+
+        return "redirect:/admin/listaSitio";
     }
+
 //-----------------------------------------------------------------------
 
     // GESTION DE EQUIPOS
