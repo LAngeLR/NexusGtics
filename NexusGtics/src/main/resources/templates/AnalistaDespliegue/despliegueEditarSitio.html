@@ -60,167 +60,17 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
-</head>
+  <head th:include="Fragmentos/head :: head('Analista de Despliegue')"></head>
+
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center" style="background-color: #B0C4DE">
+<!-- ======= Header ======= -->
+<header th:replace="Fragmentos/header :: header('Analista de Despliegue')"><!-- End Header --></header><!-- End Header -->
 
-
-    <div class="d-flex align-items-center justify-content-between">
-      <a th:href="@{/analistaDespliegue/}" class="logo d-flex align-items-center">
-        <img th:src="@{/assets/img/logo.png}" alt="">
-        <span class="d-none d-lg-block">Nexus</span>
-      </a>
-      <i class="bi bi-list toggle-sidebar-btn"></i>
-    </div><!-- End Logo -->
-
-    <div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-      </form>
-    </div><!-- End Search Bar -->
-
-    <nav class="header-nav ms-auto">
-      <ul class="d-flex align-items-center">
-
-        <li class="nav-item d-block d-lg-none">
-          <a class="nav-link nav-icon search-bar-toggle " href="#">
-            <i class="bi bi-search"></i>
-          </a>
-        </li><!-- End Search Icon-->
-
-
-        <li class="nav-item dropdown">
-
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-chat-left-text"></i>
-            <!--<span class="badge bg-success badge-number"></span>-->
-          </a><!-- End Messages Icon -->
-
-        </li><!-- End Messages Nav -->
-
-        <li class="nav-item dropdown pe-3">
-
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
-          </a><!-- End Profile Iamge Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-            <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
-              <span>Analista de despliegue</span>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" th:href="@{/analistaDespliegue/perfil}">
-                <i class="bi bi-person"></i>
-                <span>Mi perfil</span>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-
-
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" th:href="@{/login}">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Cerrar sesión</span>
-              </a>
-            </li>
-
-          </ul><!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
-
-      </ul>
-    </nav><!-- End Icons Navigation -->
-
-  </header><!-- End Header -->
-
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-
-    <ul class="sidebar-nav" id="sidebar-nav">
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/analistaDespliegue/}">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Inicio</span>
-        </a>
-      </li><!-- End Tables Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#sit-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-bar-chart"></i><span>Sitios</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="sit-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a th:href="@{/analistaDespliegue/listaSitio}">
-              <i class="bi bi-circle"></i><span>Lista de sitios</span>
-            </a>
-          </li>
-          <li>
-            <a th:href="@{/analistaDespliegue/mapaSitios}">
-              <i class="bi bi-circle"></i><span>Mapa de sitios</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tick-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-card-list"></i><span>Tickets</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="tick-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a th:href="@{/analistaDespliegue/ticket}">
-              <i class="bi bi-circle"></i><span>Lista de Tickets</span>
-            </a>
-          </li>
-          <li>
-            <a th:href="@{/analistaDespliegue/crearTicket}">
-              <i class="bi bi-circle"></i><span>Crear Ticket</span>
-            </a>
-          </li>
-          <li>
-            <a th:href="@{/analistaDespliegue/dashboard}">
-              <i class="bi bi-circle"></i><span>Dashboard</span>
-            </a>
-          </li>
-          <li>
-            <a th:href="@{/analistaDespliegue/mapaTickets}">
-              <i class="bi bi-circle"></i><span>Mapa de Tickets</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#map-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-gem"></i><span>Mapas</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="map-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a th:href="@{/analistaDespliegue/mapaSitios}">
-              <i class="bi bi-circle"></i><span>Mapa de sitios</span>
-            </a>
-          </li>
-          <li>
-            <a th:href="@{/analistaDespliegue/mapaTickets}">
-              <i class="bi bi-circle"></i><span>Mapa de tickets</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-
-  </aside><!-- End Sidebar-->
+<!-- ======= Sidebar ======= -->
+<aside th:replace="Fragmentos/sidebarDespliegue :: #sidebar">
+</aside><!-- End Sidebar-->
 
   <main id="main" class="main">
     <div class="container">
@@ -376,11 +226,8 @@
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer">
-    <div class="credits" style="font-size: x-small;color:#5e5d5d">
-      Contacto: ☎ | 2758403  ✉ | <a href="mailto:nexus.empresatcom@gmail.com" style="color:#5e5d5d"> nexus.empresatcom@gmail.com</a>
-    </div>
-  </footer><!-- End Footer -->
+  <footer th:replace="Fragmentos/footer :: footer"></footer>
+
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
