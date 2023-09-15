@@ -30,7 +30,7 @@
                     <div class="pagetitle" style="margin-top: -35px;">
                         <h1 class="card-title">Creación de empresa</h1>
                     </div>
-                    <form method="POST" action="" enctype="multipart/form-data">
+                    <form method="POST" th:action="@{/admin/guardarEmpresa}" enctype="multipart/form-data">
                         <div class="row mx-5">
 
                             <div class="mb-3">
@@ -39,33 +39,33 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="descripcion">RUC:</label>
-                                <input type="number" class="form-control" name="descripcion" id="descripcion" >
+                                <label for="ruc">RUC:</label>
+                                <input type="number" class="form-control" name="ruc" id="ruc" >
                             </div>
 
                             <div class="mb-3">
-                                <label for="precio">Representante:</label>
-                                <input type="text" class="form-control" name="precio" id="precio">
+                                <label for="representante">Representante:</label>
+                                <input type="text" class="form-control" name="representante" id="representante">
                             </div>
 
                             <div class="mb-3">
-                                <label for="precio">Correo electrónico:</label>
-                                <input type="text" class="form-control" name="precio" id="precio">
+                                <label for="correo">Correo electrónico:</label>
+                                <input type="text" class="form-control" name="correo" id="correo">
                             </div>
 
                             <div class="mb-3">
-                                <label for="descuento">Teléfono:</label>
-                                <input type="text" class="form-control" name="descuento" id="descuento" >
+                                <label for="telefono">Teléfono:</label>
+                                <input type="number" class="form-control" name="telefono" id="telefono" >
                             </div>
 
                             <div class="mb-3">
-                                <label for="descuento">Fecha de afiliación:</label>
-                                <input type="date" class="form-control" name="descuento" id="descuento" >
+                                <label for="fechaAfiliacion">Fecha de afiliación:</label>
+                                <input type="date" class="form-control" name="fechaAfiliacion" id="fechaAfiliacion" >
                             </div>
 
-                            <div class="mb-4">
-                                <label for="descuento">Dirección sede principal:</label>
-                                <input type="text" class="form-control" name="descuento" id="descuento" >
+                            <div class="mb-3">
+                                <label for="direccion">Dirección Sede Principal:</label>
+                                <input type="text" class="form-control" name="direccion" id="direccion">
                             </div>
                             <br>
                             <div>

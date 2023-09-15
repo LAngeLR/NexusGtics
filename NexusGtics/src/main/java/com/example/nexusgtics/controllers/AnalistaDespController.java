@@ -1,7 +1,9 @@
 package com.example.nexusgtics.controllers;
 
 import com.example.nexusgtics.entity.Sitio;
+import com.example.nexusgtics.entity.Ticket;
 import com.example.nexusgtics.repository.SitioRepository;
+import com.example.nexusgtics.repository.TicketRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
@@ -15,10 +17,11 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/analistaDespliegue")
 public class AnalistaDespController {
-
+    final TicketRepository ticketRepository;
     final SitioRepository sitioRepository;
 
-    public AnalistaDespController(SitioRepository sitioRepository ){
+    public AnalistaDespController(TicketRepository ticketRepository, SitioRepository sitioRepository ){
+        this.ticketRepository = ticketRepository;
         this.sitioRepository = sitioRepository;
     }
 
@@ -80,9 +83,13 @@ public class AnalistaDespController {
     }
 
     @GetMapping("/ticket")
-    public String listaTicket(){
+    public String listaTicket(Model model){
+        //'listar'
+        List<Ticket> lista = ticketRepository.findAll();
+        model.addAttribute("listaTicket", lista);
         return "AnalistaDespliegue/despliegueListaTickets";
     }
+
 
     @GetMapping("/crearTicket")
     public String crearTicket(){

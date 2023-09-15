@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:include="Fragmentos/head :: head('Empresa')"></head>
+<head th:include="Fragmentos/head :: head('Usuario')"></head>
 
 <body>
 <!-- ======= Header ======= -->
@@ -11,7 +11,6 @@
 <aside th:replace="Fragmentos/menuAdmin :: menu">
 </aside><!-- End Sidebar-->
 
-
 <main id="main" class="main">
     <div class="container">
 
@@ -19,59 +18,61 @@
         <div class="pagetitle">
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Gestión de empresas</a></li>
+                    <li class="breadcrumb-item"><a href="#">Gestión de usuario</a></li>
                     <li class="breadcrumb-item active">Vista detallada</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
+
         <section class="section dashboard">
             <div class="row">
                 <div class="rounded p-5" style="background-color: #FFFFFF;">
                     <div class="pagetitle">
-                        <h1 class="card-title">Información de empresa</h1>
+                        <h1 class="card-title">Información de usuario</h1>
                     </div>
-                    <form method="POST" action="" enctype="multipart/form-data" th:object="${empresa}">
+                    <form method="POST" action="" enctype="multipart/form-data" th:object="${usuario}">
                         <div class="row">
                             <div class="col-md-6">
-
                                 <div class="mb-3">
-                                    <label class="form-label">Nombre: </label>
+                                    <label class="form-label">Nombres:</label>
                                     <input type="text" class="form-control" th:field="*{nombre}" disabled>
                                 </div>
-
                                 <div class="mb-3">
-                                    <label class="form-label">RUC:</label>
-                                    <input type="number" class="form-control" th:field="*{ruc}" disabled>
+                                    <label class="form-label">Apellidos:</label>
+                                    <input type="text" class="form-control" th:field="*{apellido}" disabled>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Fecha de afiliación:</label>
-                                    <input type="text" class="form-control" th:field="*{fechaAfiliacion}" disabled>
+                                    <label class="form-label">Empresa:</label>
+                                    <input type="text" class="form-control" th:field="*{empresa.nombre}" disabled>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Dirección sede principal:</label>
-                                    <input type="text" class="form-control" th:field="*{direccion}" disabled>
+                                    <label class="form-label">Correo:</label>
+                                    <input type="text" class="form-control" th:field="*{correo}" disabled>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Cargo:</label>
+                                    <input type="text" class="form-control" th:field="*{cargo.nombreCargo}" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Fecha de registro:</label>
+                                    <input type="text" class="form-control" th:field="*{fechaRegistro}" disabled>
                                 </div>
                             </div>
                             <br><br>
                             <div class="col-md-6">
 
-                                <div class="mb-3">
-                                    <label class="form-label">Representante:</label>
-                                    <input type="text" class="form-control" th:field="*{representante}" disabled>
+                                <div class="row justify-content-center mb-3">
+                                    <label class="form-label">Foto de perfil:</label>
+                                    <br>
+                                    <br>
+                                    <img th:src="@{/assets/img/yo_2.jfif}" style="max-width: 300px;" alt="">
                                 </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Correo electrónico:</label>
-                                    <input type="text" class="form-control" th:field="*{correo}" disabled>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Teléfono:</label>
-                                    <input type="text" class="form-control" th:field="*{telefono}" disabled>
-                                </div>
-
+                                <br>
+                                <button type="submit" class="btn btn-outline-primary float-end">Editar</button>
+                                <button type="submit" class="btn btn-outline-danger float-start">Desactivar</button>
                             </div>
                         </div>
                     </form>
@@ -82,7 +83,7 @@
             </div>
         </section>
         <br>
-        <a th:href="@{/admin/listaEmpresa}" class="btn btn-outline-danger">Regresar</a>
+        <a th:href="@{/superadmin.html/listaUsuario}" class="btn btn-outline-danger">Regresar</a>
     </div>
 </main><!-- End #main -->
 

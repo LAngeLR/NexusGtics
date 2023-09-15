@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Table(name = "sitios")
 public class Sitio {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idSitios", nullable = false)
     private Integer idSitios;
 
@@ -43,7 +44,7 @@ public class Sitio {
     private Boolean tipoZona = false;
 
     @ManyToOne
-    @JoinColumn(name = "idArchivos", nullable = false)
+    @JoinColumn(name = "idArchivos")
     private Archivo archivo;
 
 }

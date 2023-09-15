@@ -10,6 +10,7 @@ import lombok.Setter;
 @Table(name = "equipos")
 public class Equipo {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idEquipos", nullable = false)
     private Integer idEquipos;
 
@@ -25,16 +26,16 @@ public class Equipo {
     @Column(name = "paginaModelo", length = 130)
     private String paginaModelo;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idSitios", nullable = false)
     private Sitio sitio;
 
     @ManyToOne
-    @JoinColumn(name = "idImagenes", nullable = false)
+    @JoinColumn(name = "idImagenes")
     private Archivo archivo;
 
     @ManyToOne
-    @JoinColumn(name = "idTipoEquipo", nullable = false)
+    @JoinColumn(name = "idTipoEquipo", nullable = false, referencedColumnName = "idTipoEquipo")
     private Tipoequipo tipoequipo;
 
 }

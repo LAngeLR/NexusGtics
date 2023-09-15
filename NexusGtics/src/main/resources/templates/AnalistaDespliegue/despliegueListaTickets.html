@@ -48,14 +48,13 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Empresa 1</td>
-                                <td>Sitio 1</td>
-                                <td>Kevin Anderson</td>
-                                <td><span class="badge text-bg-info">Baja Prioridad</span></td>
-                                <td>11-09-2023</td>
-                                <td>12-09-2023</td>
+                            <tr th:each="ticket, info: ${listaTicket}">
+                                <th th:text="${info.index + 1}" scope="row"></th>
+                                <td th:text="${ticket.idEmpresaAsignada}"></td>
+                                <td th:text="${ticket.idUsuarioCreador}"></td>
+                                <td th:text="${ticket.estado}"><span class="badge text-bg-danger"> </span></td>
+                                <td th:text="${ticket.fechaCreacion}"></td>
+                                <td th:text="${ticket.fechaCierre}"></td>
                                 <td><div class="dropdown">
                                     <button class="btn btn-light dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
@@ -69,105 +68,11 @@
 
                                     </ul>
                                 </div>
-                                    <!----></td>
+                                </td>
 
                             </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Empresa 2</td>
-                                <td>Sitio 2</td>
-                                <td>Kevin Anderson</td>
-                                <td><span class="badge text-bg-info">Baja Prioridad</span></td>
-                                <td>11-09-2023</td>
-                                <td>12-09-2023</td>
-                                <td><div class="dropdown">
-                                    <button class="btn btn-light dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                                        </svg>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" th:href="@{/analistaDespliegue/mapaTickets}">Ubicacion</a></li>
-                                        <li><a class="dropdown-item" th:href="@{/analistaDespliegue/editarTicket}">Editar</a></li>
-                                        <li><a class="dropdown-item" th:href="@{/analistaDespliegue/verTicket}">Ver más</a></li>
-
-                                    </ul>
-                                </div>
-                                    <!----></td>
-                            </tr>
-
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Empresa 3</td>
-                                <td>Sitio 3</td>
-                                <td>Kevin Anderson</td>
-                                <td><span class="badge text-bg-info">Baja Prioridad</span></td>
-                                <td>11-09-2023</td>
-                                <td>12-09-2023</td>
-                                <td><div class="dropdown">
-                                    <button class="btn btn-light dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                                        </svg>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" th:href="@{/analistaDespliegue/mapaTickets}">Ubicacion</a></li>
-                                        <li><a class="dropdown-item" th:href="@{/analistaDespliegue/editarTicket}">Editar</a></li>
-                                        <li><a class="dropdown-item" th:href="@{/analistaDespliegue/verTicket}">Ver más</a></li>
-
-                                    </ul>
-                                </div>
-                                    <!----></td>
-                            </tr>
 
 
-                            <tr>
-                                <th scope="row">4</th>
-                                <td>Empresa 4</td>
-                                <td>Sitio 4</td>
-                                <td>Kevin Anderson</td>
-                                <td><span class="badge text-bg-info">Baja Prioridad</span></td>
-                                <td>11-09-2023</td>
-                                <td>12-09-2023</td>
-                                <td><div class="dropdown">
-                                    <button class="btn btn-light dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                                        </svg>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" th:href="@{/analistaDespliegue/mapaTickets}">Ubicacion</a></li>
-                                        <li><a class="dropdown-item" th:href="@{/analistaDespliegue/editarTicket}">Editar</a></li>
-                                        <li><a class="dropdown-item" th:href="@{/analistaDespliegue/verTicket}">Ver más</a></li>
-
-                                    </ul>
-                                </div>
-                                    <!----></td>
-                            </tr>
-
-                            <tr>
-                                <th scope="row">5</th>
-                                <td>Empresa 5</td>
-                                <td>Sitio 5</td>
-                                <td>Kevin Anderson</td>
-                                <td><span class="badge text-bg-info">Baja Prioridad</span></td>
-                                <td>11-09-2023</td>
-                                <td>12-09-2023</td>
-                                <td><div class="dropdown">
-                                    <button class="btn btn-light dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                                        </svg>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" th:href="@{/analistaDespliegue/mapaTickets}">Ubicacion</a></li>
-                                        <li><a class="dropdown-item" th:href="@{/analistaDespliegue/editarTicket}">Editar</a></li>
-                                        <li><a class="dropdown-item" th:href="@{/analistaDespliegue/verTicket}">Ver más</a></li>
-
-                                    </ul>
-                                </div>
-                                    <!----></td>
-                            </tr>
                             </tbody>
                         </table>
                         <!-- End Table with stripped rows -->

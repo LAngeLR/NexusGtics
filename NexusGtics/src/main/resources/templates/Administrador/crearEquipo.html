@@ -30,42 +30,45 @@
           <div class="pagetitle" style="margin-top: -35px;">
             <h1 class="card-title">Creación de equipo</h1>
           </div>
-          <form method="POST" action="" enctype="multipart/form-data" style="margin-bottom: -35px;">
+          <form method="POST" th:action="@{/admin/guardarEquipo}" enctype="multipart/form-data" style="margin-bottom: -35px;">
             <div class="row">
               <div class="col-md-6">
 
                 <div class="mb-3">
-                  <label for="nombre">Nombre:</label>
-                  <input type="text" class="form-control" name="nombre" id="nombre" >
+                  <label for="marca">Marca:</label>
+                  <input type="text" class="form-control" name="marca" id="marca" >
                 </div>
 
                 <div class="mb-3">
-                  <label for="descripcion">Marca:</label>
+                  <label for="modelo">Modelo:</label>
+                  <input type="text" class="form-control" name="modelo" id="modelo">
+                </div>
+
+                <div class="mb-3">
+                  <label for="descripcion">Descripción:</label>
                   <input type="text" class="form-control" name="descripcion" id="descripcion" >
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Modelo:</label>
-                  <input type="text" class="form-control" name="precio" id="precio">
-                </div>
-
-                <div class="mb-3">
-                  <label for="descuento">Descripción:</label>
-                  <input type="text" class="form-control" name="descuento" id="descuento" >
-                </div>
-
-                <div class="mb-3">
-                  <label for="descuento">Cantidad:</label>
-                  <input type="number" class="form-control" name="descuento" id="descuento" >
+                  <label for="paginaModelo">Ficha técnica (fabricante)::</label>
+                  <input type="text" class="form-control" name="paginaModelo" id="paginaModelo" >
                 </div>
 
                 <div class="input-group mb-3">
-                  <label for="consola">Sitio de despliegue:</label>
+                  <label for="idSitios">Sitio de despliegue:</label>
                   <div class="col-12">
-                    <select name="consola" id="consola" class="form-control">
-                      <option value="Cargo1"></option>
-                      <option value="Cargo1">Sitio de T. Fija</option>
-                      <option value="Cargo2">Sitio de T. Móvil</option>
+                    <select name="idSitios" id="idSitios" class="form-control">
+                      <option th:each="sitio: ${listaSitios}"
+                              th:text="${sitio.distrito}" th:value="${sitio.idSitios}">Sitio de Tipo</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <label for="idTipoEquipo">Tipo de Equipo:</label>
+                  <div class="col-12">
+                    <select name="idTipoEquipo" id="idTipoEquipo" class="form-control">
+                      <option th:each="equipo: ${listaTipoEquipos}"
+                              th:text="${equipo.nombreTipo}" th:value="${equipo.idTipoEquipo}">Sitio de Tipo</option>
                     </select>
                   </div>
                 </div>
