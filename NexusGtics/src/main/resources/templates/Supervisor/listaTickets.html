@@ -98,117 +98,21 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Brandon Jacob</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>2021-05-25</td>
-                                    <td>2021-06-25</td>
 
-                                    <td><span class="badge text-bg-danger">Urgente</span></td>
+                                    <tr th:each="tickets: ${listaTickets}">
+                                        <td th:text="${tickets.idTickets}"></td>
+                                        <td th:text="${tickets.usuarioSolicitante}"></td>
+                                        <td th:text="${tickets.idCuadrilla.tecnico.nombre} + ${tickets.idCuadrilla.tecnico.apellido}"></td>
+                                        <td th:text="${tickets.fechaCreacion}"></td>
+                                        <td th:text="${tickets.fechaCierre}"></td>
 
-                                    <td><span class="badge text-bg-success">Progreso</span></td>
 
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/ticketProceso}">+</a></center></td>
-                                </tr>
+                                        <td><span class="badge text-bg-danger">Urgente</span></td>
 
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Brandon Jacob</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>2017-09-05</td>
-                                    <td>2017-10-05</td>
+                                        <td><span class="badge text-bg-success">Progreso</span></td>
 
-                                    <td><span class="badge text-bg-warning">Hacer</span></td>
-
-                                    <td><span class="badge text-bg-danger">Cerrado</span></td>
-
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/ticketCerrado}">+</a></center></td>
-                                </tr>
-
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>Brandon Jacob</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>2022-11-21</td>
-                                    <td>2022-12-21</td>
-
-                                    <td><span class="badge text-bg-success">No critico</span></td>
-
-                                    <td><span class="badge text-bg-primary">Nuevo</span></td>
-
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/ticketNuevo}">+</a></center></td>
-                                </tr>
-
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>Brandon Jacob</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>2023-02-27</td>
-                                    <td>2023-03-27</td>
-
-                                    <td><span class="badge text-bg-info">Baja Prioridad</span></td>
-
-                                    <td><span class="badge text-bg-success">Progreso</span></td>
-
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/ticketProceso}">+</a></center></td>
-                                </tr>
-
-                                <tr>
-                                    <th scope="row">5</th>
-                                    <td>Brandon Jacob</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>2021-02-13</td>
-                                    <td>2021-03-13</td>
-
-                                    <td><span class="badge text-bg-danger">Urgente</span></td>
-
-                                    <td><span class="badge text-bg-primary">Nuevo</span></td>
-
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/ticketNuevo}">+</a></center></td>
-                                </tr>
-
-                                <tr>
-                                    <th scope="row">6</th>
-                                    <td>Brandon Jacob</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>2019-05-19</td>
-                                    <td>2019-06-19</td>
-
-                                    <td><span class="badge text-bg-warning">Hacer</span></td>
-
-                                    <td><span class="badge text-bg-success">Progreso</span></td>
-
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/ticketProceso}">+</a></center></td>
-                                </tr>
-
-                                <tr>
-                                    <th scope="row">7</th>
-                                    <td>Brandon Jacob</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>2022-05-17</td>
-                                    <td>2022-06-17</td>
-
-                                    <td><span class="badge text-bg-success">No critico</span></td>
-
-                                    <td><span class="badge text-bg-primary">Nuevo</span></td>
-
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/ticketNuevo}">+</a></center></td>
-                                </tr>
-
-                                <tr>
-                                    <th scope="row">8</th>
-                                    <td>Brandon Jacob</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>2020-05-24</td>
-                                    <td>2020-06-24</td>
-
-                                    <td><span class="badge text-bg-info">Baja Prioridad</span></td>
-
-                                    <td><span class="badge text-bg-danger">Cerrado</span></td>
-
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/ticketCerrado}">+</a></center></td>
-                                </tr>
+                                        <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/supervisor/ticketProceso?id=' + ${tickets.idTickets}}">+</a></center></td>
+                                    </tr>
 
                                 </tbody>
                             </table>

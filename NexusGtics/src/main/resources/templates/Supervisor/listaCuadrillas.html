@@ -98,83 +98,14 @@
                                 </thead>
                                 <tbody>
 
-                                <tr>
-                                    <td>8</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>4</td>
-                                    <td>2021-05-25</td>
-                                    <td>10</td>
-
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/detallesCuadrilla}">+</a></center></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>7</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>10</td>
-                                    <td>2021-05-25</td>
-                                    <td>5</td>
-
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/detallesCuadrilla}">+</a></center></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>2</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>3</td>
-                                    <td>2021-05-25</td>
-                                    <td>12</td>
-
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/detallesCuadrilla}">+</a></center></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>7</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>13</td>
-                                    <td>2021-05-25</td>
-                                    <td>7</td>
-
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/detallesCuadrilla}">+</a></center></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>5</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>10</td>
-                                    <td>2021-05-25</td>
-                                    <td>7</td>
-
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/detallesCuadrilla}">+</a></center></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>2</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>7</td>
-                                    <td>2021-05-25</td>
-                                    <td>5</td>
-
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/detallesCuadrilla}">+</a></center></td>
-
-                                </tr>
-
-                                <tr>
-                                    <td>10</td>
-                                    <td>Carlos Valenzuela</td>
-                                    <td>3</td>
-                                    <td>2021-05-25</td>
-                                    <td>9</td>
-
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/supervisor/detallesCuadrilla}">+</a></center></td>
-
-                                </tr>
-
+                                    <tr th:each="cuadrilla: ${listaCuadrilla}">
+                                        <td th:text="${cuadrilla.idCuadrillas}"></td>
+                                        <td th:text="${cuadrilla.tecnico.nombre}"></td>
+                                        <td th:text="${trabajosFinalizadosPorCuadrilla[cuadrilla.idCuadrillas]}"></td>
+                                        <td> 5</td>
+                                        <td> 1</td>
+                                        <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/supervisor/detallesCuadrilla?id=' + ${cuadrilla.idCuadrillas}}">+</a></center></td>
+                                    </tr>
                                 </tbody>
                             </table>
                             <!-- End Table with stripped rows -->

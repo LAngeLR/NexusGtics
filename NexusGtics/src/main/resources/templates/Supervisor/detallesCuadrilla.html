@@ -72,21 +72,20 @@
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section profile">
+    <section class="section profile" th:object="${cuadrilla}">
         <div class="row">
             <div class="col-xl-4">
 
                 <div class="card">
                     <div class="card-body pt-5 d-flex flex-column align-items-center">
-                        <img th:src="@{/assets/img/fox.jpg}" alt="Profile" width="320" height="325">
-                        <br>
-                        <h2 style="color: #095444">Cuadrilla</h2>
-                        <h3>Nombre Cuadrilla</h3>
+                        <img th:src="@{'/assets/img/' + cuadrilla.supervisor.archivo.archivo}" alt="Profile" width="320" height="325">
 
+                        <br>
+                        <h2 style="color: #095444">Supervisor Creador</h2>
+                        <br>
+                        <h3 th:text="'Sup. ' + ${cuadrilla.supervisor.nombre}"></h3>
                     </div>
                 </div>
-
-
             </div>
 
             <div class="col-xl-8">
@@ -116,12 +115,12 @@
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label ">Numero de Cuadrilla</div>
-                                    <div class="col-lg-9 col-md-8">Cuadrilla 7</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${cuadrilla.idCuadrillas}"></div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Tecnico Lider</div>
-                                    <div class="col-lg-9 col-md-8">Mariano Gonzales</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${cuadrilla.tecnico.nombre}"></div>
                                 </div>
 
                                 <div class="row">
@@ -131,7 +130,7 @@
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Numero de trabajos asignados</div>
-                                    <div class="col-lg-9 col-md-8">10</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${trabajosFinalizadosPorCuadrilla[cuadrilla.idCuadrillas]}"></div>
                                 </div>
 
                                 <div class="row">
@@ -141,7 +140,7 @@
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Fecha de Formacion</div>
-                                    <div class="col-lg-9 col-md-8">09-03-2022</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${cuadrilla.fechaCreacion}"></div>
                                 </div>
 
                             </div>
@@ -149,38 +148,37 @@
                             <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <div style="margin-left: 80px;">
+                                        <div class="col-md-3 integrante-item">
+                                            <div>
                                                 <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="img-fluid">
                                                 <br>
                                                 <br>
-                                                <div>Tec. Hernan Godoy</div>
+                                                <div th:text="'Tec. ' + ${cuadrilla.tecnico.nombre} + ${cuadrilla.tecnico.apellido}"></div>
+                                                <br>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div style="margin-left: 60px;">
+                                        <div class="col-md-2 integrante-item2" th:each="integrante : ${integrantes}" th:if="${cuadrilla.tecnico.id!=integrante.id}">
+                                            <div>
                                                 <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="img-fluid">
                                                 <br>
                                                 <br>
-                                                <div>Tec. Erick Cruz</div>
+                                                <div th:text="'Tec. ' + ${integrante.nombre} + ${integrante.apellido}"></div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div style="margin-left: 40px;">
-                                                <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="img-fluid">
-                                                <br>
-                                                <br>
-                                                <div>Tec. Arturo Tito</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div style="margin-left: 20px;">
-                                                <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="img-fluid">
-                                                <br>
-                                                <br>
-                                                <div>Tec. Mateo Iglesias</div>
-                                            </div>
-                                        </div>
+                                        <style>
+
+                                            .integrante-item {
+                                                margin-left: 340px; /* Ajusta este valor según tu preferencia */
+                                                margin-right: 300px; /* Ajusta este valor según tu preferencia */
+                                            }
+                                        </style>
+                                        <style>
+
+                                            .integrante-item2 {
+                                                margin-left: 50px; /* Ajusta este valor según tu preferencia */
+                                                margin-right: 10px; /* Ajusta este valor según tu preferencia */
+                                            }
+                                        </style>
 
                                     </div>
                                     <div class="pt-2">

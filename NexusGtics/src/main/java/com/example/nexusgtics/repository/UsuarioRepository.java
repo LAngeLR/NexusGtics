@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
@@ -31,5 +32,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(value ="SELECT nombre, apellido FROM nexus.usuarios", nativeQuery = true )
     List<Usuario> unirUsuarioPorNombre(String nombre);
 
-
+    // ------------------------------ SUPERVISOR --------------------------------------- //
+    @Query(nativeQuery = true, value = "SELECT * FROM usuarios where IdCuadrilla=?1")
+    List<Usuario> listaDeTecnicosPorCuadrilla(int idCuadrilla);
 }
