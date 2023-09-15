@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -122,6 +123,11 @@ public class AdminController {
         return "Administrador/mapaInventarioSitio";
     }
 
+    @PostMapping("/guardarSitio")
+    public String guardarSitio(Sitio sitio, RedirectAttributes attr) {
+        sitioRepository.save(sitio);
+        return "redirect:/Administrador/listaSitio";
+    }
 //-----------------------------------------------------------------------
 
     // GESTION DE EQUIPOS
