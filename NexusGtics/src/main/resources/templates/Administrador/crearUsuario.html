@@ -69,7 +69,10 @@
 
                   <div class="mb-3">
                     <label for="descuento">Foto de perfil:</label>
-                    <input class="form-control" type="file" id="formFile">
+                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                      <img id="imgPreview" th:src="@{/assets/img/fotoSubir.webp}" class="card-img-top" style="max-height: 250px">
+                    </div>
+                    <input class="form-control" type="file" id="formFile" accept="image/*" onchange="previewImage(event, '#imgPreview')">
                   </div>
 
                   <button type="submit" class="btn btn-outline-primary float-end">Crear</button>
@@ -102,6 +105,7 @@
 
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
+  <script th:src="@{/assets/js/foto.js}"></script>
 
 </body>
 
