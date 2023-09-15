@@ -30,41 +30,42 @@
           <div class="pagetitle">
             <h1 class="card-title">Información de usuario</h1>
           </div>
-          <form method="POST" action="" enctype="multipart/form-data">
+          <form method="POST" action="" enctype="multipart/form-data" th:object="${usuario}">
             <div class="row">
               <div class="col-md-6">
-
                 <div class="mb-3">
-                  <label for="nombre">Nombres:</label>
-                  <input type="text" class="form-control" name="nombre" id="nombre" value="Rommel Antonio" disabled>
+                  <label class="form-label">Nombres:</label>
+                  <input type="text" class="form-control" th:field="*{nombre}" disabled>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Apellidos:</label>
+                  <input type="text" class="form-control" th:field="*{apellido}" disabled>
                 </div>
 
                 <div class="mb-3">
-                  <label for="descripcion">Apellidos:</label>
-                  <input type="text" class="form-control" name="descripcion" id="descripcion" value="Garay Santos" disabled>
+                  <label class="form-label">Empresa:</label>
+                  <input type="text" class="form-control" th:field="*{empresa.nombre}" disabled>
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Empresa:</label>
-                  <input type="text" class="form-control" name="precio" id="precio" value="PUCP" disabled>
+                  <label class="form-label">Correo:</label>
+                  <input type="text" class="form-control" th:field="*{correo}" disabled>
                 </div>
 
                 <div class="mb-3">
-                  <label for="descuento">Correo:</label>
-                  <input type="text" class="form-control" name="descuento" id="descuento" VALUE="rommel@gmail.com" disabled>
+                  <label class="form-label">Cargo:</label>
+                  <input type="text" class="form-control" th:field="*{cargo.nombreCargo}" disabled>
                 </div>
-
                 <div class="mb-3">
-                  <label for="consola">Cargo:</label>
-                  <input type="text" class="form-control" name="descuento" id="descuento" VALUE="Analista de Planificación" disabled>
-
+                  <label class="form-label">Fecha de registro:</label>
+                  <input type="text" class="form-control" th:field="*{fechaRegistro}" disabled>
                 </div>
               </div>
               <br><br>
               <div class="col-md-6">
 
                 <div class="row justify-content-center mb-3">
-                  <label for="descuento">Foto de perfil:</label>
+                  <label class="form-label">Foto de perfil:</label>
                   <br>
                   <br>
                   <img th:src="@{/assets/img/yo_2.jfif}" style="max-width: 300px;" alt="">

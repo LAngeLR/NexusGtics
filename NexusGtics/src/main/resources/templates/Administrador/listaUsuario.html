@@ -63,8 +63,8 @@
                           </button>
                           <ul class="dropdown-menu">
                             <li><a th:href="@{/admin/editarUsuario}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verUsuario}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Desactivar</button></li>
+                            <li><a th:href="@{'/admin/verUsuario?id=' + ${usuario.id}}" class="dropdown-item btn btn-outline-dark me-2">Visualizar</a></li>
                           </ul>
                         </div>
                       </div>
@@ -80,6 +80,7 @@
                             </div>
                             <div class="modal-footer">
                               <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                              <a th:href="@{'/admin/desabilitarUsuario?id=' + ${usuario.id}}" class="btn btn-outline-primary">Confirmar</a>
                               <button type="button" class="btn btn-outline-primary">Confirmar</button>
                             </div>
                           </div>
