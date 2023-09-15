@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,9 +49,20 @@ public class AdminController {
     // GESTION DE USUARIOS
     @GetMapping({"/listaUsuario","listausuario"})
     public String listaUsuario(Model model){
-        List<Usuario> listaUsuario = usuarioRepository.listaDeUsuariosNoAdmin();
-        model.addAttribute("listaUsuario", listaUsuario);
+        List<Usuario> listaUsuarioNoAdmin = usuarioRepository.listaDeUsuariosNoAdmin();
+        //List<Usuario> listaUsuarioTotal = usuarioRepository.findAll();
+        model.addAttribute("listaUsuario", listaUsuarioNoAdmin);
+        //model.addAttribute("listaUsuarioTotal", listaUsuarioTotal);
         return "Administrador/listaUsuario";
+    }
+
+    @GetMapping("/desabilitarUsuario")
+    public String desabilitarUsuario(@RequestParam("id") int id) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+        if (optionalUsuario.isPresent()) {
+            usuarioRepository.desactivarUsuario(id);
+        }
+        return "redirect:Administrador/listaUsuario";
     }
 
     @GetMapping({"/crearUsuario","crearusuario"})
@@ -59,9 +71,18 @@ public class AdminController {
     }
 
     @GetMapping({"/verUsuario","verusuario"})
-    public String verUsuario(){
-        return "Administrador/vistaUsuario";
+    public String verUsuario(Model model, @RequestParam("id") int id){
+        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+
+        if(optUsuario.isPresent()){
+            Usuario usuario = optUsuario.get();
+            model.addAttribute("usuario", usuario);
+            return "Administrador/vistaUsuario";
+        } else {
+            return "redirect:/Administrador/listaUsuario";
+        }
     }
+
 
     @GetMapping({"/editarUsuario","editarusuario"})
     public String editarUsuario(){
@@ -161,11 +182,8 @@ public class AdminController {
     //GESTION DE EMPRESAS
     @GetMapping({"/listaEmpresa","/listaempresa"})
     public String listaEmpresa(Model model){
-
         List<Empresa> listaEmpresa = empresaRepository.findAll();
-
         model.addAttribute("listaEmpresa",listaEmpresa);
-
         return "Administrador/listaEmpresa";
     }
 
@@ -188,6 +206,12 @@ public class AdminController {
         } else {
             return "redirect:/Administrador/listaEmpresa";
         }
+    }
+
+    @PostMapping("/guardarEmpresa")
+    public String guardarEmpresa(Empresa empresa, RedirectAttributes attr){
+        empresaRepository.save(empresa);
+        return "redirect:/admin/listaEmpresa";
     }
 
 
