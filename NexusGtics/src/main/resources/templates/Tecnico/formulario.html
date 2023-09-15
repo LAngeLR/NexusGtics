@@ -175,7 +175,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Información del cliente:</h5>
                         <!-- Advanced Form Elements -->
-                        <form>
+                        <form method="post" th:action="@{/tecnico/save}">
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">Ingrese datos</label>
                                 <div class="col-sm-10">
@@ -196,7 +196,7 @@
                                         <label for="floatingInput">Fecha</label>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input type="hour" class="form-control" id="floatingInput5" placeholder="name@example.com">
+                                        <input type="hour" class="form-control" id="floatingInput5" >
                                         <label for="floatingInput">Hora</label>
                                     </div>
                                 </div>
@@ -215,28 +215,28 @@
                                 <label class="col-sm-2 col-form-label">Agregar imagen</label>
                                 <div class="col-sm-10">
                                     <div class="input-group mb-3">
-                                        <input class="form-control" type="file" id="formFile1">
+                                        <input class="form-control" type="file" id="formFile1" >
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-5">
                                 <h5><b>Datos del técnico:</b></h5>
                                 <div class="mb-3 row">
-                                    <label class="col-sm-2 col-form-label">Nombre: </label>
+                                    <label class="col-sm-2 col-form-label">Nombre y Apellidos: </label>
                                     <div class="col-sm-10">
-                                        <input class="form-control" type="text" placeholder="Luis Medina Salazar" aria-label="Disabled input example" disabled>
+                                        <input class="form-control" type="text" th:text="${usuario.nombre + usuario.apellido}" disabled>
                                     </div>
                                 </div>
                                 <div class="mb-3 row">
                                     <label class="col-sm-2 col-form-label">DNI: </label>
                                     <div class="col-sm-10">
-                                        <input class="form-control" type="text" placeholder="728963354" aria-label="Disabled input example" disabled>
+                                        <input class="form-control" type="text" th:text="${usuario.id}">
                                     </div>
                                 </div>
                             </div>
-
+                            <center><button type="submit" class="btn btn-danger">Enviar</button></center>
                         </form><!-- End General Form Elements -->
-                        <center><button class="btn btn-danger">Enviar</button></center>
+
                     </div>
                 </div>
 

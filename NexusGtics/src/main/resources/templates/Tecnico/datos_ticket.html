@@ -173,32 +173,32 @@
                 <div class="card">
                     <div class="card-body pt-3">
                         <!-- Bordered Tabs -->
-                        <div class="tab-content pt-2">
+                        <div class="tab-content pt-2" th:each=" ticket, info : ${ticket}">
                             <div class="tab-pane fade show active profile-overview" id="datos-overview">
                                 <h5 class="card-title" style="color: #095444">Datos generale del Ticket</h5>
-                                <div class="row">
+                                <div class="row" >
                                     <div class="col-lg-3 col-md-4 label ">Prioridad:</div>
                                     <div class="col-lg-9 col-md-8" style="color: #D01515"><b>URGENTE</b></div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Nombre de Usuario:</div>
-                                    <div class="col-lg-9 col-md-8">JACOB TORRES, Sandra</div>
+                                <div class="row" >
+                                    <div class="col-lg-3 col-md-4 label" for="usuarioSolicitante">Nombre de Usuario:</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${ticket.usuarioSolicitante}" name="usuarioSolicitante" id="usuarioSolicitante"></div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Fecha de apertura</div>
-                                    <div class="col-lg-9 col-md-8">23-07-2023</div>
+                                    <div class="col-lg-3 col-md-4 label" for="fechaCreacion">Fecha de apertura</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${ticket.fechaCreacion}" name="fechaCreacion" id="fechaCreacion"></div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Fecha de vencimiento:</div>
-                                    <div class="col-lg-9 col-md-8">23-08-2023</div>
+                                    <div class="col-lg-3 col-md-4 label" for="fechaCierre">Fecha de vencimiento:</div>
+                                    <div class="col-lg-9 col-md-8"  th:text="${ticket.fechaCierre}"></div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Servicio Relacionado:</div>
-                                    <div class="col-lg-9 col-md-8">Mantenimiento de Gabinetes</div>
+                                    <div class="col-lg-3 col-md-4 label" >Servicio Relacionado:</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${tipoticket.nombreTipoTicket}"></div>
                                 </div>
 
                                 <div class="row">
