@@ -1,12 +1,23 @@
 package com.example.nexusgtics.controllers;
 
+import com.example.nexusgtics.entity.Sitio;
+import com.example.nexusgtics.repository.SitioRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/analistaOYM")
 public class AnalistaOYMController {
+
+    final SitioRepository sitioRepository;
+
+    public AnalistaOYMController(SitioRepository sitioRepository ){
+        this.sitioRepository = sitioRepository;
+    }
 
     @GetMapping("/")
     public String paginaPrincipal(){
@@ -14,7 +25,11 @@ public class AnalistaOYMController {
     }
 
     @GetMapping("/listaSitio")
-    public String listaSitio(){
+    public String listaSitio(Model model){
+        List<Sitio> listaSitio = sitioRepository.findAll();
+
+        model.addAttribute("listaSitio",listaSitio);
+
         return "AnalistaOYM/oymListaSitio";
     }
 

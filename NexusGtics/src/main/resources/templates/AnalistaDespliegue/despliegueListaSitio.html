@@ -7,7 +7,7 @@
 <body>
 
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('Analista de Despliegue')"><!-- End Header --></header><!-- End Header -->
+<header th:replace="Fragmentos/header :: header('Lista de sitios')"><!-- End Header --></header><!-- End Header -->
 
   <!-- ======= Sidebar ======= -->
 <!-- ======= Sidebar ======= -->
@@ -85,137 +85,18 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Lima</td>
-                    <td>Barranca</td>
-                    <td>Paramonga</td>
-                    <td>929292</td>
-                    <td>-9.189967, -75.015152</td>
-                    <td>Urbana</td>
-                    <td>Móvil</td>
+                  <tr th:each="sitio, info : ${listaSitio}">
+                    <td th:text = "${info.index + 1}"></td>
+                    <td th:text="${sitio.departamento}"></td>
+                    <td th:text="${sitio.provincia}"></td>
+                    <td th:text="${sitio.distrito}"></td>
+                    <td th:text="${sitio.ubigeo}"></td>
+                    <td th:text="${sitio.longitud + ', ' + sitio.latitud}"></td>
+                    <td th:text="${sitio.tipoZona == 0 ? 'urbana' : 'rural'}"></td>
+                    <td th:text="${sitio.tipo== 0 ? 'Móvil' : 'rural'}"></td>
                     <td><a class="download-link" href="ruta-al-archivo/1.csv" download>1.csv</a></td>
                     <td><center><a type="button" class="btn btn-secondary" th:href="@{/analistaDespliegue/editarSitio}">Editar</a></center></td>
                   </tr>
-
-                  <tr>
-                    <td>2</td>
-                    <td>Cusco</td>
-                    <td>Cusco</td>
-                    <td>Cusco</td>
-                    <td>142455</td>
-                    <td>-9.189967, -75.015152</td>
-                    <td>Rural</td>
-                    <td>Fijo</td>
-                    <td><a class="download-link" href="ruta-al-archivo/2.csv" download>2.csv</a></td>
-                    <td><center><a type="button" class="btn btn-secondary" th:href="@{/analistaDespliegue/editarSitio}">Editar</a></center></td>
-                  </tr>
-
-                  <tr>
-                    <td>3</td>
-                    <td>Lima</td>
-                    <td>Barranca</td>
-                    <td>Paramonga</td>
-                    <td>929292</td>
-                    <td>-9.189967, -75.015152</td>
-                    <td>Urbana</td>
-                    <td>Móvil</td>
-                    <td><a class="download-link" href="ruta-al-archivo/1.csv" download>1.csv</a></td>
-                    <td><center><a type="button" class="btn btn-secondary" th:href="@{/analistaDespliegue/editarSitio}">Editar</a></center></td>
-                  </tr>
-
-
-                  <tr>
-                    <td>4</td>
-                    <td>Cusco</td>
-                    <td>Cusco</td>
-                    <td>Cusco</td>
-                    <td>142455</td>
-                    <td>-9.189967, -75.015152</td>
-                    <td>Rural</td>
-                    <td>Fijo</td>
-                    <td><a class="download-link" href="ruta-al-archivo/2.csv" download>2.csv</a></td>
-                    <td><center><a type="button" class="btn btn-secondary" th:href="@{/analistaDespliegue/editarSitio}">Editar</a></center></td>
-                  </tr>
-
-
-                  <tr>
-                    <td>5</td>
-                    <td>Lima</td>
-                    <td>Barranca</td>
-                    <td>Paramonga</td>
-                    <td>929292</td>
-                    <td>-9.189967, -75.015152</td>
-                    <td>Urbana</td>
-                    <td>Móvil</td>
-                    <td><a class="download-link" href="ruta-al-archivo/1.csv" download>1.csv</a></td>
-                    <td><center><a type="button" class="btn btn-secondary" th:href="@{/analistaDespliegue/editarSitio}">Editar</a></center></td>
-                  </tr>
-
-                  <tr>
-                    <td>6</td>
-                    <td>Cusco</td>
-                    <td>Cusco</td>
-                    <td>Cusco</td>
-                    <td>142455</td>
-                    <td>-9.189967, -75.015152</td>
-                    <td>Rural</td>
-                    <td>Fijo</td>
-                    <td><a class="download-link" href="ruta-al-archivo/2.csv" download>2.csv</a></td>
-                    <td><center><a type="button" class="btn btn-secondary" th:href="@{/analistaDespliegue/editarSitio}">Editar</a></center></td>
-                  </tr>
-
-                  <tr>
-                    <td>7</td>
-                    <td>Lima</td>
-                    <td>Barranca</td>
-                    <td>Paramonga</td>
-                    <td>929292</td>
-                    <td>-9.189967, -75.015152</td>
-                    <td>Urbana</td>
-                    <td>Móvil</td>
-                    <td><a class="download-link" href="ruta-al-archivo/1.csv" download>1.csv</a></td>
-                    <td><center><a type="button" class="btn btn-secondary" th:href="@{/analistaDespliegue/editarSitio}">Editar</a></center></td>
-                  </tr>
-                  <tr>
-                    <td>8</td>
-                    <td>Cusco</td>
-                    <td>Cusco</td>
-                    <td>Cusco</td>
-                    <td>142455</td>
-                    <td>-9.189967, -75.015152</td>
-                    <td>Rural</td>
-                    <td>Fijo</td>
-                    <td><a class="download-link" href="ruta-al-archivo/2.csv" download>2.csv</a></td>
-                    <td><center><a type="button" class="btn btn-secondary" th:href="@{/analistaDespliegue/editarSitio}">Editar</a></center></td>
-                  </tr>
-                  <tr>
-                    <td>9</td>
-                    <td>Lima</td>
-                    <td>Barranca</td>
-                    <td>Paramonga</td>
-                    <td>929292</td>
-                    <td>-9.189967, -75.015152</td>
-                    <td>Urbana</td>
-                    <td>Móvil</td>
-                    <td><a class="download-link" href="ruta-al-archivo/1.csv" download>1.csv</a></td>
-                    <td><center><a type="button" class="btn btn-secondary" th:href="@{/analistaDespliegue/editarSitio}">Editar</a></center></td>
-                  </tr>
-                  <tr>
-                    <td>10</td>
-                    <td>Cusco</td>
-                    <td>Cusco</td>
-                    <td>Cusco</td>
-                    <td>142455</td>
-                    <td>-9.189967, -75.015152</td>
-                    <td>Rural</td>
-                    <td>Fijo</td>
-                    <td><a class="download-link" href="ruta-al-archivo/2.csv" download>2.csv</a></td>
-                    <td><center><a type="button" class="btn btn-secondary" th:href="@{/analistaDespliegue/editarSitio}">Editar</a></center></td>
-                  </tr>
-
-
-
                   </tbody>
 
                 </table>
