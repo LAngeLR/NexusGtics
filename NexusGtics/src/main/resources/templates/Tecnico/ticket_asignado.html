@@ -167,7 +167,7 @@
             </ol>
         </nav>
     </div><!-- End Page Title -->
-
+    <!--YA ESTA CRUD-->
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
@@ -190,50 +190,14 @@
                                 <th scope="col">Ver más</th>
                             </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Brandon Jacob</td>
-                                    <td>2021-05-25</td>
-                                    <td>2021-06-25</td>
+                            <tbody> <!-- th:text="${ticket.fechaCreacion}" -->
+                                <tr th:each=" ticket, info : ${ticketList}">
+                                    <th th:text="${info.index + 1}" scope="row"></th>
+                                    <td th:text="${ticket.usuarioSolicitante}"></td>
+                                    <td th:text="${ticket.fechaCreacion}"></td>
+                                    <td th:text="${ticket.fechaCierre}"></td>
                                     <td><span class="badge text-bg-info">Baja Prioridad</span></td>
-                                    <td><span class="badge text-bg-danger">Cerrado</span></td>
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/tecnico/datosticket}">+</a></center></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Sandra Jacob</td>
-                                    <td>2021-06-23</td>
-                                    <td>2021-07-23</td>
-                                    <td><span class="badge text-bg-danger">Urgente</span></td>
-                                    <td><span class="badge text-bg-success">Progreso</span></td>
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/tecnico/datosticket}">+</a></center></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>Sandra Gomez</td>
-                                    <td>2021-04-23</td>
-                                    <td>2021-05-23</td>
-                                    <td><span class="badge text-bg-warning">Hacer</span></td>
-                                    <td><span class="badge text-bg-primary">Nuevo</span></td>
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/tecnico/datosticket}">+</a></center></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>Luis Salas</td>
-                                    <td>2022-08-13</td>
-                                    <td>2022-09-13</td>
-                                    <td><span class="badge text-bg-success">No crítico</span></td>
-                                    <td><span class="badge text-bg-success">Progreso</span></td>
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/tecnico/datosticket}">+</a></center></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">5</th>
-                                    <td>Lucia Lopez</td>
-                                    <td>2023-04-12</td>
-                                    <td>2023-05-12</td>
-                                    <td><span class="badge text-bg-warning">Hacer</span></td>
-                                    <td><span class="badge text-bg-primary">Nuevo</span></td>
+                                    <td th:text="${ticket.estado}"><span class="badge text-bg-danger"></span></td>
                                     <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/tecnico/datosticket}">+</a></center></td>
                                 </tr>
                             </tbody>
