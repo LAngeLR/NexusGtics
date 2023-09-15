@@ -20,7 +20,8 @@ public class AnalistaDespController {
     final TicketRepository ticketRepository;
     final SitioRepository sitioRepository;
 
-    public AnalistaDespController(SitioRepository sitioRepository ){
+    public AnalistaDespController(TicketRepository ticketRepository, SitioRepository sitioRepository ){
+        this.ticketRepository = ticketRepository;
         this.sitioRepository = sitioRepository;
     }
 
