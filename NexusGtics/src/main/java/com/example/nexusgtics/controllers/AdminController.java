@@ -148,8 +148,24 @@ public class AdminController {
         return "Administrador/crearEmpresa";
     }
 
-    @GetMapping({"/verEmpresa","/verempresa"})
-    public String verEmpresa(@RequestParam("id") int id, Model model ){
+//    @GetMapping({"/verEmpresa","/verempresa"})
+//    public String verEmpresa(Model model, @RequestParam("id") int id ){
+//
+//        Optional<Empresa> optEmpresa = empresaRepository.findById(id);
+//        System.out.println(optEmpresa.isPresent());
+//        if (optEmpresa.isPresent()) {
+//            Empresa empresa = optEmpresa.get();
+//            model.addAttribute("empresa", empresa);
+//            System.out.println(empresa.getIdEmpresas());
+//            return "Administrador/vistaEmpresa";
+//        } else {
+//            return "redirect:Administrador/listaEmpresa";
+//        }
+//    }
+
+    @GetMapping("/verEmpresa")
+    public String verEmpresa(Model model,
+                                      @RequestParam("id") int id) {
 
         Optional<Empresa> optEmpresa = empresaRepository.findById(id);
 
@@ -158,9 +174,8 @@ public class AdminController {
             model.addAttribute("empresa", empresa);
             return "Administrador/vistaEmpresa";
         } else {
-            return "redirect:Administrador/listaEmpresa";
+            return "redirect:/Administrador/listaEmpresa";
         }
-
     }
 
 
