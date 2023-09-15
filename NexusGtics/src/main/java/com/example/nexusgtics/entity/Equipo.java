@@ -31,7 +31,7 @@ public class Equipo {
     private Sitio sitio;
 
     @ManyToOne
-    @JoinColumn(name = "idImagenes", nullable = false)
+    @JoinColumn(name = "idImagenes")
     private Archivo archivo;
 
     @ManyToOne

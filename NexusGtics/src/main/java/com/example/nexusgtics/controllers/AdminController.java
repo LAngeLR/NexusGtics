@@ -171,8 +171,22 @@ public class AdminController {
     }
 
     @GetMapping({"/crearEquipo","/crearequipo"})
-    public String crearEquipo(){
+    public String crearEquipo(Model model){
+        model.addAttribute("listaSitios",sitioRepository.findAll());
+        model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
         return "Administrador/crearEquipo";
+    }
+    @PostMapping("/guardarEquipo")
+    public String guardarEquipo(@RequestParam("marca") String marca,
+                               @RequestParam("modelo") String modelo,
+                               @RequestParam("descripcion") String descripcion,
+                               @RequestParam("paginaModelo") String paginaModelo,
+                               @RequestParam("idSitios") Integer idSitios,
+                               @RequestParam("idTipoEquipo") Integer idTipoEquipo, RedirectAttributes attr) {
+
+        equipoRepository.guardarEquipo(marca, modelo, descripcion, paginaModelo, idSitios, idTipoEquipo);
+
+        return "redirect:/admin/listaEquipo";
     }
 
     @GetMapping({"/verEquipo","/verequipo"})
