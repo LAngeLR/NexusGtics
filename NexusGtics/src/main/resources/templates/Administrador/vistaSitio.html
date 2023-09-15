@@ -65,50 +65,48 @@
           <div class="pagetitle">
             <h1 class="card-title">Visualización de sitio</h1>
           </div>
-          <form method="POST" action="" enctype="multipart/form-data">
+          <form method="POST" action="" enctype="multipart/form-data" th:object="${sitio}">
             <div class="row">
               <div class="col-md-6">
 
                 <div class="mb-3">
-                  <label for="nombre">Departamento:</label>
-                  <input type="text" class="form-control" name="nombre" id="nombre" value="Lima" disabled>
+                  <label class="form-label">Departamento:</label>
+                  <input type="text" class="form-control" th:field="*{departamento}" disabled>
                 </div>
 
                 <div class="mb-3">
-                  <label for="descripcion">Provincia:</label>
-                  <input type="text" class="form-control" name="descripcion" id="descripcion" value="Cañete" disabled>
+                  <label class="form-label">Provincia:</label>
+                  <input type="text" class="form-control" th:field="*{provincia}" disabled>
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Distrito:</label>
-                  <input type="text" class="form-control" name="precio" id="precio" value="San Vicente" disabled>
+                  <label class="form-label">Distrito:</label>
+                  <input type="text" class="form-control" th:field="*{distrito}" disabled>
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Ubigeo:</label>
-                  <input type="text" class="form-control" name="precio" id="precio" value="195195" disabled>
+                  <label class="form-label">Tipo de sitio:</label>
+                  <input type="text" class="form-control" th:field="*{tipo}" disabled>
                 </div>
 
                 <div class="mb-3">
-                  <label for="descuento">Latitud:</label>
-                  <input type="number" class="form-control" name="descuento" id="descuento" value="-12.0740" disabled>
+                  <label class="form-label">Tipo de zona:</label>
+                  <input type="text" class="form-control" th:field="*{tipoZona}" disabled>
                 </div>
 
                 <div class="mb-3">
-                  <label for="descuento">Longitud:</label>
-                  <input type="number" class="form-control" name="descuento" id="descuento" value="-77.08975" disabled>
+                  <label class="form-label">Ubigeo:</label>
+                  <input type="number" class="form-control" th:field="*{ubigeo}" disabled>
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Tipo de zona:</label>
-                  <input type="text" class="form-control" name="precio" id="consola" value="Urbana" disabled>
-
+                  <label class="form-label">Latitud:</label>
+                  <input type="number" class="form-control" th:field="*{latitud}" disabled>
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Tipo de sitio:</label>
-                  <input type="text" class="form-control" name="precio" id="consola" value="Móvil" disabled>
-
+                  <label class="form-label">Longitud:</label>
+                  <input type="number" class="form-control" th:field="*{longitud}" disabled>
                 </div>
 
               </div>
@@ -128,12 +126,14 @@
                     <div class="card-body pt-3">
                       <div id="mi_mapa" ></div>
                       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                      <script>
-                        let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
+                      <script th:inline="javascript">
+                        var latitud = [[${sitio.latitud}]];
+                        var longitud = [[${sitio.longitud}]];
+                        let map = L.map('mi_mapa').setView([latitud,longitud],18)
                         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         }).addTo(map);
-                        L.marker([-12.06802,-77.03462]).addTo(map).bindPopup('Sitio').openPopup();
+                        L.marker([latitud,longitud]).addTo(map).bindPopup('Sitio').openPopup();
 
                       </script>
                       <!-- MAPA -->

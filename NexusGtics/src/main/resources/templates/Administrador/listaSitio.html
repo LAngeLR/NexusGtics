@@ -76,19 +76,19 @@
                   <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Región</th>
-                    <th scope="col">Empresa</th>
+                    <th scope="col">Departamento</th>
+                    <th scope="col">Provincia</th>
+                    <th scope="col">Distrito</th>
                     <th scope="col">Acciones</th>
                   </tr>
                   </thead>
                   <tbody>
 
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Area 1</td>
-                    <td>Lima - Yauyos</td>
-                    <td>Fideos</td>
+                  <tr th:each="sitio, info : ${listaSitio}">
+                    <th scope="row" th:text="${info.count+1}">1</th>
+                    <td th:text="${sitio.departamento}">Provincia - Distrito</td>
+                    <td th:text="${sitio.provincia}">Provincia - Distrito</td>
+                    <td th:text="${sitio.distrito}">Provincia - Distrito</td>
 
                     <td>
                       <div class="d-flex justify-content-center align-items-center">
@@ -97,9 +97,9 @@
                             <i class="bi bi-plus-square"></i>
                           </button>
                           <ul class="dropdown-menu">
-                            <li><a th:href="@{/admin/editarSitio}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
+                            <li><a th:href="@{'/admin/editarSitio?id=' + ${sitio.idSitios}}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
                             <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verSitio}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
+                            <li><a th:href="@{'/admin/verSitio?id=' + ${sitio.idSitios}}" class="dropdown-item btn btn-outline-dark me-2">Visualizar</a></li>
                           </ul>
                         </div>
                       </div>
@@ -122,255 +122,14 @@
                       </div>
                     </td>
                   </tr>
-
-
-
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Area 2</td>
-                    <td>Tacna - Roca</td>
-                    <td>Entel</td>
-                    <td>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <div class="dropdown">
-                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-plus-square"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a th:href="@{/admin/editarSitio}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verSitio}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <!-- MODAL -->
-                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                            </div>
-                            <div class="modal-body">
-                              <h3>¿Está seguro de eliminar el sitio?</h3>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-
-
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Area 3</td>
-                    <td>Cuzco - No se</td>
-                    <td>Movistar</td>
-                    <td>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <div class="dropdown">
-                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-plus-square"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a th:href="@{/admin/editarSitio}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verSitio}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <!-- MODAL -->
-                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                            </div>
-                            <div class="modal-body">
-                              <h3>¿Está seguro de eliminar el sitio?</h3>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-
-
-                  <tr>
-                    <th scope="row">4</th>
-                    <td>Localidad 11</td>
-                    <td>Piura</td>
-                    <td>Huawei</td>
-                    <td>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <div class="dropdown">
-                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-plus-square"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a th:href="@{/admin/editarSitio}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verSitio}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <!-- MODAL -->
-                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                            </div>
-                            <div class="modal-body">
-                              <h3>¿Está seguro de eliminar el sitio?</h3>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-
-
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>Comunidad 101</td>
-                    <td>Loreto - Iquitos xd</td>
-                    <td>Cisco</td>
-                    <td>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <div class="dropdown">
-                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-plus-square"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a th:href="@{/admin/editarSitio}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verSitio}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <!-- MODAL -->
-                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                            </div>
-                            <div class="modal-body">
-                              <h3>¿Está seguro de eliminar el sitio?</h3>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <th scope="row">6</th>
-                    <td>Area 10</td>
-                    <td>Huanuco - Tambo</td>
-                    <td>Bitel</td>
-                    <td>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <div class="dropdown">
-                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-plus-square"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a th:href="@{/admin/editarSitio}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verSitio}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <!-- MODAL -->
-                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                            </div>
-                            <div class="modal-body">
-                              <h3>¿Está seguro de eliminar el sitio?</h3>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-
-
-                  <tr>
-                    <th scope="row">7</th>
-                    <td>Comunidad Inti</td>
-                    <td>Abancay - Apurimac</td>
-                    <td>Entel</td>
-                    <td>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <div class="dropdown">
-                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-plus-square"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a th:href="@{/admin/editarSitio}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verSitio}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <!-- MODAL -->
-                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                            </div>
-                            <div class="modal-body">
-                              <h3>¿Está seguro de eliminar el sitio?</h3>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-
-
-
-
                   </tbody>
                 </table>
                 <!-- End Table with stripped rows -->
-
               </div>
             </div>
-
           </div>
         </div>
       </section>
-
     </div>
   </main><!-- End #main -->
 

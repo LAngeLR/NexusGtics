@@ -17,11 +17,11 @@ public class Cuadrilla {
 
     @ManyToOne
     @JoinColumn(name = "idSupervisor", nullable = false)
-    private Usuario idSupervisor;
+    private Usuario supervisor;  //cuidado
 
     @ManyToOne
     @JoinColumn(name = "idTecnico", nullable = false)
-    private Usuario idTecnico;
+    private Usuario tecnico;    //cuidado
 
     @Column(name = "ocupado", nullable = false)
     private Boolean ocupado = false;

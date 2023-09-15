@@ -23,10 +23,10 @@ public class Comentario {
 
     @ManyToOne
     @JoinColumn(name = "idTickets", nullable = false)
-    private Ticket idTickets;
+    private Ticket ticket;
 
     @ManyToOne
     @JoinColumn(name = "idComentarista", nullable = false)
-    private Usuario idComentarista;
+    private Usuario comentarista;
 
 }

@@ -1,11 +1,10 @@
 package com.example.nexusgtics.controllers;
 
 import com.example.nexusgtics.entity.Empresa;
+import com.example.nexusgtics.entity.Equipo;
+import com.example.nexusgtics.entity.Sitio;
 import com.example.nexusgtics.entity.Usuario;
-import com.example.nexusgtics.repository.EmpresaRepository;
-import com.example.nexusgtics.repository.EquipoRepository;
-import com.example.nexusgtics.repository.SitioRepository;
-import com.example.nexusgtics.repository.UsuarioRepository;
+import com.example.nexusgtics.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,13 +22,14 @@ public class AdminController {
     final EmpresaRepository empresaRepository;
     final SitioRepository sitioRepository;
     final EquipoRepository equipoRepository;
-
+    final TipoEquipoRepository tipoEquipoRepository;
     final UsuarioRepository usuarioRepository;
 
-    public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository, UsuarioRepository usuarioRepository) {
+    public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository, UsuarioRepository usuarioRepository) {
         this.empresaRepository = empresaRepository;
         this.sitioRepository = sitioRepository;
         this.equipoRepository = equipoRepository;
+        this.tipoEquipoRepository = tipoEquipoRepository;
         this.usuarioRepository = usuarioRepository;
     }
 
@@ -42,6 +42,8 @@ public class AdminController {
     public String perfilAdmin(){
         return "Administrador/perfilAdmin";
     }
+
+//-----------------------------------------------------------------------
 
     // GESTION DE USUARIOS
     @GetMapping({"/listaUsuario","listausuario"})
@@ -78,10 +80,13 @@ public class AdminController {
     }
 
 
+//-----------------------------------------------------------------------
 
     // GESTION DE SITIOS
     @GetMapping({"/listaSitio","/listasitio"})
-    public String listaSitio(){
+    public String listaSitio(Model model){
+        List<Sitio> listaSitio = sitioRepository.findAll();
+        model.addAttribute("listaSitio", listaSitio);
         return "Administrador/listaSitio";
     }
 
@@ -91,8 +96,15 @@ public class AdminController {
     }
 
     @GetMapping({"/verSitio","/versitio"})
-    public String verSitio(){
-        return "Administrador/vistaSitio";
+    public String verSitio(Model model, @RequestParam("id") int id){
+        Optional<Sitio> optionalSitio = sitioRepository.findById(id);
+        if (optionalSitio.isPresent()){
+            Sitio sitio = optionalSitio.get();
+            model.addAttribute("sitio", sitio);
+            return "Administrador/vistaSitio";
+        }else {
+            return "Administrador/listaSitio";
+        }
     }
 
     @GetMapping({"/editarSitio","/editarsitio"})
@@ -110,10 +122,13 @@ public class AdminController {
         return "Administrador/mapaInventarioSitio";
     }
 
+//-----------------------------------------------------------------------
 
     // GESTION DE EQUIPOS
     @GetMapping({"/listaEquipo","/listaequipo"})
-    public String listaEquipo(){
+    public String listaEquipo(Model model){
+        List<Equipo> listaEquipo = equipoRepository.findAll();
+        model.addAttribute("listaEquipo", listaEquipo);
         return "Administrador/listaEquipo";
     }
 
@@ -123,14 +138,25 @@ public class AdminController {
     }
 
     @GetMapping({"/verEquipo","/verequipo"})
-    public String verEquipo(){
-        return "Administrador/vistaEquipo";
+    public String verEquipo(Model model, @RequestParam("id") int id){
+        Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
+
+        if(optionalEquipo.isPresent()){
+            Equipo equipo = optionalEquipo.get();
+            model.addAttribute("equipo", equipo);
+            return "Administrador/vistaEquipo";
+        }else {
+            return "redirect:/Administrador/listaEquipo";
+        }
+
     }
 
     @GetMapping({"/editarEquipo","/editarequipo"})
     public String editarEquipo(){
         return "Administrador/editarEquipo";
     }
+
+//-----------------------------------------------------------------------
 
     //GESTION DE EMPRESAS
     @GetMapping({"/listaEmpresa","/listaempresa"})
@@ -148,20 +174,6 @@ public class AdminController {
         return "Administrador/crearEmpresa";
     }
 
-//    @GetMapping({"/verEmpresa","/verempresa"})
-//    public String verEmpresa(Model model, @RequestParam("id") int id ){
-//
-//        Optional<Empresa> optEmpresa = empresaRepository.findById(id);
-//        System.out.println(optEmpresa.isPresent());
-//        if (optEmpresa.isPresent()) {
-//            Empresa empresa = optEmpresa.get();
-//            model.addAttribute("empresa", empresa);
-//            System.out.println(empresa.getIdEmpresas());
-//            return "Administrador/vistaEmpresa";
-//        } else {
-//            return "redirect:Administrador/listaEmpresa";
-//        }
-//    }
 
     @GetMapping("/verEmpresa")
     public String verEmpresa(Model model,

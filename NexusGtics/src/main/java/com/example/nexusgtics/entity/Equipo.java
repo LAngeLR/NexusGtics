@@ -27,14 +27,14 @@ public class Equipo {
 
     @ManyToOne
     @JoinColumn(name = "idSitios", nullable = false)
-    private Sitio idSitios;
+    private Sitio sitio;
 
     @ManyToOne
     @JoinColumn(name = "idImagenes", nullable = false)
-    private Archivo idImagenes;
+    private Archivo archivo;
 
     @ManyToOne
     @JoinColumn(name = "idTipoEquipo", nullable = false)
-    private Tipoequipo idTipoEquipo;
+    private Tipoequipo tipoequipo;
 
 }

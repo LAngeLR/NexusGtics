@@ -26,18 +26,18 @@ public class Formulario {
 
     @ManyToOne
     @JoinColumn(name = "idTecnico", nullable = false)
-    private Usuario idTecnico;
+    private Usuario tecnico;    //cuidado, no se llama usuario sino tecnico
 
     @ManyToOne
     @JoinColumn(name = "idImagenesForm", nullable = false)
-    private Archivo idImagenesForm;
+    private Archivo archivo;
 
     @ManyToOne
     @JoinColumn(name = "idTickets", nullable = false)
-    private Ticket idTickets;
+    private Ticket ticket;
 
     @ManyToOne
     @JoinColumn(name = "idTipoTicket", nullable = false)
-    private Tipoticket idTipoTicket;
+    private Tipoticket tipoticket;
 
 }

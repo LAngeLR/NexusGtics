@@ -54,4 +54,7 @@ public class Ticket {
     @JoinColumn(name = "idTipoTicket", nullable = false)
     private Tipoticket idTipoTicket;
 
+    @Column(name = "prioridad", length = 45)
+    private String prioridad;
+
 }

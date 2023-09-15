@@ -23,11 +23,11 @@ public class Historialticket {
 
     @ManyToOne
     @JoinColumn(name = "idTickets", nullable = false)
-    private Ticket idTickets;
+    private Ticket ticket;
 
     @ManyToOne
     @JoinColumn(name = "idUsuarios", nullable = false)
-    private Usuario idUsuarios;
+    private Usuario usuario;
 
     @Column(name = "descripcion", length = 250)
     private String descripcion;

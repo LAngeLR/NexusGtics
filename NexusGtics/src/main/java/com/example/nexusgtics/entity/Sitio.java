@@ -44,6 +44,6 @@ public class Sitio {
 
     @ManyToOne
     @JoinColumn(name = "idArchivos", nullable = false)
-    private Archivo idArchivos;
+    private Archivo archivo;
 
 }

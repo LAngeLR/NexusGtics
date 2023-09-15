@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head th:include="Fragmentos/head :: head('Lista de equipos')"></head>
 
@@ -97,15 +97,17 @@
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Tipo de equipo</th>
-                    <th scope="col">Tipo de sitio de implementación </th>
+                    <th scope="col">Marca </th>
+                    <th scope="col">Modelo</th>
                     <th scope="col">Acciones</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Switch</td>
-                    <td>Sitio de telefonía móvil</td>
+                  <tr th:each="equipo, info : ${listaEquipo}">
+                    <th scope="row" th:text="${info.count+1}">1</th>
+                    <td th:text="${equipo.tipoequipo.nombreTipo}">Tipo</td>
+                    <td th:text="${equipo.marca}">Marca</td>
+                    <td th:text="${equipo.modelo}">Modelo</td>
                     <td>
                       <div class="d-flex justify-content-center align-items-center">
                         <div class="dropdown">
@@ -113,9 +115,9 @@
                             <i class="bi bi-plus-square"></i>
                           </button>
                           <ul class="dropdown-menu">
-                            <li><a th:href="@{/admin/editarEquipo}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
+                            <li><a class="dropdown-item btn btn-outline-primary me-2" th:href="@{'/admin/editarEquipo?id=' + ${equipo.idEquipos}}">Editar</a></li>
                             <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verEquipo}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
+                            <li><a class="dropdown-item btn btn-outline-dark me-2" th:href="@{'/admin/verEquipo?id=' + ${equipo.idEquipos}}" >Visualizar</a></li>
                           </ul>
                         </div>
                       </div>
@@ -138,230 +140,6 @@
                       </div>
                     </td>
                   </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Router</td>
-                    <td>Sitio de telefonía fija</td>
-
-                    <td>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <div class="dropdown">
-                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-plus-square"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a th:href="@{/admin/editarEquipo}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verEquipo}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <!-- MODAL -->
-                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                            </div>
-                            <div class="modal-body">
-                              <h3>¿Está seguro de eliminar el equipo?</h3>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Gabinete</td>
-                    <td>Sitio de telefonía fija</td>
-
-                    <td>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <div class="dropdown">
-                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-plus-square"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a th:href="@{/admin/editarEquipo}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verEquipo}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <!-- MODAL -->
-                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                            </div>
-                            <div class="modal-body">
-                              <h3>¿Está seguro de eliminar el equipo?</h3>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">4</th>
-                    <td>Switch</td>
-                    <td>Sitio de telefonía móvil</td>
-
-                    <td>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <div class="dropdown">
-                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-plus-square"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a th:href="@{/admin/editarEquipo}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verEquipo}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <!-- MODAL -->
-                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                            </div>
-                            <div class="modal-body">
-                              <h3>¿Está seguro de eliminar el equipo?</h3>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>Baterias</td>
-                    <td>Sitio de telefonía móvil</td>
-
-                    <td>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <div class="dropdown">
-                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-plus-square"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a th:href="@{/admin/editarEquipo}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verEquipo}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <!-- MODAL -->
-                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                            </div>
-                            <div class="modal-body">
-                              <h3>¿Está seguro de eliminar el equipo?</h3>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">6</th>
-                    <td>Transceiver</td>
-                    <td>Sitio de telefonía fija</td>
-
-                    <td>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <div class="dropdown">
-                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-plus-square"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a th:href="@{/admin/editarEquipo}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verEquipo}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <!-- MODAL -->
-                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                            </div>
-                            <div class="modal-body">
-                              <h3>¿Está seguro de eliminar el equipo?</h3>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">7</th>
-                    <td>Ups</td>
-                    <td>Sitio de telefonía móvil</td>
-
-                    <td>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <div class="dropdown">
-                          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-plus-square"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li><a th:href="@{/admin/editarEquipo}" class="dropdown-item btn btn-outline-primary me-2">Editar</a></li>
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
-                            <li><a th:href="@{/admin/verEquipo}" class="dropdown-item btn btn-outline-dark me-2" href="#">Visualizar</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                      <!-- MODAL -->
-                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                            </div>
-                            <div class="modal-body">
-                              <h3>¿Está seguro de eliminar el equipo?</h3>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-
-
                   </tbody>
                 </table>
                 <!-- End Table with stripped rows -->

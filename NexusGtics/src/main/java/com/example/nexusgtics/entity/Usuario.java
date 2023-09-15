@@ -38,18 +38,18 @@ public class Usuario {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "idCargos", nullable = false)
-    private Cargo idCargos;
+    private Cargo cargo;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "idEmpresas", nullable = false)
-    private Empresa idEmpresas;
+    private Empresa empresa;
 
     @ManyToOne
     @JoinColumn(name = "idImagenPerfil", nullable = false)
-    private Archivo idImagenPerfil;
+    private Archivo archivo;
 
     @ManyToOne
     @JoinColumn(name = "IdCuadrilla")
-    private Cuadrilla idCuadrilla;
+    private Cuadrilla cuadrilla;
 
 }
