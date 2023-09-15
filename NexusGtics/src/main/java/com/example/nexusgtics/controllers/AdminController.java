@@ -1,12 +1,29 @@
 package com.example.nexusgtics.controllers;
 
+import com.example.nexusgtics.entity.Empresa;
+import com.example.nexusgtics.repository.EmpresaRepository;
+import com.example.nexusgtics.repository.EquipoRepository;
+import com.example.nexusgtics.repository.SitioRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
+    final EmpresaRepository empresaRepository;
+    final SitioRepository sitioRepository;
+    final EquipoRepository equipoRepository;
+
+    public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository) {
+        this.empresaRepository = empresaRepository;
+        this.sitioRepository = sitioRepository;
+        this.equipoRepository = equipoRepository;
+    }
 
     @GetMapping({"/","","admin","administrador"})
     public String paginaPrincipal(){
@@ -95,7 +112,12 @@ public class AdminController {
 
     //GESTION DE EMPRESAS
     @GetMapping({"/listaEmpresa","/listaempresa"})
-    public String listaEmpresa(){
+    public String listaEmpresa(Model model){
+
+        List<Empresa> listaEmpresa = empresaRepository.findAll();
+
+        model.addAttribute("listaEmpresa",listaEmpresa);
+
         return "Administrador/listaEmpresa";
     }
 
