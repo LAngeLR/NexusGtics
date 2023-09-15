@@ -63,16 +63,16 @@ public class TecnicoController {
 
     @GetMapping("/datosticket")
     public String pagdatostick(Model model){
-        Ticket ticket = new Ticket();
+        //Ticket ticket = new Ticket();
         Tipoticket tipoticket = new Tipoticket();
-        model.addAttribute("ticket",ticket);
+        //model.addAttribute("ticket",ticket);
         model.addAttribute("tipoticket",tipoticket);
 
         //'listar'
-       // List<Ticket> lista = ticketRepository.findAll();
-      //  model.addAttribute("ticket", lista);
-      // List<Tipoticket> list = tipoticketRepository.findAll();
-      //model.addAttribute("tipoticket", list);
+        List<Ticket> lista = ticketRepository.findAll();
+        model.addAttribute("ticket", lista);
+       List<Tipoticket> list = tipoticketRepository.findAll();
+      model.addAttribute("tipoticket1", list);
             return "Tecnico/datos_ticket";
 
     }
