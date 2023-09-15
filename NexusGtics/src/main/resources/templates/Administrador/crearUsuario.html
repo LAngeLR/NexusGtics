@@ -28,7 +28,7 @@
             <div class="pagetitle" style="margin-top: -35px;">
               <h1 class="card-title">Creación de usuario</h1>
             </div>
-            <form method="POST" action="" enctype="multipart/form-data" style="margin-bottom: -35px;">
+            <form method="POST" th:action="@{'/admin/guardarUsuario'}" enctype="multipart/form-data" style="margin-bottom: -35px;">
               <div class="row">
                 <div class="col-md-6">
                   <input type="hidden" class="form-control" name="idJuego" id="idJuego">

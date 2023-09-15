@@ -30,46 +30,46 @@
                     <div class="pagetitle">
                         <h1 class="card-title">Información de empresa</h1>
                     </div>
-                    <form method="POST" action="" enctype="multipart/form-data">
+                    <form method="POST" action="" enctype="multipart/form-data" th:object="${empresa}">
                         <div class="row">
                             <div class="col-md-6">
 
                                 <div class="mb-3">
-                                    <label for="nombre">Nombre:</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre" value="Applus" disabled>
+                                    <label class="form-label">Nombre:</label>
+                                    <input type="text" class="form-control" th:field="*{nombre}" disabled>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="descripcion">RUC:</label>
-                                    <input type="number" class="form-control" name="descripcion" id="descripcion" value="01234567890" disabled>
+                                    <label class="form-label">RUC:</label>
+                                    <input type="number" class="form-control" th:field="*{ruc}" disabled>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="precio">Fecha de afiliación:</label>
-                                    <input type="date" class="form-control" name="precio" id="precio" value="10/05/2019" disabled>
+                                    <label class="form-label">Fecha de afiliación:</label>
+                                    <input type="date" class="form-control" th:field="*{fechaAfiliacion}" disabled>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="precio">Dirección sede principal:</label>
-                                    <input type="text" class="form-control" name="precio" id="precio" value="Av. Universitaria 1801, San Miguel" disabled>
+                                    <label class="form-label">Dirección sede principal:</label>
+                                    <input type="text" class="form-control" th:field="*{direccion}" disabled>
                                 </div>
                             </div>
                             <br><br>
                             <div class="col-md-6">
 
                                 <div class="mb-3">
-                                    <label for="precio">Representante:</label>
-                                    <input type="text" class="form-control" name="precio" id="precio" value="Alisson Becker" disabled>
+                                    <label class="form-label">Representante:</label>
+                                    <input type="text" class="form-control" th:field="*{representante}" disabled>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="descuento">Correo electrónico:</label>
-                                    <input type="text" class="form-control" name="descuento" id="descuento" VALUE="beckeralisson@outlook.com" disabled>
+                                    <label class="form-label">Correo electrónico:</label>
+                                    <input type="text" class="form-control" th:field="*{correo}" disabled>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="precio">Teléfono:</label>
-                                    <input type="text" class="form-control" name="precio" id="precio" value="987654321" disabled>
+                                    <label class="form-label">Teléfono:</label>
+                                    <input type="text" class="form-control" th:field="*{telefono}" disabled>
                                 </div>
 
                             </div>

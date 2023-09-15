@@ -36,19 +36,19 @@ public class Usuario {
     @Column(name = "tecnicoConCuadrilla")
     private Boolean tecnicoConCuadrilla;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "idCargos", nullable = false)
     private Cargo idCargos;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "idEmpresas", nullable = false)
     private Empresa idEmpresas;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "idImagenPerfil", nullable = false)
     private Archivo idImagenPerfil;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "IdCuadrilla")
     private Cuadrilla idCuadrilla;
 

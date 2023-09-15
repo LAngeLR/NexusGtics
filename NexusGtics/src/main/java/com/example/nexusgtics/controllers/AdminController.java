@@ -1,15 +1,20 @@
 package com.example.nexusgtics.controllers;
 
 import com.example.nexusgtics.entity.Empresa;
+import com.example.nexusgtics.entity.Usuario;
 import com.example.nexusgtics.repository.EmpresaRepository;
 import com.example.nexusgtics.repository.EquipoRepository;
 import com.example.nexusgtics.repository.SitioRepository;
+import com.example.nexusgtics.repository.UsuarioRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -19,10 +24,13 @@ public class AdminController {
     final SitioRepository sitioRepository;
     final EquipoRepository equipoRepository;
 
-    public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository) {
+    final UsuarioRepository usuarioRepository;
+
+    public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository, UsuarioRepository usuarioRepository) {
         this.empresaRepository = empresaRepository;
         this.sitioRepository = sitioRepository;
         this.equipoRepository = equipoRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @GetMapping({"/","","admin","administrador"})
@@ -37,7 +45,9 @@ public class AdminController {
 
     // GESTION DE USUARIOS
     @GetMapping({"/listaUsuario","listausuario"})
-    public String listaUsuario(){
+    public String listaUsuario(Model model){
+        List<Usuario> listaUsuario = usuarioRepository.findAll();
+        model.addAttribute("listaUsuario", listaUsuario);
         return "Administrador/listaUsuario";
     }
 
@@ -55,6 +65,18 @@ public class AdminController {
     public String editarUsuario(){
         return "Administrador/editarUsuario";
     }
+
+
+    // CRUD DE USUARIOS
+
+    @PostMapping("/guardarUsuario")
+    public String guardarNuevoUsuario(Usuario usuario){
+
+        usuarioRepository.save(usuario);
+
+        return "redirect:Administrador/listaSitio";
+    }
+
 
 
     // GESTION DE SITIOS
@@ -127,8 +149,18 @@ public class AdminController {
     }
 
     @GetMapping({"/verEmpresa","/verempresa"})
-    public String verEmpresa(){
-        return "Administrador/vistaEmpresa";
+    public String verEmpresa(@RequestParam("id") int id, Model model ){
+
+        Optional<Empresa> optEmpresa = empresaRepository.findById(id);
+
+        if (optEmpresa.isPresent()) {
+            Empresa empresa = optEmpresa.get();
+            model.addAttribute("empresa", empresa);
+            return "Administrador/vistaEmpresa";
+        } else {
+            return "redirect:Administrador/listaEmpresa";
+        }
+
     }
 
 
