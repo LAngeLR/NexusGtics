@@ -80,15 +80,19 @@
                     <th scope="col">Provincia</th>
                     <th scope="col">Distrito</th>
                     <th scope="col">Acciones</th>
+                    <th scope="col">Tipo de Zona</th>
+                    <th scope="col">Tipo de Sitio</th>
                   </tr>
                   </thead>
                   <tbody>
 
                   <tr th:each="sitio, info : ${listaSitio}">
-                    <th scope="row" th:text="${info.count+1}">1</th>
+                    <th scope="row" th:text="${info.index+1}">1</th>
                     <td th:text="${sitio.departamento}">Provincia - Distrito</td>
                     <td th:text="${sitio.provincia}">Provincia - Distrito</td>
                     <td th:text="${sitio.distrito}">Provincia - Distrito</td>
+                    <td th:text="${sitio.tipoZona == 0 ? 'urbana' : 'rural'}"></td>
+                    <td th:text="${sitio.tipo== 0 ? 'Móvil' : 'fijo'}"></td>
 
                     <td>
                       <div class="d-flex justify-content-center align-items-center">

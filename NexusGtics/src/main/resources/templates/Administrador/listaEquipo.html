@@ -104,7 +104,7 @@
                   </thead>
                   <tbody>
                   <tr th:each="equipo, info : ${listaEquipo}">
-                    <th scope="row" th:text="${info.count+1}">1</th>
+                    <th scope="row" th:text="${info.index+1}">1</th>
                     <td th:text="${equipo.tipoequipo.nombreTipo}">Tipo</td>
                     <td th:text="${equipo.marca}">Marca</td>
                     <td th:text="${equipo.modelo}">Modelo</td>
