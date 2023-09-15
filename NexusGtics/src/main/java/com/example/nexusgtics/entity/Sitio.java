@@ -43,7 +43,7 @@ public class Sitio {
     private Boolean tipoZona = false;
 
     @ManyToOne
-    @JoinColumn(name = "idArchivos", nullable = false)
+    @JoinColumn(name = "idArchivos")
     private Archivo archivo;
 
 }

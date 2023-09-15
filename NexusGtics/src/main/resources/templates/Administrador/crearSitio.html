@@ -30,55 +30,54 @@
           <div class="pagetitle" style="margin-top: -35px;">
             <h1 class="card-title">Creación de sitio</h1>
           </div>
-          <form method="POST" action="" enctype="multipart/form-data" style="margin-bottom: -35px;">
+          <form method="POST" th:action="@{/Administrador/guardarSitio}" enctype="multipart/form-data" style="margin-bottom: -35px;">
             <div class="row">
               <div class="col-md-6">
 
                 <div class="mb-3">
-                  <label for="nombre">Departamento:</label>
-                  <input type="text" class="form-control" name="nombre" id="nombre" >
+                  <label for="departamento">Departamento:</label>
+                  <input type="text" class="form-control" name="departamento" id="departamento" >
                 </div>
 
                 <div class="mb-3">
-                  <label for="descripcion">Provincia:</label>
-                  <input type="text" class="form-control" name="descripcion" id="descripcion" >
+                  <label for="provincia">Provincia:</label>
+                  <input type="text" class="form-control" name="provincia" id="provincia" >
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Distrito:</label>
-                  <input type="text" class="form-control" name="precio" id="precio">
+                  <label for="distrito">Distrito:</label>
+                  <input type="text" class="form-control" name="distrito" id="distrito">
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Ubigeo:</label>
-                  <input type="text" class="form-control" name="precio" id="precio">
+                  <label for="ubigeo">Ubigeo:</label>
+                  <input type="number" class="form-control" name="ubigeo" id="ubigeo">
                 </div>
 
                 <div class="mb-3">
-                  <label for="descuento">Latitud:</label>
-                  <input type="number" class="form-control" name="descuento" id="descuento" >
+                  <label for="latitud">Latitud:</label>
+                  <input type="number" class="form-control" name="latitud" id="latitud" >
                 </div>
 
                 <div class="mb-3">
-                  <label for="descuento">Longitud:</label>
-                  <input type="number" class="form-control" name="descuento" id="descuento" >
+                  <label for="longitud">Longitud:</label>
+                  <input type="number" class="form-control" name="longitud" id="longitud" >
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Tipo de zona:</label>
-                  <select name="consola" id="consola" class="form-control">
-                    <option value="Cargo1"></option>
-                    <option value="Cargo1">Urbana</option>
-                    <option value="Cargo2">Rural</option>
+                  <label for="tipo">Tipo de sitio:</label>
+                  <select name="tipo" id="tipo" class="form-control">
+                    <option value="1">Móvil</option>
+                    <option value="0">Fijo</option>
                   </select>
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Tipo de sitio:</label>
-                  <select name="consola" id="consola" class="form-control">
+                  <label for="tipoZona">Tipo de zona:</label>
+                  <select name="tipoZona" id="tipoZona" class="form-control">
                     <option value="Cargo1"></option>
-                    <option value="Cargo1">Móvil</option>
-                    <option value="Cargo2">Fijo</option>
+                    <option value="1">Urbana</option>
+                    <option value="0">Rural</option>
                   </select>
                 </div>
 

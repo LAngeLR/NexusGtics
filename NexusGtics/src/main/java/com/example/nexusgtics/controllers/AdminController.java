@@ -143,6 +143,11 @@ public class AdminController {
         return "Administrador/mapaInventarioSitio";
     }
 
+    @PostMapping("/guardarSitio")
+    public String guardarSitio(Sitio sitio, RedirectAttributes attr) {
+        sitioRepository.save(sitio);
+        return "redirect:/Administrador/listaSitio";
+    }
 //-----------------------------------------------------------------------
 
     // GESTION DE EQUIPOS
