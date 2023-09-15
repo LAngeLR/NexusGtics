@@ -18,8 +18,9 @@ public class AnalistaOYMController {
     final SitioRepository sitioRepository;
 
 
-    public AnalistaOYMController(SitioRepository sitioRepository ){
+    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository ){
         this.sitioRepository = sitioRepository;
+        this.ticketRepository = ticketRepository;
     }
 
     @GetMapping("/")
