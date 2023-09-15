@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @Entity
@@ -11,7 +13,7 @@ import lombok.Setter;
 public class Cuadrilla {
     @Id
     @Column(name = "idCuadrillas", nullable = false)
-    private Integer id;
+    private Integer idCuadrillas;
 
     @ManyToOne
     @JoinColumn(name = "idSupervisor", nullable = false)
@@ -23,5 +25,8 @@ public class Cuadrilla {
 
     @Column(name = "ocupado", nullable = false)
     private Boolean ocupado = false;
+
+    @Column(name = "fechaCreacion", nullable = false)
+    private Instant fechaCreacion;
 
 }

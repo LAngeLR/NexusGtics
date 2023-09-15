@@ -11,7 +11,7 @@ import lombok.Setter;
 public class Equipo {
     @Id
     @Column(name = "idEquipos", nullable = false)
-    private Integer id;
+    private Integer idEquipos;
 
     @Column(name = "marca", nullable = false, length = 45)
     private String marca;
@@ -22,7 +22,7 @@ public class Equipo {
     @Column(name = "modelo", nullable = false, length = 45)
     private String modelo;
 
-    @Column(name = "paginaModelo", length = 45)
+    @Column(name = "paginaModelo", length = 130)
     private String paginaModelo;
 
     @ManyToOne

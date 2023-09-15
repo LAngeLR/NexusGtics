@@ -13,7 +13,7 @@ import java.time.Instant;
 public class Ticket {
     @Id
     @Column(name = "idTickets", nullable = false)
-    private Integer id;
+    private Integer idTickets;
 
     @Column(name = "descripcion", nullable = false, length = 45)
     private String descripcion;
@@ -29,10 +29,6 @@ public class Ticket {
 
     @Column(name = "usuarioSolicitante", length = 70)
     private String usuarioSolicitante;
-
-    @ManyToOne
-    @JoinColumn(name = "idImagenTicket", nullable = false)
-    private Archivo idImagenTicket;
 
     @ManyToOne
     @JoinColumn(name = "idSupervisorEncargado")

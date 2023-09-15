@@ -14,7 +14,7 @@ import lombok.Setter;
 public class Dinamicasitioatributo {
     @Id
     @Column(name = "idDinamicaSitioAtributo", nullable = false)
-    private Integer id;
+    private Integer idDinamicaSitioAtributo;
 
     @Column(name = "nuevoCampo", nullable = false, length = 45)
     private String nuevoCampo;

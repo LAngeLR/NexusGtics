@@ -13,7 +13,7 @@ import java.time.Instant;
 public class Historialticket {
     @Id
     @Column(name = "idhistorialTickets", nullable = false)
-    private Integer id;
+    private Integer idhistorialTickets;
 
     @Column(name = "estado", nullable = false)
     private Integer estado;
@@ -26,8 +26,8 @@ public class Historialticket {
     private Ticket idTickets;
 
     @ManyToOne
-    @JoinColumn(name = "iidUsuarios", nullable = false)
-    private Usuario iidUsuarios;
+    @JoinColumn(name = "idUsuarios", nullable = false)
+    private Usuario idUsuarios;
 
     @Column(name = "descripcion", length = 250)
     private String descripcion;

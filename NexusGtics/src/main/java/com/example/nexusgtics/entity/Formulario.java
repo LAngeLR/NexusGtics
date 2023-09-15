@@ -13,7 +13,7 @@ import java.time.Instant;
 public class Formulario {
     @Id
     @Column(name = "idFormularios", nullable = false)
-    private Integer id;
+    private Integer idFormularios;
 
     @Column(name = "fechaLlenado", nullable = false)
     private Instant fechaLlenado;

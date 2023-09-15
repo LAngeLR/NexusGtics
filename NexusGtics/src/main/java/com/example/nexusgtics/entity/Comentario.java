@@ -13,7 +13,7 @@ import java.time.Instant;
 public class Comentario {
     @Id
     @Column(name = "idComentarios", nullable = false)
-    private Integer id;
+    private Integer idComentarios;
 
     @Column(name = "comentario", length = 250)
     private String comentario;

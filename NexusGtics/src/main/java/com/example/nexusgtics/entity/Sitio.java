@@ -1,6 +1,5 @@
 package com.example.nexusgtics.entity;
 
-import com.example.nexusgtics.entity.Archivo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +13,7 @@ import java.math.BigDecimal;
 public class Sitio {
     @Id
     @Column(name = "idSitios", nullable = false)
-    private Integer id;
+    private Integer idSitios;
 
     @Column(name = "tipo", nullable = false)
     private Boolean tipo = false;
@@ -31,11 +30,11 @@ public class Sitio {
     @Column(name = "departamento", nullable = false, length = 45)
     private String departamento;
 
-    @Column(name = "longitud", nullable = false, precision = 10, scale = 7)
-    private BigDecimal longitud;
-
     @Column(name = "latitud", nullable = false, precision = 10, scale = 7)
     private BigDecimal latitud;
+
+    @Column(name = "longitud", nullable = false, precision = 10, scale = 7)
+    private BigDecimal longitud;
 
     @Column(name = "habilitado", nullable = false)
     private Boolean habilitado = false;

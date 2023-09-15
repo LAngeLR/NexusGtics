@@ -1,8 +1,5 @@
 package com.example.nexusgtics.entity;
 
-import com.example.nexusgtics.entity.Archivo;
-import com.example.nexusgtics.entity.Cargo;
-import com.example.nexusgtics.entity.Empresa;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,16 +36,20 @@ public class Usuario {
     @Column(name = "tecnicoConCuadrilla")
     private Boolean tecnicoConCuadrilla;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idCargos", nullable = false)
     private Cargo idCargos;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idEmpresas", nullable = false)
     private Empresa idEmpresas;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idImagenPerfil", nullable = false)
     private Archivo idImagenPerfil;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IdCuadrilla")
+    private Cuadrilla idCuadrilla;
 
 }

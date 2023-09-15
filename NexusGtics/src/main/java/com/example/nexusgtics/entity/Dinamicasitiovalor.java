@@ -10,7 +10,7 @@ import lombok.Setter;
 @Table(name = "dinamicasitiovalor")
 public class Dinamicasitiovalor {
     @EmbeddedId
-    private DinamicasitiovalorId id;
+    private DinamicasitiovalorId idDinamicaSitioValor;
 
     @MapsId("idSitios")
     @ManyToOne

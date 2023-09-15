@@ -18,5 +18,4 @@ public class DinamicasitiovalorId implements Serializable {
 
     @Column(name = "idAtributoSitio", nullable = false)
     private Integer idAtributoSitio;
-
 }

@@ -16,13 +16,13 @@ import java.time.LocalDate;
 public class Empresa {
     @Id
     @Column(name = "idEmpresas", nullable = false)
-    private Integer id;
+    private Integer idEmpresas;
 
     @Column(name = "nombre", nullable = false, length = 45)
     private String nombre;
 
     @Column(name = "ruc", nullable = false)
-    private Integer ruc;
+    private Long ruc;
 
     @Column(name = "telefono", nullable = false)
     private Integer telefono;
