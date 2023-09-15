@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:include="Fragmentos/head :: head('Lista de usuarios')"></head>
+<head th:include="Fragmentos/head :: head('Lista de sitios')"></head>
 
 <body>
 <!-- ======= Header ======= -->
 <header th:replace="Fragmentos/header :: header('admin')"><!-- End Header --></header>
 
+
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuAdmin :: menu">
 </aside><!-- End Sidebar-->
-
 
   <main id="main" class="main">
     <div class="container">
@@ -52,8 +52,8 @@
                   <tr th:each="usuario, info : ${listaUsuario}">
                     <td th:text="${info.index + 1}"></td>
                     <td th:text="${usuario.nombre} + ${usuario.apellido}"></td>
-                    <td th:text="${usuario.idCargos.nombreCargo}"></td>
-                    <td th:text="${usuario.idEmpresas.nombre}"></td>
+                    <td th:text="${usuario.cargo.nombreCargo}"></td>
+                    <td th:text="${usuario.empresa.nombre}"></td>
                     <td th:text="${usuario.correo}"></td>
                     <td>
                       <div class="d-flex justify-content-center align-items-center">

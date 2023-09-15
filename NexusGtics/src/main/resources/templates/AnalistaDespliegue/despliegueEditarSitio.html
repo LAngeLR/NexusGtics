@@ -91,67 +91,71 @@
           <div class="pagetitle">
             <h1 class="card-title">Edición de sitio</h1>
           </div>
-          <form method="POST" action="" enctype="multipart/form-data">
+          <form method="POST" th:action="@{'/analistaDespliegue/guardarSitio'}" >
+            <input th:value="${sitio.idSitios}" name="idSitio" type="hidden" />
             <div class="row">
               <div class="col-md-6">
                 <div class="mb-3">
 
-                  <label for="nombre">Id de sitio:</label>
-                  <input type="text" class="form-control" name="nombre" id="nombre" value="2" disabled>
+                  <label class="form-label">Id de sitio:</label>
+                  <input type="hidden" class="form-control" th:value="${sitio.idSitios}" disabled>
                 </div>
 
                 <div class="mb-3">
-                  <label for="nombre">Departamento:</label>
-                  <input type="text" class="form-control" name="nombre" id="nombre" value="Lima">
+                  <label  for="departamento" class="form-label" >Departamento:</label>
+                  <input th:value="${sitio.departamento}" name="departamento" id="departamento" type="text" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                  <label for="descripcion">Provincia:</label>
-                  <input type="text" class="form-control" name="descripcion" id="descripcion" value="Cañete">
+                  <label for="provincia" class="form-label">Provincia:</label>
+                  <input th:value="${sitio.provincia}" name="provincia"  id="provincia" type="text" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Distrito:</label>
-                  <input type="text" class="form-control" name="precio" id="precio" value="San Vicente">
+                  <label for="distrito" class="form-label">Distrito:</label>
+                  <input th:value="${sitio.distrito}" name="distrito"  id="distrito" type="text" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Ubigeo:</label>
-                  <input type="text" class="form-control" name="precio" id="precio" value="195195">
+                  <label for="ubigeo" class="form-label">Ubigeo:</label>
+                  <input th:value="${sitio.ubigeo}" name="ubigeo" id="ubigeo" type="text" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                  <label for="descuento">Latitud:</label>
-                  <input type="number" class="form-control" name="descuento" id="descuento" value="-12.0740">
+                  <label for="latitud" class="form-label">Latitud:</label>
+                  <input th:value="${sitio.latitud}" name="latitud" id="latitud" type="number" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                  <label for="descuento">Longitud:</label>
-                  <input type="number" class="form-control" name="descuento" id="descuento" value="-77.08975">
+                  <label for="longitud" class="form-label">Longitud:</label>
+                  <input th:value="${sitio.longitud}" name="longitud" id="longitud" type="number" class="form-control" />
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Tipo de zona:</label>
-                  <select name="consola" id="consola" class="form-control">
-                    <option value="Cargo1">Urbana</option>
-                    <option value="Cargo2">Rural</option>
+                  <label for="tipoZona" class="form-label">Tipo de zona:</label>
+                  <select  name="tipoZona" id="tipoZona" class="form-control" th:value="${sitio.tipoZona}">
+                    <option  value="0" th:selected="${sitio.tipoZona == 0}">Urbana</option>
+                    <option  value="1" th:selected="${sitio.tipoZona != 0}">Rural</option>
                   </select>
                 </div>
 
+
                 <div class="mb-3">
-                  <label for="precio">Tipo de sitio:</label>
-                  <select name="consola" id="consola" class="form-control">
-                    <option value="Cargo1">Móvil</option>
-                    <option value="Cargo2">Fijo</option>
+                  <label for="tipo" class="form-label">Tipo de sitio:</label>
+                  <select name="tipo" id="tipo" class="form-control" th:field="${sitio.tipo}">
+                    <option  th:value="${sitio.tipo == 0}">Móvil</option>
+                    <option  th:value="${sitio.tipo != 0}">Fijo</option>
                   </select>
                 </div>
+
+
 
               </div>
               <br><br>
               <div class="col-md-6">
 
                 <div class="mb-3">
-                  <label for="descuento">Foto de sitio:</label>
+                  <label class="form-label">Foto de sitio:</label>
                   <br>
                   <br>
                   <img th:src="@{/assets/img/sitio1.webp}" style="max-width: 300px;" alt="">
@@ -220,9 +224,10 @@
       <br>
       <br>
       <div>
-        <a  type="submit" class="btn btn-outline-primary " th:href="@{/analistaDespliegue/listaSitio}">Aceptar</a>
-        <a  type="submit" class="btn btn-outline-danger " th:href="@{/analistaDespliegue/listaSitio}">Cancelar</a>
+        <button  type="submit" class="btn btn-outline-primary " >Aceptar</button>
+        <a  th:href="@{'/analistaDespliegue/listaSitio'}" class="btn btn-outline-danger " >Cancelar</a>
       </div>
+    </div>
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->

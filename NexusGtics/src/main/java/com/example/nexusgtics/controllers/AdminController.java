@@ -49,7 +49,7 @@ public class AdminController {
     // GESTION DE USUARIOS
     @GetMapping({"/listaUsuario","listausuario"})
     public String listaUsuario(Model model){
-        List<Usuario> listaUsuario = usuarioRepository.findAll();
+        List<Usuario> listaUsuario = usuarioRepository.listaDeUsuariosNoAdmin();
         model.addAttribute("listaUsuario", listaUsuario);
         return "Administrador/listaUsuario";
     }

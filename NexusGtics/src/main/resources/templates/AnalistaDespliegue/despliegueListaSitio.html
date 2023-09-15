@@ -76,7 +76,6 @@
                     <th scope="col">Departamento</th>
                     <th scope="col">Provincia</th>
                     <th scope="col">Distrito</th>
-                    <th scope="col">Ubigeo</th>
                     <th scope="col">Longitud y Latitud</th>
                     <th scope="col">Tipo de zona</th>
                     <th scope="col">Tipo de sitio</th>
@@ -90,12 +89,11 @@
                     <td th:text="${sitio.departamento}"></td>
                     <td th:text="${sitio.provincia}"></td>
                     <td th:text="${sitio.distrito}"></td>
-                    <td th:text="${sitio.ubigeo}"></td>
                     <td th:text="${sitio.longitud + ', ' + sitio.latitud}"></td>
                     <td th:text="${sitio.tipoZona == 0 ? 'urbana' : 'rural'}"></td>
-                    <td th:text="${sitio.tipo== 0 ? 'Móvil' : 'rural'}"></td>
+                    <td th:text="${sitio.tipo== 0 ? 'Móvil' : 'Fijo'}"></td>
                     <td><a class="download-link" href="ruta-al-archivo/1.csv" download>1.csv</a></td>
-                    <td><center><a type="button" class="btn btn-secondary" th:href="@{/analistaDespliegue/editarSitio}">Editar</a></center></td>
+                    <td><a type="button" class="btn btn-secondary" th:href="@{'/analistaDespliegue/editarSitio?id=' + ${sitio.idSitios}}">Editar</a></td>
                   </tr>
                   </tbody>
 
