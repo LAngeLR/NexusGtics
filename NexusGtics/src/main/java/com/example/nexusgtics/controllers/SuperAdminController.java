@@ -68,6 +68,19 @@ public class SuperAdminController {
         }
     }
 
+    @GetMapping({"/verUsuarioA","verusuarioa"})
+    public String verUsuarioA(Model model, @RequestParam("id") int id){
+        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+
+        if(optUsuario.isPresent()){
+            Usuario usuario = optUsuario.get();
+            model.addAttribute("usuario", usuario);
+            return "Superadmin/vistaUsuarioA";
+        } else {
+            return "redirect:/Superadmin/listaUsuario";
+        }
+    }
+
 
     @GetMapping({"/editarUsuario","editarusuario"})
     public String editarUsuario(){
