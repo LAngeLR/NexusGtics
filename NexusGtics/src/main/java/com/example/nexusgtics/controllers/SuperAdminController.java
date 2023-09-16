@@ -32,7 +32,7 @@ public class SuperAdminController {
         return "perfilSuperadmin";
     }
 
-    @GetMapping({"/listaUsuario","listausuario"})
+    @GetMapping({"/listaUsuario","listausuario", "listausuarios","listaUsuarios"})
     public String listaUsuario(Model model){
         List<Usuario> listaUsuarioNoAdmin = usuarioRepository.listaDeUsuariosNoAdmin();
         //List<Usuario> listaUsuarioTotal = usuarioRepository.findAll();
