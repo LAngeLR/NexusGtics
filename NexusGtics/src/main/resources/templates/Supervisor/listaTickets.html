@@ -100,15 +100,59 @@
                                 <tbody>
 
                                     <tr th:each="tickets: ${listaTickets}">
-                                        <div th:if="${tickets.estado!=1 && tickets.estado!=2}">
+                                        <div th:if="${tickets.estado!=1}">
                                             <td th:text="${tickets.idTickets}"></td>
                                             <td th:text="${tickets.usuarioSolicitante}"></td>
-                                            <td th:text="${tickets.idCuadrilla.tecnico.nombre} + ${tickets.idCuadrilla.tecnico.apellido}"></td>
+
+                                            <div th:if="${tickets.idCuadrilla}==null">
+                                                <td>Cuadrilla no asignada</td>
+                                            </div>
+
+                                            <div th:unless="${tickets.idCuadrilla}==null">
+                                                <td th:text="${tickets.idCuadrilla.tecnico.nombre} + ${tickets.idCuadrilla.tecnico.apellido}"></td>
+                                            </div>
+
                                             <td th:text="${tickets.fechaCreacion}"></td>
                                             <td th:text="${tickets.fechaCierre}"></td>
-                                            <td th:text="${tickets.prioridad}"></td>
-                                            <td th:text="${tickets.estado}"></td>
-                                            <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/supervisor/ticketProceso?id=' + ${tickets.idTickets}}">+</a></center></td>
+
+                                            <!--prioridades con botones estilos-->
+                                            <td th:if="${tickets.prioridad eq 'Hacer'}">
+                                                <span class="badge text-bg-warning" th:text="${tickets.prioridad}"></span>
+                                            </td>
+                                            <td th:if="${tickets.prioridad eq 'Baja prioridad'}">
+                                                <span class="badge text-bg-info" th:text="${tickets.prioridad}"></span>
+                                            </td>
+                                            <td th:if="${tickets.prioridad eq 'Urgente'}">
+                                                <span class="badge text-bg-danger" th:text="${tickets.prioridad}"></span>
+                                            </td>
+                                            <td th:if="${tickets.prioridad eq 'No critico'}">
+                                                <span class="badge text-bg-success" th:text="${tickets.prioridad}"></span>
+                                            </td>
+
+                                            <!--estados segun flujo del proyecto on estilos-->
+                                            <td th:if="${tickets.estado==7 || tickets.estado==6}">
+                                                <span class="badge text-bg-danger">Cerrado</span>
+                                            </td>
+                                            <td th:if="${tickets.estado==2}">
+                                                <span class="badge text-bg-primary">Nuevo</span>
+                                            </td>
+                                            <td th:if="${tickets.estado==3 || tickets.estado==4 || tickets.estado==5}">
+                                                <span class="badge text-bg-success">En progreso</span>
+                                            </td>
+
+                                            <!--direccion de vistas segun estado-->
+                                            <td th:if="${tickets.estado!=2 && tickets.estado!=7 && tickets.estado!=6}">
+                                                <center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/supervisor/ticketProceso?id=' + ${tickets.idTickets}}">+</a></center>
+                                            </td>
+
+                                            <td th:if="${tickets.estado==2}">
+                                                <center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/supervisor/ticketNuevo?id=' + ${tickets.idTickets}}">+</a></center>
+                                            </td>
+
+                                            <td th:if="${tickets.estado==7 || tickets.estado==6}">
+                                                <center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/supervisor/ticketCerrado?id=' + ${tickets.idTickets}}">+</a></center>
+                                            </td>
+
                                         </div>
                                     </tr>
 
