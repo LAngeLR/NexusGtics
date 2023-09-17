@@ -100,18 +100,16 @@
                                 <tbody>
 
                                     <tr th:each="tickets: ${listaTickets}">
-                                        <td th:text="${tickets.idTickets}"></td>
-                                        <td th:text="${tickets.usuarioSolicitante}"></td>
-                                        <td th:text="${tickets.idCuadrilla.tecnico.nombre} + ${tickets.idCuadrilla.tecnico.apellido}"></td>
-                                        <td th:text="${tickets.fechaCreacion}"></td>
-                                        <td th:text="${tickets.fechaCierre}"></td>
-
-
-                                        <td><span class="badge text-bg-danger">Urgente</span></td>
-
-                                        <td><span class="badge text-bg-success">Progreso</span></td>
-
-                                        <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/supervisor/ticketProceso?id=' + ${tickets.idTickets}}">+</a></center></td>
+                                        <div th:if="${tickets.estado!=1 && tickets.estado!=2}">
+                                            <td th:text="${tickets.idTickets}"></td>
+                                            <td th:text="${tickets.usuarioSolicitante}"></td>
+                                            <td th:text="${tickets.idCuadrilla.tecnico.nombre} + ${tickets.idCuadrilla.tecnico.apellido}"></td>
+                                            <td th:text="${tickets.fechaCreacion}"></td>
+                                            <td th:text="${tickets.fechaCierre}"></td>
+                                            <td th:text="${tickets.prioridad}"></td>
+                                            <td th:text="${tickets.estado}"></td>
+                                            <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/supervisor/ticketProceso?id=' + ${tickets.idTickets}}">+</a></center></td>
+                                        </div>
                                     </tr>
 
                                 </tbody>
