@@ -78,98 +78,152 @@
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section profile">
-        <div class="col-xl-12">
-            <div class="card">
-                <div class="card-body pt-3">
-                    <!-- Bordered Tabs -->
-                    <div class="tab-content pt-2">
-                        <div class="tab-pane fade show active profile-overview" id="datos-overview">
-                            <h5 class="card-title" style="color: #095444">Datos generales del Ticket</h5>
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 label ">Prioridad:</div>
-                                <div class="col-lg-9 col-md-8" style="color: #D01515"><b>URGENTE</b></div>
+    <section class="section profile" th:object="${tickets}">
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <!-- Bordered Tabs -->
+                        <div class="tab-content pt-2">
+                            <div class="tab-pane fade show active profile-overview" id="datos-overview">
+                                <h5 class="card-title" style="color: #095444">Datos generales del Ticket</h5>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">Prioridad:</div>
+                                    <div class="col-lg-9 col-md-8" style="color: #D01515"><b th:text="${tickets.prioridad}"></b></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Nombre de Usuario:</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${tickets.usuarioSolicitante}"></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Fecha de apertura:</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${tickets.fechaCreacion}"></div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-lg-3 col-md-4 label">Fecha de vencimiento:</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${tickets.fechaCierre}"></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 label">Servicio Relacionado:</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${tickets.idTipoTicket.nombreTipoTicket}"></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 label">Cuadrilla Asignada:</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${tickets.idCuadrilla.idCuadrillas}"></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-3 label">Tecnico Lider</div>
+                                    <div class="col-lg-9 col-md-8" th:text="'Tec. ' + ${tickets.idCuadrilla.tecnico.nombre} + ${tickets.idCuadrilla.tecnico.apellido}"></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Estado:</div>
+                                    <div class="col-lg-9 col-md-8">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                Progreso
+                                            </label>
+                                        </div>
+                                        </div>
+                                </div>
+
                             </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Nombre de Usuario:</div>
-                                <div class="col-lg-9 col-md-8">JACOB TORRES, Sandra</div>
+                            <br>
+                        </div><!-- End Bordered Tabs -->
+                            <div class="d-flex justify-content-end">
+                                <a type="button" class="btn btn-outline-warning" th:href="@{/supervisor/comentarios}" style="margin-right: 20px;">Comentarios</a>
+                                <button class="btn btn-outline-danger">Guardar</button>
                             </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Fecha de apertura:</div>
-                                <div class="col-lg-9 col-md-8">23-07-2023</div>
                             </div>
-
-                            <div class="row">
-
-                                <div class="col-lg-3 col-md-4 label">Fecha de vencimiento:</div>
-                                <div class="col-lg-9 col-md-8">23-08-2023</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-3 label">Servicio Relacionado:</div>
-                                <div class="col-lg-9 col-md-8">Mantenimiento de Gabinetes</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-3 label">Cuadrilla Asignada:</div>
-                                <div class="col-lg-9 col-md-8">Cuadrilla 7</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-3 label">Tecnico Lider</div>
-                                <div class="col-lg-9 col-md-8">Mauricio Guiterrez</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Estado:</div>
-                                <div class="col-lg-9 col-md-8">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                        <label class="form-check-label" for="flexRadioDefault1">
-                                            Progreso
-                                        </label>
+                                </div>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                                        <label class="form-check-label" for="flexRadioDefault2">
-                                            Cerrado
-                                        </label>
-                                    </div></div>
+                                    <div class="col-xl-6">
+                                        <div class="card">
+                                            <div class="card-body pt-3">
+                                                <div class="col-md-8 col-lg-9">
+                                                    <h5 class="card-title" style="color: #095444">Foto del Sitio:</h5>
+                                                    <img th:src="@{https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg}" alt="Profile" style="max-height: 35rem; margin-left: 35px;">
+                                                </div>
+                                                <div class="tab-content pt-2">
+
+                                                    <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                                        <br><br>
+                                                        <div class="row">
+                                                            <div class="col-lg-3 col-md-4 label">Descripcion:</div>
+                                                            <div class="col-lg-9 col-md-8" th:text="${tickets.descripcion}"></div>
+                                                        </div>
+                                                        <br>
+                                                        <div class="row">
+                                                            <div class="col-lg-3 col-md-4 label">Tiempo Transcurrido:</div>
+                                                            <div class="col-lg-9 col-md-8">2hrs : 26 min : 50 seg</div>
+                                                        </div>
+                                                    </div>
+                                                </div><!-- End Bordered Tabs -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div class="card-body pt-3">
+                                        <h5 class="card-title" style="color: #095444; text-align: center; ">Ubicacion</h5>
+                                        <div id="mi_mapa" ></div>
+                                        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                                        <script th:inline="javascript">
+                                            var latitud = [[${tickets.idSitios.latitud}]];
+                                            var longitud = [[${tickets.idSitios.longitud}]];
+                                            let map = L.map('mi_mapa').setView([latitud,longitud],18)
+                                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                            }).addTo(map);
+                                            L.marker([latitud,longitud]).addTo(map).bindPopup('Sitio').openPopup();
+                                        </script>
+
+                                        <script>
+                                            function centrarMapaEnCoordenadasIniciales() {
+                                                map.setView([latitud, longitud], 18);
+                                            }
+
+                                            // Agrega el botón como un control personalizado en Leaflet
+                                            var botonCentrar = L.control({ position: 'bottomright' });
+
+                                            botonCentrar.onAdd = function (map) {
+                                                var container = L.DomUtil.create('div', 'boton-centrar');
+                                                var button = L.DomUtil.create('button', 'btn btn-primary', container);
+                                                button.type = 'button';
+
+                                                // Crea el icono bx-current-location y agrégalo al botón
+                                                var icono = L.DomUtil.create('i', 'bx bx-collapse', button);
+
+                                                // Agrega el evento de clic para centrar el mapa
+                                                L.DomEvent.on(button, 'click', centrarMapaEnCoordenadasIniciales);
+                                                return container;
+                                            };
+                                            botonCentrar.addTo(map);
+                                        </script>
+
+                                        <div class="mb-3" style="margin-top: 25px;"> <!-- Agrega un margen en la parte superior -->
+                                            <input type="text" class="form-control" th:value="'Direccion: ' + ${tickets.idSitios.departamento} +', '+ ${tickets.idSitios.provincia} +', '+ ${tickets.idSitios.distrito}" disabled>
+                                        </div>
+                                        <!-- MAPA -->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <br>
-                    </div><!-- End Bordered Tabs -->
-
-                    <div class="d-flex justify-content-end">
-                        <a type="button" class="btn btn-outline-warning" th:href="@{/supervisor/comentarios}" style="margin-right: 20px;">Comentarios</a>
-                        <button class="btn btn-outline-danger">Guardar</button>
                     </div>
-
                 </div>
             </div>
-        </div>
-
-        <div class="col-xl-12">
-            <div class="card">
-                <div class="card-body pt-3">
-                    <h5 class="card-title" style="color: #095444; text-align: center; ">Ubicacion</h5>
-                    <div id="mi_mapa" ></div>
-                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                    <script>
-                        let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
-                        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        }).addTo(map);
-                        L.marker([-12.06802,-77.03462]).addTo(map).bindPopup('Sitio').openPopup();
-                    </script>
-                    <!-- MAPA -->
-                </div>
-            </div>
-        </div>
-
         </div>
     </section>
 

@@ -39,16 +39,6 @@ public class SupervisorController {
     public String Tickets(Model model){
 
         List<Ticket> listaTickets = ticketRepository.findAll();
-        List<String> categorias = new ArrayList<>();
-        categorias.add("Urgente");
-        categorias.add("Hacer");
-        categorias.add("No critico");
-        categorias.add("Baja Prioridad");
-
-        Random random = new Random();
-        String categoriaAleatoria = categorias.get(random.nextInt(categorias.size()));
-
-        model.addAttribute("categoriaAleatoria", categoriaAleatoria);
 
         model.addAttribute("listaTickets",listaTickets);
 
@@ -59,6 +49,7 @@ public class SupervisorController {
     public String Cuadrillas(Model model){
 
         List<Cuadrilla> listaCuadrilla = cuadrillaRepository.findAll();
+
         Map<Integer, Integer> trabajosFinalizadosPorCuadrilla = new HashMap<>();
 
         for (Cuadrilla cuadrilla : listaCuadrilla) {
@@ -74,18 +65,50 @@ public class SupervisorController {
     }
 
     @GetMapping("/ticketNuevo")
-    public String nuevoTicket(){
-        return "Supervisor/ticketNuevo";
+    public String nuevoTicket(Model model, @RequestParam("id") int id){
+        Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
+        List<Usuario> listaSupervisor = usuarioRepository.listaDeSupervisores(5);
+        List<Cuadrilla> listaCuadrillas = cuadrillaRepository.findAll();
+
+        if (ticketBuscado.isPresent()) {
+            Ticket ticket = ticketBuscado.get();
+            model.addAttribute("ticket", ticket);
+            model.addAttribute("listaSupervisores",listaSupervisor);
+            model.addAttribute("listaCuadrillas",listaCuadrillas);
+
+            return "supervisor/ticketNuevo";
+        } else {
+            return "redirect:/supervisor/listaTickets";
+        }
     }
 
     @GetMapping("/ticketProceso")
-    public String procesoTicket(){
-        return "Supervisor/ticketProceso";
+    public String procesoTicket(Model model, @RequestParam("id") int id){
+
+        Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
+
+        if (ticketBuscado.isPresent()) {
+            Ticket ticket = ticketBuscado.get();
+            model.addAttribute("tickets", ticket);
+            return "supervisor/ticketProceso";
+        } else {
+            return "redirect:/supervisor/listaTickets";
+        }
     }
 
     @GetMapping("/ticketCerrado")
-    public String cerradoTicket(){
-        return "Supervisor/ticketCerrado";
+    public String cerradoTicket(Model model, @RequestParam("id") int id){
+
+        Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
+
+        if (ticketBuscado.isPresent()) {
+            Ticket ticket = ticketBuscado.get();
+            model.addAttribute("tickets", ticket);
+            return "supervisor/ticketCerrado";
+        } else {
+            return "redirect:/supervisor/listaTickets";
+        }
+
     }
 
     @GetMapping("/comentarios")
