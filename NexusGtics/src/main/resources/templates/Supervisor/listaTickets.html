@@ -100,7 +100,6 @@
                                 <tbody>
 
                                     <tr th:each="tickets: ${listaTickets}">
-                                        <div th:if="${tickets.estado!=1 || tickcets.estado!=7}">
                                             <td th:text="${tickets.idTickets}"></td>
                                             <td th:text="${tickets.usuarioSolicitante}"></td>
 
@@ -155,8 +154,6 @@
                                             <td th:if="${tickets.estado==7 || tickets.estado==6}">
                                                 <center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/supervisor/ticketCerrado?id=' + ${tickets.idTickets}}">+</a></center>
                                             </td>
-
-                                        </div>
                                     </tr>
 
                                 </tbody>

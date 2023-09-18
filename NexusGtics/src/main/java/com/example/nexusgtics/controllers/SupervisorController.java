@@ -38,7 +38,7 @@ public class SupervisorController {
     @GetMapping("/listaTickets")
     public String Tickets(Model model){
 
-        List<Ticket> listaTickets = ticketRepository.findAll();
+        List<Ticket> listaTickets = ticketRepository.listaTicketsModificado( 1);
 
         model.addAttribute("listaTickets",listaTickets);
 

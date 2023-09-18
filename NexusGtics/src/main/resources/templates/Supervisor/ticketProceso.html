@@ -116,7 +116,7 @@
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-3 label">Cuadrilla Asignada:</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${tickets.idCuadrilla.idCuadrillas}"></div>
+                                    <div class="col-lg-9 col-md-8" th:text="'Cuadrilla ' + ${tickets.idCuadrilla.idCuadrillas}"></div>
                                 </div>
 
                                 <div class="row">
@@ -140,8 +140,7 @@
                             <br>
                         </div><!-- End Bordered Tabs -->
                             <div class="d-flex justify-content-end">
-                                <a type="button" class="btn btn-outline-warning" th:href="@{/supervisor/comentarios}" style="margin-right: 20px;">Comentarios</a>
-                                <button class="btn btn-outline-danger">Guardar</button>
+                                <a type="button" class="btn btn-outline-warning" th:href="@{/supervisor/comentarios}" style="margin-right: 25px;">Comentarios</a>
                             </div>
                             </div>
                                 </div>
