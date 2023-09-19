@@ -1,9 +1,6 @@
 package com.example.nexusgtics.controllers;
 
-import com.example.nexusgtics.entity.Empresa;
-import com.example.nexusgtics.entity.Equipo;
-import com.example.nexusgtics.entity.Sitio;
-import com.example.nexusgtics.entity.Usuario;
+import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,8 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -27,12 +26,18 @@ public class AdminController {
     final TipoEquipoRepository tipoEquipoRepository;
     final UsuarioRepository usuarioRepository;
 
-    public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository, UsuarioRepository usuarioRepository) {
+    final CargoRepository cargoRepository;
+    private final ArchivoRepository archivoRepository;
+
+    public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository, UsuarioRepository usuarioRepository, CargoRepository cargoRepository,
+                           ArchivoRepository archivoRepository) {
         this.empresaRepository = empresaRepository;
         this.sitioRepository = sitioRepository;
         this.equipoRepository = equipoRepository;
         this.tipoEquipoRepository = tipoEquipoRepository;
         this.usuarioRepository = usuarioRepository;
+        this.cargoRepository = cargoRepository;
+        this.archivoRepository = archivoRepository;
     }
 
     @GetMapping({"/","","admin","administrador"})
@@ -48,15 +53,16 @@ public class AdminController {
 //-----------------------------------------------------------------------
 
     // GESTION DE USUARIOS
+
+    // Lista de usuarios no admin
     @GetMapping({"/listaUsuario","listausuario"})
     public String listaUsuario(Model model){
         List<Usuario> listaUsuarioNoAdmin = usuarioRepository.listaDeUsuariosNoAdmin();
-        //List<Usuario> listaUsuarioTotal = usuarioRepository.findAll();
         model.addAttribute("listaUsuario", listaUsuarioNoAdmin);
-        //model.addAttribute("listaUsuarioTotal", listaUsuarioTotal);
         return "Administrador/listaUsuario";
     }
 
+    // Desabilitar Usuarios
     @GetMapping("/desabilitarUsuario")
     public String desabilitarUsuario(@RequestParam("id") int id) {
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
@@ -67,7 +73,11 @@ public class AdminController {
     }
 
     @GetMapping({"/crearUsuario","crearusuario"})
-    public String crearUsuario(){
+    public String crearUsuario(Model model){
+
+        model.addAttribute("listaEmpresa", empresaRepository.findAll());
+        model.addAttribute("listaCargo", cargoRepository.findAll());
+
         return "Administrador/crearUsuario";
     }
 
@@ -84,6 +94,38 @@ public class AdminController {
         }
     }
 
+    @PostMapping("/saveUsuario")
+    public String saveUsuario(@RequestParam("imagenSubida") MultipartFile file,
+                              Usuario usuario,
+                              Model model,
+                              RedirectAttributes attr){
+
+        if (usuario.getArchivo() == null) {
+            usuario.setArchivo(new Archivo());
+        }
+
+        if(file.isEmpty()){
+            model.addAttribute("msg", "Debe subir un archivo");
+            return "redirect:/admin/crearUsuario";
+        }
+
+        String fileName = file.getOriginalFilename();
+
+        try{
+            Archivo archivo = usuario.getArchivo();
+            archivo.setTipo(1);
+            archivo.setArchivo(file.getBytes());
+            archivoRepository.save(archivo);
+
+
+            int idImagen = archivo.getIdArchivos();
+            usuario.getArchivo().setIdArchivos(idImagen);
+            usuarioRepository.save(usuario);
+            return "redirect:/admin/listaUsuario";
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @GetMapping({"/editarUsuario","editarusuario"})
     public String editarUsuario(){
@@ -93,11 +135,11 @@ public class AdminController {
 
     // CRUD DE USUARIOS
 
+
+    /*  Aun no saleee  */
     @PostMapping("/guardarUsuario")
-    public String guardarNuevoUsuario(Usuario usuario){
-
+    public String guardarNuevoUsuario(Usuario usuario, RedirectAttributes attr){
         usuarioRepository.save(usuario);
-
         return "redirect:Administrador/listaSitio";
     }
 

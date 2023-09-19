@@ -25,10 +25,10 @@ public class Usuario {
     @Column(name = "correo", nullable = false, length = 45)
     private String correo;
 
-    @Column(name = "contrasenia", nullable = false, length = 45)
+    @Column(name = "contrasenia", length = 45)
     private String contrasenia;
 
-    @Column(name = "habilitado", nullable = false)
+    @Column(name = "habilitado")
     private Boolean habilitado = false;
 
     @Column(name = "fechaRegistro")
@@ -46,7 +46,7 @@ public class Usuario {
     private Empresa empresa;
 
     @ManyToOne
-    @JoinColumn(name = "idImagenPerfil", nullable = false)
+    @JoinColumn(name = "idImagenPerfil")
     private Archivo archivo;
 
     @ManyToOne

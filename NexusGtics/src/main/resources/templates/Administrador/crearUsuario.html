@@ -28,7 +28,7 @@
             <div class="pagetitle" style="margin-top: -35px;">
               <h1 class="card-title">Creación de usuario</h1>
             </div>
-            <form method="POST" th:action="@{'/admin/guardarUsuario'}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+            <form method="POST" th:action="@{/admin/saveUsuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
               <div class="row">
                 <div class="col-md-6">
                   <input type="hidden" class="form-control" name="idJuego" id="idJuego">
@@ -38,42 +38,56 @@
                   </div>
 
                   <div class="mb-3">
-                    <label for="descripcion">Apellidos:</label>
-                    <input type="text" class="form-control" name="descripcion" id="descripcion" >
+                    <label for="apellido">Apellidos:</label>
+                    <input type="text" class="form-control" name="apellido" id="apellido" >
                   </div>
 
                   <div class="mb-3">
-                    <label for="precio">Empresa:</label>
-                    <input type="text" class="form-control" name="precio" id="precio">
+                    <label for="correo">Correo:</label>
+                    <input type="text" class="form-control" name="correo" id="correo" >
+                  </div>
+
+                  <input type="hidden" name="contrasenia" id="contrasenia" th:value="${codigoAleatorio}">
+
+                  <input type="hidden" name="habilitado" id="habilitado" value="1">
+
+                  <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:value="${fechaActual}">
+
+                  <div class="mb-3">
+                    <label for="cargo" class="form-label">Selector de cargos</label>
+                    <select class="form-select" name="cargo" id="cargo">
+                      <option th:each="cargo: ${listaCargo}"
+                              th:text="${cargo.nombreCargo}" th:value="${cargo.idCargos}">Open this select menu</option>
+                    </select>
                   </div>
 
                   <div class="mb-3">
-                    <label for="descuento">Correo:</label>
-                    <input type="text" class="form-control" name="descuento" id="descuento" >
+                    <label for="empresa" class="form-label">Selector de Empresas</label>
+                    <select class="form-select" name="empresa" id="empresa">
+                      <option th:each="empresa: ${listaEmpresa}"
+                              th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}">Open this select menu</option>
+                    </select>
                   </div>
 
-                  <div class="input-group mb-3">
-                    <label for="consola">Cargo:</label>
-                    <div class="col-12">
-                      <select name="consola" id="consola" class="form-control">
-                        <option value="Cargo1">Analista de OyM</option>
-                        <option value="Cargo2">Analista de Planificación</option>
-                        <option value="Cargo3">Analista de Supervisor de campo</option>
-                        <option value="Cargo4">Técnicos</option>
-                      </select>
-                    </div>
+                  <div class="mb-3 pb-2 form-check">
+                    <input class="form-check-input" type="checkbox" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla">
+                    <label class="form-check-label" for="tecnicoConCuadrilla">¿Técnico con cuadrilla?</label>
                   </div>
+
+
                 </div>
                 <br><br>
                 <div class="col-md-6">
 
                   <div class="mb-3">
-                    <label for="descuento">Foto de perfil:</label>
+                    <label for="imagenSubida" class="form-label">Foto de perfil:</label>
                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                      <img id="imgPreview" th:src="@{/assets/img/fotoSubir.webp}" class="card-img-top" style="max-height: 250px">
+                      <img id="imgPreview" th:src="@{/assets/img/fotoSubir.webp}" class="card-img-top" style="max-height: 250px" alt="">
                     </div>
-                    <input class="form-control" type="file" id="formFile" accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
                   </div>
+
 
                   <button type="submit" class="btn btn-outline-primary float-end">Crear</button>
                 </div>
@@ -106,6 +120,36 @@
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
   <script th:src="@{/assets/js/foto.js}"></script>
+<!-- Para generar contraña -->
+  <script>
+
+    var caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var codigoAleatorio = '';
+    var contraseniaInput = document.getElementById("contrasenia");
+    for (var i = 0; i < 6; i++) {
+      var indice = Math.floor(Math.random() * caracteres.length);
+      codigoAleatorio += caracteres.charAt(indice);
+    }
+    //document.getElementById('codigoAleatorio').value = codigoAleatorio;
+    contraseniaInput.value = codigoAleatorio;
+
+
+  </script>
+
+<!-- Para FECHA -->
+<script>
+  // Obtener el campo de fecha por su ID
+  var fechaRegistro2Input = document.getElementById("fechaRegistro");
+
+  // Obtener la fecha actual en el formato deseado ('yyyy-MM-dd')
+  var fechaActual = new Date().toISOString().split("T")[0];
+
+  // Establecer la fecha actual como valor del campo
+  fechaRegistro2Input.value = fechaActual;
+</script>
+
+
+
 
 </body>
 
