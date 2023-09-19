@@ -9,8 +9,10 @@ import com.example.nexusgtics.entity.Cuadrilla;
 import com.example.nexusgtics.repository.CuadrillaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
 
@@ -108,7 +110,21 @@ public class SupervisorController {
         } else {
             return "redirect:/supervisor/listaTickets";
         }
+    }
 
+    @PostMapping("/actualizarSupervisor")
+    public String actualizarSupervisor(Ticket ticket , RedirectAttributes redirectAttributes){
+        ticketRepository.actualizarSupervisor(ticket.getIdTickets(),ticket.getIdSupervisorEncargado().getId());
+        redirectAttributes.addAttribute("id",ticket.getIdTickets());
+        return "redirect:/supervisor/ticketNuevo";
+    }
+
+    @PostMapping("/actualizarCuadrilla")
+    public String actualizarCuadrilla(Ticket ticket, RedirectAttributes redirectAttributes){
+
+        ticketRepository.actualizarCuadrilla(ticket.getIdTickets(),ticket.getIdCuadrilla().getIdCuadrillas());
+        redirectAttributes.addAttribute("id", ticket.getIdTickets());
+        return "redirect:/supervisor/ticketNuevo";
     }
 
     @GetMapping("/comentarios")

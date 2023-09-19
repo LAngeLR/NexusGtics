@@ -2,7 +2,9 @@ package com.example.nexusgtics.repository;
 
 import com.example.nexusgtics.entity.Ticket;
 import com.example.nexusgtics.entity.Usuario;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -12,6 +14,16 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     // ------------------------------ SUPERVISOR --------------------------------------- //
     @Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE estado != ?1")
     List<Ticket> listaTicketsModificado(int valor1);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE tickets SET idCuadrilla = ?2 WHERE idTickets = ?1")
+    void actualizarCuadrilla(int ticketId, int cuadrillaId);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE tickets SET idSupervisorEncargado = ?2 WHERE idTickets = ?1")
+    void actualizarSupervisor(int ticketId, int supervisorId);
 
 
 }
