@@ -90,7 +90,10 @@
                 <br>
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label">Prioridad:</div>
-                  <div class="col-lg-9 col-md-8" style="color: #D01515"><b th:text="${tickets.prioridad}"></b></div>
+                  <div class="col-lg-9 col-md-8" style="color: #D01515" th:if="${tickets.prioridad eq 'Urgente'}"><b th:text="${tickets.prioridad}"></b></div>
+                  <div class="col-lg-9 col-md-8" style="color: #3498DB" th:if="${tickets.prioridad eq 'Baja prioridad'}"><b th:text="${tickets.prioridad}"></b></div>
+                  <div class="col-lg-9 col-md-8" style="color: #FFC300" th:if="${tickets.prioridad eq 'Hacer'}"><b th:text="${tickets.prioridad}"></b></div>
+                  <div class="col-lg-9 col-md-8" style="color: #4CAF50" th:if="${tickets.prioridad eq 'No critico'}"><b th:text="${tickets.prioridad}"></b></div>
                 </div>
 
                 <div class="row">
@@ -128,24 +131,6 @@
                   <div class="col-lg-9 col-md-8" th:text="${tickets.descripcion}"></div>
                 </div>
 
-                <div class="row" th:if="${tickets.estado==6}">
-                  <div class="col-lg-3 col-md-4 label">Estado:</div>
-                  <div class="col-lg-9 col-md-8">
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
-                      <label class="form-check-label" for="flexRadioDefault1">
-                        Progreso
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
-                      <label class="form-check-label" for="flexRadioDefault3">
-                        Cerrado
-                      </label>
-                    </div>
-                  </div>
-                </div>
-
                 <div class="row" th:if="${tickets.estado==7}">
                   <div class="col-lg-3 col-md-4 label">Estado:</div>
                   <div class="col-lg-9 col-md-8">
@@ -158,13 +143,39 @@
                   </div>
                 </div>
 
+                <form th:action="@{/supervisor/actualizarEstado}" class="search-form" method="POST">
+                  <input th:value="${tickets.idTickets}" name="idTickets" type="hidden" />
+                  <div class="row" th:if="${tickets.estado==6}">
+                    <div class="col-lg-3 col-md-4 label">Estado:</div>
+                    <div class="col-lg-9 col-md-8">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="cambioEstado" id="flexRadioDefault1" value="Progreso" checked>
+                        <label class="form-check-label" for="flexRadioDefault1">
+                          Progreso
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="cambioEstado" id="flexRadioDefault3" value="Cerrado">
+                        <label class="form-check-label" for="flexRadioDefault3">
+                          Cerrado
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <center><br>
+
+                    <a class="btn" type="button" style="background-color: #82DEAC" th:href="@{/supervisor/formulario}" >Formulario</a>
+                    <a type="button" class="btn btn-outline-warning" th:href="@{/supervisor/comentarios}">comentarios</a>
+                    <button type="submit" class="btn btn-outline-danger" th:if="${tickets.estado==6}">Guardar</button>
+                  </center>
+                </form>
+
+
               </div>
-              <br><br>
+
             </div><!-- End Bordered Tabs -->
-            <center><button class="btn" style="background-color: #82DEAC">Formulario</button>
-          <!-- End Bordered Tabs -->
-              <a type="button" class="btn btn-outline-warning " th:href="@{/supervisor/comentarios}">comentarios</a>
-              <button class="btn btn-outline-danger" th:if="${tickets.estado==6}">Guardar</button></center>
+
           </div>
         </div>
       </div>
@@ -215,8 +226,6 @@
             function centrarMapaEnCoordenadasIniciales() {
               map.setView([latitud, longitud], 18);
             }
-
-            // Agrega el botón como un control personalizado en Leaflet
             var botonCentrar = L.control({ position: 'bottomright' });
 
             botonCentrar.onAdd = function (map) {
@@ -224,10 +233,10 @@
               var button = L.DomUtil.create('button', 'btn btn-primary', container);
               button.type = 'button';
 
-              // Crea el icono bx-current-location y agrégalo al botón
+
               var icono = L.DomUtil.create('i', 'bx bx-collapse', button);
 
-              // Agrega el evento de clic para centrar el mapa
+
               L.DomEvent.on(button, 'click', centrarMapaEnCoordenadasIniciales);
               return container;
             };

@@ -88,9 +88,13 @@
                             <div class="tab-pane fade show active profile-overview" id="datos-overview">
                                 <h5 class="card-title" style="color: #095444">Datos generales del Ticket</h5>
                                 <br>
+
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">Prioridad:</div>
-                                    <div class="col-lg-9 col-md-8" style="color: #D01515"><b th:text="${tickets.prioridad}"></b></div>
+                                    <div class="col-lg-3 col-md-4 label">Prioridad:</div>
+                                    <div class="col-lg-9 col-md-8" style="color: #D01515" th:if="${tickets.prioridad eq 'Urgente'}"><b th:text="${tickets.prioridad}"></b></div>
+                                    <div class="col-lg-9 col-md-8" style="color: #3498DB" th:if="${tickets.prioridad eq 'Baja prioridad'}"><b th:text="${tickets.prioridad}"></b></div>
+                                    <div class="col-lg-9 col-md-8" style="color: #FFC300" th:if="${tickets.prioridad eq 'Hacer'}"><b th:text="${tickets.prioridad}"></b></div>
+                                    <div class="col-lg-9 col-md-8" style="color: #4CAF50" th:if="${tickets.prioridad eq 'No critico'}"><b th:text="${tickets.prioridad}"></b></div>
                                 </div>
 
                                 <div class="row">

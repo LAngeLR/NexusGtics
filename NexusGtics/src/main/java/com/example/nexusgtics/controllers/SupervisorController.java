@@ -120,16 +120,38 @@ public class SupervisorController {
     }
 
     @PostMapping("/actualizarCuadrilla")
-    public String actualizarCuadrilla(Ticket ticket, RedirectAttributes redirectAttributes){
+    public String actualizarCuadrilla(Ticket ticket){
 
         ticketRepository.actualizarCuadrilla(ticket.getIdTickets(),ticket.getIdCuadrilla().getIdCuadrillas());
-        redirectAttributes.addAttribute("id", ticket.getIdTickets());
-        return "redirect:/supervisor/ticketNuevo";
+        ticketRepository.actualizarEstado(ticket.getIdTickets(),3);
+
+        return "redirect:/supervisor/listaTickets";
     }
+
+    @PostMapping("/actualizarEstado")
+    public String actualizarEstado(@RequestParam("idTickets") int id, @RequestParam("cambioEstado") String cambioEstado, RedirectAttributes redirectAttributes) {
+
+        int estadoUtilizar;
+        redirectAttributes.addAttribute("id",id);
+
+        if (cambioEstado.equals("Cerrado")) {
+            estadoUtilizar = 7;
+            ticketRepository.actualizarEstado(id,estadoUtilizar);
+            return "redirect:/supervisor/listaTickets";
+        } else{
+            return "redirect:/supervisor/ticketCerrado";
+        }
+    }
+
 
     @GetMapping("/comentarios")
     public String comentarioTicket(){
         return "Supervisor/comentariosTickets";
+    }
+
+    @GetMapping("/formulario")
+    public String formulario(){
+        return "Supervisor/formulario";
     }
 
     @GetMapping("/perfil")

@@ -70,7 +70,7 @@
     <div class="pagetitle">
         <div class="d-flex justify-content-between align-items-center">
             <h1>Detalles</h1>
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center" th:if="${ticket.idSupervisorEncargado == null}">
                 <button type="button" class="btn btn-outline-success me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">Aceptar Ticket</button>
                 <!-- MODAL 1 -->
                 <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel1" aria-hidden="true">
@@ -122,9 +122,13 @@
                             <div class="tab-pane fade show active profile-overview" id="datos-overview">
                                 <h5 class="card-title" style="color: #095444">Datos generales del Ticket</h5>
                                 <br>
+
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">Prioridad:</div>
-                                    <div class="col-lg-9 col-md-8" style="color: #D01515"><b th:text="${ticket.prioridad}"></b></div>
+                                    <div class="col-lg-3 col-md-4 label">Prioridad:</div>
+                                    <div class="col-lg-9 col-md-8" style="color: #D01515" th:if="${ticket.prioridad eq 'Urgente'}"><b th:text="${ticket.prioridad}"></b></div>
+                                    <div class="col-lg-9 col-md-8" style="color: #3498DB" th:if="${ticket.prioridad eq 'Baja prioridad'}"><b th:text="${ticket.prioridad}"></b></div>
+                                    <div class="col-lg-9 col-md-8" style="color: #FFC300" th:if="${ticket.prioridad eq 'Hacer'}"><b th:text="${ticket.prioridad}"></b></div>
+                                    <div class="col-lg-9 col-md-8" style="color: #4CAF50" th:if="${ticket.prioridad eq 'No critico'}"><b th:text="${ticket.prioridad}"></b></div>
                                 </div>
 
                                 <div class="row">
@@ -226,10 +230,9 @@
                     </script>
 
 
-                    <div class="mb-3" style="margin-top: 25px;"> <!-- Agrega un margen en la parte superior -->
+                    <div class="mb-3" style="margin-top: 25px;">
                         <input type="text" class="form-control" th:value="'Direccion: ' + ${ticket.idSitios.departamento} +', '+ ${ticket.idSitios.provincia} +', '+ ${ticket.idSitios.distrito}" disabled>
                     </div>
-                    <!-- MAPA -->
                 </div>
             </div>
         </div>
@@ -241,12 +244,12 @@
                     <h5 class="card-title" style="color: #095444">Seleccionar Supervisor</h5>
                     <div class="search-bar" id="seccionSupervisores">
                         <form th:action="@{/supervisor/actualizarSupervisor}" class="search-form" method="POST">
+                            <input th:value="${ticket.idTickets}" name="idTickets" type="hidden"/>
                             <div class="input-group mb-3">
-                                <select class="form-select" name="supervisores" id="supervisores">
+                                <select class="form-select" th:field="*{idSupervisorEncargado}" id="supervisores">
                                     <option th:each="supervisor : ${listaSupervisores}" th:text="${supervisor.nombre}" th:value="${supervisor.id}"></option>
                                 </select>
                             </div>
-
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel3" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
@@ -269,7 +272,6 @@
                                 </div>
                             </div>
                         </form>
-
                     </div>
                     <!-- End Bordered Tabs -->
                 </div>
