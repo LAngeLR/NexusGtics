@@ -67,8 +67,8 @@ public class AnalistaOYMController {
     @GetMapping("/ticket")
     public String listaTicket(Model model){
         //'listar'
-        List<Ticket> lista = ticketRepository.findAll();
-        model.addAttribute("listaTicket", lista);
+        List<Ticket> listaTicket = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaTicket);
         return "AnalistaOYM/oymListaTickets";
     }
 
