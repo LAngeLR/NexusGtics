@@ -196,9 +196,22 @@
                                     <td th:text="${ticket.usuarioSolicitante}"></td>
                                     <td th:text="${ticket.fechaCreacion}"></td>
                                     <td th:text="${ticket.fechaCierre}"></td>
-                                    <td><span class="badge text-bg-info">Baja Prioridad</span></td>
+                                    <td>
+                                        <div th:if="${ticket.prioridad == 'Baja prioridad'}">
+                                            <span class="badge text-bg-info" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                        </div>
+                                        <div th:if="${ticket.prioridad == 'No critico'}">
+                                            <span class="badge text-bg-success" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                        </div>
+                                        <div th:if="${ticket.prioridad == 'Urgente'}">
+                                            <span class="badge text-bg-danger" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                        </div>
+                                        <div th:if="${ticket.prioridad == 'Hacer'}">
+                                            <span class="badge text-bg-warning" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                        </div>
+                                    </td>
                                     <td th:text="${ticket.estado}"><span class="badge text-bg-danger"></span></td>
-                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{/tecnico/datosticket}">+</a></center></td>
+                                    <td><center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/tecnico/verTicket?id='+${ticket.idTickets}}">+</a></center></td>
                                 </tr>
                             </tbody>
                         </table>

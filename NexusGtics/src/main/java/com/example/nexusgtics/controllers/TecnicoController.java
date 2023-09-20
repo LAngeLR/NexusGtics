@@ -1,12 +1,11 @@
 package com.example.nexusgtics.controllers;
-import com.example.nexusgtics.entity.Formulario;
 import com.example.nexusgtics.entity.Ticket;
 import com.example.nexusgtics.entity.Tipoticket;
 import com.example.nexusgtics.entity.Usuario;
+import com.example.nexusgtics.repository.SitioRepository;
 import com.example.nexusgtics.repository.TicketRepository;
 import com.example.nexusgtics.repository.TipoticketRepository;
 import com.example.nexusgtics.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,14 +23,17 @@ import java.util.Optional;
 public class TecnicoController {
     final TicketRepository ticketRepository;
     final UsuarioRepository usuarioRepository;
-    private final TipoticketRepository tipoticketRepository;
+    final TipoticketRepository tipoticketRepository;
+
+    final SitioRepository sitioRepository;
 
     public TecnicoController(TicketRepository ticketRepository,
                              UsuarioRepository usuarioRepository,
-                             TipoticketRepository tipoticketRepository){
+                             TipoticketRepository tipoticketRepository, SitioRepository sitioRepository){
         this.ticketRepository = ticketRepository;
         this.usuarioRepository = usuarioRepository;
         this.tipoticketRepository = tipoticketRepository;
+        this.sitioRepository = sitioRepository;
     }
     @GetMapping("/")
     public String paginaPrincipal(){
@@ -50,6 +52,7 @@ public class TecnicoController {
         }
     }
 
+    //-----------------------------------------------------------------------
 
     @GetMapping("/comentarios")
     public String pagcomentarios(){
@@ -61,21 +64,32 @@ public class TecnicoController {
         return "Tecnico/dashboard";
     }
 
-    @GetMapping("/datosticket")
-    public String pagdatostick(Model model){
-        //Ticket ticket = new Ticket();
-        Tipoticket tipoticket = new Tipoticket();
-        //model.addAttribute("ticket",ticket);
-        model.addAttribute("tipoticket",tipoticket);
-
+    //YA ESTA CRUD LISTAR
+    @GetMapping("/ticketasignado")
+    public String pagtickasignado(Model model){
         //'listar'
         List<Ticket> lista = ticketRepository.findAll();
-        model.addAttribute("ticket", lista);
-       List<Tipoticket> list = tipoticketRepository.findAll();
-      model.addAttribute("tipoticket1", list);
+        model.addAttribute("ticketList", lista);
+        return "Tecnico/ticket_asignado";
+    }
+
+    @GetMapping({"/verTicket","/verticket"})
+    public String pagdatostick(Model model, @RequestParam("id") int id){
+        Optional <Ticket> optionalTicket = ticketRepository.findById(id);
+
+        if(optionalTicket.isPresent()){
+            Ticket ticket = optionalTicket.get();
+            model.addAttribute("ticket", ticket);
             return "Tecnico/datos_ticket";
+        }else{
+            return "Tecnico/ticket_asignado";
+        }
 
     }
+
+    //-----------------------------------------------------------------------
+
+
 
     @GetMapping("/desplazamiento")
     public String pagdesplazamiento(){
@@ -94,25 +108,12 @@ public class TecnicoController {
         return "Tecnico/formulario";
     }
 
-    @PostMapping("/save")
-    public String guardarFormulario(Ticket ticket, RedirectAttributes attr){
-        ticketRepository.save(ticket);
-        return "redirect:/Tecnico/datos_ticket";
-    }
-
 
     @GetMapping("/mapa")
     public String pagmapa(){
         return "Tecnico/mapa";
     }
 
-    //YA ESTA CRUD LISTAR
-    @GetMapping("/ticketasignado")
-    public String pagtickasignado(Model model){
-        //'listar'
-        List<Ticket> lista = ticketRepository.findAll();
-        model.addAttribute("ticketList", lista);
-        return "Tecnico/ticket_asignado";
-    }
+
 
 }
