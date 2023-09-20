@@ -188,18 +188,18 @@
               <table style=" width: 50%;">
                 <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Tipo de equipo</th>
-                  <th>Marca</th>
-                  <th>Modelo </th>
+                  <th scope="col">#</th>
+                  <th scope="col">Tipo de equipo</th>
+                  <th scope="col">Marca </th>
+                  <th scope="col">Modelo</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Switch</td>
-                  <td>Cisco</td>
-                  <td>Catalyst 94000</td>
+                <tr th:each="equipo, info : ${listaEquipo}">
+                  <th scope="row" th:text="${info.index+1}">1</th>
+                  <td th:text="${equipo.tipoequipo.nombreTipo}">Tipo</td>
+                  <td th:text="${equipo.marca}">Marca</td>
+                  <td th:text="${equipo.modelo}">Modelo</td>
                 </tr>
                 </tbody>
               </table>

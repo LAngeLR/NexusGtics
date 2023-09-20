@@ -1,7 +1,9 @@
 package com.example.nexusgtics.controllers;
 
+import com.example.nexusgtics.entity.Equipo;
 import com.example.nexusgtics.entity.Sitio;
 import com.example.nexusgtics.entity.Ticket;
+import com.example.nexusgtics.repository.EquipoRepository;
 import com.example.nexusgtics.repository.SitioRepository;
 import com.example.nexusgtics.repository.TicketRepository;
 import org.springframework.stereotype.Controller;
@@ -17,10 +19,13 @@ public class AnalistaOYMController {
     final TicketRepository ticketRepository;
     final SitioRepository sitioRepository;
 
+    final EquipoRepository equipoRepository;
 
-    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository ){
+
+    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository ){
         this.sitioRepository = sitioRepository;
         this.ticketRepository = ticketRepository;
+        this.equipoRepository = equipoRepository;
     }
 
     @GetMapping("/")
@@ -44,7 +49,11 @@ public class AnalistaOYMController {
         return "AnalistaOYM/oymEditarSitio";
     }
     @GetMapping("/listaEquipo")
-    public String listaEquipo(){
+    public String listaEquipo(Model model){
+        List<Equipo> listaEquipo = equipoRepository.findAll();
+
+        model.addAttribute("listaEquipo",listaEquipo);
+
         return "AnalistaOYM/oymListaEquipos";
     }
     @GetMapping("/verEquipo")
