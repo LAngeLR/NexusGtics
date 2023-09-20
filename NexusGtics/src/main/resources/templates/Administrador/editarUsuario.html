@@ -32,51 +32,65 @@
           <div class="pagetitle">
             <h1 class="card-title">Información de usuario</h1>
           </div>
-          <form method="POST" action="" enctype="multipart/form-data">
+          <form method="POST" th:action="@{/admin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
             <div class="row">
               <div class="col-md-6">
+                <input type="hidden" class="form-control" th:field="*{id}">
+                <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
 
                 <div class="mb-3">
-                  <label for="nombre">Nombres:</label>
-                  <input type="text" class="form-control" name="nombre" id="nombre" value="Rommel Antonio">
+                  <label class="form-label">Nombres:</label>
+                  <input type="text" class="form-control" th:field="*{nombre}">
                 </div>
 
                 <div class="mb-3">
-                  <label for="descripcion">Apellidos:</label>
-                  <input type="text" class="form-control" name="descripcion" id="descripcion" value="Garay Santos">
+                  <label class="form-label">Apellidos:</label>
+                  <input type="text" class="form-control" th:field="*{apellido}">
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Empresa:</label>
-                  <input type="text" class="form-control" name="precio" id="precio" value="PUCP" >
+                  <label class="form-label">Correo:</label>
+                  <input type="text" class="form-control" th:field="*{correo}">
+                </div>
+
+                <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
+
+                <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
+
+                <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:field="*{fechaRegistro}">
+
+                <input type="hidden" name="archivo" id="archivo" th:field="*{archivo.idArchivos}">
+
+                <div class="mb-3">
+                  <label class="form-label">Empresa</label>
+                  <select class="form-select" name="empresa" id="empresa">
+                    <option th:each="empresa: ${listaEmpresa}"
+                            th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
+                            th:selected="${usuario.empresa.idEmpresas == empresa.idEmpresas}">Open this select menu</option>
+                  </select>
                 </div>
 
                 <div class="mb-3">
-                  <label for="descuento">Correo:</label>
-                  <input type="text" class="form-control" name="descuento" id="descuento" VALUE="rommel@gmail.com" >
+                  <label class="form-label">Cargo</label>
+                  <select class="form-select" name="cargo" id="cargo">
+                    <option th:each="cargo: ${listaCargo}"
+                            th:unless="${cargo.nombreCargo == 'Superadmin' || cargo.nombreCargo == 'Administrador'}"
+                            th:text="${cargo.nombreCargo}" th:value="${cargo.idCargos}"
+                            th:selected="${usuario.cargo.idCargos == cargo.idCargos}">Open this select menu</option>
+                  </select>
                 </div>
 
-                <div class="mb-3">
-                  <label for="consola">Cargo:</label>
-                  <div class="col-12">
-                    <select name="consola" id="consola" class="form-control">
-                      <option value="Cargo1">Analista de OyM</option>
-                      <option value="Cargo2">Analista de Planificación</option>
-                      <option value="Cargo3">Analista de Supervisor de campo</option>
-                      <option value="Cargo4">Técnicos</option>
-                    </select>
-                  </div>
-
-                </div>
               </div>
               <br><br>
               <div class="col-md-6">
 
                 <div class="mb-3">
-                  <label for="descuento">Foto de perfil:</label>
-                  <br>
-                  <br>
-                  <img th:src="@{/assets/img/yo_2.jfif}" style="max-width: 300px;" alt="">
+                  <label for="imagenSubida" class="form-label">Foto de perfil:</label>
+                  <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                    <img id="imgPreview" th:src="@{|image/${usuario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                  </div>
+                  <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                         accept="image/*" onchange="previewImage(event, '#imgPreview')">
                 </div>
 
                 <button type="submit" class="btn btn-outline-primary float-end">Aplicar cambios</button>
@@ -111,6 +125,7 @@
 
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/foto.js}"></script>
 
 </body>
 

@@ -20,4 +20,10 @@ public class Archivo {
     @Column(name = "archivo")
     private byte[] archivo;
 
+    @Column(name = "nombre")
+    private String nombre;
+
+    @Column(name = "contentType", nullable = false)
+    private String contentType;
+
 }

@@ -23,7 +23,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     @Modifying
     @Transactional
-    @Query(value ="update usuarios set habilitado = false where idUsuarios = ?1;", nativeQuery = true )
+    @Query(value ="update nexus.usuarios set habilitado = false where idUsuarios = ?1", nativeQuery = true )
     void desactivarUsuario(int id);
 
 

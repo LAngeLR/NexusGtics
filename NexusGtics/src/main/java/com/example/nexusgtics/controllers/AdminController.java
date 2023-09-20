@@ -2,12 +2,14 @@ package com.example.nexusgtics.controllers;
 
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
+import com.sun.net.httpserver.HttpsServer;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -62,14 +64,14 @@ public class AdminController {
         return "Administrador/listaUsuario";
     }
 
-    // Desabilitar Usuarios
-    @GetMapping("/desabilitarUsuario")
+    // BANEAR USUARIO
+    @GetMapping("/banearUsuario")
     public String desabilitarUsuario(@RequestParam("id") int id) {
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         if (optionalUsuario.isPresent()) {
             usuarioRepository.desactivarUsuario(id);
         }
-        return "redirect:Administrador/listaUsuario";
+        return "redirect:/admin/listaUsuario";
     }
 
     @GetMapping({"/crearUsuario","crearusuario"})
@@ -94,6 +96,7 @@ public class AdminController {
         }
     }
 
+    /*CREAR NUEVO USUARIO*/
     @PostMapping("/saveUsuario")
     public String saveUsuario(@RequestParam("imagenSubida") MultipartFile file,
                               Usuario usuario,
@@ -108,16 +111,14 @@ public class AdminController {
             model.addAttribute("msg", "Debe subir un archivo");
             return "redirect:/admin/crearUsuario";
         }
-
         String fileName = file.getOriginalFilename();
-
         try{
             Archivo archivo = usuario.getArchivo();
+            archivo.setNombre(fileName);
             archivo.setTipo(1);
             archivo.setArchivo(file.getBytes());
+            archivo.setContentType(file.getContentType());
             archivoRepository.save(archivo);
-
-
             int idImagen = archivo.getIdArchivos();
             usuario.getArchivo().setIdArchivos(idImagen);
             usuarioRepository.save(usuario);
@@ -127,21 +128,24 @@ public class AdminController {
         }
     }
 
+    /*EDITAR USUARIO*/
     @GetMapping({"/editarUsuario","editarusuario"})
-    public String editarUsuario(){
-        return "Administrador/editarUsuario";
+    public String editarUsuario(Model model, @RequestParam("id") int id){
+
+        Optional<Usuario> usuario1 = usuarioRepository.findById(id);
+
+        if (usuario1.isPresent()) {
+            Usuario usuario = usuario1.get();
+            model.addAttribute("usuario", usuario);
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            return "Administrador/editarUsuario";
+        } else {
+            return "redirect:/admin";
+        }
     }
 
 
-    // CRUD DE USUARIOS
-
-
-    /*  Aun no saleee  */
-    @PostMapping("/guardarUsuario")
-    public String guardarNuevoUsuario(Usuario usuario, RedirectAttributes attr){
-        usuarioRepository.save(usuario);
-        return "redirect:Administrador/listaSitio";
-    }
 
 
 //-----------------------------------------------------------------------
@@ -288,4 +292,27 @@ public class AdminController {
     }
 
 
+
+    /*PARA VISUALIZAR FOTOS*/
+    @GetMapping("/image/{id}")
+    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") int id){
+        Optional<Archivo> opt = archivoRepository.findById(id);
+
+        if(opt.isPresent()){
+            Archivo u = opt.get();
+
+            byte[] imagenComoBytes = u.getArchivo();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.parseMediaType(u.getContentType()));
+
+
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK);
+        } else {
+            return  null;
+        }
+    }
 }

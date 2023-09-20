@@ -68,10 +68,10 @@
                   <label class="form-label">Foto de perfil:</label>
                   <br>
                   <br>
-                  <img th:src="@{/assets/img/yo_2.jfif}" style="max-width: 300px;" alt="">
+                  <img th:src="@{|image/${usuario.archivo.idArchivos}|}" style="max-width: 300px;" alt="">
                 </div>
 
-                <button type="submit" class="btn btn-outline-primary float-end">Editar</button>
+                <a th:href="@{'/admin/editarUsuario?id=' + ${usuario.id}}" class="btn btn-outline-primary me-2 float-end">Editar</a>
                 <button type="submit" class="btn btn-outline-danger float-start">Desactivar</button>
               </div>
             </div>

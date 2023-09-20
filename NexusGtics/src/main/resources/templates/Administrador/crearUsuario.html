@@ -52,11 +52,14 @@
                   <input type="hidden" name="habilitado" id="habilitado" value="1">
 
                   <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:value="${fechaActual}">
+                  <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" value="0">
 
                   <div class="mb-3">
                     <label for="cargo" class="form-label">Selector de cargos</label>
                     <select class="form-select" name="cargo" id="cargo">
+                      <option value="-1">--Seleccione un cargo--</option>
                       <option th:each="cargo: ${listaCargo}"
+                              th:unless="${cargo.nombreCargo == 'Superadmin' || cargo.nombreCargo == 'Administrador'}"
                               th:text="${cargo.nombreCargo}" th:value="${cargo.idCargos}">Open this select menu</option>
                     </select>
                   </div>
@@ -64,17 +67,11 @@
                   <div class="mb-3">
                     <label for="empresa" class="form-label">Selector de Empresas</label>
                     <select class="form-select" name="empresa" id="empresa">
+                      <option value="-1">--Seleccione una empresa--</option>
                       <option th:each="empresa: ${listaEmpresa}"
                               th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}">Open this select menu</option>
                     </select>
                   </div>
-
-                  <div class="mb-3 pb-2 form-check">
-                    <input class="form-check-input" type="checkbox" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla">
-                    <label class="form-check-label" for="tecnicoConCuadrilla">¿Técnico con cuadrilla?</label>
-                  </div>
-
-
                 </div>
                 <br><br>
                 <div class="col-md-6">
