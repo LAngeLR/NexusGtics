@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.time.Instant;
 
 import java.util.*;
 
@@ -53,18 +54,29 @@ public class SupervisorController {
         List<Cuadrilla> listaCuadrilla = cuadrillaRepository.findAll();
 
         Map<Integer, Integer> trabajosFinalizadosPorCuadrilla = new HashMap<>();
+        Map<Integer, Integer> numeroTecnicosPorCuadrilla = new HashMap<>();
 
         for (Cuadrilla cuadrilla : listaCuadrilla) {
-            int trabajosFinalizados = cuadrillaRepository.contarTrabajosFinalizados(cuadrilla.getIdCuadrillas()); // Reemplaza "getId()" con el método adecuado para obtener el ID de la cuadrilla
+            int trabajosFinalizados;
+            Integer trabajosFinalizadosResult = cuadrillaRepository.contarTrabajosFinalizados(cuadrilla.getIdCuadrillas());
+
+            trabajosFinalizados = (trabajosFinalizadosResult != null) ? trabajosFinalizadosResult : 0;
+
             trabajosFinalizadosPorCuadrilla.put(cuadrilla.getIdCuadrillas(), trabajosFinalizados);
         }
 
-        model.addAttribute("listaCuadrilla",listaCuadrilla);
+        for (Cuadrilla cuadrilla1 : listaCuadrilla) {
 
+            int tecnicosCuadrilla = cuadrillaRepository.numeroTecnicosPorCuadrilla(cuadrilla1.getIdCuadrillas());
+
+            numeroTecnicosPorCuadrilla.put(cuadrilla1.getIdCuadrillas(), tecnicosCuadrilla);
+        }
+        model.addAttribute("listaCuadrilla", listaCuadrilla);
         model.addAttribute("trabajosFinalizadosPorCuadrilla", trabajosFinalizadosPorCuadrilla);
-
+        model.addAttribute("numeroTecnicosPorCuadrilla", numeroTecnicosPorCuadrilla);
         return "Supervisor/listaCuadrillas";
     }
+
 
     @GetMapping("/ticketNuevo")
     public String nuevoTicket(Model model, @RequestParam("id") int id){
@@ -170,9 +182,49 @@ public class SupervisorController {
     }
 
     @GetMapping("/crearCuadrilla")
-    public String crearCuadrilla(){
+    public String crearCuadrilla(Model model,  @RequestParam(name = "id", required = false, defaultValue = "-1") int id){
+
+        if(id == -1){
+            model.addAttribute("valor", id);
+        }
+        else{
+            model.addAttribute("valor", cuadrillaRepository.numeroTecnicosPorCuadrilla(id));
+            model.addAttribute("a", id);
+        }
+        model.addAttribute("listaTecnicos",usuarioRepository.listaDeSupervisores(6));
         return "Supervisor/crearCuadrilla";
     }
+
+    @PostMapping("/guardarCuadrilla")
+    public String guardarCuadrilla(Cuadrilla cuadrilla, RedirectAttributes attr) {
+
+        Instant fechaCreacion = Instant.now();
+        cuadrilla.setFechaCreacion(fechaCreacion);
+
+        cuadrillaRepository.save(cuadrilla);
+        usuarioRepository.cambiarTecnico(cuadrilla.getTecnico().getId(),cuadrilla.getIdCuadrillas());
+
+        return "redirect:/supervisor/listaCuadrillas";
+    }
+
+    @PostMapping("/guardarTecnicos")
+
+    public String guardarTecnicos(
+            @RequestParam(name = "tecnicosSeleccionados", required = false) List<Integer> tecnicosSeleccionados, @RequestParam("a") int valor){
+        if (tecnicosSeleccionados != null && !tecnicosSeleccionados.isEmpty()) {
+            for (Integer userId : tecnicosSeleccionados) {
+                Usuario usuario = usuarioRepository.findById(userId).orElse(null);
+
+                if (usuario != null) {
+                    usuarioRepository.cambiarTecnico(usuario.getId(), valor);
+                }
+            }
+        }
+        return "redirect:/supervisor/listaCuadrillas";
+    }
+
+
+
 
     @GetMapping("/detallesCuadrilla")
     public String detallesCuadrilla(Model model, @RequestParam("id") int id){
@@ -184,7 +236,8 @@ public class SupervisorController {
         Map<Integer, Integer> trabajosFinalizadosPorCuadrilla = new HashMap<>();
 
         for (Cuadrilla cuadrilla : listaCuadrilla) {
-            int trabajosFinalizados = cuadrillaRepository.contarTrabajosFinalizados(cuadrilla.getIdCuadrillas()); // Reemplaza "getId()" con el método adecuado para obtener el ID de la cuadrilla
+            Integer trabajosFinalizados = cuadrillaRepository.contarTrabajosFinalizados(cuadrilla.getIdCuadrillas()); // Reemplaza "getId()" con el método adecuado para obtener el ID de la cuadrilla
+            trabajosFinalizados = (trabajosFinalizados != null) ? trabajosFinalizados : 0;
             trabajosFinalizadosPorCuadrilla.put(cuadrilla.getIdCuadrillas(), trabajosFinalizados);
         }
 
