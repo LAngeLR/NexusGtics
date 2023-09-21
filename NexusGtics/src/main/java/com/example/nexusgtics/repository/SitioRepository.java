@@ -12,5 +12,5 @@ public interface SitioRepository extends JpaRepository<Sitio, Integer> {
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "insert into sitios (departamento, provincia, distrito, ubigeo, latitud, longitud, tipo, tipoZona, habilitado) values (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, true)")
-    void guardarSitio(String departamento, String provincia, String distrito, Integer ubigeo, BigDecimal latitud, BigDecimal longitud, Boolean tipo, Boolean tipoZona);
+    void guardarSitio(String departamento, String provincia, String distrito, Integer ubigeo, BigDecimal latitud, BigDecimal longitud, String tipo, String tipoZona);
 }
