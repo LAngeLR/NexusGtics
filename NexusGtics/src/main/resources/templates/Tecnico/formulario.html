@@ -173,64 +173,72 @@
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Información del cliente:</h5>
+                        <h5 class="card-title">Información del cliente y ticket:</h5>
                         <!-- Advanced Form Elements -->
-                        <form method="post" th:action="@{/tecnico/save}">
-                            <div class="row mb-3">
-                                <label class="col-sm-2 col-form-label">Ingrese datos</label>
+                        <form method="POST" th:action="@{/tecnico/saveFormulario}" th:object="${ticket}" enctype="multipart/form-data">
+                            <div class="row">
                                 <div class="col-sm-10">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
-                                        <label for="floatingInput">Nombre completo</label>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-4 form-label">ID del Ticket</label>
+                                        <div class="col-sm-8">
+                                            <input type="number" class="form-control-plaintext"  th:field="*{idTickets}" disabled>
+                                        </div>
                                     </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="number" class="form-control" id="floatingInput2" placeholder="name@example.com">
-                                        <label for="floatingInput">Telf. Celular</label>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-4 form-label">Nombre completo</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control-plaintext"  th:field="*{usuarioSolicitante}" disabled>
+                                        </div>
                                     </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="floatingInput3" placeholder="name@example.com">
-                                        <label for="floatingInput">Dirección</label>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-4 form-label">Prioridad del Ticket</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control-plaintext" th:field="*{prioridad}" disabled>
+                                        </div>
                                     </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="date" class="form-control" id="floatingInput4" placeholder="name@example.com">
-                                        <label for="floatingInput">Fecha</label>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-4 form-label">Servicio</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control-plaintext" th:field="*{idTipoTicket.nombreTipoTicket}" disabled>
+                                        </div>
                                     </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="hour" class="form-control" id="floatingInput5" >
-                                        <label for="floatingInput">Hora</label>
+                                    <div class="mb-3 row">
+                                        <label class="col-sm-4 form-label">Fecha</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control-plaintext" th:field="*{fechaCreacion}" disabled>
+                                        </div>
                                     </div>
+
                                 </div>
 
                                 <div class="row mb-3">
                                     <h5>Descripción:</h5>
-                                    <label class="col-sm-2 col-form-label">Trabajo realizado</label>
-                                    <div class="col-sm-10">
-                                        <textarea class="form-control" style="height: 100px"></textarea>
+                                    <label for="descripcion" class="col-sm-4">Trabajo realizado</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="descripcion" id="descripcion">
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="row mb-5">
-                                <h5><b>Adicional:</b></h5>
-                                <label class="col-sm-2 col-form-label">Agregar imagen</label>
-                                <div class="col-sm-10">
-                                    <div class="input-group mb-3">
-                                        <input class="form-control" type="file" id="formFile1" >
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <h5><b>Subir foto:</b></h5>
+                                <label for="imagenSubida" class="form-label">Agregar imagen</label>
+                                <input class="form-control" type="file" name="imagenSubida" id="imagenSubida" accept="image/*"
+                                       onchange="previewImage(event, '#imgPreview')">
                             </div>
+
                             <div class="row mb-5">
                                 <h5><b>Datos del técnico:</b></h5>
                                 <div class="mb-3 row">
-                                    <label class="col-sm-2 col-form-label">Nombre y Apellidos: </label>
+                                    <label class="col-sm-2 col-form-label">Nombre </label>
                                     <div class="col-sm-10">
-                                        <input class="form-control" type="text" th:text="${usuario.nombre + usuario.apellido}" disabled>
+                                        <input class="form-control" type="text" th:field="*{idCuadrilla.tecnico.nombre}" disabled>
                                     </div>
                                 </div>
                                 <div class="mb-3 row">
-                                    <label class="col-sm-2 col-form-label">DNI: </label>
+                                    <label class="col-sm-2 col-form-label">Apellido </label>
                                     <div class="col-sm-10">
-                                        <input class="form-control" type="text" th:text="${usuario.id}">
+                                        <input class="form-control" type="text" th:field="*{idCuadrilla.tecnico.apellido}" disabled>
                                     </div>
                                 </div>
                             </div>
