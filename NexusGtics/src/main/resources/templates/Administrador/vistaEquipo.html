@@ -73,7 +73,7 @@
                 <div class="mb-3">
                   <label for="descuento">Foto de referencia:</label>
                   <br>
-                  <img th:src="@{/assets/img/switch_9400.avif}" style="max-width: 600px;" alt="">
+                  <img th:src="@{|image/${equipo.archivo.idArchivos}|}" style="max-width: 600px;" alt="">
                 </div>
 
                 <!--button type="submit" class="btn btn-outline-primary float-end"  >Editar</button>

@@ -72,16 +72,18 @@
                     </select>
                   </div>
                 </div>
+                <input type="hidden" name="habilitado" id="habilitado" value="1">
               </div>
               <br><br>
               <div class="col-md-6">
 
                 <div class="mb-3">
-                  <label for="descuento">Foto de perfil:</label>
+                  <label for="imagenSubida" class="form-label">Foto de Equipo:</label>
                   <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                    <img id="imgPreview" th:src="@{/assets/img/subirEquipo.png}" class="card-img-top" style="max-height: 250px">
+                    <img id="imgPreview" th:src="@{/assets/img/fotoSitio.png}" class="card-img-top" style="max-height: 250px" alt="">
                   </div>
-                  <input class="form-control" type="file" id="formFile" accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                  <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                         accept="image/*" onchange="previewImage(event, '#imgPreview')">
                 </div>
 
                 <button type="submit" class="btn btn-outline-primary float-end">Crear</button>
