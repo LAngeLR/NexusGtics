@@ -33,6 +33,7 @@
             min-height: 25rem;
             min-width: 30rem;
         }
+
     </style>
 </head>
 <body>
@@ -199,8 +200,8 @@
                 </div>
             </div>
             <div class="col-xl-12">
-                <div class="card">
-                    <div class="card-body pt-3">
+                <div class="card" >
+                    <div class="card-body pt-3" th:object="${sitio}">
                         <div id="mi_mapa" ></div>
                         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
                         <script>
@@ -216,8 +217,8 @@
                             L.marker([-12.06176,-77.04292]).addTo(map).bindPopup('Abierto').openPopup();
                             L.marker([-12.06180,-77.02531]).addTo(map).bindPopup('Abierto').openPopup();
                         </script>
-                        <!-- MAPA -->
 
+                    </div>
                     </div>
                 </div>
 

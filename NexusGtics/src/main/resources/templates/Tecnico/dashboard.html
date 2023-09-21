@@ -315,47 +315,33 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Técnico</th>
-                                        <th scope="col">Trabajo</th>
+                                        <th scope="col">Empresa</th>
                                         <th scope="col">Prioridad</th>
                                         <th scope="col">Estado</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2457</a></th>
-                                        <td>Brandon Jacob</td>
-                                        <td>Mantenimiento de Gabinete</td>
-                                        <td><span class="badge bg-primary">Baja Prioridad</span></td>
-                                        <td><span class="badge bg-success">Progreso</span></td>
+                                    <tr th:each=" ticket, info : ${ticketList}">
+                                        <th th:text="${info.index + 1}" scope="row"></th>
+                                        <td th:text="${ticket.usuarioSolicitante}"></td>
+                                        <td th:text="${ticket.idEmpresaAsignada.nombre}"></td>
+                                        <td>
+                                            <div th:if="${ticket.prioridad == 'Baja prioridad'}">
+                                                <span class="badge text-bg-info" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                            </div>
+                                            <div th:if="${ticket.prioridad == 'No critico'}">
+                                                <span class="badge text-bg-success" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                            </div>
+                                            <div th:if="${ticket.prioridad == 'Urgente'}">
+                                                <span class="badge text-bg-danger" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                            </div>
+                                            <div th:if="${ticket.prioridad == 'Hacer'}">
+                                                <span class="badge text-bg-warning" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                            </div>
+                                        </td>
+                                        <td th:text="${ticket.estado}"></td>
                                     </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2147</a></th>
-                                        <td>Bridie Kessler</td>
-                                        <td>Instalar Router</td>
-                                        <td><span class="badge bg-success">No critico</span></td>
-                                        <td><span class="badge bg-primary">Nuevo</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2049</a></th>
-                                        <td>Ashleigh Langosh</td>
-                                        <td>Reparar Router</td>
-                                        <td><span class="badge bg-danger">Urgente</span></td>
-                                        <td><span class="badge bg-danger">Cerrado</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2644</a></th>
-                                        <td>Angus Grady</td>
-                                        <td>Mantenimiento Gabinete</td>
-                                        <td><span class="badge bg-danger">Urgente</span></td>
-                                        <td><span class="badge bg-success">Progreso</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2644</a></th>
-                                        <td>Raheem Lehner</td>
-                                        <td>Reparar Switch</td>
-                                        <td><span class="badge bg-warning">Hacer</span></td>
-                                        <td><span class="badge bg-danger">Cerrado</span></td>
-                                    </tr>
+
                                     </tbody>
                                 </table>
 
