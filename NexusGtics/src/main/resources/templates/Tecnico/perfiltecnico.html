@@ -160,7 +160,7 @@
     <h1>Inicio</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/Tecnico/tecnico.html}">Home</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/Tecnico/tecnico}">Home</a></li>
         <li class="breadcrumb-item active">Perfil</li>
       </ol>
     </nav>
@@ -173,9 +173,9 @@
         <div class="card">
           <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
             <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-            <h2 style="color: #095444">Luis Medina</h2>
-            <h3>Técnico</h3>
-            <h3>ID: 198273984</h3>
+            <input type="text" style="color: #095444" th:object="${usuario.id==9}" th:text="${usuario.nombre + ' ' + usuario.apellido}">
+            <input type="text" th:object="${usuario.id==9}" th:field="*{usuario.cargo}">
+            <input type="text" th:object="${usuario.id==9}" th:field="*{usuario.dni}">
           </div>
         </div>
 
@@ -204,39 +204,34 @@
             <div class="tab-content pt-2">
 
               <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                <h5 class="card-title" style="color: #095444">Sobre Luis:</h5>
+                <h5 class="card-title" style="color: #095444">Sobre <span type="text" th:object="${usuario}" th:field="*{nombre}"></span>:</h5>
                 <p class="small fst-italic">Técnico en el rubro de Telecomunicaciones, soy egresado del instituto "Instituto de Telecomunicaciones". Con 6 años de experiencia en diferentes empresas de telecomunicaciones.</p>
 
                 <h5 class="card-title" style="color: #095444">Detalles del Perfil</h5>
 
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label ">Nombre y apellidos</div>
-                  <div class="col-lg-9 col-md-8">Luis Media Salazar</div>
+                  <input class="col-lg-9 col-md-8" type="text" th:object="${usuario.id==9}" th:text="*{usuario.nombre +''+usuario.apellido}">
                 </div>
 
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label">DNI</div>
-                  <div class="col-lg-9 col-md-8">728963541</div>
+                  <input class="col-lg-9 col-md-8" type="text" th:object="${usuario.id==9}" th:field="*{usuario.dni}">
                 </div>
 
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label">Compañía</div>
-                  <div class="col-lg-9 col-md-8">Lusseru</div>
+                  <input class="col-lg-9 col-md-8" type="text" th:object="${usuario.id==9}" th:field="*{usuario.empresa}">
                 </div>
 
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label">Trabajo</div>
-                  <div class="col-lg-9 col-md-8">Técnico</div>
-                </div>
-
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label">País</div>
-                  <div class="col-lg-9 col-md-8">Perú</div>
+                  <input class="col-lg-9 col-md-8" type="text" th:object="${usuario.id==9}" th:field="*{usuario.cargo}">
                 </div>
 
                 <div class="row">
                   <div class="col-lg-3 col-md-4 label">Correo</div>
-                  <div class="col-lg-9 col-md-8">luismed.lusseru@gmail.com</div>
+                  <input class="col-lg-9 col-md-8" type="text" th:object="${usuario.id==9}" th:field="*{usuario.correo}">
                 </div>
 
               </div>

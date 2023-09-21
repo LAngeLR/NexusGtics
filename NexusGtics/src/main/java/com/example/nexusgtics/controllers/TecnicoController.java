@@ -42,11 +42,10 @@ public class TecnicoController {
     }
     @GetMapping("/")
     public String paginaPrincipal(){
-        return "Tecnico/tecnico";
+            return "Tecnico/tecnico";
     }
     @GetMapping("/perfiltecnico")
     public String perfilTecnico(Model model, @RequestParam("id") int id){
-
         Optional<Usuario> optUsuario = usuarioRepository.findById(id);
         if(optUsuario.isPresent()){
             Usuario usuario = optUsuario.get();
@@ -65,7 +64,9 @@ public class TecnicoController {
     }
 
     @GetMapping("/dashboard")
-    public String pagdashboard(){
+    public String pagdashboard(Model model){
+        List<Ticket> lista = ticketRepository.findAll();
+        model.addAttribute("ticketList", lista);
         return "Tecnico/dashboard";
     }
 
@@ -160,7 +161,8 @@ public class TecnicoController {
 
     //-----------------------------------------------------------------------
     @GetMapping("/mapa")
-    public String pagmapa(){
+    public String pagmapa(Model model){
+        model.addAttribute("sitio", sitioRepository.findAll());
         return "Tecnico/mapa";
     }
 
