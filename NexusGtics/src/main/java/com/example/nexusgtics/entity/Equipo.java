@@ -27,7 +27,7 @@ public class Equipo {
     private String paginaModelo;
 
     @ManyToOne
-    @JoinColumn(name = "idSitios", nullable = false)
+    @JoinColumn(name = "idSitios", nullable = false , referencedColumnName = "idSitios")
     private Sitio sitio;
 
     @ManyToOne

@@ -30,7 +30,7 @@
             <div class="pagetitle">
               <h1 class="card-title">Edición de equipo</h1>
             </div>
-            <form method="POST" th:action="@{/admin/saveEquipo}" enctype="multipart/form-data" th:object="${equipo}" >
+            <form method="POST" th:action="@{/admin/saveEquipo}" th:object="${equipo}" enctype="multipart/form-data" style="margin-bottom: -35px;">
               <div class="row">
                 <div class="col-md-6">
                   <input type="hidden" class="form-control" th:field="*{idEquipos}">
@@ -66,16 +66,15 @@
                     <label class="form-label">Ficha técnica (fabricante):</label>
                     <input type="text" class="form-control" th:field="*{paginaModelo}">
                   </div>
-                  <div class="mb-3">
-                    <label class="form-label">Sitio de despliegue:</label>
-                    <select class="form-select" name="sitios" id="sitios">
-                      <option th:each="sitio: ${listaSitios}"
-                              th:text="${sitio.distrito}" th:value="${sitio.idSitios}"
-                              th:selected="${equipo.sitio.idSitios == sitio.idSitios}">Open this select menu</option>
-                    </select>
-
-                </div>
-
+                  <div class="input-group mb-3">
+                    <label for="idSitios">Sitio de despliegue:</label>
+                    <div class="col-12">
+                      <select name="idSitios" id="idSitios" class="form-control">
+                        <option th:each="sitio: ${listaSitios}"
+                                th:text="${sitio.distrito}" th:value="${sitio.idSitios}">Sitio de Tipo</option>
+                      </select>
+                    </div>
+                  </div>
 
                 </div>
                 <br><br>
@@ -91,7 +90,6 @@
                   </div>
 
                   <button type="submit" class="btn btn-outline-primary float-end">Aplicar cambios</button>
-
                 </div>
               </div>
             </form>

@@ -407,8 +407,10 @@ public class AdminController {
             int idImagen = archivo.getIdArchivos();
             equipo.getArchivo().setIdArchivos(idImagen);
             equipoRepository.save(equipo);
+            System.out.println(equipo.getSitio());
             return "redirect:/admin/listaEquipo";
         } catch (IOException e) {
+            System.out.println("error save");
             throw new RuntimeException(e);
         }
     }
@@ -435,6 +437,7 @@ public class AdminController {
             model.addAttribute("equipo", equipo);
             model.addAttribute("listaSitios",sitioRepository.findAll());
             model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+            System.out.println("se enivó a editar");
             return "Administrador/editarEquipo";
         }else {
             return "redirect:/admin/listaEquipo";
