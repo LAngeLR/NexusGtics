@@ -53,4 +53,10 @@ public class Usuario {
     @JoinColumn(name = "IdCuadrilla")
     private Cuadrilla cuadrilla;
 
+    @Column(name = "dni")
+    private Integer dni;
+
+    @Column(name = "descripcion", length = 130)
+    private String descripcion;
+
 }

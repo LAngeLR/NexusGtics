@@ -38,4 +38,7 @@ public class Equipo {
     @JoinColumn(name = "idTipoEquipo", nullable = false, referencedColumnName = "idTipoEquipo")
     private Tipoequipo tipoequipo;
 
+    @Column(name = "habilitado")
+    private Boolean habilitado;
+
 }

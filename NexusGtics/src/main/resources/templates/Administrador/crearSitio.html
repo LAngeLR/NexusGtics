@@ -30,7 +30,7 @@
           <div class="pagetitle" style="margin-top: -35px;">
             <h1 class="card-title">Creación de sitio</h1>
           </div>
-          <form method="POST" th:action="@{/admin/guardarSitio}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+          <form method="POST" th:action="@{/admin/saveSitio}" enctype="multipart/form-data" style="margin-bottom: -35px;">
             <div class="row">
               <div class="col-md-6">
 
@@ -56,41 +56,47 @@
 
                 <div class="mb-3">
                   <label for="latitud">Latitud:</label>
-                  <input type="number" class="form-control" name="latitud" id="latitud" >
+                  <input type="text" class="form-control" name="latitud" id="latitud" >
                 </div>
 
                 <div class="mb-3">
                   <label for="longitud">Longitud:</label>
-                  <input type="number" class="form-control" name="longitud" id="longitud" >
+                  <input type="text" class="form-control" name="longitud" id="longitud" >
                 </div>
 
                 <div class="mb-3">
-                  <label for="tipo">Tipo de sitio:</label>
+                  <label for="tipoZona" class="form-label">Selector de Zona</label>
+                  <select class="form-select" name="tipoZona" id="tipoZona">
+                    <option value="-1">--Seleccione una Zona--</option>
+                    <option value="Urbana">Urbana</option>
+                    <option value="Rural">Rural</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="tipo">Selector de sitio:</label>
                   <select name="tipo" id="tipo" class="form-control">
-                    <option value="True">Móvil</option>
-                    <option value="False">Fijo</option>
+                    <option value="-1">--Seleccione un Sitio--</option>
+                    <option value="Movil">Móvil</option>
+                    <option value="Fijo">Fijo</option>
                   </select>
                 </div>
 
-                <div class="mb-3">
-                  <label for="tipoZona">Tipo de zona:</label>
-                  <select name="tipoZona" id="tipoZona" class="form-control">
-                    <option value="Cargo1"></option>
-                    <option value="True">Urbana</option>
-                    <option value="False">Rural</option>
-                  </select>
-                </div>
+                <input type="hidden" name="habilitado" id="habilitado" value="1">
+
+
 
               </div>
               <br><br>
               <div class="col-md-6">
 
                 <div class="mb-3">
-                  <label for="descuento">Foto de perfil:</label>
+                  <label for="imagenSubida" class="form-label">Foto de Sitio:</label>
                   <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                    <img id="imgPreview" th:src="@{/assets/img/fotoSubir.png}" class="card-img-top" style="max-height: 250px">
+                    <img id="imgPreview" th:src="@{/assets/img/fotoSitio.png}" class="card-img-top" style="max-height: 250px" alt="">
                   </div>
-                  <input class="form-control" type="file" id="formFile" accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                  <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                         accept="image/*" onchange="previewImage(event, '#imgPreview')">
                 </div>
 
                 <button type="submit" class="btn btn-outline-primary float-end">Crear</button>
