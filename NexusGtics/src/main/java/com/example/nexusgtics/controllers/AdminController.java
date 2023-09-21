@@ -247,15 +247,13 @@ public class AdminController {
     /*EDITAR Sitio*/
     @GetMapping({"/editarSitio"})
     public String editarSitio(Model model, @RequestParam("id") int id){
-
-        Optional<Sitio> sitio1 = sitioRepository.findById(id);
-
-        if (sitio1.isPresent()) {
-            Sitio sitio = sitio1.get();
+        Optional<Sitio> optionalSitio = sitioRepository.findById(id);
+        if (optionalSitio.isPresent()){
+            Sitio sitio = optionalSitio.get();
             model.addAttribute("sitio", sitio);
             return "Administrador/editarSitio";
-        } else {
-            return "redirect:/admin";
+        }else {
+            return "Administrador/listaSitio";
         }
     }
 
