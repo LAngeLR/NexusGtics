@@ -244,9 +244,19 @@ public class AdminController {
         }
     }
 
-    @GetMapping({"/editarSitio","/editarsitio"})
-    public String editarSitio(){
-        return "Administrador/editarSitio";
+    /*EDITAR USUARIO*/
+    @GetMapping({"/editarSitio"})
+    public String editarSitio(Model model, @RequestParam("id") int id){
+
+        Optional<Sitio> sitio1 = sitioRepository.findById(id);
+
+        if (sitio1.isPresent()) {
+            Sitio sitio = sitio1.get();
+            model.addAttribute("sitio", sitio);
+            return "Administrador/editarUsuario";
+        } else {
+            return "redirect:/admin";
+        }
     }
 
     @GetMapping({"/ubicarSitio","/ubicarsitio"})
@@ -259,7 +269,7 @@ public class AdminController {
         return "Administrador/mapaInventarioSitio";
     }
 
-    /*CREAR NUEVO USUARIO*/
+    /*CREAR NUEVO SITIO*/
     @PostMapping("/saveSitio")
     public String saveSitio(@RequestParam("imagenSubida") MultipartFile file,
                               Sitio sitio,
