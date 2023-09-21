@@ -86,7 +86,7 @@ public class AdminController {
         if (optionalUsuario.isPresent()) {
             usuarioRepository.activarUsuario(id);
         }
-        return "redirect:/admin/listaUsuario";
+        return "redirect:/admin/banearUsuario";
     }
 
     @GetMapping({"/crearUsuario","crearusuario"})
