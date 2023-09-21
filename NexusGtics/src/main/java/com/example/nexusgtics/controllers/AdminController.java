@@ -295,8 +295,8 @@ public class AdminController {
                                @RequestParam("ubigeo") Integer ubigeo,
                                @RequestParam("latitud") BigDecimal latitud,
                                @RequestParam("longitud") BigDecimal longitud,
-                               @RequestParam("tipo") Boolean tipo,
-                               @RequestParam("tipoZona") Boolean tipoZona, RedirectAttributes attr) {
+                               @RequestParam("tipo") String tipo,
+                               @RequestParam("tipoZona") String tipoZona, RedirectAttributes attr) {
 
         sitioRepository.guardarSitio(departamento, provincia, distrito, ubigeo, latitud, longitud, tipo, tipoZona);
 

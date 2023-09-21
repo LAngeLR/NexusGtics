@@ -1,18 +1,14 @@
 package com.example.nexusgtics.controllers;
+import com.example.nexusgtics.entity.Comentario;
+import com.example.nexusgtics.entity.Cuadrilla;
 import com.example.nexusgtics.entity.Ticket;
-import com.example.nexusgtics.entity.Tipoticket;
 import com.example.nexusgtics.entity.Usuario;
-import com.example.nexusgtics.repository.SitioRepository;
-import com.example.nexusgtics.repository.TicketRepository;
-import com.example.nexusgtics.repository.TipoticketRepository;
-import com.example.nexusgtics.repository.UsuarioRepository;
+import com.example.nexusgtics.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,14 +22,19 @@ public class TecnicoController {
     final TipoticketRepository tipoticketRepository;
 
     final SitioRepository sitioRepository;
+    final ComentarioRepository comentarioRepository;
+    private final CuadrillaRepository cuadrillaRepository;
 
     public TecnicoController(TicketRepository ticketRepository,
                              UsuarioRepository usuarioRepository,
-                             TipoticketRepository tipoticketRepository, SitioRepository sitioRepository){
+                             TipoticketRepository tipoticketRepository, SitioRepository sitioRepository, ComentarioRepository comentarioRepository,
+                             CuadrillaRepository cuadrillaRepository){
         this.ticketRepository = ticketRepository;
         this.usuarioRepository = usuarioRepository;
         this.tipoticketRepository = tipoticketRepository;
         this.sitioRepository = sitioRepository;
+        this.comentarioRepository = comentarioRepository;
+        this.cuadrillaRepository = cuadrillaRepository;
     }
     @GetMapping("/")
     public String paginaPrincipal(){
@@ -76,10 +77,12 @@ public class TecnicoController {
     @GetMapping({"/verTicket","/verticket"})
     public String pagdatostick(Model model, @RequestParam("id") int id){
         Optional <Ticket> optionalTicket = ticketRepository.findById(id);
-
-        if(optionalTicket.isPresent()){
+        Optional <Comentario> optionalComentario = comentarioRepository.findById(id);
+        if(optionalTicket.isPresent() && optionalComentario.isPresent()){
             Ticket ticket = optionalTicket.get();
+            Comentario comentario = optionalComentario.get();
             model.addAttribute("ticket", ticket);
+            model.addAttribute("comentario", comentario);
             return "Tecnico/datos_ticket";
         }else{
             return "Tecnico/ticket_asignado";
