@@ -79,93 +79,103 @@
         <section class="section dashboard">
             <div class="row">
                 <div class="rounded p-5" style="background-color: #FFFFFF;">
-                    <div class="pagetitle">
+                    <div class="pagetitle" th:if="${valor == -1}">
                         <h1 class="card-title">Creación de cuadrilla</h1>
                     </div>
-                    <form method="POST" action="" enctype="multipart/form-data">
+
+                    <div class="pagetitle" th:if="${valor != -1}">
+                        <h1 class="card-title">Asignacion de Tecnicos a Cuadrilla</h1>
+                    </div>
+
+                    <form method="post" th:action="@{/supervisor/guardarCuadrilla}" th:if="${valor == -1}">
                         <div class="row">
                             <div class="col-md-6">
-                                <input type="hidden" class="form-control" name="idJuego" id="idJuego">
                                 <div class="input-group mb-3">
-                                    <label for="idJuego">Tecnico Lider:</label>
+                                    <label for="tecnico">Tecnico Lider:</label>
                                     <div class="col-12">
-                                        <select name="lider" id="lider" class="form-control">
-                                            <option value="Cargo1">Luis Angel</option>
-                                            <option value="Cargo2">Gustavo Roca</option>
-                                            <option value="Cargo3">Pedro Cisneros</option>
-                                            <option value="Cargo4">Juan Torres</option>
+                                        <select class="form-select" name="tecnico" id="tecnico">
+                                            <option th:each="tecnico: ${listaTecnicos}"
+                                                    th:text="${tecnico.nombre}" th:value="${tecnico.id}">Open this select menu</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="precio">Nro de Cuadrilla:</label>
-                                    <input type="text" class="form-control" name="precio" id="precio">
-                                </div>
+                                <input type="hidden" class="form-control" name="ocupado" id="ocupado" value="0">
+                                <input type="hidden" class="form-control" name="supervisor" id="supervisor" value="5">
 
                                 <div class="mb-3">
-                                    <label for="descuento">Nro de integrantes:</label>
-                                    <input type="text" class="form-control" name="descuento" id="descuento" >
-                                </div>
-
-                                <div class="mb-3">
-                                    <!-- Combobox con selección múltiple -->
-                                    <label for="descuento">Tecnicos Disponibles:</label>
-                                    <select class="form-select" multiple>
-                                        <option value="option1">Primer Tecnico </option>
-                                        <option value="option2">Segundo Tecnico </option>
-                                        <option value="option3">Tercer Tecnico </option>
-                                        <option value="option4">Cuarto Tecnico </option>
-                                        <option value="option5">Quinto Tecnico </option>
-                                    </select><!-- End Combobox con selección múltiple -->
+                                    <label for="idCuadrillas">Nro de Cuadrilla:</label>
+                                    <input type="text" class="form-control" name="idCuadrillas" id="idCuadrillas">
                                 </div>
                             </div>
                             <br><br>
+                        </div>
+                        <br>
+                        <a th:href="@{/supervisor/listaCuadrillas}" class="btn btn-outline-danger">Regresar</a>
+                        <button type="submit" class="btn btn-outline-primary float-end">Crear</button>
+                    </form>
+
+                    <form method="post" th:action="@{/supervisor/guardarTecnicos}" th:if="${valor != -1}">
+                        <div class="row">
                             <div class="col-md-6">
 
-                                <div class="mb-3">
-                                    <label for="descuento">Foto de la cuadrilla (Opcional):</label>
-                                    <input class="form-control" type="file" id="formFile" accept="image/*" onchange="mostrarImagen(this)">
+                                <input type="hidden" class="form-control" name="a" id="valor" th:value="${a}">
+
+                                <div class="input-group mb-3">
+                                    <label for="tecnico">Tecnicos:</label>
+                                    <div class="col-12">
+                                        <select class="form-select" name="tecnicoslibres" id="tecnicoslibres" multiple>
+                                            <option th:each="tecnicoslibres: ${listaTecnicos}"
+                                                    th:text="${tecnicoslibres.nombre}" th:value="${tecnicoslibres.id}">Open this select menu</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div id="imagenMostrada"></div>
-
-
-                                <button type="submit" class="btn btn-outline-primary float-end">Crear</button>
                             </div>
-
-                            <script>
-                                function mostrarImagen(input) {
-                                    var imagenMostrada = document.getElementById('imagenMostrada');
-
-                                    if (input.files && input.files[0]) {
-                                        var reader = new FileReader();
-
-                                        reader.onload = function (e) {
-                                            var imagen = document.createElement('img');
-                                            imagen.src = e.target.result;
-                                            imagen.classList.add('img-thumbnail'); // Estilo opcional para la imagen
-
-                                            // Limpia el contenido actual del div y agrega la imagen
-                                            imagenMostrada.innerHTML = '';
-                                            imagenMostrada.appendChild(imagen);
-                                        };
-
-                                        reader.readAsDataURL(input.files[0]);
-                                    }
-                                }
-                            </script>
-
-
+                            <div class="col-md-6">
+                                <label>Tecnicos Seleccionados:</label>
+                                <select class="form-select" name="tecnicosSeleccionados" id="tecnicosSeleccionados" multiple></select>
+                                <br>
+                                <button type="button" id="agregarTecnicos" class="btn btn-outline-primary">Agregar</button>
+                                <button type="button" id="quitarTecnicos" class="btn btn-outline-danger">Quitar</button>
+                            </div>
                         </div>
+                        <br>
+                        <a th:href="@{/supervisor/listaCuadrillas}" class="btn btn-outline-danger">Regresar</a>
+                        <button type="submit" class="btn btn-outline-primary float-end">Asignar</button>
                     </form>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            const tecnicosLibres = document.getElementById("tecnicoslibres");
+                            const tecnicosSeleccionados = document.getElementById("tecnicosSeleccionados");
+                            const agregarTecnicosButton = document.getElementById("agregarTecnicos");
+                            const quitarTecnicosButton = document.getElementById("quitarTecnicos");
+
+                            agregarTecnicosButton.addEventListener("click", function () {
+
+                                const selectedOptions = Array.from(tecnicosLibres.selectedOptions);
+
+
+                                selectedOptions.forEach(function (option) {
+                                    tecnicosSeleccionados.appendChild(option);
+                                });
+                            });
+
+                            quitarTecnicosButton.addEventListener("click", function () {
+
+                                const selectedOptions = Array.from(tecnicosSeleccionados.selectedOptions);
+
+                                selectedOptions.forEach(function (option) {
+                                    tecnicosSeleccionados.removeChild(option);
+                                    tecnicosLibres.appendChild(option);
+                                });
+                            });
+                        });
+                    </script>
                 </div>
                 <br><br>
-
-
             </div>
         </section>
         <br>
-        <a th:href="@{/supervisor/listaCuadrilla}" class="btn btn-outline-danger">Regresar</a>
     </div>
 
 </main><!-- End #main -->

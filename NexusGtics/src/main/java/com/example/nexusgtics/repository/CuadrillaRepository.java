@@ -12,5 +12,10 @@ public interface CuadrillaRepository extends JpaRepository<Cuadrilla, Integer> {
             "FROM tickets t \n" +
             "WHERE t.idCuadrilla = ?1 AND (t.estado = 6 OR t.estado = 7)\n" +
             "GROUP BY t.idTickets;")
-    int contarTrabajosFinalizados(int idCuadrilla);
+    Integer contarTrabajosFinalizados(int idCuadrilla);
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(u.idUsuarios) AS cantidad_Tecnicos\n" +
+            "FROM usuarios u \n" +
+            "WHERE u.idCuadrilla = ?1 AND u.idCargos = 6;")
+    int numeroTecnicosPorCuadrilla(int idCuadrilla);
 }

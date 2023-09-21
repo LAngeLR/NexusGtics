@@ -44,6 +44,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM usuarios where IdCuadrilla=?1")
     List<Usuario> listaDeTecnicosPorCuadrilla(int idCuadrilla);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM usuarios where idCargos=?1")
+    @Query(nativeQuery = true, value = "SELECT * FROM usuarios where idCargos=?1 and idCuadrilla IS NULL")
     List<Usuario> listaDeSupervisores(int valor);
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value ="UPDATE nexus.usuarios SET tecnicoConCuadrilla = true, IdCuadrilla = ?2 WHERE idUsuarios = ?1")
+    void cambiarTecnico(int idUsuario, int idCuadrilla);
 }
