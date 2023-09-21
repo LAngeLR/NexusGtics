@@ -128,15 +128,17 @@ public class SupervisorController {
     public String actualizarSupervisor(Ticket ticket , RedirectAttributes redirectAttributes){
         ticketRepository.actualizarSupervisor(ticket.getIdTickets(),ticket.getIdSupervisorEncargado().getId());
         redirectAttributes.addAttribute("id",ticket.getIdTickets());
+        redirectAttributes.addFlashAttribute("mensaje","Supervisor " + ticket.getIdSupervisorEncargado().getNombre()+" asignado");
         return "redirect:/supervisor/ticketNuevo";
     }
 
     @PostMapping("/actualizarCuadrilla")
-    public String actualizarCuadrilla(Ticket ticket){
+    public String actualizarCuadrilla(Ticket ticket, RedirectAttributes redirectAttributes){
 
         ticketRepository.actualizarCuadrilla(ticket.getIdTickets(),ticket.getIdCuadrilla().getIdCuadrillas());
         ticketRepository.actualizarEstado(ticket.getIdTickets(),3);
 
+        redirectAttributes.addFlashAttribute("abc","Cuadrilla " + ticket.getIdCuadrilla().getIdCuadrillas()+ " asignada");
         return "redirect:/supervisor/listaTickets";
     }
 
@@ -207,6 +209,7 @@ public class SupervisorController {
         cuadrilla.setFechaCreacion(fechaCreacion);
 
         cuadrillaRepository.save(cuadrilla);
+        redirectAttributes.addFlashAttribute("msg","Cuadrilla " + cuadrilla.getIdCuadrillas() + " creada Correctamente");
         usuarioRepository.cambiarTecnico(cuadrilla.getTecnico().getId(),cuadrilla.getIdCuadrillas());
 
         return "redirect:/supervisor/crearCuadrilla?id=" + cuadrilla.getIdCuadrillas();
