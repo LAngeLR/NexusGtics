@@ -222,7 +222,7 @@ public class AdminController {
 
     @GetMapping({"/listaSitio","/listasitio"})
     public String listaSitio(Model model){
-        List<Sitio> listaSitio = sitioRepository.findAll();
+        List<Sitio> listaSitio = sitioRepository.listaDeSitios();
         model.addAttribute("listaSitio", listaSitio);
         return "Administrador/listaSitio";
     }
@@ -273,11 +273,9 @@ public class AdminController {
                               Sitio sitio,
                               Model model,
                               RedirectAttributes attr){
-
         if (sitio.getArchivo() == null) {
             sitio.setArchivo(new Archivo());
         }
-
         String fileName = file.getOriginalFilename();
         try{
             Archivo archivo = sitio.getArchivo();
@@ -294,6 +292,18 @@ public class AdminController {
             throw new RuntimeException(e);
         }
     }
+
+
+    /* Eliminar sitio */
+    @GetMapping("/eliminarSitio")
+    public String eliminarSitio(@RequestParam("id") int id) {
+        Optional<Sitio> optionalSitio = sitioRepository.findById(id);
+        if (optionalSitio.isPresent()) {
+            sitioRepository.eliminarEmpresa(id);
+        }
+        return "redirect:/admin/listaSitio";
+    }
+
 
 
     @PostMapping("/guardarSitio")

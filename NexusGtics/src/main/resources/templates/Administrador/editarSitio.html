@@ -9,7 +9,7 @@
 
 
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuAdmin :: menu">
+<aside th:replace="Fragmentos/menuAdmin :: menu"></aside>
 
   <main id="main" class="main">
     <div class="container">
@@ -33,6 +33,10 @@
           <form method="POST" th:action="@{/admin/saveSitio}" th:object="${sitio}" enctype="multipart/form-data" style="margin-bottom: -35px;">
             <div class="row">
               <div class="col-md-6">
+
+                <input type="hidden" class="form-control" th:field="*{idSitios}">
+                <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
+                <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
 
                 <div class="mb-3">
                   <label class="form-label">Departamento:</label>
@@ -64,30 +68,22 @@
                   <input type="text" class="form-control" th:field="*{longitud}">
                 </div>
 
-                <div class="mb-3">
-                  <label for="tipoZona" class="form-label">Selector de Zona</label>
-                  <select class="form-select" name="tipoZona" id="tipoZona">
-                    <option value="-1" th:selected="${sitio.tipoZona == 'Cargo1'}">>--Seleccione una Zona--</option>
-                    <option value="Urbana">Urbana</option>
-                    <option value="Rural">Rural</option>
-                  </select>
-                </div>
 
-                <div class="mb-3">
-                  <label for="tipo">Selector de sitio:</label>
-                  <select name="tipo" id="tipo" class="form-control">
-                    <option value="-1" th:selected="${sitio.tipo == 'Cargo1'}">>--Seleccione un Sitio--</option>
-                    <option value="Movil">Móvil</option>
-                    <option value="Fijo">Fijo</option>
-                  </select>
-                </div>
 
               </div>
               <br><br>
               <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Zona</label>
+                  <input type="text" class="form-control" th:field="*{tipoZona}">
+                </div>
 
                 <div class="mb-3">
-                  <label for="imagenSubida" class="form-label">Foto de perfil:</label>
+                  <label class="form-label">Sitio</label>
+                  <input type="text" class="form-control" th:field="*{tipo}">
+                </div>
+                <div class="mb-3">
+                  <label for="imagenSubida" class="form-label">Foto de Sitio:</label>
                   <div class="card mx-auto" style="width: 250px; max-height: 250px">
                     <img id="imgPreview" th:src="@{|image/${sitio.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
                   </div>
@@ -127,6 +123,7 @@
 
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/foto.js}"></script>
 
 </body>
 
