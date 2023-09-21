@@ -52,9 +52,7 @@ public class AdminController {
         return "Administrador/perfilAdmin";
     }
 
-//-----------------------------------------------------------------------
-
-    // GESTION DE USUARIOS
+//---------------------------- GESTION DE USUARIOS -------------------------------------------
 
     // Lista de usuarios no admin
     @GetMapping({"/listaUsuario","listausuario"})
@@ -70,9 +68,6 @@ public class AdminController {
         model.addAttribute("listaUsuario", listaUsuarioBaneado);
         return "Administrador/listaUsuarioBaneado";
     }
-
-
-
 
     // DESACTIVAR USUARIO
     @GetMapping("/banearUsuario")
@@ -127,10 +122,6 @@ public class AdminController {
             usuario.setArchivo(new Archivo());
         }
 
-        if(file.isEmpty()){
-            model.addAttribute("msg", "Debe subir un archivo");
-            return "redirect:/admin/crearUsuario";
-        }
         String fileName = file.getOriginalFilename();
         try{
             Archivo archivo = usuario.getArchivo();
@@ -168,9 +159,67 @@ public class AdminController {
 
 
 
-//-----------------------------------------------------------------------
 
-    // GESTION DE SITIOS
+//------------------------------ GESTION DE EMPRESAS -----------------------------------------
+    @GetMapping({"/listaEmpresa","/listaempresa"})
+    public String listaEmpresa(Model model){
+        List<Empresa> listaEmpresa = empresaRepository.findAll();
+        model.addAttribute("listaEmpresa",listaEmpresa);
+        return "Administrador/listaEmpresa";
+    }
+
+    @GetMapping({"/crearEmpresa","/crearempresa"})
+    public String crearEmpresa(){
+        return "Administrador/crearEmpresa";
+    }
+
+    @GetMapping("/verEmpresa")
+    public String verEmpresa(Model model,
+                             @RequestParam("id") int id) {
+
+        Optional<Empresa> optEmpresa = empresaRepository.findById(id);
+
+        if (optEmpresa.isPresent()) {
+            Empresa empresa = optEmpresa.get();
+            model.addAttribute("empresa", empresa);
+            return "Administrador/vistaEmpresa";
+        } else {
+            return "redirect:/Administrador/listaEmpresa";
+        }
+    }
+
+    @PostMapping("/guardarEmpresa")
+    public String guardarEmpresa(Empresa empresa, RedirectAttributes attr){
+        empresaRepository.save(empresa);
+        return "redirect:/admin/listaEmpresa";
+    }
+
+    /*PARA VISUALIZAR FOTOS*/
+    @GetMapping("/image/{id}")
+    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") int id){
+        Optional<Archivo> opt = archivoRepository.findById(id);
+
+        if(opt.isPresent()){
+            Archivo u = opt.get();
+
+            byte[] imagenComoBytes = u.getArchivo();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.parseMediaType(u.getContentType()));
+
+
+            return new ResponseEntity<>(
+                    imagenComoBytes,
+                    httpHeaders,
+                    HttpStatus.OK);
+        } else {
+            return  null;
+        }
+    }
+
+
+//------------------------------ GESTION DE SITIOS -----------------------------------------
+
     @GetMapping({"/listaSitio","/listasitio"})
     public String listaSitio(Model model){
         List<Sitio> listaSitio = sitioRepository.findAll();
@@ -179,7 +228,7 @@ public class AdminController {
     }
 
     @GetMapping({"/crearSitio","/crearsitio"})
-    public String crearSitio(){
+    public String crearSitio(Model model){
         return "Administrador/crearSitio";
     }
 
@@ -208,6 +257,34 @@ public class AdminController {
     @GetMapping({"/inventarioSitio","/inventariositio"})
     public String inventarioSitio(){
         return "Administrador/mapaInventarioSitio";
+    }
+
+    /*CREAR NUEVO USUARIO*/
+    @PostMapping("/saveSitio")
+    public String saveSitio(@RequestParam("imagenSubida") MultipartFile file,
+                              Sitio sitio,
+                              Model model,
+                              RedirectAttributes attr){
+
+        if (sitio.getArchivo() == null) {
+            sitio.setArchivo(new Archivo());
+        }
+
+        String fileName = file.getOriginalFilename();
+        try{
+            Archivo archivo = sitio.getArchivo();
+            archivo.setNombre(fileName);
+            archivo.setTipo(1);
+            archivo.setArchivo(file.getBytes());
+            archivo.setContentType(file.getContentType());
+            archivoRepository.save(archivo);
+            int idImagen = archivo.getIdArchivos();
+            sitio.getArchivo().setIdArchivos(idImagen);
+            sitioRepository.save(sitio);
+            return "redirect:/admin/listaSitio";
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -274,65 +351,4 @@ public class AdminController {
         return "Administrador/editarEquipo";
     }
 
-//-----------------------------------------------------------------------
-
-    //GESTION DE EMPRESAS
-    @GetMapping({"/listaEmpresa","/listaempresa"})
-    public String listaEmpresa(Model model){
-        List<Empresa> listaEmpresa = empresaRepository.findAll();
-        model.addAttribute("listaEmpresa",listaEmpresa);
-        return "Administrador/listaEmpresa";
-    }
-
-    @GetMapping({"/crearEmpresa","/crearempresa"})
-    public String crearEmpresa(){
-        return "Administrador/crearEmpresa";
-    }
-
-
-    @GetMapping("/verEmpresa")
-    public String verEmpresa(Model model,
-                                      @RequestParam("id") int id) {
-
-        Optional<Empresa> optEmpresa = empresaRepository.findById(id);
-
-        if (optEmpresa.isPresent()) {
-            Empresa empresa = optEmpresa.get();
-            model.addAttribute("empresa", empresa);
-            return "Administrador/vistaEmpresa";
-        } else {
-            return "redirect:/Administrador/listaEmpresa";
-        }
-    }
-
-    @PostMapping("/guardarEmpresa")
-    public String guardarEmpresa(Empresa empresa, RedirectAttributes attr){
-        empresaRepository.save(empresa);
-        return "redirect:/admin/listaEmpresa";
-    }
-
-
-
-    /*PARA VISUALIZAR FOTOS*/
-    @GetMapping("/image/{id}")
-    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") int id){
-        Optional<Archivo> opt = archivoRepository.findById(id);
-
-        if(opt.isPresent()){
-            Archivo u = opt.get();
-
-            byte[] imagenComoBytes = u.getArchivo();
-
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(MediaType.parseMediaType(u.getContentType()));
-
-
-            return new ResponseEntity<>(
-                    imagenComoBytes,
-                    httpHeaders,
-                    HttpStatus.OK);
-        } else {
-            return  null;
-        }
-    }
 }
