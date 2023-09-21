@@ -30,47 +30,51 @@
             <div class="pagetitle">
               <h1 class="card-title">Edición de equipo</h1>
             </div>
-            <form method="POST" action="" enctype="multipart/form-data">
+            <form method="POST" th:action="@{/admin/saveEquipo}" enctype="multipart/form-data" th:object="${equipo}" >
               <div class="row">
                 <div class="col-md-6">
+                  <input type="hidden" class="form-control" th:field="*{idEquipos}">
+                  <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
+                  <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
 
                   <div class="mb-3">
-                    <label for="nombre">Nombre:</label>
-                    <input type="text" class="form-control" name="nombre" id="nombre" value="Switch">
+                    <label class="form-label">Tipo de equipo:</label>
+                    <select class="form-select" name="tipoEquipo" id="tipoEquipo">
+                      <option th:each="tipo: ${listaTipoEquipos}"
+                              th:text="${tipo.nombreTipo}" th:value="${tipo.idTipoEquipo}"
+                              th:selected="${equipo.tipoequipo.idTipoEquipo == tipo.idTipoEquipo}">Open this select menu</option>
+                    </select>
                   </div>
 
-                  <div class="mb-3">
-                    <label for="descripcion">Marca:</label>
-                    <input type="text" class="form-control" name="descripcion" id="descripcion" value="Cisco">
-                  </div>
 
                   <div class="mb-3">
-                    <label for="precio">Modelo:</label>
-                    <input type="text" class="form-control" name="precio" id="precio" value="Catalyst 94000">
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="descuento">Descripción:</label>
-                    <textarea class="form-control" aria-label="With textarea " style="height: 80px; resize: none;">
-  Plataforma modular
-  Soporte 9 Tbps de ancho de banda
-  Escalable hasta 384 puertos</textarea>
+                    <label class="form-label">Marca:</label>
+                    <input type="text" class="form-control" th:field="*{marca}">
                   </div>
 
                   <div class="mb-3">
-                    <label for="descuento">Cantidad:</label>
-                    <input type="number" class="form-control" name="descuento" id="descuento" value="12">
+                    <label class="form-label">Modelo:</label>
+                    <input type="text" class="form-control" th:field="*{modelo}">
                   </div>
 
-                  <div class="input-group mb-3">
-                    <label for="consola">Sitio de despliegue:</label>
-                    <div class="col-12">
-                      <select name="consola" id="consola" class="form-control">
-                        <option value="Cargo1">Sitio de T. Fija</option>
-                        <option value="Cargo2">Sitio de T. Móvil</option>
-                      </select>
-                    </div>
+                  <div class="mb-3">
+                    <label class="form-label">Descripción:</label>
+                    <input class="form-control" aria-label="With textarea" th:field="*{descripcion}">
                   </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Ficha técnica (fabricante):</label>
+                    <input type="text" class="form-control" th:field="*{paginaModelo}">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Sitio de despliegue:</label>
+                    <select class="form-select" name="sitios" id="sitios">
+                      <option th:each="sitio: ${listaSitios}"
+                              th:text="${sitio.distrito}" th:value="${sitio.idSitios}"
+                              th:selected="${equipo.sitio.idSitios == sitio.idSitios}">Open this select menu</option>
+                    </select>
+
+                </div>
 
 
                 </div>
@@ -78,13 +82,16 @@
                 <div class="col-md-6">
 
                   <div class="mb-3">
-                    <label for="descuento">Foto de referencia:</label>
-                    <br>
-                    <br>
-                    <img th:src="@{/assets/img/switch_9400.avif}" style="max-width: 600px;" alt="">
+                    <label for="imagenSubida" class="form-label">Foto de perfil:</label>
+                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                      <img id="imgPreview" th:src="@{|image/${equipo.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                    </div>
+                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
                   </div>
 
-                  <button type="submit" class="btn btn-outline-primary float-end">Guardar cambios</button>
+                  <button type="submit" class="btn btn-outline-primary float-end">Aplicar cambios</button>
+
                 </div>
               </div>
             </form>

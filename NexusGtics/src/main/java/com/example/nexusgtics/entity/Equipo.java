@@ -26,7 +26,7 @@ public class Equipo {
     @Column(name = "paginaModelo", length = 130)
     private String paginaModelo;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "idSitios", nullable = false)
     private Sitio sitio;
 

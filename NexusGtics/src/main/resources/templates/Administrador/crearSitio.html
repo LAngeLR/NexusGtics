@@ -30,7 +30,7 @@
           <div class="pagetitle" style="margin-top: -35px;">
             <h1 class="card-title">Creación de sitio</h1>
           </div>
-          <form method="POST" th:action="@{/admin/saveSitio}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+          <form method="POST" th:action="@{/admin/guardarSitio}" enctype="multipart/form-data" style="margin-bottom: -35px;">
             <div class="row">
               <div class="col-md-6">
 
@@ -74,16 +74,13 @@
                 </div>
 
                 <div class="mb-3">
-                  <label for="tipo">Selector de sitio:</label>
+                  <label for="tipo">Selector de Sitio:</label>
                   <select name="tipo" id="tipo" class="form-control">
                     <option value="-1">--Seleccione un Sitio--</option>
                     <option value="Movil">Móvil</option>
                     <option value="Fijo">Fijo</option>
                   </select>
                 </div>
-
-                <input type="hidden" name="habilitado" id="habilitado" value="1">
-
 
 
               </div>

@@ -9,7 +9,7 @@
 
 
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuAdmin :: menu">
+<aside th:replace="Fragmentos/menuAdmin :: menu"></aside>
 
   <main id="main" class="main">
     <div class="container">
@@ -34,62 +34,61 @@
             <div class="row">
               <div class="col-md-6">
 
+                <input type="hidden" class="form-control" th:field="*{idSitios}">
+                <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
+                <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
+
                 <div class="mb-3">
-                  <label for="nombre">Departamento:</label>
-                  <input type="text" class="form-control" name="nombre" id="nombre" value="Lima">
+                  <label class="form-label">Departamento:</label>
+                  <input type="text" class="form-control" th:field="*{departamento}">
                 </div>
 
                 <div class="mb-3">
-                  <label for="descripcion">Provincia:</label>
-                  <input type="text" class="form-control" name="descripcion" id="descripcion" value="Cañete">
+                  <label class="form-label">Provincia:</label>
+                  <input type="text" class="form-control" th:field="*{provincia}">
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Distrito:</label>
-                  <input type="text" class="form-control" name="precio" id="precio" value="San Vicente">
+                  <label class="form-label">Distrito:</label>
+                  <input type="text" class="form-control" th:field="*{distrito}">
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Ubigeo:</label>
-                  <input type="text" class="form-control" name="precio" id="precio" value="195195">
+                  <label class="form-label">Ubigeo:</label>
+                  <input type="text" class="form-control" th:field="*{ubigeo}">
                 </div>
 
                 <div class="mb-3">
-                  <label for="descuento">Latitud:</label>
-                  <input type="number" class="form-control" name="descuento" id="descuento" value="-12.0740">
+                  <label class="form-label">Latitud:</label>
+                  <input type="text" class="form-control" th:field="*{latitud}">
                 </div>
 
                 <div class="mb-3">
-                  <label for="descuento">Longitud:</label>
-                  <input type="number" class="form-control" name="descuento" id="descuento" value="-77.08975">
+                  <label class="form-label">Longitud:</label>
+                  <input type="text" class="form-control" th:field="*{longitud}">
                 </div>
 
-                <div class="mb-3">
-                  <label for="precio">Tipo de zona:</label>
-                  <select name="consola" id="consola" class="form-control">
-                    <option value="Cargo1">Urbana</option>
-                    <option value="Cargo2">Rural</option>
-                  </select>
-                </div>
 
-                <div class="mb-3">
-                  <label for="precio">Tipo de sitio:</label>
-                  <select name="consola" id="consola" class="form-control">
-                    <option value="Cargo1">Móvil</option>
-                    <option value="Cargo2">Fijo</option>
-                  </select>
-                </div>
 
               </div>
               <br><br>
               <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Zona</label>
+                  <input type="text" class="form-control" th:field="*{tipoZona}">
+                </div>
 
                 <div class="mb-3">
-                  <label for="descuento">Foto de sitio:</label>
-                  <br>
-                  <br>
-                  <img th:src="@{/assets/img/sitio1.webp}" style="max-width: 300px;" alt="">
-
+                  <label class="form-label">Sitio</label>
+                  <input type="text" class="form-control" th:field="*{tipo}">
+                </div>
+                <div class="mb-3">
+                  <label for="imagenSubida" class="form-label">Foto de Sitio:</label>
+                  <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                    <img id="imgPreview" th:src="@{|image/${sitio.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                  </div>
+                  <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                         accept="image/*" onchange="previewImage(event, '#imgPreview')">
                 </div>
 
                 <button type="submit" class="btn btn-outline-primary float-end">Aplicar cambios</button>
@@ -124,6 +123,7 @@
 
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/foto.js}"></script>
 
 </body>
 

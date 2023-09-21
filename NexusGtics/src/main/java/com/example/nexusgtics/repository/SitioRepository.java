@@ -13,7 +13,15 @@ import java.util.List;
 public interface SitioRepository extends JpaRepository<Sitio, Integer> {
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "insert into sitios (departamento, provincia, distrito, ubigeo, latitud, longitud, tipo, tipoZona, habilitado) values (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, true)")
-    void guardarSitio(String departamento, String provincia, String distrito, Integer ubigeo, BigDecimal latitud, BigDecimal longitud, String tipo, String tipoZona);
+    @Query(nativeQuery = true, value = "insert into sitios (departamento, provincia, distrito, ubigeo, latitud, longitud, tipo, tipoZona, idArchivos, habilitado) values (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, true)")
+    void guardarSitio(String departamento, String provincia, String distrito, Integer ubigeo, BigDecimal latitud, BigDecimal longitud, String tipo, String tipoZona, int idArchivos);
+
+    @Query(value ="select * from nexus.sitios where habilitado = 1", nativeQuery = true )
+    List<Sitio> listaDeSitios();
+
+    @Modifying
+    @org.springframework.transaction.annotation.Transactional
+    @Query(value ="update nexus.sitios set habilitado = false where idSitios = ?1", nativeQuery = true )
+    void eliminarEmpresa(int id);
 
 }

@@ -222,7 +222,7 @@ public class AdminController {
 
     @GetMapping({"/listaSitio","/listasitio"})
     public String listaSitio(Model model){
-        List<Sitio> listaSitio = sitioRepository.findAll();
+        List<Sitio> listaSitio = sitioRepository.listaDeSitios();
         model.addAttribute("listaSitio", listaSitio);
         return "Administrador/listaSitio";
     }
@@ -244,18 +244,16 @@ public class AdminController {
         }
     }
 
-    /*EDITAR USUARIO*/
+    /*EDITAR Sitio*/
     @GetMapping({"/editarSitio"})
     public String editarSitio(Model model, @RequestParam("id") int id){
-
-        Optional<Sitio> sitio1 = sitioRepository.findById(id);
-
-        if (sitio1.isPresent()) {
-            Sitio sitio = sitio1.get();
+        Optional<Sitio> optionalSitio = sitioRepository.findById(id);
+        if (optionalSitio.isPresent()){
+            Sitio sitio = optionalSitio.get();
             model.addAttribute("sitio", sitio);
-            return "Administrador/editarUsuario";
-        } else {
-            return "redirect:/admin";
+            return "Administrador/editarSitio";
+        }else {
+            return "Administrador/listaSitio";
         }
     }
 
@@ -275,11 +273,9 @@ public class AdminController {
                               Sitio sitio,
                               Model model,
                               RedirectAttributes attr){
-
         if (sitio.getArchivo() == null) {
             sitio.setArchivo(new Archivo());
         }
-
         String fileName = file.getOriginalFilename();
         try{
             Archivo archivo = sitio.getArchivo();
@@ -298,19 +294,51 @@ public class AdminController {
     }
 
 
+    /* Eliminar sitio */
+    @GetMapping("/eliminarSitio")
+    public String eliminarSitio(@RequestParam("id") int id) {
+        Optional<Sitio> optionalSitio = sitioRepository.findById(id);
+        if (optionalSitio.isPresent()) {
+            sitioRepository.eliminarEmpresa(id);
+        }
+        return "redirect:/admin/listaSitio";
+    }
+
+
+
     @PostMapping("/guardarSitio")
-    public String guardarSitio(@RequestParam("departamento") String departamento,
+    public String guardarSitio(Sitio sitio,
+                               @RequestParam("departamento") String departamento,
                                @RequestParam("provincia") String provincia,
                                @RequestParam("distrito") String distrito,
                                @RequestParam("ubigeo") Integer ubigeo,
                                @RequestParam("latitud") BigDecimal latitud,
                                @RequestParam("longitud") BigDecimal longitud,
                                @RequestParam("tipo") String tipo,
-                               @RequestParam("tipoZona") String tipoZona, RedirectAttributes attr) {
+                               @RequestParam("tipoZona") String tipoZona,
+                               @RequestParam("imagenSubida") MultipartFile file, RedirectAttributes attr) {
 
-        sitioRepository.guardarSitio(departamento, provincia, distrito, ubigeo, latitud, longitud, tipo, tipoZona);
+//        sitioRepository.guardarSitio(departamento, provincia, distrito, ubigeo, latitud, longitud, tipo, tipoZona);
+//        return "redirect:/admin/listaSitio";
+//        sitioRepository.guardarSitio(departamento, provincia, distrito, ubigeo, latitud, longitud, tipo, tipoZona, idArchivos);
+        if (sitio.getArchivo() == null) {
+            sitio.setArchivo(new Archivo());
+        }
 
-        return "redirect:/admin/listaSitio";
+        String fileName = file.getOriginalFilename();
+        try{
+            Archivo archivo = sitio.getArchivo();
+            archivo.setNombre(fileName);
+            archivo.setTipo(1);
+            archivo.setArchivo(file.getBytes());
+            archivo.setContentType(file.getContentType());
+            archivoRepository.save(archivo);
+            int idArchivos = archivo.getIdArchivos();
+            sitioRepository.guardarSitio(departamento, provincia, distrito, ubigeo, latitud, longitud, tipo, tipoZona, idArchivos);
+            return "redirect:/admin/listaSitio";
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 //-----------------------------------------------------------------------
@@ -330,16 +358,59 @@ public class AdminController {
         return "Administrador/crearEquipo";
     }
     @PostMapping("/guardarEquipo")
-    public String guardarEquipo(@RequestParam("marca") String marca,
+    public String guardarEquipo(Equipo equipo,
+                                @RequestParam("marca") String marca,
                                @RequestParam("modelo") String modelo,
                                @RequestParam("descripcion") String descripcion,
                                @RequestParam("paginaModelo") String paginaModelo,
                                @RequestParam("idSitios") Integer idSitios,
-                               @RequestParam("idTipoEquipo") Integer idTipoEquipo, RedirectAttributes attr) {
+                               @RequestParam("idTipoEquipo") Integer idTipoEquipo,
+                               @RequestParam("imagenSubida") MultipartFile file,RedirectAttributes attr) {
 
-        equipoRepository.guardarEquipo(marca, modelo, descripcion, paginaModelo, idSitios, idTipoEquipo);
+        if (equipo.getArchivo() == null) {
+            equipo.setArchivo(new Archivo());
+        }
 
-        return "redirect:/admin/listaEquipo";
+        String fileName = file.getOriginalFilename();
+        try{
+            Archivo archivo = equipo.getArchivo();
+            archivo.setNombre(fileName);
+            archivo.setTipo(1);
+            archivo.setArchivo(file.getBytes());
+            archivo.setContentType(file.getContentType());
+            archivoRepository.save(archivo);
+            int idImagenes = archivo.getIdArchivos();
+            equipoRepository.guardarEquipo(marca, modelo, descripcion, paginaModelo, idSitios, idTipoEquipo, idImagenes);
+            return "redirect:/admin/listaEquipo";
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @PostMapping("/saveEquipo")
+    public String saveEquipo(@RequestParam("imagenSubida") MultipartFile file,
+                              Equipo equipo,
+                              Model model,
+                              RedirectAttributes attr){
+
+        if (equipo.getArchivo() == null) {
+            equipo.setArchivo(new Archivo());
+        }
+
+        String fileName = file.getOriginalFilename();
+        try{
+            Archivo archivo = equipo.getArchivo();
+            archivo.setNombre(fileName);
+            archivo.setTipo(1);
+            archivo.setArchivo(file.getBytes());
+            archivo.setContentType(file.getContentType());
+            archivoRepository.save(archivo);
+            int idImagen = archivo.getIdArchivos();
+            equipo.getArchivo().setIdArchivos(idImagen);
+            equipoRepository.save(equipo);
+            return "redirect:/admin/listaEquipo";
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping({"/verEquipo","/verequipo"})
@@ -351,14 +422,44 @@ public class AdminController {
             model.addAttribute("equipo", equipo);
             return "Administrador/vistaEquipo";
         }else {
-            return "redirect:/Administrador/listaEquipo";
+            return "redirect:/admin/listaEquipo";
         }
 
     }
 
     @GetMapping({"/editarEquipo","/editarequipo"})
-    public String editarEquipo(){
-        return "Administrador/editarEquipo";
+    public String editarEquipo(Model model, @RequestParam("id") int id){
+        Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
+        if(optionalEquipo.isPresent()){
+            Equipo equipo = optionalEquipo.get();
+            model.addAttribute("equipo", equipo);
+            model.addAttribute("listaSitios",sitioRepository.findAll());
+            model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+            return "Administrador/editarEquipo";
+        }else {
+            return "redirect:/admin/listaEquipo";
+        }
     }
+    @PostMapping("/actualizarEquipo")
+    public String actualizarEquipo(@RequestParam("marca") String marca,
+                                   @RequestParam("modelo") String modelo,
+                                   @RequestParam("descripcion") String descripcion,
+                                   @RequestParam("paginaModelo") String paginaModelo,
+                                   @RequestParam("idSitios") int idSitios,
+                                   @RequestParam("idTipoEquipo") int idTipoEquipo,
+                                   @RequestParam("idImagenes") int idImagenes,
+                                   @RequestParam("idEquipos") int idEquipos, RedirectAttributes attr) {
+
+
+        Optional<Equipo> optionalEquipo = equipoRepository.findById(idEquipos);
+        if(optionalEquipo.isPresent()){
+            equipoRepository.actualizarEquipo(marca, modelo, descripcion, paginaModelo, idSitios, idTipoEquipo, idImagenes, idEquipos);
+            return "redirect:/ruta/donde/redirigir";
+        }else {
+            return "redirect:/Administrador/listaEquipo";
+        }
+
+    }
+
 
 }
