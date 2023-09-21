@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:include="Fragmentos/head :: head('Lista de sitios')"></head>
+<head th:include="Fragmentos/head :: head('Lista de activos')"></head>
 
 <body>
 <!-- ======= Header ======= -->
@@ -19,7 +19,7 @@
         <nav>
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.html">Gestión de usuarios</a></li>
-            <li class="breadcrumb-item active">Lista de usuarios</li>
+            <li class="breadcrumb-item active">Lista de baneados</li>
           </ol>
         </nav>
       </div><!-- End Page Title -->
@@ -34,7 +34,7 @@
                 <div class="container">
 
                   <a th:href="@{/admin/crearUsuario}" class="btn btn-outline-primary me-2 mt-3 float-end">Nuevo usuario</a>
-                  <h5 class="card-title">Usuarios en general</h5>
+                  <h5 class="card-title">Usuarios Baneados</h5>
                 </div>
                 <!-- Table with stripped rows -->
                 <table class="table datatable">
@@ -63,10 +63,8 @@
                           </button>
                           <ul class="dropdown-menu">
                             <li><a th:href="@{'/admin/editarUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Editar</a></li>
-                            <li><a th:href="@{'/admin/banearUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2"
-                                   id="popover-button" data-bs-container="body" data-bs-placement="left" data-bs-content="Left popover">Desactivar</a></li>
+                            <li><a th:href="@{'/admin/banearUsuario?id=' + ${usuario.id}}" class="dropdown-item text-danger me-2">Activar</a></li>
                             <li><a th:href="@{'/admin/verUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Visualizar</a></li>
-
                           </ul>
                           <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
@@ -122,22 +120,7 @@
 
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
-<script>
-  $(document).ready(function() {
-    // Selecciona el botón del popover
-    var popoverButton = $('#popover-button');
 
-    // Activa el popover al pasar el mouse sobre el botón
-    popoverButton.mouseenter(function() {
-      popoverButton.popover('show');
-    });
-
-    // Desactiva el popover al quitar el mouse del botón
-    popoverButton.mouseleave(function() {
-      popoverButton.popover('hide');
-    });
-  });
-</script>
 </body>
 
 </html>

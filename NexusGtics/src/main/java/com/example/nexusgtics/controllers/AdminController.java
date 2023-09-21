@@ -64,12 +64,32 @@ public class AdminController {
         return "Administrador/listaUsuario";
     }
 
-    // BANEAR USUARIO
+    @GetMapping({"/listaBaneados"})
+    public String listaBaneado(Model model){
+        List<Usuario> listaUsuarioBaneado = usuarioRepository.listaDeUsuariosBaneados();
+        model.addAttribute("listaUsuario", listaUsuarioBaneado);
+        return "Administrador/listaUsuarioBaneado";
+    }
+
+
+
+
+    // DESACTIVAR USUARIO
     @GetMapping("/banearUsuario")
     public String desabilitarUsuario(@RequestParam("id") int id) {
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         if (optionalUsuario.isPresent()) {
             usuarioRepository.desactivarUsuario(id);
+        }
+        return "redirect:/admin/listaUsuario";
+    }
+
+    // ACTIVAR USUARIO
+    @GetMapping("/activarUsuario")
+    public String activarUsuario(@RequestParam("id") int id) {
+        Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+        if (optionalUsuario.isPresent()) {
+            usuarioRepository.activarUsuario(id);
         }
         return "redirect:/admin/listaUsuario";
     }

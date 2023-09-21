@@ -17,14 +17,22 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
 
     // ------------------------------ ADMIN --------------------------------------- //
-    @Query(value ="select * from nexus.usuarios where idCargos not IN (1, 2)", nativeQuery = true )
+    @Query(value ="select * from nexus.usuarios where idCargos not IN (1, 2) and habilitado = 1", nativeQuery = true )
     List<Usuario> listaDeUsuariosNoAdmin();
+
+    @Query(value ="select * from nexus.usuarios where habilitado = 0", nativeQuery = true )
+    List<Usuario> listaDeUsuariosBaneados();
 
 
     @Modifying
     @Transactional
     @Query(value ="update nexus.usuarios set habilitado = false where idUsuarios = ?1", nativeQuery = true )
     void desactivarUsuario(int id);
+
+    @Modifying
+    @Transactional
+    @Query(value ="update nexus.usuarios set habilitado = true where idUsuarios = ?1", nativeQuery = true )
+    void activarUsuario(int id);
 
 
     // ------------------------------ ANALISTA OYM --------------------------------------- //

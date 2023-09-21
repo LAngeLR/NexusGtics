@@ -23,7 +23,7 @@ public class Archivo {
     @Column(name = "nombre")
     private String nombre;
 
-    @Column(name = "contentType", nullable = false)
+    @Column(name = "contentType")
     private String contentType;
 
 }
