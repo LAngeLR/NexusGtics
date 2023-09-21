@@ -62,9 +62,12 @@
                             <i class="bi bi-plus-square"></i>
                           </button>
                           <ul class="dropdown-menu">
-                            <li><a th:href="@{'/admin/editarUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Editar</a></li>
-                            <li><a th:href="@{'/admin/activarUsuario?id=' + ${usuario.id}}" class="dropdown-item text-danger me-2">Activar</a></li>
-                            <li><a th:href="@{'/admin/verUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Visualizar</a></li>
+                            <li th:unless="${usuario.cargo.nombreCargo == 'Administrador'}">
+                            <li><a th:href="@{'/superadmin/editarUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Editar</a></li>
+                            <li><a th:href="@{'/superadmin/activarUsuario?id=' + ${usuario.id}}" class="dropdown-item text-danger me-2">Activar</a></li>
+                            </li>
+
+                            <li><a th:href="@{'/superadmin/verUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Visualizar</a></li>
                           </ul>
                           <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">

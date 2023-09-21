@@ -21,7 +21,7 @@
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">Gestión de usuario</a></li>
-                    <li class="breadcrumb-item active">Editar usuario administrador</li>
+                    <li class="breadcrumb-item active">Editar usuario Administrador</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -32,45 +32,61 @@
                     <div class="pagetitle">
                         <h1 class="card-title">Información de usuario</h1>
                     </div>
-                    <form method="POST" action="" enctype="multipart/form-data">
+                    <form method="POST" th:action="@{/superadmin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row">
                             <div class="col-md-6">
+                                <input type="hidden" class="form-control" th:field="*{id}">
+                                <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
 
                                 <div class="mb-3">
-                                    <label for="nombre">Nombres:</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre" value="Rommel Antonio">
+                                    <label class="form-label">Nombres:</label>
+                                    <input type="text" class="form-control" th:field="*{nombre}">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="descripcion">Apellidos:</label>
-                                    <input type="text" class="form-control" name="descripcion" id="descripcion" value="Garay Santos">
+                                    <label class="form-label">Apellidos:</label>
+                                    <input type="text" class="form-control" th:field="*{apellido}">
                                 </div>
 
                                 <div class="mb-3">
-                                    <div class="col-12">
-                                        <h4>Empresa: Nexus</h4>
-                                    </div>
+                                    <label class="form-label">Correo:</label>
+                                    <input type="text" class="form-control" th:field="*{correo}">
+                                </div>
+
+                                <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
+
+                                <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
+
+                                <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:field="*{fechaRegistro}">
+
+                                <input type="hidden" name="archivo" id="archivo" th:field="*{archivo.idArchivos}">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Empresa</label>
+                                    <select class="form-select" name="empresa" id="empresa" disabled>
+                                        <option value="1" selected>Nexus</option>
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="descuento">Correo:</label>
-                                    <input type="text" class="form-control" name="descuento" id="descuento" VALUE="rommel@gmail.com" >
+                                    <label class="form-label">Cargo</label>
+                                    <label for="cargo" class="form-label">Selector de cargos</label>
+                                    <select class="form-select" name="cargo" id="cargo" disabled>
+                                        <option value="2" selected>Administrador</option>
+                                    </select>
                                 </div>
 
-                                <div class="mb-3">
-                                    <div class="col-12">
-                                        <h4>Cargo: Administrador</h4>
-                                    </div>
-                                </div>
                             </div>
                             <br><br>
                             <div class="col-md-6">
 
                                 <div class="mb-3">
-                                    <label for="descuento">Foto de perfil:</label>
-                                    <br>
-                                    <br>
-                                    <img th:src="@{/assets/img/yo_2.jfif}" style="max-width: 300px;" alt="">
+                                    <label for="imagenSubida" class="form-label">Foto de perfil:</label>
+                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                        <img id="imgPreview" th:src="@{|image/${usuario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                                    </div>
+                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
                                 </div>
 
                                 <button type="submit" class="btn btn-outline-primary float-end">Aplicar cambios</button>
@@ -84,7 +100,7 @@
             </div>
         </section>
         <br>
-        <a th:href="@{/superadmin.html/listaUsuario}" class="btn btn-outline-danger">Regresar</a>
+        <a th:href="@{/superadmin/listaUsuario}" class="btn btn-outline-danger">Regresar</a>
     </div>
 </main><!-- End #main -->
 
@@ -105,6 +121,7 @@
 
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/foto.js}"></script>
 
 </body>
 
