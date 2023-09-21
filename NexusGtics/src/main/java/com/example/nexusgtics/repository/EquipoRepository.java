@@ -11,6 +11,6 @@ public interface EquipoRepository extends JpaRepository<Equipo, Integer> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "insert into equipos (marca, modelo, descripcion, paginaModelo, idSitios, idTipoEquipo) values (?1, ?2, ?3, ?4, ?5, ?6)")
+    @Query(nativeQuery = true, value = "insert into equipos (marca, modelo, descripcion, paginaModelo, idSitios, idTipoEquipo, habilitado) values (?1, ?2, ?3, ?4, ?5, ?6, true)")
     void guardarEquipo(String marca, String modelo, String descripcion, String paginaModelo, int idSitios, int idTipoEquipo);
 }
