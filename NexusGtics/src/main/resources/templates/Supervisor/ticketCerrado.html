@@ -71,7 +71,7 @@
     <h1>Detalles</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/supervisor/}">Home</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/supervisor/listaTickets}">Lista Tickets</a></li>
         <li class="breadcrumb-item active">Tickets</li>
         <li class="breadcrumb-item active">Ver tickets</li>
       </ol>
@@ -166,7 +166,7 @@
                   <center><br>
 
                     <a class="btn" type="button" style="background-color: #82DEAC" th:href="@{/supervisor/formulario}" >Formulario</a>
-                    <a type="button" class="btn btn-outline-warning" th:href="@{/supervisor/comentarios}">comentarios</a>
+                    <a type="button" class="btn btn-outline-warning" th:href="@{'/supervisor/comentarios?id=' + ${tickets.idTickets}}">comentarios</a>
                     <button type="submit" class="btn btn-outline-danger" th:if="${tickets.estado==6}">Guardar</button>
                   </center>
                 </form>

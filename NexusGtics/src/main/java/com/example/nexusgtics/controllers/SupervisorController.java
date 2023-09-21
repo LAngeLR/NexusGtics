@@ -157,7 +157,10 @@ public class SupervisorController {
 
 
     @GetMapping("/comentarios")
-    public String comentarioTicket(){
+    public String comentarioTicket(Model model, @RequestParam("id") int id){
+
+        model.addAttribute("id",id);
+        model.addAttribute("estado",ticketRepository.obtenerEstado(id));
         return "Supervisor/comentariosTickets";
     }
 
@@ -186,6 +189,8 @@ public class SupervisorController {
 
         if(id == -1){
             model.addAttribute("valor", id);
+            int numero= cuadrillaRepository.cantidadCuadrillas();
+            model.addAttribute("cantidad",numero+1);
         }
         else{
             model.addAttribute("valor", cuadrillaRepository.numeroTecnicosPorCuadrilla(id));
@@ -196,7 +201,7 @@ public class SupervisorController {
     }
 
     @PostMapping("/guardarCuadrilla")
-    public String guardarCuadrilla(Cuadrilla cuadrilla, RedirectAttributes attr) {
+    public String guardarCuadrilla(Cuadrilla cuadrilla, RedirectAttributes redirectAttributes) {
 
         Instant fechaCreacion = Instant.now();
         cuadrilla.setFechaCreacion(fechaCreacion);
@@ -204,7 +209,7 @@ public class SupervisorController {
         cuadrillaRepository.save(cuadrilla);
         usuarioRepository.cambiarTecnico(cuadrilla.getTecnico().getId(),cuadrilla.getIdCuadrillas());
 
-        return "redirect:/supervisor/listaCuadrillas";
+        return "redirect:/supervisor/crearCuadrilla?id=" + cuadrilla.getIdCuadrillas();
     }
 
     @PostMapping("/guardarTecnicos")

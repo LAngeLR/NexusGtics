@@ -18,4 +18,7 @@ public interface CuadrillaRepository extends JpaRepository<Cuadrilla, Integer> {
             "FROM usuarios u \n" +
             "WHERE u.idCuadrilla = ?1 AND u.idCargos = 6;")
     int numeroTecnicosPorCuadrilla(int idCuadrilla);
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(DISTINCT idCuadrillas) as cuadrilla_count FROM cuadrillas")
+    int cantidadCuadrillas();
 }

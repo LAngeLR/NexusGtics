@@ -66,9 +66,10 @@
         <h1>Comentarios</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/supervisor/}">Home</a></li>
-                <li class="breadcrumb-item active">Tickets</li>
-                <li class="breadcrumb-item active">Ver Tickets</li>
+                <li class="breadcrumb-item"><a th:href="@{/supervisor/listaTickets}">Lista tickets</a></li>
+                <li class="breadcrumb-item" th:if="${estado==2}"><a th:href="@{'/supervisor/ticketNuevo?id=' + ${id}}">Ver Tickets</a></li>
+                <li class="breadcrumb-item" th:if="${estado==3 || estado==4 || estado==5 }"><a th:href="@{'/supervisor/ticketProceso?id=' + ${id}}">Ver Tickets</a></li>
+                <li class="breadcrumb-item" th:if="${estado==7 || estado==6}"><a th:href="@{'/supervisor/ticketCerrado?id=' + ${id}}">Ver Tickets</a></li>
             </ol>
         </nav>
     </div><!-- End Page Title -->

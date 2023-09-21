@@ -71,7 +71,7 @@
         <h1>Detalles</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/supervisor/}">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/supervisor/listaTickets}">Lista tickets</a></li>
                 <li class="breadcrumb-item active">Tickets</li>
                 <li class="breadcrumb-item active">Ver tickets</li>
             </ol>
@@ -144,7 +144,7 @@
                             <br>
                         </div><!-- End Bordered Tabs -->
                             <div class="d-flex justify-content-end">
-                                <a type="button" class="btn btn-outline-warning" th:href="@{/supervisor/comentarios}" style="margin-right: 25px;">Comentarios</a>
+                                <a type="button" class="btn btn-outline-warning" th:href="@{'/supervisor/comentarios?id=' + ${tickets.idTickets}}" style="margin-right: 25px;">Comentarios</a>
                             </div>
                             </div>
                                 </div>
