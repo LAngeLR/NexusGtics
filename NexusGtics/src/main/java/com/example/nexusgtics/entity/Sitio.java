@@ -17,7 +17,7 @@ public class Sitio {
     private Integer idSitios;
 
     @Column(name = "tipo", nullable = false)
-    private Boolean tipo = false;
+    private String tipo;
 
     @Column(name = "provincia", nullable = false, length = 45)
     private String provincia;
@@ -41,7 +41,7 @@ public class Sitio {
     private Boolean habilitado = false;
 
     @Column(name = "tipoZona", nullable = false)
-    private Boolean tipoZona = false;
+    private String tipoZona;
 
     @ManyToOne
     @JoinColumn(name = "idArchivos")
