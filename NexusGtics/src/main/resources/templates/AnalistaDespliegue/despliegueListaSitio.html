@@ -90,8 +90,8 @@
                     <td th:text="${sitio.provincia}"></td>
                     <td th:text="${sitio.distrito}"></td>
                     <td th:text="${sitio.longitud + ', ' + sitio.latitud}"></td>
-                    <td th:text="${sitio.tipoZona == 0 ? 'Urbana' : 'Rural'}"></td>
-                    <td th:text="${sitio.tipo == 0 ? 'Movil' : 'Fijo'}"></td>
+                    <td th:text="${sitio.tipoZona }"></td>
+                    <td th:text="${sitio.tipo}"></td>
                     <td><a class="download-link" href="ruta-al-archivo/1.csv" download>1.csv</a></td>
                     <td><a type="button" class="btn btn-secondary" th:href="@{'/analistaDespliegue/editarSitio?id=' + ${sitio.idSitios}}">Editar</a></td>
                   </tr>

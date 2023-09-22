@@ -56,7 +56,7 @@ public class AnalistaDespController {
             model.addAttribute("sitio", sitio);
             return "AnalistaDespliegue/despliegueEditarSitio";
         }else {
-            return "redirect: /AnalistaDespliegue/despliegueListaSitio";
+            return "redirect:/analistaDespliegue/listaSitio";
         }
 
     }
@@ -64,7 +64,7 @@ public class AnalistaDespController {
     @PostMapping("/guardarSitio")
     public String guardarSitio(Sitio sitio){
         sitioRepository.save(sitio);
-        return "redirect:/AnalistaDespliegue/despliegueListaSitio";
+        return "redirect:/analistaDespliegue/listaSitio";
     }
 
 
