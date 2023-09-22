@@ -67,11 +67,11 @@
                     <input type="text" class="form-control" th:field="*{paginaModelo}">
                   </div>
                   <div class="input-group mb-3">
-                    <label for="idSitios">Sitio de despliegue:</label>
+                    <label>Sitio de despliegue:</label>
                     <div class="col-12">
                       <select name="idSitios" id="idSitios" class="form-control">
-                        <option th:each="sitio: ${listaSitios}"
-                                th:text="${sitio.distrito}" th:value="${sitio.idSitios}">Sitio de Tipo</option>
+                        <option th:each="sitio1: ${listaSitios}"
+                                th:text="${sitio1.distrito}" th:value="${sitio1.idSitios}">Sitio de Tipo</option>
                       </select>
                     </div>
                   </div>

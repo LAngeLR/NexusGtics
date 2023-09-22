@@ -59,27 +59,25 @@
                   <input type="text" class="form-control" th:field="*{paginaModelo}" disabled>
                 </div>
 
-                <div-- class="mb-3">
+                <div class="mb-3">
                   <label class="form-label">Sitio de despliegue:</label>
                   <input type="text" class="form-control" th:value="${equipo.sitio.distrito}" disabled>
 
-                </div-->
+                </div>
 
 
               </div>
               <br><br>
               <div class="col-md-6">
 
-                <div class="mb-3">
-                  <label for="descuento">Foto de referencia:</label>
+                <div class="row justify-content-center mb-3">
+                  <label class="form-label">Foto de referencia:</label>
                   <br>
-                  <img th:src="@{|image/${equipo.archivo.idArchivos}|}" style="max-width: 600px;" alt="">
+                  <br>
+                  <img th:src="@{|image/${equipo.archivo.idArchivos}|}" style="max-width: 300px;" alt="">
                 </div>
-
-                <!--button type="submit" class="btn btn-outline-primary float-end"  >Editar</button>
-                <button type="submit" class="btn btn-outline-danger float-start">Desactivar</button-->
-                <button class="btn btn-outline-primary float-end" th:href="@{'/admin/editarEquipo?id=' + ${equipo.idEquipos}}" >Editar</button>
-                <button class="btn btn-outline-danger float-start">Desactivar</button>
+                <a th:href="@{'/admin/editarEquipo?id=' + ${equipo.idEquipos}}" class="btn btn-outline-primary me-2 float-end">Editar</a>
+                <a th:href="@{'/admin/deshabilitarEquipo?id=' + ${equipo.idEquipos}}" class="btn btn-outline-danger float-start">Eliminar</a>
 
               </div>
             </div>

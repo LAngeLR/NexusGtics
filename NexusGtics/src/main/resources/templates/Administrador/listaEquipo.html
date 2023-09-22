@@ -116,7 +116,7 @@
                           </button>
                           <ul class="dropdown-menu">
                             <li><a class="dropdown-item btn btn-outline-primary me-2" th:href="@{'/admin/editarEquipo?id=' + ${equipo.idEquipos}}">Editar</a></li>
-                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button></li>
+                            <li><a class="dropdown-item btn btn-outline-danger me-2" th:href="@{'/admin/deshabilitarEquipo?id=' + ${equipo.idEquipos}}">Eliminar</a></li>
                             <li><a class="dropdown-item btn btn-outline-dark me-2" th:href="@{'/admin/verEquipo?id=' + ${equipo.idEquipos}}" >Visualizar</a></li>
                           </ul>
                         </div>
@@ -133,7 +133,7 @@
                             </div>
                             <div class="modal-footer">
                               <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
+                              <a th:href="@{'/admin/deshabilitarEquipo?id=' + ${equipo.idEquipos}}" class="btn btn-outline-primary me-2 float-end">Confirmar</a>
                             </div>
                           </div>
                         </div>
@@ -143,10 +143,8 @@
                   </tbody>
                 </table>
                 <!-- End Table with stripped rows -->
-
               </div>
             </div>
-
           </div>
         </div>
       </section>

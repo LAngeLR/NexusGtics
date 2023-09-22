@@ -318,13 +318,9 @@ public class AdminController {
                                @RequestParam("tipoZona") String tipoZona,
                                @RequestParam("imagenSubida") MultipartFile file, RedirectAttributes attr) {
 
-//        sitioRepository.guardarSitio(departamento, provincia, distrito, ubigeo, latitud, longitud, tipo, tipoZona);
-//        return "redirect:/admin/listaSitio";
-//        sitioRepository.guardarSitio(departamento, provincia, distrito, ubigeo, latitud, longitud, tipo, tipoZona, idArchivos);
         if (sitio.getArchivo() == null) {
             sitio.setArchivo(new Archivo());
         }
-
         String fileName = file.getOriginalFilename();
         try{
             Archivo archivo = sitio.getArchivo();
@@ -346,7 +342,7 @@ public class AdminController {
     // GESTION DE EQUIPOS
     @GetMapping({"/listaEquipo","/listaequipo"})
     public String listaEquipo(Model model){
-        List<Equipo> listaEquipo = equipoRepository.findAll();
+        List<Equipo> listaEquipo = equipoRepository.listaEquiposHabilitados();
         model.addAttribute("listaEquipo", listaEquipo);
         return "Administrador/listaEquipo";
     }
@@ -418,7 +414,6 @@ public class AdminController {
     @GetMapping({"/verEquipo","/verequipo"})
     public String verEquipo(Model model, @RequestParam("id") int id){
         Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
-
         if(optionalEquipo.isPresent()){
             Equipo equipo = optionalEquipo.get();
             model.addAttribute("equipo", equipo);
@@ -453,7 +448,6 @@ public class AdminController {
                                    @RequestParam("idImagenes") int idImagenes,
                                    @RequestParam("idEquipos") int idEquipos, RedirectAttributes attr) {
 
-
         Optional<Equipo> optionalEquipo = equipoRepository.findById(idEquipos);
         if(optionalEquipo.isPresent()){
             equipoRepository.actualizarEquipo(marca, modelo, descripcion, paginaModelo, idSitios, idTipoEquipo, idImagenes, idEquipos);
@@ -461,8 +455,15 @@ public class AdminController {
         }else {
             return "redirect:/Administrador/listaEquipo";
         }
-
     }
 
+    @GetMapping("/deshabilitarEquipo")
+    public String deshabilitarEquipo(@RequestParam("id") int id) {
+        Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
+        if (optionalEquipo.isPresent()) {
+            equipoRepository.deshabilitarEquipo(id);
+        }
+        return "redirect:/admin/listaEquipo";
+    }
 
 }
