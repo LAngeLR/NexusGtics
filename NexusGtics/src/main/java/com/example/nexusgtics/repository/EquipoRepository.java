@@ -31,4 +31,10 @@ public interface EquipoRepository extends JpaRepository<Equipo, Integer> {
     //lista de habilitados en 1
     @Query(value ="select * from equipos where habilitado = 1", nativeQuery = true )
     List<Equipo> listaEquiposHabilitados();
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "update equipos set idSitios = ?1 where idEquipos = ?2")
+    void agregarEquipo(int idSitios, int idEquipos);
+
 }

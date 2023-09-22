@@ -27,74 +27,76 @@
         </nav>
       </div><!-- End Page Title -->
 
-      <section class="section dashboard">
-        <div class="row">
-          <div class="rounded p-5" style="background-color: #FFFFFF;">
-            <div class="pagetitle">
-              <h1 class="card-title">Visualización de equipo</h1>
-            </div>
-            <form method="POST" action="" enctype="multipart/form-data">
-              <div class="row">
-                <div class="col-md-6">
+        <section class="section dashboard">
+            <div class="row">
+                <div class="rounded p-5" style="background-color: #FFFFFF;">
+                    <div class="pagetitle">
+                        <h1 class="card-title">Vista de equipo</h1>
+                    </div>
+                    <form method="POST" action="" enctype="multipart/form-data" th:object="${equipo}" >
+                        <div class="row">
+                            <div class="col-md-6">
 
-                  <div class="mb-3">
-                    <label for="nombre">Nombre:</label>
-                    <input type="text" class="form-control" name="nombre" id="nombre" value="Switch" disabled>
-                  </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Tipo de equipo:</label>
+                                    <input type="text" class="form-control" th:field="*{tipoequipo.nombreTipo}" disabled>
+                                </div>
 
-                  <div class="mb-3">
-                    <label for="descripcion">Marca:</label>
-                    <input type="text" class="form-control" name="descripcion" id="descripcion" value="Cisco" disabled>
-                  </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Marca:</label>
+                                    <input type="text" class="form-control" th:field="*{marca}" disabled>
+                                </div>
 
-                  <div class="mb-3">
-                    <label for="precio">Modelo:</label>
-                    <input type="text" class="form-control" name="precio" id="precio" value="Catalyst 94000" disabled>
-                  </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Modelo:</label>
+                                    <input type="text" class="form-control" th:field="*{modelo}" disabled>
+                                </div>
 
-                  <div class="mb-3">
-                    <label for="descuento">Descripción:</label>
-                    <textarea class="form-control" aria-label="With textarea " style="height: 80px; resize: none;" disabled>
-Plataforma modular
-Soporte 9 Tbps de ancho de banda
-Escalable hasta 384 puertos</textarea>
-                  </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Descripción:</label>
+                                    <input class="form-control" aria-label="With textarea" th:field="*{descripcion}" disabled>
+                                </div>
 
-                  <div class="mb-3">
-                    <label for="descuento">Cantidad:</label>
-                    <input type="number" class="form-control" name="descuento" id="descuento" value="12" disabled>
-                  </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Ficha técnica (fabricante):</label>
+                                    <input type="text" class="form-control" th:field="*{paginaModelo}" disabled>
+                                </div>
 
-                  <div class="mb-3">
-                    <label for="consola">Sitio de despliegue:</label>
-                    <input type="text" class="form-control" name="descuento" id="descuento" value="Sitio de T. Fija" disabled>
+                                <div-- class="mb-3">
+                                    <label class="form-label">Sitio de despliegue:</label>
+                                    <input type="text" class="form-control" th:value="${equipo.sitio.distrito}" disabled>
 
-                  </div>
+                                </div-->
 
 
+                            </div>
+                            <br><br>
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+                                    <label for="descuento">Foto de referencia:</label>
+                                    <br>
+                                    <img th:src="@{|image/${equipo.archivo.idArchivos}|}" style="max-width: 600px;" alt="">
+                                </div>
+
+                                <!--button type="submit" class="btn btn-outline-primary float-end"  >Editar</button>
+                                <button type="submit" class="btn btn-outline-danger float-start">Desactivar</button-->
+
+                            </div>
+
+                            <div>
+                                <br>
+                                <button  type="submit" class="btn btn-outline-primary " >Agregar</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <br><br>
-                <div class="col-md-6">
-
-                  <div class="mb-3">
-                    <label for="descuento">Foto de referencia:</label>
-                    <br>
-                    <br>
-                    <img th:src="@{/assets/img/switch_9400.avif}" style="max-width: 600px;" alt="">
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-          <br><br>
 
 
-        </div>
-      </section>
-      <br>
-      <a th:href="@{/analistaDespliegue/listaEquipo}" class="btn btn-outline-success">Agregar</a>
-      <a th:href="@{/analistaDespliegue/listaEquipo}" class="btn btn-outline-danger">Regresar</a>
-    </div>
+            </div>
+        </section>
+      </div>
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->

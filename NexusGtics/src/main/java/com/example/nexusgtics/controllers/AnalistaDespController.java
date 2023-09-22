@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -71,18 +72,37 @@ public class AnalistaDespController {
         return "redirect:/analistaDespliegue/listaSitio";
     }
 
+    @PostMapping("/guardarEquipo")
+    public String agregarEquipo(@RequestParam("idSitios") int idSitios,
+                                @RequestParam("idEquipos") int idEquipos, RedirectAttributes attr){
+        Optional<Equipo> optionalEquipo = equipoRepository.findById(idEquipos);
+        if(optionalEquipo.isPresent()){
+            equipoRepository.agregarEquipo(idSitios, idEquipos);
+            return "redirect:/analistaDespliegue/listaSitio";
+        }else {
+            return "redirect:/analistaDespliegue/listaEquipo";
+        }
+    }
+
 
     @GetMapping("/listaEquipo")
     public String listaEquipo(Model model ){
         List<Equipo> listaEquipo = equipoRepository.findAll();
-
         model.addAttribute("listaEquipo",listaEquipo);
         return "AnalistaDespliegue/despliegueListaEquipos";
     }
     @GetMapping("/verEquipo")
-    public String verEquipo(){
-        return "AnalistaDespliegue/despliegueVerEquipos";
+    public String verEquipo(Model model, @RequestParam("id") int id){
+        Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
+        if(optionalEquipo.isPresent()){
+            Equipo equipo = optionalEquipo.get();
+            model.addAttribute("equipo", equipo);
+            return "AnalistaDespliegue/despliegueVerEquipos";
+        }else {
+            return "redirect:/analistaDespliegue/listaEquipo";
+        }
     }
+
     @GetMapping("/perfil")
     public String perfilAD(){
         return "AnalistaDespliegue/perfilAnalistaDespliegue";
