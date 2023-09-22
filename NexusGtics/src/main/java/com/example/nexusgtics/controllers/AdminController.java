@@ -99,15 +99,23 @@ public class AdminController {
     }
 
     @GetMapping({"/verUsuario","verusuario"})
-    public String verUsuario(Model model, @RequestParam("id") int id){
-        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+    public String verUsuario(Model model, @RequestParam("id") String idStr){
 
-        if(optUsuario.isPresent()){
-            Usuario usuario = optUsuario.get();
-            model.addAttribute("usuario", usuario);
-            return "Administrador/vistaUsuario";
-        } else {
-            return "redirect:/Administrador/listaUsuario";
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/admin/listaUsuario";
+            }
+            Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+            if(optUsuario.isPresent()){
+                Usuario usuario = optUsuario.get();
+                model.addAttribute("usuario", usuario);
+                return "Administrador/vistaUsuario";
+            } else {
+                return "redirect:/admin/listaUsuario";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaUsuario";
         }
     }
 
@@ -141,18 +149,25 @@ public class AdminController {
 
     /*EDITAR USUARIO*/
     @GetMapping({"/editarUsuario","editarusuario"})
-    public String editarUsuario(Model model, @RequestParam("id") int id){
+    public String editarUsuario(Model model, @RequestParam("id") String idStr){
 
-        Optional<Usuario> usuario1 = usuarioRepository.findById(id);
-
-        if (usuario1.isPresent()) {
-            Usuario usuario = usuario1.get();
-            model.addAttribute("usuario", usuario);
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-            return "Administrador/editarUsuario";
-        } else {
-            return "redirect:/admin";
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/admin/listaUsuario";
+            }
+            Optional<Usuario> usuario1 = usuarioRepository.findById(id);
+            if (usuario1.isPresent()) {
+                Usuario usuario = usuario1.get();
+                model.addAttribute("usuario", usuario);
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Administrador/editarUsuario";
+            } else {
+                return "redirect:/admin";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaUsuario";
         }
     }
 
@@ -175,16 +190,23 @@ public class AdminController {
 
     @GetMapping("/verEmpresa")
     public String verEmpresa(Model model,
-                             @RequestParam("id") int id) {
+                             @RequestParam("id") String idStr){
 
-        Optional<Empresa> optEmpresa = empresaRepository.findById(id);
-
-        if (optEmpresa.isPresent()) {
-            Empresa empresa = optEmpresa.get();
-            model.addAttribute("empresa", empresa);
-            return "Administrador/vistaEmpresa";
-        } else {
-            return "redirect:/Administrador/listaEmpresa";
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !empresaRepository.existsById(id)) {
+                return "redirect:/admin/listaEmpresa";
+            }
+            Optional<Empresa> optEmpresa = empresaRepository.findById(id);
+            if (optEmpresa.isPresent()) {
+                Empresa empresa = optEmpresa.get();
+                model.addAttribute("empresa", empresa);
+                return "Administrador/vistaEmpresa";
+            } else {
+                return "redirect:/admin/listaEmpresa";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaEmpresa";
         }
     }
 
@@ -233,27 +255,45 @@ public class AdminController {
     }
 
     @GetMapping({"/verSitio","/versitio"})
-    public String verSitio(Model model, @RequestParam("id") int id){
-        Optional<Sitio> optionalSitio = sitioRepository.findById(id);
-        if (optionalSitio.isPresent()){
-            Sitio sitio = optionalSitio.get();
-            model.addAttribute("sitio", sitio);
-            return "Administrador/vistaSitio";
-        }else {
-            return "Administrador/listaSitio";
+    public String verSitio(Model model, @RequestParam("id") String idStr){
+
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !sitioRepository.existsById(id)) {
+                return "redirect:/admin/listaSitio";
+            }
+            Optional<Sitio> optionalSitio = sitioRepository.findById(id);
+            if (optionalSitio.isPresent()){
+                Sitio sitio = optionalSitio.get();
+                model.addAttribute("sitio", sitio);
+                return "Administrador/vistaSitio";
+            }else {
+                return "redirect:/admin/listaSitio";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaSitio";
         }
     }
 
     /*EDITAR Sitio*/
     @GetMapping({"/editarSitio"})
-    public String editarSitio(Model model, @RequestParam("id") int id){
-        Optional<Sitio> optionalSitio = sitioRepository.findById(id);
-        if (optionalSitio.isPresent()){
-            Sitio sitio = optionalSitio.get();
-            model.addAttribute("sitio", sitio);
-            return "Administrador/editarSitio";
-        }else {
-            return "Administrador/listaSitio";
+    public String editarSitio(Model model, @RequestParam("id") String idStr){
+
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !sitioRepository.existsById(id)) {
+                return "redirect:/admin/listaSitio";
+            }
+            Optional<Sitio> optionalSitio = sitioRepository.findById(id);
+            if (optionalSitio.isPresent()){
+                Sitio sitio = optionalSitio.get();
+                model.addAttribute("sitio", sitio);
+                return "Administrador/editarSitio";
+            }else {
+                return "redirect:/admin/listaSitio";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaSitio";
         }
     }
 
@@ -412,29 +452,45 @@ public class AdminController {
     }
 
     @GetMapping({"/verEquipo","/verequipo"})
-    public String verEquipo(Model model, @RequestParam("id") int id){
-        Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
-        if(optionalEquipo.isPresent()){
-            Equipo equipo = optionalEquipo.get();
-            model.addAttribute("equipo", equipo);
-            return "Administrador/vistaEquipo";
-        }else {
+    public String verEquipo(Model model, @RequestParam("id") String idStr){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !equipoRepository.existsById(id)) {
+                return "redirect:/admin/listaEquipo";
+            }
+            Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
+            if(optionalEquipo.isPresent()){
+                Equipo equipo = optionalEquipo.get();
+                model.addAttribute("equipo", equipo);
+                return "Administrador/vistaEquipo";
+            } else {
+                return "redirect:/admin/listaEquipo";
+            }
+        } catch (NumberFormatException e) {
             return "redirect:/admin/listaEquipo";
         }
-
     }
 
+
     @GetMapping({"/editarEquipo","/editarequipo"})
-    public String editarEquipo(Model model, @RequestParam("id") int id){
-        Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
-        if(optionalEquipo.isPresent()){
-            Equipo equipo = optionalEquipo.get();
-            model.addAttribute("equipo", equipo);
-            model.addAttribute("listaSitios",sitioRepository.findAll());
-            model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
-            System.out.println("se enivó a editar");
-            return "Administrador/editarEquipo";
-        }else {
+    public String editarEquipo(Model model, @RequestParam("id") String idStr){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !equipoRepository.existsById(id)) {
+                return "redirect:/admin/listaEquipo";
+            }
+            Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
+            if(optionalEquipo.isPresent()){
+                Equipo equipo = optionalEquipo.get();
+                model.addAttribute("equipo", equipo);
+                model.addAttribute("listaSitios",sitioRepository.findAll());
+                model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+                System.out.println("se envió a editar");
+                return "Administrador/editarEquipo";
+            }else {
+                return "redirect:/admin/listaEquipo";
+            }
+        } catch (NumberFormatException e) {
             return "redirect:/admin/listaEquipo";
         }
     }

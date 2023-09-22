@@ -43,6 +43,7 @@
                       <option th:each="tipo: ${listaTipoEquipos}"
                               th:text="${tipo.nombreTipo}" th:value="${tipo.idTipoEquipo}"
                               th:selected="${equipo.tipoequipo.idTipoEquipo == tipo.idTipoEquipo}">Open this select menu</option>
+                      <input type="hidden" class="form-control" th:field="*{tipoequipo.idTipoEquipo}">
                     </select>
                   </div>
 
@@ -66,14 +67,14 @@
                     <label class="form-label">Ficha técnica (fabricante):</label>
                     <input type="text" class="form-control" th:field="*{paginaModelo}">
                   </div>
-                  <div class="input-group mb-3">
+                  <div class="mb-3">
                     <label>Sitio de despliegue:</label>
-                    <div class="col-12">
-                      <select name="idSitios" id="idSitios" class="form-control">
-                        <option th:each="sitio1: ${listaSitios}"
-                                th:text="${sitio1.distrito}" th:value="${sitio1.idSitios}">Sitio de Tipo</option>
-                      </select>
-                    </div>
+                    <select name="idSitios" id="idSitios" class="form-select">
+                      <option th:each="sitio1: ${listaSitios}"
+                              th:text="${sitio1.distrito}" th:value="${sitio1.idSitios}"
+                              th:selected="${equipo.sitio.idSitios == sitio1.idSitios}">Open this select menu</option>
+                      <input type="hidden" class="form-control" th:field="*{sitio.idSitios}">
+                    </select>
                   </div>
 
                 </div>
