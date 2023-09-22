@@ -28,7 +28,7 @@
             <div class="pagetitle" style="margin-top: -35px;">
               <h1 class="card-title">Creación de usuario</h1>
             </div>
-            <form method="POST" th:action="@{/admin/saveUsuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+            <form method="POST" th:action="@{/admin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
               <div class="row">
                 <div class="col-md-6">
                   <input type="hidden" class="form-control" name="idJuego" id="idJuego">
@@ -53,6 +53,8 @@
 
                   <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:value="${fechaActual}">
                   <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" value="0">
+                  <input type="hidden" name="dni" id="dni" value="0">
+                  <input type="hidden" name="descripcion" id="descripcion" value="-">
 
                   <div class="mb-3">
                     <label for="cargo" class="form-label">Selector de cargos</label>

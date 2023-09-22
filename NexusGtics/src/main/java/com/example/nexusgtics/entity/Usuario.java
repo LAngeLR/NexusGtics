@@ -1,6 +1,7 @@
 package com.example.nexusgtics.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,13 +17,18 @@ public class Usuario {
     @Column(name = "idUsuarios", nullable = false)
     private Integer id;
 
-    @Column(name = "nombre", nullable = false, length = 45)
+    @Column(name = "nombre", nullable = false, length = 15)
+    @NotBlank(message = "El nombre no puede estar en blanco")
+    @Pattern(regexp = "^[A-Za-z]+$", message = "El nombre debe contener solo letras")
     private String nombre;
 
-    @Column(name = "apellido", nullable = false, length = 45)
+    @Column(name = "apellido", nullable = false, length = 15)
+    @NotBlank(message = "El apellido no puede estar en blanco")
+    @Pattern(regexp = "^[A-Za-z]+$", message = "El apellido debe contener solo letras")
     private String apellido;
 
     @Column(name = "correo", nullable = false, length = 45)
+    @NotBlank(message = "El correo no puede estar en blanco")
     private String correo;
 
     @Column(name = "contrasenia", length = 45)

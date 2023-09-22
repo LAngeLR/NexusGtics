@@ -3,12 +3,14 @@ package com.example.nexusgtics.controllers;
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
 import com.sun.net.httpserver.HttpsServer;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -114,15 +116,16 @@ public class AdminController {
             } else {
                 return "redirect:/admin/listaUsuario";
             }
-        } catch (NumberFormatException e) {
-            return "redirect:/admin/listaUsuario";
+        } catch (NumberFormatException e) { //errores
+
+            return "Administrador/crearUsuario";
         }
     }
 
     /*CREAR NUEVO USUARIO*/
     @PostMapping("/saveUsuario")
     public String saveUsuario(@RequestParam("imagenSubida") MultipartFile file,
-                              Usuario usuario,
+                              @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
 
@@ -132,16 +135,24 @@ public class AdminController {
 
         String fileName = file.getOriginalFilename();
         try{
-            Archivo archivo = usuario.getArchivo();
-            archivo.setNombre(fileName);
-            archivo.setTipo(1);
-            archivo.setArchivo(file.getBytes());
-            archivo.setContentType(file.getContentType());
-            archivoRepository.save(archivo);
-            int idImagen = archivo.getIdArchivos();
-            usuario.getArchivo().setIdArchivos(idImagen);
-            usuarioRepository.save(usuario);
-            return "redirect:/admin/listaUsuario";
+            //validación de nombre, apellido y correo
+            if (!bindingResult.hasErrors()){
+                Archivo archivo = usuario.getArchivo();
+                archivo.setNombre(fileName);
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+                int idImagen = archivo.getIdArchivos();
+                usuario.getArchivo().setIdArchivos(idImagen);
+                usuarioRepository.save(usuario);
+                return "redirect:/admin/listaUsuario";
+            }else {
+                return "redirect:/admin/listaUsuario";
+            }
+
+
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
