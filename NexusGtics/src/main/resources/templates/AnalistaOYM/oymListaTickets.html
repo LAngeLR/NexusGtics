@@ -235,8 +235,8 @@
               <tbody>
               <tr th:each="ticket, info: ${listaTicket}">
                 <th th:text="${info.index + 1}" scope="row"></th>
-                <td th:text="${ticket.idEmpresaAsignada}"></td>
-                <td th:text="${ticket.idUsuarioCreador}"></td>
+                <td th:text="${ticket.idEmpresaAsignada.nombre}"></td>
+                <td th:text="${ticket.idUsuarioCreador.nombre}"></td>
                 <td th:text="${ticket.estado}"><span class="badge text-bg-danger"> </span></td>
                 <td th:text="${ticket.fechaCreacion}"></td>
                 <td th:text="${ticket.fechaCierre}"></td>
@@ -248,7 +248,7 @@
                   </button>
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" th:href="@{/analistaOYM/mapaTickets}">Ubicacion</a></li>
-                    <li><a class="dropdown-item" th:href="@{/analistaOYM/editarTicket}">Editar</a></li>
+                    <li><a class="dropdown-item" th:href="@{'analistaOYM/editarTicket?id='+ ${ticket.idTickets}}">Editar</a></li>
                     <li><a class="dropdown-item" th:href="@{/analistaOYM/verTicket}">Ver más</a></li>
 
                   </ul>

@@ -220,36 +220,53 @@
                             <div class="tab-pane fade show active profile-overview" id="datos-overview">
                                 <h5 class="card-title" style="color: #095444">Datos generale del Ticket</h5>
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Usuario creador:</div>
-                                    <div class="col-lg-9 col-md-8">K. Anderson</div>
-                                </div>
+                                <form method="POST" action="" enctype="multipart/form-data" th:object="${ticket}">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Usuario creador:</div>
+                                        <div class="col-lg-9 col-md-8">
+                                            <input type="text" th:field="*{idUsuarioCreador.nombre}">
+                                        </div>
+                                    </div>
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Tipo de ticket</div>
-                                    <div class="col-lg-9 col-md-8">Mantenimiento</div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Tipo de ticket</div>
+                                        <div class="col-lg-9 col-md-8">
+                                            <input type="text" th:field="*{idTipoTicket.nombreTipoTicket}">
+                                        </div>
+                                    </div>
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Empresa proveedora</div>
-                                    <div class="col-lg-9 col-md-8">Empresa 1</div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Empresa proveedora</div>
+                                        <div class="col-lg-9 col-md-8">
+                                            <input type="text" th:field="*{idEmpresaAsignada.nombre}">
+                                        </div>
+                                    </div>
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Sitio asignado</div>
-                                    <div class="col-lg-9 col-md-8">Sitio 1</div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Sitio asignado</div>
+                                        <div class="col-lg-9 col-md-8">
+                                            <input type="text" th:field="*{idSitios.provincia}">
+                                        </div>
+                                    </div>
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Sitio asignado</div>
-                                    <div class="col-lg-9 col-md-8">Proceso</div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Estado</div>
+                                        <div class="col-lg-9 col-md-8">
+                                            <input type="text" th:field="*{estado}">
+                                        </div>
+                                    </div>
 
 
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Fecha de vencimiento:</div>
-                                    <div class="col-lg-9 col-md-8">23-08-2023</div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Fecha de vencimiento:</div>
+                                        <div class="col-lg-9 col-md-8">
+                                            <input type="text" th:field="*{fechaCierre}">
+                                        </div>
+                                    </div>
+
+                                </form>
+
+
 
 
                             </div>
@@ -276,6 +293,7 @@
                             <h5 class="card-title" style="color: #095444">Formulario:</h5>
                             <img th:src="@{https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg}" alt="Profile" style="max-height:14rem">
                         </div>
+
                         <div class="tab-content pt-2">
 
                             <div class="tab-pane fade show active profile-overview" id="profile-overview">

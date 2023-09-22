@@ -10,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/analistaOYM")
@@ -87,8 +89,17 @@ public class AnalistaOYMController {
     }
 
     @GetMapping("/editarTicket")
-    public String editarTicket(){
-        return "AnalistaOYM/oymEditarTicket";
+    public String editarTicket(Model model, @RequestParam("id") int id){
+        Optional<Ticket> optTicket = ticketRepository.findById(id);
+        if(optTicket.isPresent()){
+            Ticket ticket = optTicket.get();
+            model.addAttribute("ticket",ticket);
+            return "AnalistaOYM/oymEditarTicket";
+        }else{
+            return "redirect:/analistaOYM/ticket";
+        }
+
+
     }
 
     @GetMapping("/dashboard")
@@ -97,8 +108,15 @@ public class AnalistaOYMController {
     }
 
     @GetMapping("/verTicket")
-    public String verticket(){
-        return "AnalistaOYM/oymVistaTicket";
+    public String verticket(Model model, @RequestParam("id") int id){
+        Optional<Ticket> optionalTicket = ticketRepository.findById(id);
+        if(optionalTicket.isPresent()){
+            Ticket ticket = optionalTicket.get();
+            model.addAttribute("ticket", ticket);
+            return "AnalistaOYM/oymVistaTicket";
+        }else{
+            return "redirect:/analistaOYM/ticket";
+        }
     }
 
 
