@@ -50,23 +50,15 @@
                   <tbody>
                   <tr th:each="equipo, info : ${listaEquipo}">
                     <td th:text = "${info.index + 1}" >  </td>
-                    <td th:text = "${equipo.tipoequipo.nombreTipo}">  </td>
+                    <td th:text="${equipo.tipoequipo.nombreTipo}">Tipo</td>
                     <td th:text="${equipo.marca}">Marca</td>
                     <td th:text="${equipo.modelo}">Modelo</td>
-                    <td>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <a th:href="@{/analistaDespliegue/editarSitio}" class="btn btn-outline-primary me-2">Agregar</a>
-                        <a th:href="@{/analistaDespliegue/verEquipo}" class="btn btn-outline-dark me-2">Visualizar</a>
-                        <!-- MODAL -->
-                      </div>
-                    </td>
+                    <td><a type="button" class="btn btn-outline-dark" th:href="@{'/analistaDespliegue/verEquipo?id=' + ${equipo.idEquipos}}">Ver</a></td>
+
                   </tr>
-
-
                   </tbody>
                 </table>
                 <!-- End Table with stripped rows -->
-
               </div>
             </div>
 
