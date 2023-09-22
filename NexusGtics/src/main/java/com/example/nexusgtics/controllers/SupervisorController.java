@@ -260,3 +260,45 @@ public class SupervisorController {
         }
     }
 }
+
+//    @GetMapping("/detallesCuadrilla")
+//    public String detallesCuadrilla(Model model, @RequestParam("id") String idParam) {
+//        int id = 0; // Valor predeterminado en caso de que no se pueda convertir el ID
+//
+//        try {
+//            // Intenta convertir el parámetro "id" a un entero
+//            id = Integer.parseInt(idParam);
+//        } catch (NumberFormatException e) {
+//            // Si ocurre una excepción al convertir, establece el ID en 0 (letras o valor no válido)
+//            id = 0;
+//        }
+//
+//        // Verifica si el ID es 0 (no válido) o existe en la base de datos
+//        if (id == 0 || !cuadrillaRepository.existsById(id)) {
+//            // El ID no es válido o no existe, puedes manejar la lógica de manejo de error aquí
+//            return "redirect:/supervisor/listaCuadrillas"; // O redirigir a una página de error personalizada
+//        }
+//
+//        // El ID es válido y existe, continúa con la lógica para mostrar detalles de la Cuadrilla
+//        Optional<Cuadrilla> optShipper = cuadrillaRepository.findById(id);
+//        List<Usuario> integrantesCuadrilla = usuarioRepository.listaDeTecnicosPorCuadrilla(id);
+//        List<Cuadrilla> listaCuadrilla = cuadrillaRepository.findAll();
+//
+//        Map<Integer, Integer> trabajosFinalizadosPorCuadrilla = new HashMap<>();
+//
+//        for (Cuadrilla cuadrilla : listaCuadrilla) {
+//            Integer trabajosFinalizados = cuadrillaRepository.contarTrabajosFinalizados(cuadrilla.getIdCuadrillas());
+//            trabajosFinalizados = (trabajosFinalizados != null) ? trabajosFinalizados : 0;
+//            trabajosFinalizadosPorCuadrilla.put(cuadrilla.getIdCuadrillas(), trabajosFinalizados);
+//        }
+//
+//        if (optShipper.isPresent()) {
+//            Cuadrilla cuadrilla = optShipper.get();
+//            model.addAttribute("cuadrilla", cuadrilla);
+//            model.addAttribute("integrantes", integrantesCuadrilla);
+//            model.addAttribute("trabajosFinalizadosPorCuadrilla", trabajosFinalizadosPorCuadrilla);
+//            return "supervisor/detallesCuadrilla";
+//        } else {
+//            return "redirect:/supervisor/listaCuadrillas";
+//        }
+//    }
