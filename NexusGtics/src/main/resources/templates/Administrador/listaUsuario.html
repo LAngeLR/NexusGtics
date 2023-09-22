@@ -62,9 +62,11 @@
                             <i class="bi bi-plus-square"></i>
                           </button>
                           <ul class="dropdown-menu">
+                            <li th:unless="${usuario.cargo.nombreCargo == 'Administrador'}">
                             <li><a th:href="@{'/admin/editarUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Editar</a></li>
-                            <li><a th:href="@{'/admin/banearUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2"
-                                   id="popover-button" data-bs-container="body" data-bs-placement="left" data-bs-content="Left popover">Desactivar</a></li>
+                              <a th:href="@{'/superadmin/banearUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2"
+                                 id="popover-button" data-bs-container="body" data-bs-placement="left" data-bs-content="Left popover">Desactivar</a>
+                            </li>
                             <li><a th:href="@{'/admin/verUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Visualizar</a></li>
 
                           </ul>

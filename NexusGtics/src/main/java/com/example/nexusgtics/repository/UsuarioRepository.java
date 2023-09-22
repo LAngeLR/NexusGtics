@@ -13,11 +13,12 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     // ------------------------------ SUPERADMIN --------------------------------------- //
 
-
+    @Query(value ="select * from nexus.usuarios where idCargos not IN (1) and habilitado = 1", nativeQuery = true )
+    List<Usuario> listaDeUsuariosTotal();
 
 
     // ------------------------------ ADMIN --------------------------------------- //
-    @Query(value ="select * from nexus.usuarios where idCargos not IN (1, 2) and habilitado = 1", nativeQuery = true )
+    @Query(value ="select * from nexus.usuarios where idCargos not IN (1) and habilitado = 1", nativeQuery = true )
     List<Usuario> listaDeUsuariosNoAdmin();
 
     @Query(value ="select * from nexus.usuarios where habilitado = 0", nativeQuery = true )

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:include="Fragmentos/head :: head('Lista de usuarios')"></head>
+<head th:include="Fragmentos/head :: head('Lista de sitios')"></head>
 
 <body>
 <!-- ======= Header ======= -->
@@ -33,7 +33,7 @@
                         <div class="card-body">
                             <div class="container">
 
-                                <a th:href="@{/superadmin.html/crearUsuario}" class="btn btn-outline-primary me-2 mt-3 float-end">Nuevo usuario</a>
+                                <a th:href="@{/superadmin/crearUsuario}" class="btn btn-outline-primary me-2 mt-3 float-end">Nuevo usuario</a>
                                 <h5 class="card-title">Usuarios en general</h5>
                             </div>
                             <!-- Table with stripped rows -->
@@ -51,7 +51,7 @@
                                 <tbody>
                                 <tr th:each="usuario, info : ${listaUsuario}">
                                     <td th:text="${info.index + 1}"></td>
-                                    <td th:text="${usuario.nombre} + ${usuario.apellido}"></td>
+                                    <td th:text="${usuario.nombre} + ' ' + ${usuario.apellido}"></td>
                                     <td th:text="${usuario.cargo.nombreCargo}"></td>
                                     <td th:text="${usuario.empresa.nombre}"></td>
                                     <td th:text="${usuario.correo}"></td>
@@ -62,28 +62,39 @@
                                                     <i class="bi bi-plus-square"></i>
                                                 </button>
                                                 <ul class="dropdown-menu">
-                                                    <li><a th:href="@{'/superadmin/verUsuario?id=' + ${usuario.id}}" class="dropdown-item btn btn-outline-dark me-2">Visualizar</a></li>
+
+                                                    <li th:if="${usuario.cargo.nombreCargo == 'Administrador'}">
+                                                        <a th:href="@{'/superadmin/editarUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Editar</a>
+                                                        <a th:href="@{'/superadmin/banearUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2"
+                                                           id="popover-button" data-bs-container="body" data-bs-placement="left" data-bs-content="Left popover">Desactivar</a>
+                                                    <li><a th:href="@{'/superadmin/verUsuarioA?id=' + ${usuario.id}}" class="dropdown-item me-2">Visualizar</a></li>
+                                                    </li>
+                                                    <li th:unless="${usuario.cargo.nombreCargo == 'Administrador'}">
+                                                    <li><a th:href="@{'/superadmin/verUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Visualizar</a></li>
+                                                    </li>
+
+
                                                 </ul>
+                                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <h3>¿Está seguro de banear el usuario?</h3>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                                                                <a th:href="@{'/superadmin/banearUsuario?id=' + ${usuario.id}}" class="btn btn-outline-primary">Confirmar</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
                                         <!-- MODAL -->
-                                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <h3>¿Está seguro de eliminar el usuario?</h3>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                                                        <a th:href="@{'/superadmin/desabilitarUsuario?id=' + ${usuario.id}}" class="btn btn-outline-primary">Confirmar</a>
-                                                        <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </td>
                                 </tr>
 
@@ -118,7 +129,22 @@
 
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
+<script>
+    $(document).ready(function() {
+        // Selecciona el botón del popover
+        var popoverButton = $('#popover-button');
 
+        // Activa el popover al pasar el mouse sobre el botón
+        popoverButton.mouseenter(function() {
+            popoverButton.popover('show');
+        });
+
+        // Desactiva el popover al quitar el mouse del botón
+        popoverButton.mouseleave(function() {
+            popoverButton.popover('hide');
+        });
+    });
+</script>
 </body>
 
 </html>

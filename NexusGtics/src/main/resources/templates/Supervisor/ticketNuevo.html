@@ -67,6 +67,11 @@
 
 <main id="main" class="main" th:object="${ticket}">
 
+
+    <div class="alert alert-success" role="alert" th:if="${mensaje!=null}" th:text="${mensaje}">
+        abc
+    </div>
+
     <div class="pagetitle">
         <div class="d-flex justify-content-between align-items-center">
             <h1>Detalles</h1>
