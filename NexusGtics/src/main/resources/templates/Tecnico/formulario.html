@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -28,6 +28,7 @@
 
     <!-- Template Main CSS File -->
     <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
 </head>
 
@@ -156,7 +157,8 @@
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
-    <div class="pagetitle">
+    <div class="container">
+        <div class="pagetitle">
         <h1>Formulario</h1>
         <nav>
             <ol class="breadcrumb">
@@ -168,7 +170,7 @@
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section">
+        <section class="section">
         <div class="row">
             <div class="col-lg-8">
                 <div class="card">
@@ -220,11 +222,20 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3">
+                            <!--<div class="mb-3">
                                 <h5><b>Subir foto:</b></h5>
                                 <label for="imagenSubida" class="form-label">Agregar imagen</label>
                                 <input class="form-control" type="file" name="imagenSubida" id="imagenSubida" accept="image/*"
                                        onchange="previewImage(event, '#imgPreview')">
+                            </div> -->
+
+                            <div class="mb-3">
+                                <label for="imagenSubida" class="form-label">Foto de perfil:</label>
+                                <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                    <img id="imgPreview" th:src="@{/assets/img/fotoSubir.webp}" class="card-img-top" style="max-height: 250px" alt="">
+                                </div>
+                                <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                                       accept="image/*" onchange="previewImage(event, '#imgPreview')">
                             </div>
 
                             <div class="row mb-5">
@@ -251,7 +262,7 @@
             </div>
         </div>
     </section>
-
+    </div>
 </main><!-- End #main -->
 
 <!-- ======= Footer ======= -->
@@ -275,6 +286,7 @@
 
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/foto.js}"></script>
 
 </body>
 
