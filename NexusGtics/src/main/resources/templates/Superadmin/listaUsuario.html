@@ -18,7 +18,7 @@
         <div class="pagetitle">
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Gestión de usuarios</a></li>
+                    <li class="breadcrumb-item">Gestión de usuarios</li>
                     <li class="breadcrumb-item active">Lista de usuarios</li>
                 </ol>
             </nav>
@@ -33,7 +33,7 @@
                         <div class="card-body">
                             <div class="container">
 
-                                <a th:href="@{/superadmin/crearUsuario}" class="btn btn-outline-primary me-2 mt-3 float-end">Nuevo usuario</a>
+                                <a th:href="@{/superadmin/crearUsuario}" class="btn btn-outline-primary me-2 mt-3 float-end">Nuevo administrador</a>
                                 <h5 class="card-title">Usuarios en general</h5>
                             </div>
                             <!-- Table with stripped rows -->
@@ -58,21 +58,19 @@
                                     <td>
                                         <div class="d-flex justify-content-center align-items-center">
                                             <div class="dropdown">
-                                                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="bi bi-plus-square"></i>
+                                                <button class="btn btn-light dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                                                        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                                                    </svg>
                                                 </button>
                                                 <ul class="dropdown-menu">
 
                                                     <li th:if="${usuario.cargo.nombreCargo == 'Administrador'}">
-                                                        <a th:href="@{'/superadmin/editarUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Editar</a>
-                                                        <a th:href="@{'/superadmin/banearUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2"
-                                                           id="popover-button" data-bs-container="body" data-bs-placement="left" data-bs-content="Left popover">Desactivar</a>
+                                                        <a th:href="@{'/superadmin/editarUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Editar</a></li>
+                                                    <li><a th:href="@{'/superadmin/banearUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2 text-danger">Desactivar</a></li>
+                                                        <!--<a th:href="@{'/superadmin/banearUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2"
+                                                           id="popover-button" data-bs-container="body" data-bs-placement="left" data-bs-content="Left popover">Desactivar</a>-->
                                                     <li><a th:href="@{'/superadmin/verUsuarioA?id=' + ${usuario.id}}" class="dropdown-item me-2">Visualizar</a></li>
-                                                    </li>
-                                                    <li th:unless="${usuario.cargo.nombreCargo == 'Administrador'}">
-                                                    <li><a th:href="@{'/superadmin/verUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Visualizar</a></li>
-                                                    </li>
-
 
                                                 </ul>
                                                 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

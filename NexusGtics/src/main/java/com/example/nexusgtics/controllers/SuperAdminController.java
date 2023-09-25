@@ -48,7 +48,7 @@ public class SuperAdminController {
 
     @GetMapping({"/listaUsuario","listausuario", "listausuarios","listaUsuarios"})
     public String listaUsuario(Model model){
-        List<Usuario> listaUsuarioNoAdmin = usuarioRepository.listaDeUsuariosNoAdmin();
+        List<Usuario> listaUsuarioNoAdmin = usuarioRepository.listaDeUsuariosNoSuperadmin();
         model.addAttribute("listaUsuario", listaUsuarioNoAdmin);
         return "Superadmin/listaUsuario";
     }
@@ -136,7 +136,7 @@ public class SuperAdminController {
             int idImagen = archivo.getIdArchivos();
             usuario.getArchivo().setIdArchivos(idImagen);
             usuarioRepository.save(usuario);
-            return "redirect:/Superadmin/listaUsuario";
+            return "redirect:/superadmin/listaUsuario";
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

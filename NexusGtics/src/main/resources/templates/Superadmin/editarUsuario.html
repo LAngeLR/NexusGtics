@@ -20,8 +20,8 @@
         <div class="pagetitle">
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Gestión de usuario</a></li>
-                    <li class="breadcrumb-item active">Editar usuario Administrador</li>
+                    <li class="breadcrumb-item"><a href="#">Gestión de usuarios</a></li>
+                    <li class="breadcrumb-item active">Editar Administrador</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -53,28 +53,17 @@
                                     <input type="text" class="form-control" th:field="*{correo}">
                                 </div>
 
-                                <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
 
-                                <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
-
-                                <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:field="*{fechaRegistro}">
-
-                                <input type="hidden" name="archivo" id="archivo" th:field="*{archivo.idArchivos}">
 
                                 <div class="mb-3">
                                     <label class="form-label">Empresa</label>
-                                    <select class="form-select" name="empresa" id="empresa" disabled>
-                                        <option value="1" selected>Nexus</option>
+                                    <select class="form-select" name="empresa" id="empresa">
+                                        <option th:each="empresa: ${listaEmpresa}"
+                                                th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
+                                                th:selected="${usuario.empresa.idEmpresas == empresa.idEmpresas}">Open this select menu</option>
                                     </select>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Cargo</label>
-                                    <label for="cargo" class="form-label">Selector de cargos</label>
-                                    <select class="form-select" name="cargo" id="cargo" disabled>
-                                        <option value="2" selected>Administrador</option>
-                                    </select>
-                                </div>
 
                             </div>
                             <br><br>
