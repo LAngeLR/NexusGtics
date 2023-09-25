@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<aside id="sidebar" class="sidebar">
+<aside id="sidebar" class="sidebar" th:fragment="menu">
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/analistaDespliegue/}">
-                <i class="bi bi-layout-text-window-reverse"></i><span>Inicio</span>
+                <i class="bi bi-house"></i><span>Inicio</span>
             </a>
         </li><!-- End Tables Nav -->
 
@@ -56,7 +56,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#map-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-gem"></i><span>Mapas</span><i class="bi bi-chevron-down ms-auto"></i>
+                <i class="bi bi-map"></i><span>Mapas</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
             <ul id="map-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>

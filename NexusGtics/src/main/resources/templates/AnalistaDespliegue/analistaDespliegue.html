@@ -11,14 +11,14 @@
 <!-- End Header -->
 
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/sidebarDespliegue :: #sidebar">
+<aside th:replace="Fragmentos/menuDespliegue :: #sidebar">
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
     <div class="card text-center" >
-        <img src="https://www.it2com.net/wp-content/uploads/2022/11/1560132.jpg" class="card-img" alt="fondo" style="height: 400px;">
+        <img th:src="@{/assets/img/fondoAnalistaDespliegue.png}" class="card-img" alt="fondo" style="height: 274px;">
         <div class="card-img-overlay" style="background-color: rgba(42,41,41,0.2)">
-            <br><br><br><br><br><br><br><br><br><br>
+            <br><br>
             <h1 class="card-text" style="color:white"><b>¡Bienvenido Analista de Despliegue!</b></h1>
             <br>
             <p class="card-text" style="color: white">La velocidad de la comunicación depende de nuestra precisión en el análisis. <br> Somos los velocistas del mundo digital.</p>
