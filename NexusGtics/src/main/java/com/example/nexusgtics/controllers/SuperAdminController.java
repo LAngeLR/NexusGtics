@@ -60,13 +60,14 @@ public class SuperAdminController {
         return "Superadmin/listaUsuarioBaneado";
     }
 
+    // Desactivar USUARIO
     @GetMapping("/banearUsuario")
     public String desabilitarUsuario(@RequestParam("id") int id) {
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         if (optionalUsuario.isPresent()) {
             usuarioRepository.desactivarUsuario(id);
         }
-        return "redirect:/Superadmin/listaUsuario";
+        return "redirect:/superadmin/listaUsuario";
     }
 
     // ACTIVAR USUARIO
@@ -76,7 +77,7 @@ public class SuperAdminController {
         if (optionalUsuario.isPresent()) {
             usuarioRepository.activarUsuario(id);
         }
-        return "redirect:/Superadmin/banearUsuario";
+        return "redirect:/superadmin/listaBaneados";
     }
 
     @GetMapping({"/crearUsuario","crearusuario"})
@@ -110,7 +111,7 @@ public class SuperAdminController {
             model.addAttribute("usuario", usuario);
             return "Superadmin/vistaUsuarioA";
         } else {
-            return "redirect:/Superadmin/listaUsuario";
+            return "redirect:/superadmin/listaUsuario";
         }
     }
 
