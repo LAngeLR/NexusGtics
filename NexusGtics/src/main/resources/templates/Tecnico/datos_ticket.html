@@ -211,20 +211,26 @@
                                 </div>
 
                                 <div class="mb-3 row">
-                                    <div class="col-sm-4 form-label">Estado:</div>
-                                    <div class="col-lg-9 col-md-8">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                            <label class="form-check-label" for="flexRadioDefault1">
-                                                Progreso
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                                            <label class="form-check-label" for="flexRadioDefault2">
-                                                Cerrado
-                                            </label>
-                                        </div>
+                                    <div class="mb-3">
+                                        <!--<label for="estado" class="form-label">Estado</label>
+                                        <select class="form-select" name="estado" id="estado">
+                                            <option value="-1">--Seleccione el estado--</option>
+                                            <option th:each="cargo: ${ticket}"
+                                                    th:unless="${ticket.estado == 6 || ticket.estado == 2 || ticket.estado == 1}"
+                                                    th:text="${ticket.estado}" th:value="${ticket.estado}">Open this select menu</option>
+                                            <td th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5}">
+                                                <span class="badge text-bg-success">En progreso</span>
+                                            </td>
+                                        </select> -->
+
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option th:each="cargo: ${ticket}"
+                                                    th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5 || ticket.estado==6 || ticket.estado==2 || ticket.estado==1}"
+                                                    th:value="${ticket.estado}">Progreso</option>
+                                            <option th:each="cargo: ${ticket}"
+                                                    th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5 || ticket.estado==7 || ticket.estado==6 || ticket.estado==2 || ticket.estado==1}"
+                                                    th:value="${ticket.estado}">Cerrado</option>
+                                        </select>
                                     </div>
                                 </div>
                             <br>

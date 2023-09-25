@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -95,7 +96,6 @@ public class TecnicoController {
         }else{
             return "Tecnico/ticket_asignado";
         }
-
     }
 
     //-----------------------------------------------------------------------
