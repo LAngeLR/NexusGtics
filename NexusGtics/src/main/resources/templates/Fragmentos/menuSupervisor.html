@@ -5,73 +5,50 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/analistaDespliegue/}">
-                <i class="bi bi-house"></i><span>Inicio</span>
+            <a class="nav-link collapse" data-bs-target="#tables-nav" th:href="@{/supervisor/}">
+                <i class="bi bi-layout-text-window-reverse"></i><span>Inicio</span>
             </a>
-        </li><!-- End Tables Nav -->
+        </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#sit-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-bar-chart"></i><span>Sitios</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="sit-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a th:href="@{/analistaDespliegue/listaSitio}">
-                        <i class="bi bi-circle"></i><span>Lista de sitios</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/analistaDespliegue/mapaSitios}">
-                        <i class="bi bi-circle"></i><span>Mapa de sitios</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tick-nav" data-bs-toggle="collapse" href="#">
+            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-card-list"></i><span>Tickets</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="tick-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:href="@{/analistaDespliegue/ticket}">
-                        <i class="bi bi-circle"></i><span>Lista de Tickets</span>
+                    <a th:href="@{/supervisor/listaTickets}">
+                        <i class="bi bi-circle"></i><span>Ver Tickets</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/analistaDespliegue/crearTicket}">
-                        <i class="bi bi-circle"></i><span>Crear Ticket</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/analistaDespliegue/dashboard}">
+                    <a th:href="@{/supervisor/dashboard}">
                         <i class="bi bi-circle"></i><span>Dashboard</span>
                     </a>
                 </li>
-                <li>
-                    <a th:href="@{/analistaDespliegue/mapaTickets}">
-                        <i class="bi bi-circle"></i><span>Mapa de Tickets</span>
-                    </a>
-                </li>
             </ul>
-        </li>
+        </li><!-- End Tables Nav -->
+        <!-- End Charts Nav -->
+
+
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#map-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-map"></i><span>Mapas</span><i class="bi bi-chevron-down ms-auto"></i>
+            <a class="nav-link collapsed" th:href="@{/supervisor/listaCuadrillas}">
+                <i class="bi bi-layout-text-window-reverse"></i>
+                <span>Cuadrillas</span>
             </a>
-            <ul id="map-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a th:href="@{/analistaDespliegue/mapaSitios}">
-                        <i class="bi bi-circle"></i><span>Mapa de sitios</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/analistaDespliegue/mapaTickets}">
-                        <i class="bi bi-circle"></i><span>Mapa de tickets</span>
-                    </a>
-                </li>
-            </ul>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" th:href="@{/supervisor/mapaTickets}">
+                <i class="bi bi-grid"></i>
+                <span>Mapa</span>
+            </a>
+        </li>
+
+        <!-- End Icons Nav -->
+
+        <!-- End Components Nav -->
+
     </ul>
 
-</aside>
+</aside><!-- End Sidebar-->
 </html>
