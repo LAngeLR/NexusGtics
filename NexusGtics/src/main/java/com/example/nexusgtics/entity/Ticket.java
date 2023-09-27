@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -16,17 +17,17 @@ public class Ticket {
     @Column(name = "idTickets", nullable = false)
     private Integer idTickets;
 
-    @Column(name = "descripcion", nullable = false, length = 45)
+    @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
     @Column(name = "estado", nullable = false)
     private Integer estado;
 
     @Column(name = "fechaCreacion", nullable = false)
-    private Instant fechaCreacion;
+    private LocalDate fechaCreacion;
 
     @Column(name = "fechaCierre")
-    private Instant fechaCierre;
+    private LocalDate fechaCierre;
 
     @Column(name = "usuarioSolicitante", length = 70)
     private String usuarioSolicitante;
@@ -36,7 +37,7 @@ public class Ticket {
     private Usuario idSupervisorEncargado;
 
     @ManyToOne
-    @JoinColumn(name = "idUsuarioCreador", nullable = false)
+    @JoinColumn(name = "idUsuarioCreador")
     private Usuario idUsuarioCreador;
 
     @ManyToOne

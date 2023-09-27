@@ -73,20 +73,21 @@
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Empresa</th>
-                <th scope="col">Sitio</th>
                 <th scope="col">Usuario</th>
+                <th scope="col">Sitio</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Fecha inicio</th>
                 <th scope="col">Fecha vencimiento</th>
-                <th scope="col">   </th>
+                <th scope="col">Acciones</th>
               </tr>
               </thead>
               <tbody>
               <tr th:each="ticket, info: ${listaTicket}">
                 <th th:text="${info.index + 1}" scope="row"></th>
                 <td th:text="${ticket.idEmpresaAsignada.nombre}"></td>
-                <td th:text="${ticket.idUsuarioCreador.nombre}"></td>
-                <td th:text="${ticket.estado}"><span class="badge text-bg-danger"> </span></td>
+                <td th:text="${ticket.usuarioSolicitante}"></td>
+                <td th:text="${ticket.idSitios.provincia}"></td>
+                <td th:text="${ticket.estado}"></td>
                 <td th:text="${ticket.fechaCreacion}"></td>
                 <td th:text="${ticket.fechaCierre}"></td>
                 <td>

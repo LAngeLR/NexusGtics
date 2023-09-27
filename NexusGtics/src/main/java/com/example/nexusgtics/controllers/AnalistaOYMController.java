@@ -1,19 +1,22 @@
 package com.example.nexusgtics.controllers;
 
-import com.example.nexusgtics.entity.Equipo;
-import com.example.nexusgtics.entity.Sitio;
-import com.example.nexusgtics.entity.Ticket;
+import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.EmpresaRepository;
 import com.example.nexusgtics.repository.EquipoRepository;
 import com.example.nexusgtics.repository.SitioRepository;
 import com.example.nexusgtics.repository.TicketRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,12 +92,22 @@ public class AnalistaOYMController {
         return "AnalistaOYM/oymListaTickets";
     }
 
+    /* DIRECCIONAR A FORMULARIO*/
     @GetMapping("/crearTicket")
     public String crearTicket(Model model) {
         model.addAttribute("listaEmpresa", empresaRepository.findAll());
-        model.addAttribute("listaSitio", sitioRepository.findAll());
+        model.addAttribute("listaSitios", sitioRepository.findAll());
 
         return "AnalistaOYM/oymCrearTicket";
+    }
+
+    /*CREAR NUEVO TICKET*/
+    @PostMapping("/saveTicket")
+    public String saveTicket( Ticket ticket,
+                              RedirectAttributes attr){
+
+        ticketRepository.save(ticket);
+        return "redirect:/analistaOYM/ticket";
     }
 
     @GetMapping("/editarTicket")
