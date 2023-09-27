@@ -92,7 +92,8 @@ public class AdminController {
     }
 
     @GetMapping({"/crearUsuario","crearusuario"})
-    public String crearUsuario(Model model){
+    public String crearUsuario(Model model,
+                               @ModelAttribute("usuario") Usuario usuario){
 
         model.addAttribute("listaEmpresa", empresaRepository.findAll());
         model.addAttribute("listaCargo", cargoRepository.findAll());
@@ -110,14 +111,15 @@ public class AdminController {
             }
             Optional<Usuario> optUsuario = usuarioRepository.findById(id);
             if(optUsuario.isPresent()){
-                Usuario usuario = optUsuario.get();
-                model.addAttribute("usuario", usuario);
+                Usuario usuario1 = optUsuario.get();
+                model.addAttribute("usuario", usuario1);
                 return "Administrador/vistaUsuario";
             } else {
                 return "redirect:/admin/listaUsuario";
             }
         } catch (NumberFormatException e) { //errores
-
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
             return "Administrador/crearUsuario";
         }
     }
@@ -125,18 +127,18 @@ public class AdminController {
     /*CREAR NUEVO USUARIO*/
     @PostMapping("/saveUsuario")
     public String saveUsuario(@RequestParam("imagenSubida") MultipartFile file,
-                              @Valid Usuario usuario, BindingResult bindingResult,
+                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
 
-        if (usuario.getArchivo() == null) {
-            usuario.setArchivo(new Archivo());
-        }
+        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
 
-        String fileName = file.getOriginalFilename();
-        try{
-            //validación de nombre, apellido y correo
-            if (!bindingResult.hasErrors()){
+            if (usuario.getArchivo() == null) {
+                usuario.setArchivo(new Archivo());
+            }
+            String fileName = file.getOriginalFilename();
+            try{
+                //validación de nombre, apellido y correo
                 Archivo archivo = usuario.getArchivo();
                 archivo.setNombre(fileName);
                 archivo.setTipo(1);
@@ -147,29 +149,30 @@ public class AdminController {
                 usuario.getArchivo().setIdArchivos(idImagen);
                 usuarioRepository.save(usuario);
                 return "redirect:/admin/listaUsuario";
-            }else {
-                return "redirect:/admin/listaUsuario";
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
-
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } else { //hay al menos 1 error
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            return "Administrador/crearUsuario";
         }
     }
 
     /*EDITAR USUARIO*/
     @GetMapping({"/editarUsuario","editarusuario"})
-    public String editarUsuario(Model model, @RequestParam("id") String idStr){
+    public String editarUsuario(Model model, @RequestParam("id") String idStr,
+                                @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
 
         try{
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/admin/listaUsuario";
             }
-            Optional<Usuario> usuario1 = usuarioRepository.findById(id);
-            if (usuario1.isPresent()) {
-                Usuario usuario = usuario1.get();
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
                 model.addAttribute("usuario", usuario);
                 model.addAttribute("listaEmpresa", empresaRepository.findAll());
                 model.addAttribute("listaCargo", cargoRepository.findAll());

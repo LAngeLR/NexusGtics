@@ -18,17 +18,16 @@ public class Usuario {
     private Integer id;
 
     @Column(name = "nombre", nullable = false, length = 15)
-    @NotBlank(message = "El nombre no puede estar en blanco")
-    @Pattern(regexp = "^[A-Za-z]+$", message = "El nombre debe contener solo letras")
+    @NotBlank
     private String nombre;
 
     @Column(name = "apellido", nullable = false, length = 15)
-    @NotBlank(message = "El apellido no puede estar en blanco")
-    @Pattern(regexp = "^[A-Za-z]+$", message = "El apellido debe contener solo letras")
+    @NotBlank
     private String apellido;
 
     @Column(name = "correo", nullable = false, length = 45)
-    @NotBlank(message = "El correo no puede estar en blanco")
+    @NotBlank
+    @Email(message = "ingrese un correo electronico")
     private String correo;
 
     @Column(name = "contrasenia", length = 45)
