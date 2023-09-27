@@ -76,8 +76,8 @@
                                 <tr th:each=" ticket, info : ${ticketList}">
                                     <th th:text="${info.index + 1}" scope="row"></th>
                                     <td th:text="${ticket.usuarioSolicitante}"></td>
-                                    <td th:text="${#dates.format(ticket.fechaCreacion, 'yyyy-MM-dd')}"></td>
-                                    <td th:text="${#dates.format(ticket.fechaCierre, 'yyyy-MM-dd')}"></td>
+                                    <td th:text="${ticket.fechaCreacion}"></td>
+                                    <td th:text="${ticket.fechaCierre}"></td>
                                     <td>
                                         <div th:if="${ticket.prioridad == 'Baja prioridad'}">
                                             <span class="badge text-bg-info" th:text="${ticket.prioridad}">Baja Prioridad</span>
