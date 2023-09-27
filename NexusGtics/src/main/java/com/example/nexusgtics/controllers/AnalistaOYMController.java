@@ -3,12 +3,14 @@ package com.example.nexusgtics.controllers;
 import com.example.nexusgtics.entity.Equipo;
 import com.example.nexusgtics.entity.Sitio;
 import com.example.nexusgtics.entity.Ticket;
+import com.example.nexusgtics.repository.EmpresaRepository;
 import com.example.nexusgtics.repository.EquipoRepository;
 import com.example.nexusgtics.repository.SitioRepository;
 import com.example.nexusgtics.repository.TicketRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,13 +23,17 @@ public class AnalistaOYMController {
     final TicketRepository ticketRepository;
     final SitioRepository sitioRepository;
 
+
     final EquipoRepository equipoRepository;
+    final EmpresaRepository empresaRepository;
 
 
-    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository ){
+    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1){
         this.sitioRepository = sitioRepository;
         this.ticketRepository = ticketRepository;
         this.equipoRepository = equipoRepository;
+
+        this.empresaRepository = empresaRepository1;
     }
 
     @GetMapping("/")
@@ -84,7 +90,10 @@ public class AnalistaOYMController {
     }
 
     @GetMapping("/crearTicket")
-    public String crearTicket(){
+    public String crearTicket(Model model) {
+        model.addAttribute("listaEmpresa", empresaRepository.findAll());
+        model.addAttribute("listaSitio", sitioRepository.findAll());
+
         return "AnalistaOYM/oymCrearTicket";
     }
 
@@ -124,6 +133,7 @@ public class AnalistaOYMController {
     public String comentarios(){
         return "AnalistaOYM/oymComentarios";
     }
+
 
 
 
