@@ -21,7 +21,7 @@ public interface SitioRepository extends JpaRepository<Sitio, Integer> {
 
     @Modifying
     @org.springframework.transaction.annotation.Transactional
-    @Query(value ="update nexus.sitios set habilitado = false where idSitios = ?1", nativeQuery = true )
+    @Query(value    ="update nexus.sitios set habilitado = false where idSitios = ?1", nativeQuery = true )
     void eliminarEmpresa(int id);
 
 }
