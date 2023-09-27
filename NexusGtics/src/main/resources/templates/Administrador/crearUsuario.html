@@ -43,8 +43,12 @@
                   </div>
 
                   <div class="mb-3">
-                    <label for="correo">Correo:</label>
-                    <input type="text" class="form-control" name="correo" id="correo" >
+                    <label class="form-label">Correo:</label>
+                    <input th:field="*{correo}" type="text" th:class="${#fields.hasErrors('correo')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
+                      Mensaje de error de correo
+                    </div>
                   </div>
 
                   <input type="hidden" name="contrasenia" id="contrasenia" th:value="${codigoAleatorio}">
@@ -61,7 +65,7 @@
                     <select class="form-select" name="cargo" id="cargo">
                       <option value="-1">--Seleccione un cargo--</option>
                       <option th:each="cargo: ${listaCargo}"
-                              th:unless="${cargo.nombreCargo == 'Superadmin' || cargo.nombreCargo == 'Administrador'}"
+                              th:unless="${cargo.nombreCargo == 'Super administrador' || cargo.nombreCargo == 'Administrador'}"
                               th:text="${cargo.nombreCargo}" th:value="${cargo.idCargos}">Open this select menu</option>
                     </select>
                   </div>

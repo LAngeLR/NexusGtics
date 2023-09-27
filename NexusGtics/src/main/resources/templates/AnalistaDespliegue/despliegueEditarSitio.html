@@ -119,15 +119,16 @@
                 </div>
                 <br><br>
                 <div class="col-md-6">
-                  <div class="mb-3">
+<!--                  <div class="mb-3">-->
 <!--                    <label for="imagenSubida" class="form-label">Foto de Sitio:</label>-->
-<!--                      <div class="card mx-auto" style="width: 250px; max-height: 250px">-->
-<!--                        <img id="imgPreview" th:src="@{|image/${sitio.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">-->
-<!--                      </div>-->
-<!--                      <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"-->
-<!--                             accept="image/*" onchange="previewImage(event, '#imgPreview')">-->
-<!--                    <br>-->
-<!--                    <br>-->
+<!--                    <div class="card mx-auto" style="width: 250px; max-height: 250px">-->
+<!--                      <img id="imgPreview" th:src="@{|image/${sitio.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">-->
+<!--                    </div>-->
+<!--                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"-->
+<!--                           accept="image/*" onchange="previewImage(event, '#imgPreview')">-->
+<!--                  </div>-->
+                  <div class="mb-3">
+
                     <label >Ubicación del sitio:</label>
                     <div class="d-flex justify-content-center align-items-center">
                       <div class="card-body pt-3">
@@ -193,6 +194,7 @@
 
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/foto.js}"></script>
 
 </body>
 
