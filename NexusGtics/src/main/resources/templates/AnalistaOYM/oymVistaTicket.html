@@ -69,39 +69,46 @@
                             <div class="tab-pane fade show active profile-overview" id="datos-overview">
                                 <h5 class="card-title" style="color: #095444">Datos generale del Ticket</h5>
 
-                                <form method="POST" action="" enctype="multipart/form-data" th:object="${ticket}">
+                                <form method="POST" action="" enctype="multipart/form-data" th:object="${ticket}" disabled>
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Usuario creador:</div>
                                         <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{idUsuarioCreador.nombre}">
+                                            <input type="text" th:field="*{idUsuarioCreador.nombre}" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Usuario solicitante:</div>
+                                        <div class="col-lg-9 col-md-8">
+                                            <input type="text" th:field="*{usuarioSolicitante}" disabled>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Tipo de ticket</div>
                                         <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{idTipoTicket.nombreTipoTicket}">
+                                            <input type="text" th:field="*{idTipoTicket.nombreTipoTicket}" disabled>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Empresa proveedora</div>
                                         <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{idEmpresaAsignada.nombre}">
+                                            <input type="text" th:field="*{idEmpresaAsignada.nombre}" disabled>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Sitio asignado</div>
                                         <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{idSitios.provincia}">
+                                            <input type="text" th:field="*{idSitios.provincia}" disabled>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Estado</div>
                                         <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{estado}">
+                                            <input type="text" th:field="*{estado}" disabled>
                                         </div>
                                     </div>
 
@@ -109,7 +116,7 @@
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Fecha de vencimiento:</div>
                                         <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{fechaCierre}">
+                                            <input type="text" th:field="*{fechaCierre}" disabled>
                                         </div>
                                     </div>
 

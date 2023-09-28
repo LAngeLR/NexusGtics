@@ -66,14 +66,11 @@
                     <div class="pagetitle">
                         <h1 class="card-title">Editar ticket</h1>
                     </div>
-                    <form method="POST" action="" enctype="multipart/form-data">
+                    <form method="POST" th:action="@{/analistaOYM/saveTicket}" th:object="${ticket}" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
+                                <input type="hidden" class="form-control" th:field="*{id}">
 
-                                    <label for="nombre">Id de ticket:</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre" value="2" disabled>
-                                </div>
 
                                 <div class="mb-3">
 

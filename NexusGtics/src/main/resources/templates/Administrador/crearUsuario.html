@@ -28,18 +28,32 @@
             <div class="pagetitle" style="margin-top: -35px;">
               <h1 class="card-title">Creación de usuario</h1>
             </div>
+            <div class="alert alert-danger" role="alert" th:if="${msgCargo != null}" th:text="${msgCargo}">
+              A simple success alert—check it out!
+            </div>
+            <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}">
+              A simple success alert—check it out!
+            </div>
             <form method="POST" th:action="@{/admin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
               <div class="row">
                 <div class="col-md-6">
                   <input type="hidden" class="form-control" name="idJuego" id="idJuego">
                   <div class="mb-3">
-                    <label for="nombre">Nombres:</label>
-                    <input type="text" class="form-control" name="nombre" id="nombre" >
+                    <label class="form-label">Nombres:</label>
+                    <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
+                      Mensaje de error de nombre
+                    </div>
                   </div>
 
                   <div class="mb-3">
-                    <label for="apellido">Apellidos:</label>
-                    <input type="text" class="form-control" name="apellido" id="apellido" >
+                    <label class="form-label">Apellidos:</label>
+                    <input th:field="*{apellido}" type="text" th:class="${#fields.hasErrors('apellido')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}">
+                      Mensaje de error de nombre
+                    </div>
                   </div>
 
                   <div class="mb-3">
@@ -51,14 +65,21 @@
                     </div>
                   </div>
 
+                  <!--div class="mb-3">
+                    <label class="form-label">DNI:</label>
+                    <input type="text" th:field="*{dni}" class="form-control" >
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('dni')}" th:errors="${#fields.hasErrors('dni')?'form-control is-invalid':'form-control'}">
+                      Mensaje de error de dni
+                    </div>
+                  </div-->
+
                   <input type="hidden" name="contrasenia" id="contrasenia" th:value="${codigoAleatorio}">
 
                   <input type="hidden" name="habilitado" id="habilitado" value="1">
 
                   <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:value="${fechaActual}">
                   <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" value="0">
-                  <input type="hidden" name="dni" id="dni" value="0">
-                  <input type="hidden" name="descripcion" id="descripcion" value="-">
 
                   <div class="mb-3">
                     <label for="cargo" class="form-label">Selector de cargos</label>
@@ -77,6 +98,14 @@
                       <option th:each="empresa: ${listaEmpresa}"
                               th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}">Open this select menu</option>
                     </select>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Descripción:</label>
+                    <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
+                      Mensaje de error de descripcion
+                    </div>
                   </div>
                 </div>
                 <br><br>
