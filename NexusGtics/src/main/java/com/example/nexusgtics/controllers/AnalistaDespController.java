@@ -38,29 +38,34 @@ public class AnalistaDespController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping(value = {"/", ""})
     public String paginaPrincipal(){
         return "AnalistaDespliegue/analistaDespliegue";
     }
 
     @GetMapping("/listaSitio")
     public String listaSitio(Model model){
-
         List<Sitio>  listaSitio = sitioRepository.findAll();
-
         model.addAttribute("listaSitio",listaSitio);
-
         return "AnalistaDespliegue/despliegueListaSitio";
     }
 
     @GetMapping("/editarSitio")
-    public String editarSitio(Model model, @RequestParam("id") int id){
-        Optional<Sitio> optSitio = sitioRepository.findById(id);
-        if(optSitio.isPresent()){
-            Sitio sitio = optSitio.get();
-            model.addAttribute("sitio", sitio);
-            return "AnalistaDespliegue/despliegueEditarSitio";
-        }else {
+    public String editarSitio(Model model, @RequestParam("id") String idStr){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !sitioRepository.existsById(id)) {
+                return "redirect:/analistaDespliegue/listaSitio";
+            }
+            Optional<Sitio> optSitio = sitioRepository.findById(id);
+            if(optSitio.isPresent()){
+                Sitio sitio = optSitio.get();
+                model.addAttribute("sitio", sitio);
+                return "AnalistaDespliegue/despliegueEditarSitio";
+            }else {
+                return "redirect:/analistaDespliegue/listaSitio";
+                }
+        } catch (NumberFormatException e) {
             return "redirect:/analistaDespliegue/listaSitio";
         }
 
