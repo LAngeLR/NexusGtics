@@ -1,5 +1,6 @@
 package com.example.nexusgtics.repository;
 
+import com.example.nexusgtics.entity.Formulario;
 import com.example.nexusgtics.entity.Ticket;
 import com.example.nexusgtics.entity.Usuario;
 import jakarta.transaction.Transactional;
@@ -33,5 +34,15 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query(nativeQuery = true, value = "SELECT estado FROM tickets where idTickets=?1")
     int obtenerEstado(int idTicket);
 
+    //------------------------ Tecnico --------------------//
+    //obtener descripcion de formulario
+
+    @Query(nativeQuery = true, value = "SELECT descripcion FROM formularios where idTickets=?1")
+    int obtenerDescripcion(int idTicket);
+    //List<Formulario> obtenerDescripcion(int idTicket);
+
+    //@Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE estado != ?1")
+    //    List<Ticket> listaTicketsModificado(int valor1);
+    //Actualizar foto
 
 }

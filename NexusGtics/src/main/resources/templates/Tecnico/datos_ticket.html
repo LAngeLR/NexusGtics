@@ -106,6 +106,7 @@
                                         </select> -->
 
                                         <select class="form-select" aria-label="Default select example">
+                                            <option value="-1">--Seleccione el estado--</option>
                                             <option th:each="cargo: ${ticket}"
                                                     th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5 || ticket.estado==6 || ticket.estado==2 || ticket.estado==1}"
                                                     th:value="${ticket.estado}">Progreso</option>

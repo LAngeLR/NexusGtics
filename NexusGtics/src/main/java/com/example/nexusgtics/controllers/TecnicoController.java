@@ -3,13 +3,11 @@ import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import jakarta.validation.Valid;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.List;
@@ -109,8 +107,9 @@ public class TecnicoController {
 
 
     /*Formulario*/
-    @GetMapping("/formulario")
-    public String pagformulario(Model model,@RequestParam("id") int id ){
+    @GetMapping({"/formulario", "formulario"})
+    public String pagformulario(Model model, @RequestParam("id") String idStr,
+                                @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult){
         /*List<Ticket> lista = ticketRepository.findAll();
         model.addAttribute("ticketList", lista);
 
@@ -119,15 +118,37 @@ public class TecnicoController {
         model.addAttribute("usuarioList", list);
         model.addAttribute("usuario", usuario);*/
 
-        Optional <Ticket> optionalTicket = ticketRepository.findById(id);
-        if(optionalTicket.isPresent()){
+        /*Optional <Ticket> optionalTicket = ticketRepository.findById(id);
+        Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+        if(optionalTicket.isPresent() && optionalFormulario.isPresent()){
             Ticket ticket = optionalTicket.get();
+            Formulario formulario = optionalFormulario.get();
             model.addAttribute("ticket", ticket);
+            model.addAttribute("formulario",formulario);
         }
 
         model.addAttribute("listaUsuario", usuarioRepository.findAll());
         model.addAttribute("ticketList", ticketRepository.findAll());
-        return "Tecnico/formulario";
+        return "Tecnico/formulario";*/
+
+        try {
+            int id = Integer.parseInt(idStr);
+            if(id <=0 || !formularioRepository.existsById(id)){
+                return "redirect:/tecnico/verTicket";
+            }
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            if(optionalFormulario.isPresent()){
+                formulario = optionalFormulario.get();
+                model.addAttribute("formulario", formulario);
+                model.addAttribute("idTick", formularioRepository.obtenerid(id));
+                return "Tecnico/formulario";
+            }else{
+                return "redirect:/tecnico/verTicket";
+            }
+        }
+        catch (NumberFormatException e){
+            return "redirect:/tecnico/verTicket";
+        }
     }
 
     /* Guardar Datos*/
