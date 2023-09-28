@@ -44,7 +44,9 @@ public class TecnicoController {
 
     }
     @GetMapping(value = {"/", ""})
-    public String paginaPrincipal(){
+    public String paginaPrincipal(Model model){
+        List<Ticket> listaT= ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
             return "Tecnico/tecnico";
     }
     @GetMapping("/perfiltecnico")
@@ -64,6 +66,8 @@ public class TecnicoController {
     @GetMapping("/comentarios")
     public String pagcomentarios(Model model,@RequestParam("id") int id,
     RedirectAttributes attr){
+        List<Ticket> listaT= ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if(optionalTicket.isPresent()){
             Ticket ticket = optionalTicket.get();
@@ -79,6 +83,8 @@ public class TecnicoController {
     public String pagdashboard(Model model){
         List<Ticket> lista = ticketRepository.findAll();
         model.addAttribute("ticketList", lista);
+        List<Ticket> listaT= ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
         return "Tecnico/dashboard";
     }
 
@@ -88,6 +94,8 @@ public class TecnicoController {
         //'listar'
         List<Ticket> lista = ticketRepository.findAll();
         model.addAttribute("ticketList", lista);
+        List<Ticket> listaT= ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
         return "Tecnico/ticket_asignado";
     }
     //-----------------------------------------------------------------------
@@ -108,6 +116,8 @@ public class TecnicoController {
       //  }else{
         //    return "Tecnico/ticket_asignado";
       //  }
+        List<Ticket> listaT= ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
         try{
             if(id <=0 || !ticketRepository.existsById(id)){
                 return "redirect:/ticket/ticketasignado";
@@ -176,6 +186,8 @@ public class TecnicoController {
     @GetMapping("/desplazamiento")
     public String pagdesplazamiento(Model model,@RequestParam("id") int id,
                                     RedirectAttributes attr){
+        List<Ticket> listaT= ticketRepository.findAll();
+        model.addAttribute("listaTicket1", listaT);
 
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if(optionalTicket.isPresent()){
@@ -214,7 +226,8 @@ public class TecnicoController {
         model.addAttribute("listaUsuario", usuarioRepository.findAll());
         model.addAttribute("ticketList", ticketRepository.findAll());
         return "Tecnico/formulario";*/
-
+        List<Ticket> listaT= ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
         try {
             int id = Integer.parseInt(idStr);
             if(id <=0 || !formularioRepository.existsById(id)){
@@ -272,10 +285,12 @@ public class TecnicoController {
     //-----------------------------------------------------------------------
     @GetMapping("/mapa")
     public String pagmapa(Model model){
-        model.addAttribute("sitio", sitioRepository.findAll());
+        List<Ticket> listaT= ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+
+        List<Sitio> sitioList = sitioRepository.findAll();
+        model.addAttribute("sitioList", sitioList);
         return "Tecnico/mapa";
     }
-
-
 
 }
