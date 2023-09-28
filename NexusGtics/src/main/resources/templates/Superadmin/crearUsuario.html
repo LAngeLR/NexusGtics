@@ -56,14 +56,7 @@
                                 <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" value="0">
 
 
-                                <div class="mb-3">
-                                    <label for="empresa" class="form-label">Selector de Empresas</label>
-                                    <select class="form-select" name="empresa" id="empresa">
-                                        <option value="-1">--Seleccione una empresa--</option>
-                                        <option th:each="empresa: ${listaEmpresa}"
-                                                th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}">Open this select menu</option>
-                                    </select>
-                                </div>
+                                <input type="hidden" name="empresa" id="empresa" value="1">
                             </div>
                             <br><br>
                             <div class="col-md-6">
