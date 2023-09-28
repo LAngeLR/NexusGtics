@@ -134,13 +134,22 @@ public class AdminController {
             model.addAttribute("msgCargo", "Escoger un cargo");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
-            return "Administrador/crearUsuario";
+
+            if (usuario.getId() == null) {
+                return "Administrador/crearUsuario";
+            } else {
+                return "Administrador/editarUsuario";
+            }
         }
         if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
             model.addAttribute("msgEmpresa", "Escoger una empresa");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
-            return "Administrador/crearUsuario";
+            if (usuario.getId() == null) {
+                return "Administrador/crearUsuario";
+            } else {
+                return "Administrador/editarUsuario";
+            }
         }
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (usuario.getArchivo() == null) {
@@ -166,7 +175,11 @@ public class AdminController {
         } else { //hay al menos 1 error
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
-            return "Administrador/crearUsuario";
+            if (usuario.getId() == null) {
+                return "Administrador/crearUsuario";
+            } else {
+                return "Administrador/editarUsuario";
+            }
         }
     }
 

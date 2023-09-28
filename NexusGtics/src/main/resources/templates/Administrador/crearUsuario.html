@@ -65,14 +65,14 @@
                     </div>
                   </div>
 
-                  <!--div class="mb-3">
+                  <div class="mb-3">
                     <label class="form-label">DNI:</label>
-                    <input type="text" th:field="*{dni}" class="form-control" >
+                    <input th:field="*{dni}" type="text" th:class="${#fields.hasErrors('dni')?'form-control is-invalid':'form-control'}"/>
                     <div class="invalid-feedback"
-                         th:if="${#fields.hasErrors('dni')}" th:errors="${#fields.hasErrors('dni')?'form-control is-invalid':'form-control'}">
-                      Mensaje de error de dni
+                         th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">
+                      Mensaje de error de correo
                     </div>
-                  </div-->
+                  </div>
 
                   <input type="hidden" name="contrasenia" id="contrasenia" th:value="${codigoAleatorio}">
 

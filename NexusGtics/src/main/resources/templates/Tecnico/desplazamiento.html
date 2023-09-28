@@ -27,9 +27,13 @@
 
         <!-- Template Main CSS File -->
         <link th:href="@{/assets/css/style.css}" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+        <link rel="stylesheet" th:href="@{/leaflet/dist/leaflet-routing-machine.css}"/>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+        <script th:href="@{/leaflet/dist/leaflet-routing-machine.js}"></script>
+
     <style>
-        #mi_mapa{
+        #map{
             min-height: 35rem;
             min-width: 20rem;
         }
@@ -248,9 +252,8 @@
             <div class="col-xl-8">
                 <div class="card">
                     <div class="card-body pt-3">
-                        <div id="mi_mapa"></div>
-                        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                        <script>
+                        <div id="map"></div>
+                        <!--<script>
                             let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
                             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -258,8 +261,25 @@
                             L.marker([-12.06802,-77.03462]).addTo(map)
                                 .bindPopup('Ticket aquí')
                                 .openPopup();
-                        </script>
+                        </script>-->
                         <!-- MAPA -->
+                        <script>
+                            var map = L.map('map').setView([-12.06802,-77.03462],18)
+                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            }).addTo(map);
+                            var marker = L.marker([-12.07319, -77.03498].addTo(map));
+                            //click event
+                            map.on('click', function (e){
+                                var endMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+
+                            L.Routing.control({
+                                waypoints: [
+                                    L.latLng(-12.07319, -77.03498),
+                                    L.latLng(e.latlng.lat, e.latlng.lng) ]
+                                }).addTo(map);
+                            })
+                        </script>
                     </div>
                 </div>
 
