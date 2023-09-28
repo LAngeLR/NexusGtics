@@ -1,5 +1,6 @@
 package com.example.nexusgtics.controllers;
 
+import com.example.nexusgtics.entity.Sitio;
 import com.example.nexusgtics.entity.Ticket;
 import com.example.nexusgtics.entity.Usuario;
 import com.example.nexusgtics.repository.TicketRepository;
@@ -33,7 +34,7 @@ public class SupervisorController {
         this.ticketRepository = ticketRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping( {"/",""})
     public String paginaPrincipal(){
         return "Supervisor/menuSupervisor";
     }
@@ -55,6 +56,7 @@ public class SupervisorController {
 
         Map<Integer, Integer> trabajosFinalizadosPorCuadrilla = new HashMap<>();
         Map<Integer, Integer> numeroTecnicosPorCuadrilla = new HashMap<>();
+
 
         for (Cuadrilla cuadrilla : listaCuadrilla) {
             int trabajosFinalizados;
@@ -79,47 +81,68 @@ public class SupervisorController {
 
 
     @GetMapping("/ticketNuevo")
-    public String nuevoTicket(Model model, @RequestParam("id") int id){
-        Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
-        List<Usuario> listaSupervisor = usuarioRepository.listaDeSupervisores(5);
-        List<Cuadrilla> listaCuadrillas = cuadrillaRepository.findAll();
+    public String nuevoTicket(Model model, @RequestParam("id") String idStr){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/supervisor/listaTickets";
+            }
+            Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
+            List<Usuario> listaSupervisor = usuarioRepository.listaDeSupervisores(5);
+            List<Cuadrilla> listaCuadrillas = cuadrillaRepository.findAll();
+            if (ticketBuscado.isPresent()) {
+                Ticket ticket = ticketBuscado.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("listaSupervisores",listaSupervisor);
+                model.addAttribute("listaCuadrillas",listaCuadrillas);
 
-        if (ticketBuscado.isPresent()) {
-            Ticket ticket = ticketBuscado.get();
-            model.addAttribute("ticket", ticket);
-            model.addAttribute("listaSupervisores",listaSupervisor);
-            model.addAttribute("listaCuadrillas",listaCuadrillas);
-
-            return "supervisor/ticketNuevo";
-        } else {
+                return "Supervisor/ticketNuevo";
+            } else {
+                return "redirect:/supervisor/listaTickets";
+            }
+        } catch (NumberFormatException e) {
             return "redirect:/supervisor/listaTickets";
         }
     }
 
     @GetMapping("/ticketProceso")
-    public String procesoTicket(Model model, @RequestParam("id") int id){
+    public String procesoTicket(Model model, @RequestParam("id") String idStr){
 
-        Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
-
-        if (ticketBuscado.isPresent()) {
-            Ticket ticket = ticketBuscado.get();
-            model.addAttribute("tickets", ticket);
-            return "supervisor/ticketProceso";
-        } else {
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/supervisor/listaTickets";
+            }
+            Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
+            if (ticketBuscado.isPresent()) {
+                Ticket ticket = ticketBuscado.get();
+                model.addAttribute("tickets", ticket);
+                return "Supervisor/ticketProceso";
+            } else {
+                return "redirect:/supervisor/listaTickets";
+            }
+        } catch (NumberFormatException e) {
             return "redirect:/supervisor/listaTickets";
         }
     }
 
     @GetMapping("/ticketCerrado")
-    public String cerradoTicket(Model model, @RequestParam("id") int id){
+    public String cerradoTicket(Model model, @RequestParam("id") String idStr){
 
-        Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
-
-        if (ticketBuscado.isPresent()) {
-            Ticket ticket = ticketBuscado.get();
-            model.addAttribute("tickets", ticket);
-            return "supervisor/ticketCerrado";
-        } else {
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/supervisor/listaTickets";
+            }
+            Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
+            if (ticketBuscado.isPresent()) {
+                Ticket ticket = ticketBuscado.get();
+                model.addAttribute("tickets", ticket);
+                return "Supervisor/ticketCerrado";
+            } else {
+                return "redirect:/supervisor/listaTickets";
+            }
+        } catch (NumberFormatException e) {
             return "redirect:/supervisor/listaTickets";
         }
     }
@@ -231,74 +254,39 @@ public class SupervisorController {
         return "redirect:/supervisor/listaCuadrillas";
     }
 
-
-
-
     @GetMapping("/detallesCuadrilla")
-    public String detallesCuadrilla(Model model, @RequestParam("id") int id){
+    public String detallesCuadrilla(Model model, @RequestParam("id") String idStr){
 
-        Optional<Cuadrilla> optShipper = cuadrillaRepository.findById(id);
-        List<Usuario> integrantesCuadrilla = usuarioRepository.listaDeTecnicosPorCuadrilla(id);
-        List<Cuadrilla> listaCuadrilla = cuadrillaRepository.findAll();
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !cuadrillaRepository.existsById(id)) {
+                return "redirect:/supervisor/listaCuadrillas";
+            }
+            Optional<Cuadrilla> optShipper = cuadrillaRepository.findById(id);
+            List<Usuario> integrantesCuadrilla = usuarioRepository.listaDeTecnicosPorCuadrilla(id);
+            List<Cuadrilla> listaCuadrilla = cuadrillaRepository.findAll();
+            List<Ticket> listaTicketsCerradosPorCuadrilla = ticketRepository.listaTicketsCerradosPorCuadrilla(id);
 
-        Map<Integer, Integer> trabajosFinalizadosPorCuadrilla = new HashMap<>();
+            Map<Integer, Integer> trabajosFinalizadosPorCuadrilla = new HashMap<>();
 
-        for (Cuadrilla cuadrilla : listaCuadrilla) {
-            Integer trabajosFinalizados = cuadrillaRepository.contarTrabajosFinalizados(cuadrilla.getIdCuadrillas()); // Reemplaza "getId()" con el método adecuado para obtener el ID de la cuadrilla
-            trabajosFinalizados = (trabajosFinalizados != null) ? trabajosFinalizados : 0;
-            trabajosFinalizadosPorCuadrilla.put(cuadrilla.getIdCuadrillas(), trabajosFinalizados);
-        }
+            for (Cuadrilla cuadrilla : listaCuadrilla) {
+                Integer trabajosFinalizados = cuadrillaRepository.contarTrabajosFinalizados(cuadrilla.getIdCuadrillas()); // Reemplaza "getId()" con el método adecuado para obtener el ID de la cuadrilla
+                trabajosFinalizados = (trabajosFinalizados != null) ? trabajosFinalizados : 0;
+                trabajosFinalizadosPorCuadrilla.put(cuadrilla.getIdCuadrillas(), trabajosFinalizados);
+            }
 
-        if (optShipper.isPresent()) {
-            Cuadrilla cuadrilla = optShipper.get();
-            model.addAttribute("cuadrilla", cuadrilla);
-            model.addAttribute("integrantes", integrantesCuadrilla);
-            model.addAttribute("trabajosFinalizadosPorCuadrilla", trabajosFinalizadosPorCuadrilla);
-            return "supervisor/detallesCuadrilla";
-        } else {
-            return "redirect:/supervisor/listCuadrillas";
+            if (optShipper.isPresent()) {
+                Cuadrilla cuadrilla = optShipper.get();
+                model.addAttribute("cuadrilla", cuadrilla);
+                model.addAttribute("integrantes", integrantesCuadrilla);
+                model.addAttribute("trabajosFinalizadosPorCuadrilla", trabajosFinalizadosPorCuadrilla);
+                model.addAttribute("listaTicketsCerradosPorCuadrilla", listaTicketsCerradosPorCuadrilla);
+                return "Supervisor/detallesCuadrilla";
+            } else {
+                return "redirect:/supervisor/listaCuadrillas";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/supervisor/listaCuadrillas";
         }
     }
 }
-
-//    @GetMapping("/detallesCuadrilla")
-//    public String detallesCuadrilla(Model model, @RequestParam("id") String idParam) {
-//        int id = 0; // Valor predeterminado en caso de que no se pueda convertir el ID
-//
-//        try {
-//            // Intenta convertir el parámetro "id" a un entero
-//            id = Integer.parseInt(idParam);
-//        } catch (NumberFormatException e) {
-//            // Si ocurre una excepción al convertir, establece el ID en 0 (letras o valor no válido)
-//            id = 0;
-//        }
-//
-//        // Verifica si el ID es 0 (no válido) o existe en la base de datos
-//        if (id == 0 || !cuadrillaRepository.existsById(id)) {
-//            // El ID no es válido o no existe, puedes manejar la lógica de manejo de error aquí
-//            return "redirect:/supervisor/listaCuadrillas"; // O redirigir a una página de error personalizada
-//        }
-//
-//        // El ID es válido y existe, continúa con la lógica para mostrar detalles de la Cuadrilla
-//        Optional<Cuadrilla> optShipper = cuadrillaRepository.findById(id);
-//        List<Usuario> integrantesCuadrilla = usuarioRepository.listaDeTecnicosPorCuadrilla(id);
-//        List<Cuadrilla> listaCuadrilla = cuadrillaRepository.findAll();
-//
-//        Map<Integer, Integer> trabajosFinalizadosPorCuadrilla = new HashMap<>();
-//
-//        for (Cuadrilla cuadrilla : listaCuadrilla) {
-//            Integer trabajosFinalizados = cuadrillaRepository.contarTrabajosFinalizados(cuadrilla.getIdCuadrillas());
-//            trabajosFinalizados = (trabajosFinalizados != null) ? trabajosFinalizados : 0;
-//            trabajosFinalizadosPorCuadrilla.put(cuadrilla.getIdCuadrillas(), trabajosFinalizados);
-//        }
-//
-//        if (optShipper.isPresent()) {
-//            Cuadrilla cuadrilla = optShipper.get();
-//            model.addAttribute("cuadrilla", cuadrilla);
-//            model.addAttribute("integrantes", integrantesCuadrilla);
-//            model.addAttribute("trabajosFinalizadosPorCuadrilla", trabajosFinalizadosPorCuadrilla);
-//            return "supervisor/detallesCuadrilla";
-//        } else {
-//            return "redirect:/supervisor/listaCuadrillas";
-//        }
-//    }

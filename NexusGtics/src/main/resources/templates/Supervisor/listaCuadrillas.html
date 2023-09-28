@@ -51,12 +51,12 @@
 
                                     <tr th:each="cuadrilla: ${listaCuadrilla}">
                                         <td th:text="${cuadrilla.idCuadrillas}"></td>
-                                        <td th:text="${cuadrilla.tecnico.nombre}"></td>
+                                        <td th:text="${cuadrilla.tecnico.nombre}+ ' ' + ${cuadrilla.tecnico.apellido}"></td>
                                         <td th:text="${trabajosFinalizadosPorCuadrilla[cuadrilla.idCuadrillas]}"></td>
                                         <td> 5</td>
                                         <td> 1</td>
-                                        <td th:if="${numeroTecnicosPorCuadrilla[cuadrilla.idCuadrillas] == 5}"><center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/supervisor/detallesCuadrilla?id=' + ${cuadrilla.idCuadrillas}}">+</a></center></td>
-                                        <td th:if="${numeroTecnicosPorCuadrilla[cuadrilla.idCuadrillas] < 5}"><center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/supervisor/crearCuadrilla?id=' + ${cuadrilla.idCuadrillas}}">+</a></center></td>
+                                        <td th:if="${numeroTecnicosPorCuadrilla[cuadrilla.idCuadrillas] == 5}"><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/detallesCuadrilla?id=' + ${cuadrilla.idCuadrillas}}">+</a></center></td>
+                                        <td th:if="${numeroTecnicosPorCuadrilla[cuadrilla.idCuadrillas] < 5}"><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/crearCuadrilla?id=' + ${cuadrilla.idCuadrillas}}">+</a></center></td>
                                     </tr>
                                 </tbody>
                             </table>
