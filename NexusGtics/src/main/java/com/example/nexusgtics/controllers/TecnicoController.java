@@ -27,7 +27,6 @@ public class TecnicoController {
     final ComentarioRepository comentarioRepository;
     final ArchivoRepository archivoRepository;
     private final FormularioRepository formularioRepository;
-    private final EquipoRepository equipoRepository;
 
     public TecnicoController(TicketRepository ticketRepository,
                              UsuarioRepository usuarioRepository,
@@ -42,9 +41,9 @@ public class TecnicoController {
         this.comentarioRepository = comentarioRepository;
         this.archivoRepository = archivoRepository;
         this.formularioRepository = formularioRepository;
-        this.equipoRepository = equipoRepository;
+
     }
-    @GetMapping("/")
+    @GetMapping(value = {"/", ""})
     public String paginaPrincipal(){
             return "Tecnico/tecnico";
     }
