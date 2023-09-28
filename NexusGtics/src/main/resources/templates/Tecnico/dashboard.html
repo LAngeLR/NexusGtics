@@ -168,12 +168,12 @@
                                                 width: 2
                                             },
                                             xaxis: {
-                                                type: 'datetime',
-                                                categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+                                                type: 'text',
+                                                categories: ["2017", "2018", "2019", "2020", "2021", "2022", "2023"]
                                             },
                                             tooltip: {
                                                 x: {
-                                                    format: 'dd/MM/yy HH:mm'
+                                                    format: 'dd/MM/yy'
                                                 },
                                             }
                                         }).render();
@@ -189,7 +189,7 @@
                     <!-- Recent Sales -->
                     <div class="col-12">
                         <div class="card recent-sales overflow-auto">
-                            <div class="card-body">
+                            <div class="card-body table-responsive">
                                 <h5 class="card-title">Tickets de tu cuadrilla <span>| Cuadrilla 3</span></h5>
 
                                 <table class="table table-borderless datatable">
