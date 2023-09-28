@@ -80,7 +80,7 @@
                     <th scope="col">Tipo de zona</th>
                     <th scope="col">Tipo de sitio</th>
                     <th scope="col">Archivo en csv</th>
-                    <th scope="col">Editar</th>
+                    <th scope="col">Acciones</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -93,7 +93,19 @@
                     <td th:text="${sitio.tipoZona }"></td>
                     <td th:text="${sitio.tipo}"></td>
                     <td><a class="download-link" href="ruta-al-archivo/1.csv" download>1.csv</a></td>
-                    <td><a type="button" class="btn btn-secondary" th:href="@{'/analistaDespliegue/editarSitio?id=' + ${sitio.idSitios}}">Editar</a></td>
+                    <td>
+                      <div class="dropdown">
+                        <button class="btn btn-light dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                          </svg>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" th:href="@{'/analistaDespliegue/editarSitio?id=' + ${sitio.idSitios}}">Editar</a></li>
+                          <li><a class="dropdown-item" th:href="@{'/analistaDespliegue/verSitio?id='+ ${sitio.idSitios}}">Visualizar</a></li>
+                        </ul>
+                      </div>
+                    </td>
                   </tr>
                   </tbody>
 

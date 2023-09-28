@@ -69,7 +69,7 @@
               <div class="row">
                 <div class="col-md-6">
                   <input type="hidden" class="form-control" th:field="*{idSitios}">
-
+                  <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
                   <div class="mb-3">
                     <label class="form-label" >Departamento:</label>
                     <input th:field="*{departamento}" type="text" class="form-control" />
@@ -119,14 +119,14 @@
                 </div>
                 <br><br>
                 <div class="col-md-6">
-<!--                  <div class="mb-3">-->
-<!--                    <label for="imagenSubida" class="form-label">Foto de Sitio:</label>-->
-<!--                    <div class="card mx-auto" style="width: 250px; max-height: 250px">-->
-<!--                      <img id="imgPreview" th:src="@{|image/${sitio.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">-->
-<!--                    </div>-->
-<!--                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"-->
-<!--                           accept="image/*" onchange="previewImage(event, '#imgPreview')">-->
-<!--                  </div>-->
+                  <div class="mb-3">
+                    <label for="imagenSubida" class="form-label">Foto de Sitio:</label>
+                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                      <img id="imgPreview" th:src="@{|image/${sitio.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                    </div>
+                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                  </div>
                   <div class="mb-3">
 
                     <label >Ubicación del sitio:</label>

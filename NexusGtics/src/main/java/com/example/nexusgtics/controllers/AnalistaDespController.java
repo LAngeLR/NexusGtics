@@ -15,8 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,38 +40,85 @@ public class AnalistaDespController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping(value = {"/", ""})
     public String paginaPrincipal(){
         return "AnalistaDespliegue/analistaDespliegue";
     }
 
     @GetMapping("/listaSitio")
     public String listaSitio(Model model){
-
         List<Sitio>  listaSitio = sitioRepository.findAll();
-
         model.addAttribute("listaSitio",listaSitio);
-
         return "AnalistaDespliegue/despliegueListaSitio";
     }
 
     @GetMapping("/editarSitio")
-    public String editarSitio(Model model, @RequestParam("id") int id){
-        Optional<Sitio> optSitio = sitioRepository.findById(id);
-        if(optSitio.isPresent()){
-            Sitio sitio = optSitio.get();
-            model.addAttribute("sitio", sitio);
-            return "AnalistaDespliegue/despliegueEditarSitio";
-        }else {
+    public String editarSitio(Model model, @RequestParam("id") String idStr){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !sitioRepository.existsById(id)) {
+                return "redirect:/analistaDespliegue/listaSitio";
+            }
+            Optional<Sitio> optSitio = sitioRepository.findById(id);
+            if(optSitio.isPresent()){
+                Sitio sitio = optSitio.get();
+                model.addAttribute("sitio", sitio);
+                return "AnalistaDespliegue/despliegueEditarSitio";
+            }else {
+                return "redirect:/analistaDespliegue/listaSitio";
+                }
+        } catch (NumberFormatException e) {
             return "redirect:/analistaDespliegue/listaSitio";
         }
 
     }
 
+    @GetMapping("/verSitio")
+    public String verSitio(Model model, @RequestParam("id") String idStr){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !sitioRepository.existsById(id)) {
+                return "redirect:/analistaDespliegue/listaSitio";
+            }
+            Optional<Sitio> optSitio = sitioRepository.findById(id);
+            if(optSitio.isPresent()){
+                Sitio sitio = optSitio.get();
+                model.addAttribute("sitio", sitio);
+                return "AnalistaDespliegue/despliegueVistaSitio";
+            }else {
+                return "redirect:/analistaDespliegue/listaSitio";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/analistaDespliegue/listaSitio";
+        }
+
+    }
+
+
+
     @PostMapping("/guardarSitio")
-    public String guardarSitio(Sitio sitio){
-        sitioRepository.save(sitio);
-        return "redirect:/analistaDespliegue/listaSitio";
+    public String guardarSitio(@RequestParam("imagenSubida") MultipartFile file,
+                               Sitio sitio,
+                               Model model,
+                               RedirectAttributes attr){
+        if (sitio.getArchivo() == null) {
+            sitio.setArchivo(new Archivo());
+        }
+        String fileName = file.getOriginalFilename();
+        try{
+            Archivo archivo = sitio.getArchivo();
+            archivo.setNombre(fileName);
+            archivo.setTipo(1);
+            archivo.setArchivo(file.getBytes());
+            archivo.setContentType(file.getContentType());
+            archivoRepository.save(archivo);
+            int idImagen = archivo.getIdArchivos();
+            sitio.getArchivo().setIdArchivos(idImagen);
+            sitioRepository.save(sitio);
+            return "redirect:/analistaDespliegue/listaSitio";
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @PostMapping("/guardarEquipo")
