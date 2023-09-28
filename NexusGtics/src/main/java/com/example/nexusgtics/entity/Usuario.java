@@ -18,18 +18,21 @@ public class Usuario {
     private Integer id;
 
     @Column(name = "nombre", nullable = false, length = 45)
-    @NotBlank
+    @NotBlank(message = "El campo no debe estar vacío")
     @Pattern(regexp = "^[A-Za-z ]+$", message = "El nombre solo debe contener letras")
+    @Size(max = 45)
     private String nombre;
 
     @Column(name = "apellido", nullable = false, length = 45)
-    @NotBlank
+    @NotBlank(message = "El campo no debe estar vacío")
     @Pattern(regexp = "^[A-Za-z]+$", message = "El apellido debe contener solo letras")
+    @Size(max = 45)
     private String apellido;
 
     @Column(name = "correo", nullable = false, length = 45)
-    @NotBlank
+    @NotBlank(message = "El campo no debe estar vacío")
     @Email(message = "ingrese un correo electronico")
+    @Size(max = 45)
     private String correo;
 
     @Column(name = "contrasenia", length = 45)
@@ -60,16 +63,10 @@ public class Usuario {
     @JoinColumn(name = "IdCuadrilla")
     private Cuadrilla cuadrilla;
 
-//    @Column(name = "dni")
-//    @Digits(integer = 8, fraction = 0, message = "El DNI debe ser un número de 8 dígitos")
-//    @Min(value = 00000000)
-//    private Integer dni;
-
     @Column(name = "dni")
     @Pattern(regexp = "^[0-9]{8}$", message = "El DNI debe ser un número de 8 dígitos")
     @Size(min = 8, max = 8, message = "El DNI debe tener exactamente 8 dígitos")
     private String dni;
-
 
     @Column(name = "descripcion", length = 130)
     @Size(max = 130, message = "La descripción no puede tener más de 130 caracteres")

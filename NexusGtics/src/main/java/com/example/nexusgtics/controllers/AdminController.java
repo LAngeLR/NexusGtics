@@ -221,7 +221,7 @@ public class AdminController {
     }
 
     @GetMapping({"/crearEmpresa","/crearempresa"})
-    public String crearEmpresa(){
+    public String crearEmpresa(@ModelAttribute("empresa") Empresa empresa){
         return "Administrador/crearEmpresa";
     }
 
@@ -248,9 +248,15 @@ public class AdminController {
     }
 
     @PostMapping("/guardarEmpresa")
-    public String guardarEmpresa(Empresa empresa, RedirectAttributes attr){
-        empresaRepository.save(empresa);
-        return "redirect:/admin/listaEmpresa";
+    public String guardarEmpresa(@ModelAttribute("empresa") @Valid Empresa empresa,
+            BindingResult bindingResult,RedirectAttributes attr){
+
+        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+            empresaRepository.save(empresa);
+            return "redirect:/admin/listaEmpresa";
+        } else { //hay al menos 1 error
+            return "Administrador/crearEmpresa";
+        }
     }
 
     /*PARA VISUALIZAR FOTOS*/

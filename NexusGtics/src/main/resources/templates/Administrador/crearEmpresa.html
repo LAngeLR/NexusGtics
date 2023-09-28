@@ -30,42 +30,68 @@
                     <div class="pagetitle" style="margin-top: -35px;">
                         <h1 class="card-title">Creación de empresa</h1>
                     </div>
-                    <form method="POST" th:action="@{/admin/guardarEmpresa}" enctype="multipart/form-data">
+                    <form method="POST" th:action="@{/admin/guardarEmpresa}" th:object="${empresa}" enctype="multipart/form-data">
                         <div class="row mx-5">
 
                             <div class="mb-3">
-                                <label for="nombre">Nombre:</label>
-                                <input type="text" class="form-control" name="nombre" id="nombre" >
+                                <label class="form-label">Nombre:</label>
+                                <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
+                                    Mensaje de error de nombre
+                                </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="ruc">RUC:</label>
-                                <input type="number" class="form-control" name="ruc" id="ruc" >
+                                <label class="form-label">RUC:</label>
+                                <input th:field="*{ruc}" type="text" th:class="${#fields.hasErrors('ruc')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('ruc')}" th:errors="*{ruc}">
+                                    Mensaje de error de ruc
+                                </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="representante">Representante:</label>
-                                <input type="text" class="form-control" name="representante" id="representante">
+                                <label class="form-label">Representante:</label>
+                                <input th:field="*{representante}" type="text" th:class="${#fields.hasErrors('representante')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('representante')}" th:errors="*{representante}">
+                                    Mensaje de error de representante
+                                </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="correo">Correo electrónico:</label>
-                                <input type="text" class="form-control" name="correo" id="correo">
+                                <label class="form-label">Correo:</label>
+                                <input th:field="*{correo}" type="text" th:class="${#fields.hasErrors('correo')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
+                                    Mensaje de error de correo
+                                </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="telefono">Teléfono:</label>
-                                <input type="number" class="form-control" name="telefono" id="telefono" >
+                                <label class="form-label">Teléfono:</label>
+                                <input th:field="*{telefono}" type="text" th:class="${#fields.hasErrors('telefono')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}">
+                                    Mensaje de error de correo
+                                </div>
                             </div>
 
-                            <div class="mb-3">
+                            <!--div class="mb-3">
                                 <label for="fechaAfiliacion">Fecha de afiliación:</label>
                                 <input type="date" class="form-control" name="fechaAfiliacion" id="fechaAfiliacion" >
-                            </div>
+                            </div-->
+                            <input type="hidden" name="fechaAfiliacion" id="fechaAfiliacion" th:value="${fechaActual}">
+
 
                             <div class="mb-3">
-                                <label for="direccion">Dirección Sede Principal:</label>
-                                <input type="text" class="form-control" name="direccion" id="direccion">
+                                <label class="form-label">Dirección Sede Principal:</label>
+                                <input th:field="*{direccion}" type="text" th:class="${#fields.hasErrors('direccion')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}">
+                                    Mensaje de error de nombre
+                                </div>
                             </div>
                             <br>
                             <div>
@@ -103,6 +129,16 @@
 
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
+<script>
+    // Obtener el campo de fecha por su ID
+    var fechaAfiliacion2Input = document.getElementById("fechaAfiliacion");
+
+    // Obtener la fecha actual en el formato deseado ('yyyy-MM-dd')
+    var fechaActual = new Date().toISOString().split("T")[0];
+
+    // Establecer la fecha actual como valor del campo
+    fechaAfiliacion2Input.value = fechaActual;
+</script>
 
 </body>
 

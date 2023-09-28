@@ -6,16 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="f2df6238-63d4-4ff8-af71-271dbcb293a3" name="Changes" comment="si">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-
       <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/editarUsuario.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/editarUsuario.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/vistaUsuario.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/vistaUsuario.html" afterDir="false" />
-
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/SuperAdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/SuperAdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/crearUsuario.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/crearUsuario.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/editarUsuario.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/editarUsuario.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/listaUsuarioBaneado.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/listaUsuarioBaneado.html" afterDir="false" />
-
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/entity/Empresa.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/entity/Empresa.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/entity/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/entity/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/crearEmpresa.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/crearEmpresa.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +48,6 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-<<<<<<< HEAD
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
@@ -77,30 +70,6 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
     &quot;spring.configuration.checksum&quot;: &quot;3f2e67f494e6d5fb837d4c0e6ddc61c7&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-=======
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Daniel/IdeaProjects/NexusGtics",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "spring.configuration.checksum": "3f2e67f494e6d5fb837d4c0e6ddc61c7",
-    "vue.rearranger.settings.migration": "true"
->>>>>>> 672c11c28ce9ebee4a46e8731e5b302636941f4a
   },
   &quot;keyToStringList&quot;: {
     &quot;DatabaseDriversLRU&quot;: [
@@ -134,7 +103,6 @@
       <workItem from="1695876652884" duration="86000" />
       <workItem from="1695876790084" duration="10271000" />
       <workItem from="1695928066005" duration="1568000" />
-      <workItem from="1695931346405" duration="2894000" />
     </task>
     <task id="LOCAL-00001" summary="superadmin">
       <created>1694814665135</created>
@@ -169,17 +137,6 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="superadmin" />
