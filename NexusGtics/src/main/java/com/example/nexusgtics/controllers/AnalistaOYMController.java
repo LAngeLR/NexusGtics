@@ -9,10 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -112,22 +109,21 @@ public class AnalistaOYMController {
 
     @GetMapping("/editarTicket")
     public String editarTicket(Model model, @RequestParam("id") int id){
+
         Optional<Ticket> optTicket = ticketRepository.findById(id);
         if(optTicket.isPresent()){
             Ticket ticket = optTicket.get();
-            model.addAttribute("ticket",ticket);
-            return "AnalistaOYM/oymEditarTicket";
+            model.addAttribute("ticket", ticket);
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.findAll());
+            return "AnalistaOYM/oymVistaTicket";
+
         }else{
             return "redirect:/analistaOYM/ticket";
         }
 
-
     }
 
-    @GetMapping("/dashboard")
-    public String dashboard(){
-        return "AnalistaOYM/oymDashboard";
-    }
 
     @GetMapping("/verTicket")
     public String verticket(Model model, @RequestParam("id") int id){
@@ -139,6 +135,11 @@ public class AnalistaOYMController {
         }else{
             return "redirect:/analistaOYM/ticket";
         }
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(){
+        return "AnalistaOYM/oymDashboard";
     }
 
 
