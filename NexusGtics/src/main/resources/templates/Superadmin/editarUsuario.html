@@ -64,7 +64,7 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">Empresa</label>
-                                    <select class="form-select" name="empresa" id="empresa">
+                                    <select class="form-select" name="empresa" id="empresa" disabled>
                                         <option th:each="empresa: ${listaEmpresa}"
                                                 th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
                                                 th:selected="${usuario.empresa.idEmpresas == empresa.idEmpresas}">Open this select menu</option>

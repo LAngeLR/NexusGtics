@@ -122,6 +122,38 @@ public class SuperAdminController {
                               Model model,
                               RedirectAttributes attr){
 
+        if(usuario.getNombre().length() > 45){
+            model.addAttribute("msgNombreLargo", "El nombre es demasiado largo.");
+            return "Superadmin/crearUsuario";
+
+        }
+        if(!usuario.getNombre().matches("^[a-zA-Z]+$")){
+            model.addAttribute("msgNombreMalo", "El nombre tiene caracteres inválidos.");
+            return "Superadmin/crearUsuario";
+        }
+
+        if(usuario.getApellido().length() > 45){
+            model.addAttribute("msgApellidoLargo", "El apellido es demasiado largo.");
+            return "Superadmin/crearUsuario";
+
+        }
+        if(!usuario.getApellido().matches("^[a-zA-Z]+$")) {
+            model.addAttribute("msgApellidoMalo", "El apellido tiene caracteres inválidos.");
+            return "Superadmin/crearUsuario";
+        }
+
+        if(usuario.getCorreo().length() > 45){
+            model.addAttribute("msgCorreoLargo", "El correo es demasiado largo.");
+            return "Superadmin/crearUsuario";
+        }
+
+        if(!usuario.getCorreo().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")){
+            model.addAttribute("msgCorreoLargo", "El correo tiene caracteres inválidos.");
+            return "Superadmin/crearUsuario";
+        }
+
+
+
         if (usuario.getArchivo() == null) {
             usuario.setArchivo(new Archivo());
         }
