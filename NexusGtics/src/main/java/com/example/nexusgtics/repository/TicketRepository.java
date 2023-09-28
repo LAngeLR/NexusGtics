@@ -35,6 +35,13 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     int obtenerEstado(int idTicket);
 
     //------------------------ Tecnico --------------------//
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "insert into ticket (estado) values (?1)")
+    void guardarEstado(int estado);
+
+
     //obtener descripcion de formulario
 
     @Query(nativeQuery = true, value = "SELECT descripcion FROM formularios where idTickets=?1")

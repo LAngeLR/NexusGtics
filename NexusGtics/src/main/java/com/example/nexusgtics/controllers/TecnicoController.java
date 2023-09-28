@@ -1,6 +1,7 @@
 package com.example.nexusgtics.controllers;
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,12 +27,14 @@ public class TecnicoController {
     final ComentarioRepository comentarioRepository;
     final ArchivoRepository archivoRepository;
     private final FormularioRepository formularioRepository;
+    private final EquipoRepository equipoRepository;
 
     public TecnicoController(TicketRepository ticketRepository,
                              UsuarioRepository usuarioRepository,
                              TipoticketRepository tipoticketRepository, SitioRepository sitioRepository, ComentarioRepository comentarioRepository,
                              CuadrillaRepository cuadrillaRepository, ArchivoRepository archivoRepository,
-                             FormularioRepository formularioRepository){
+                             FormularioRepository formularioRepository,
+                             EquipoRepository equipoRepository){
         this.ticketRepository = ticketRepository;
         this.usuarioRepository = usuarioRepository;
         this.tipoticketRepository = tipoticketRepository;
@@ -39,6 +42,7 @@ public class TecnicoController {
         this.comentarioRepository = comentarioRepository;
         this.archivoRepository = archivoRepository;
         this.formularioRepository = formularioRepository;
+        this.equipoRepository = equipoRepository;
     }
     @GetMapping("/")
     public String paginaPrincipal(){
@@ -59,10 +63,19 @@ public class TecnicoController {
     //-----------------------------------------------------------------------
 
     @GetMapping("/comentarios")
-    public String pagcomentarios(){
-        return "Tecnico/comentarios";
+    public String pagcomentarios(Model model,@RequestParam("id") int id,
+    RedirectAttributes attr){
+        Optional<Ticket> optionalTicket = ticketRepository.findById(id);
+        if(optionalTicket.isPresent()){
+            Ticket ticket = optionalTicket.get();
+            model.addAttribute("ticket", ticket);
+            model.addAttribute("listaTicket", ticketRepository.findAll());
+            return "Tecnico/comentarios";
+        }else{
+            return "redirect:/ticket/verticket";
+        }
     }
-
+    //-----------------------------------------------------------------------
     @GetMapping("/dashboard")
     public String pagdashboard(Model model){
         List<Ticket> lista = ticketRepository.findAll();
@@ -78,21 +91,81 @@ public class TecnicoController {
         model.addAttribute("ticketList", lista);
         return "Tecnico/ticket_asignado";
     }
-
+    //-----------------------------------------------------------------------
     @GetMapping({"/verTicket","/verticket"})
-    public String pagdatostick(Model model, @RequestParam("id") int id){
-        Optional <Ticket> optionalTicket = ticketRepository.findById(id);
-        Optional <Comentario> optionalComentario = comentarioRepository.findById(id);
-        Optional <Formulario> optionalFormulario = formularioRepository.findById(id);
-        if(optionalTicket.isPresent() && optionalComentario.isPresent() && optionalFormulario.isPresent()){
-            Ticket ticket = optionalTicket.get();
-            Comentario comentario = optionalComentario.get();
-            Formulario formulario = optionalFormulario.get();
-            model.addAttribute("ticket", ticket);
-            model.addAttribute("comentario", comentario);
-            model.addAttribute("formulario", formulario);
-            return "Tecnico/datos_ticket";
-        }else{
+    public String pagdatostick(Model model, @RequestParam("id") int id,
+                               RedirectAttributes attr){
+       // Optional <Ticket> optionalTicket = ticketRepository.findById(id);
+        //Optional <Comentario> optionalComentario = comentarioRepository.findById(id);
+        //Optional <Formulario> optionalFormulario = formularioRepository.findById(id);
+        //if(optionalTicket.isPresent() && optionalComentario.isPresent() && optionalFormulario.isPresent()){
+          //  Ticket ticket = optionalTicket.get();
+            //Comentario comentario = optionalComentario.get();
+           // Formulario formulario = optionalFormulario.get();
+           // model.addAttribute("ticket", ticket);
+           // model.addAttribute("comentario", comentario);
+           // model.addAttribute("formulario", formulario);
+           // return "Tecnico/datos_ticket";
+      //  }else{
+        //    return "Tecnico/ticket_asignado";
+      //  }
+        try{
+            if(id <=0 || !ticketRepository.existsById(id)){
+                return "redirect:/ticket/ticketasignado";
+            }
+            Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            if(optionalTicket1.isPresent() && optionalFormulario.isPresent()){
+                Ticket ticket = optionalTicket1.get();
+                Formulario formulario = optionalFormulario.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("formulario", formulario);
+                model.addAttribute("listaTicket", ticketRepository.findAll());
+                return "Tecnico/datos_ticket";
+            }else{
+                return "redirect:/ticket/ticketasignado";
+            }
+        }catch (NumberFormatException e){
+            return "redirect:/tecnico/ticketasignado";
+        }
+    }
+
+    @PostMapping("/guardarEstado")
+    public String guardarEstado(Ticket ticket,
+                                @RequestParam("estado") int estado,
+                                RedirectAttributes attributes){
+        try{
+            ticketRepository.guardarEstado(estado);
+            return "redirect:/tecnico/ticketasignado";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    //-----------------------------------------------------------------------
+    @PostMapping("/actualizarEstado")
+    public String actualizarEstado(@ModelAttribute("ticket") @Valid Ticket ticket, BindingResult bindingResult,
+                                   Model model, RedirectAttributes attr){
+
+        if (!bindingResult.hasErrors()) {
+
+            if (ticket.getEstado().equals(1)) {
+                model.addAttribute("msg", "Error al ingresar Estado");
+                model.addAttribute("listaEstado", ticketRepository.findAll());
+                return "Tecnico/ticket_asignado";
+            } else {
+                if (ticket.getIdTickets() == 0) {
+                    attr.addFlashAttribute("msg", "Producto creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg", "Producto actualizado exitosamente");
+                }
+                ticketRepository.save(ticket);
+                return "redirect:/ticket/verticket";
+            }
+
+        } else { //hay al menos 1 error
+            model.addAttribute("listaEstado", ticketRepository.findAll());
             return "Tecnico/ticket_asignado";
         }
     }
@@ -102,8 +175,19 @@ public class TecnicoController {
 
 
     @GetMapping("/desplazamiento")
-    public String pagdesplazamiento(){
-        return "Tecnico/desplazamiento";
+    public String pagdesplazamiento(Model model,@RequestParam("id") int id,
+                                    RedirectAttributes attr){
+
+        Optional<Ticket> optionalTicket = ticketRepository.findById(id);
+        if(optionalTicket.isPresent()){
+            Ticket ticket = optionalTicket.get();
+            model.addAttribute("ticket", ticket);
+            model.addAttribute("listaTicket", ticketRepository.findAll());
+            return "Tecnico/desplazamiento";
+        }else{
+            return "redirect:/ticket/verticket";
+        }
+
     }
 
 

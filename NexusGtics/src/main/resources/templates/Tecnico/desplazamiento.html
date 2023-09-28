@@ -65,12 +65,13 @@
                                 <tr>
                                     <td>
                                         <div class="col-auto">
-                                            <label for="suId" class="col-form-label">Su ID:</label>
+                                            <label for="suId" class="col-form-label">Su DNI:</label>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="col-auto">
-                                            <input type="text" id="suId" class="form-control" aria-describedby="Id">
+                                            <!--<input type="text"  class="form-control" aria-describedby="Id">-->
+                                            <input type="text" id="suId" class="form-control-plaintext" th:object="${ticket}" th:field="*{idCuadrilla.tecnico.dni}" disabled style="font-size: medium;color: #00489b;">
                                         </div>
                                     </td>
                                 </tr>
@@ -82,7 +83,7 @@
                                     </td>
                                     <td>
                                         <div class="col-auto">
-                                            <input type="text" id="ticketid" class="form-control" aria-describedby="ticketid">
+                                            <input type="text" id="ticketid" class="form-control-plaintext" th:object="${ticket}" th:field="*{idTickets}" disabled style="font-size: medium;color: #00489b;">
                                         </div>
                                     </td>
                                 </tr>
@@ -94,7 +95,7 @@
                                     </td>
                                     <td>
                                         <div class="col-auto">
-                                            <input type="hour" id="hora" class="form-control" aria-describedby="horastart">
+                                            <input type="text" id="hora" class="form-control" aria-describedby="horastart">
                                         </div>
                                     </td>
                                 </tr>
@@ -108,12 +109,12 @@
                                 <tr>
                                     <td>
                                         <div class="col-auto">
-                                            <label for="suId2" class="col-form-label">Su ID:</label>
+                                            <label for="suId2" class="col-form-label">Su DNI:</label>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="col-auto">
-                                            <input type="text" id="suId2" class="form-control" aria-describedby="Id">
+                                            <input type="text" id="suId2" class="form-control-plaintext" th:object="${ticket}" th:field="*{idCuadrilla.tecnico.dni}" disabled style="font-size: medium;color: #00489b;">
                                         </div>
                                     </td>
                                 </tr>
@@ -125,14 +126,14 @@
                                     </td>
                                     <td>
                                         <div class="col-auto">
-                                            <input type="text" id="ticketid2" class="form-control" aria-describedby="ticketid">
+                                            <input type="text" id="ticketid2" class="form-control-plaintext" th:object="${ticket}" th:field="*{idTickets}" disabled style="font-size: medium;color: #00489b;">
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <div class="col-auto">
-                                            <label for="hora2" class="col-form-label" style="font-size: small">Hora de comienzo:</label>
+                                            <label for="hora2" class="col-form-label" style="font-size: small">Hora término:</label>
                                         </div>
                                     </td>
                                     <td>
@@ -160,7 +161,7 @@
                                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             }).addTo(map);
                             L.marker([-12.06802,-77.03462]).addTo(map)
-                                .bindPopup('A pretty CSS popup.<br> Easily customizable.')
+                                .bindPopup('Ticket aquí')
                                 .openPopup();
                         </script>
                         <!-- MAPA -->
