@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
 import javax.swing.*;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
 
@@ -154,29 +155,34 @@ public class TecnicoController {
     /* Guardar Datos*/
     @PostMapping("/saveFormulario")
     public String saveFormulario(@RequestParam("imagenSubida") MultipartFile file,
-                                 Formulario formulario, Model model, RedirectAttributes attr){
-
-        if(formulario.getArchivo()==null){
-            formulario.setArchivo(new Archivo());
+                                 @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult,
+                                 Model model, RedirectAttributes attr){
+        if(!bindingResult.hasErrors()) {
+            if (formulario.getArchivo() == null) {
+                formulario.setArchivo(new Archivo());
+            }
+            if (file.isEmpty()) {
+                model.addAttribute("msg", "Debe subir un archivo");
+                return "redirect:/tecnico/formulario";
+            }
+            String fileName = file.getOriginalFilename();
+            try {
+                Archivo archivo = formulario.getArchivo();
+                archivo.setNombre(fileName);
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+                int idImagen = archivo.getIdArchivos();
+                formulario.getArchivo().setIdArchivos(idImagen);
+                formularioRepository.save(formulario);
+                return "redirect:/tecnico/verticket";
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-        if(file.isEmpty()){
-            model.addAttribute("msg", "Debe subir un archivo");
-            return "redirect:/tecnico/formulario";
-        }
-        String fileName = file.getOriginalFilename();
-        try{
-            Archivo archivo = formulario.getArchivo();
-            archivo.setNombre(fileName);
-            archivo.setTipo(1);
-            archivo.setArchivo(file.getBytes());
-            archivo.setContentType(file.getContentType());
-            archivoRepository.save(archivo);
-            int idImagen = archivo.getIdArchivos();
-            formulario.getArchivo().setIdArchivos(idImagen);
-            formularioRepository.save(formulario);
-            return "redirect:/tecnico/verticket";
-        }catch (IOException e){
-            throw new RuntimeException(e);
+        else{
+            return "Tecnico/formulario";
         }
     }
 

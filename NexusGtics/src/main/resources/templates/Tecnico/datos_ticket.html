@@ -108,16 +108,25 @@
                                         <select class="form-select" aria-label="Default select example">
                                             <option value="-1"
                                                     th:each="estado: ${ticket}"
-                                                    th:if="${ticket.estado==1 || ticket.estado==2 || ticket.estado==3 || ticket.estado==4 || ticket.estado==5 || ticket.estado==6 || ticket.estado==7}"
+                                                    th:if="${ticket.estado==1 || ticket.estado==2 || ticket.estado==3 || ticket.estado==4 || ticket.estado==5}"
                                                     th:selected="${ticket.estado==1 || ticket.estado==2 || ticket.estado==3}">--Seleccione el estado--</option>
+                                            <!--cuando pasa al tecnico-->
                                             <option th:each="estado: ${ticket}"
-                                                    th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5 || ticket.estado==6 || ticket.estado==2 || ticket.estado==1}"
+                                                    th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5 || ticket.estado==2 || ticket.estado==1}"
                                                     th:value="${ticket.estado}"
-                                                    th:selected="${ticket.estado == 4 || ticket.estado==5 || ticket.estado==6}">Progreso</option>
+                                                    th:selected="${ticket.estado == 4 || ticket.estado==5}">Progreso</option>
+                                            <!--Finalizar el trabajo del ticket-->
+                                            <option th:each="estado: ${ticket}"
+                                                    th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5 || ticket.estado==2 || ticket.estado==1 || ticket.estado== 6}"
+                                                    th:value="${ticket.estado}"
+                                                    th:selected="${ticket.estado==6}"
+                                            >Termino del trabajo
+                                            </option>
+                                            <!--Supervisor cerró el ticket-->
                                             <option th:each="estado: ${ticket}"
                                                     th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5 || ticket.estado==7 || ticket.estado==6 || ticket.estado==2 || ticket.estado==1}"
                                                     th:value="${ticket.estado}"
-                                                    th:selected="${ticket.estado == 7 || ticket.estado == 6}">Cerrado</option>
+                                                    th:selected="${ticket.estado == 7}" disabled>Cerrado</option>
                                         </select>
                                     </div>
                                 </div>
