@@ -99,8 +99,8 @@
                     </button>
                     <ul class="dropdown-menu">
                       <li><a class="dropdown-item" th:href="@{/analistaOYM/mapaTickets}">Ubicacion</a></li>
-                      <li><a class="dropdown-item" th:href="@{'analistaOYM/editarTicket?id='+ ${ticket.idTickets}}">Editar</a></li>
-                      <li><a class="dropdown-item" th:href="@{/analistaOYM/verTicket}">Ver más</a></li>
+                      <li><a class="dropdown-item" th:href="@{'/analistaOYM/editarTicket?id='+ ${ticket.idTickets}}">Editar</a></li>
+                      <li><a class="dropdown-item" th:href="@{'/analistaOYM/verTicket?id='+ ${ticket.idTickets}}">Ver más</a></li>
 
                     </ul>
                   </div>

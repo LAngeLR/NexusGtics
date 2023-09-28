@@ -33,13 +33,21 @@
                 <div class="col-md-6">
                   <input type="hidden" class="form-control" name="idJuego" id="idJuego">
                   <div class="mb-3">
-                    <label for="nombre">Nombres:</label>
-                    <input type="text" class="form-control" name="nombre" id="nombre" >
+                    <label class="form-label">Nombres:</label>
+                    <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
+                      Mensaje de error de nombre
+                    </div>
                   </div>
 
                   <div class="mb-3">
-                    <label for="apellido">Apellidos:</label>
-                    <input type="text" class="form-control" name="apellido" id="apellido" >
+                    <label class="form-label">Apellidos:</label>
+                    <input th:field="*{apellido}" type="text" th:class="${#fields.hasErrors('apellido')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}">
+                      Mensaje de error de nombre
+                    </div>
                   </div>
 
                   <div class="mb-3">

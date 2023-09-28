@@ -116,7 +116,7 @@ public class AnalistaOYMController {
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaSitios", sitioRepository.findAll());
-            return "AnalistaOYM/oymVistaTicket";
+            return "AnalistaOYM/oymEditarTicket";
 
         }else{
             return "redirect:/analistaOYM/ticket";
