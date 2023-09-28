@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f2df6238-63d4-4ff8-af71-271dbcb293a3" name="Changes" comment="si">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/07d1f561-14ae-48ef-bd38-54e9724c0697.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/07d1f561-14ae-48ef-bd38-54e9724c0697.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/messages.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AnalistaOYMController.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AnalistaOYMController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/entity/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/entity/Usuario.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/crearUsuario.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/crearUsuario.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaOYM/oymListaTickets.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaOYM/oymListaTickets.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaOYM/oymVistaTicket.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaOYM/oymVistaTicket.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +99,7 @@
       <workItem from="1695297708750" duration="10357000" />
       <workItem from="1695764660430" duration="7962000" />
       <workItem from="1695876652884" duration="86000" />
-      <workItem from="1695876790084" duration="2297000" />
+      <workItem from="1695876790084" duration="8827000" />
     </task>
     <task id="LOCAL-00001" summary="superadmin">
       <created>1694814665135</created>

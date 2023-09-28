@@ -17,12 +17,14 @@ public class Usuario {
     @Column(name = "idUsuarios", nullable = false)
     private Integer id;
 
-    @Column(name = "nombre", nullable = false, length = 15)
+    @Column(name = "nombre", nullable = false, length = 45)
     @NotBlank
+    @Pattern(regexp = "^[A-Za-z ]+$", message = "El nombre solo debe contener letras")
     private String nombre;
 
-    @Column(name = "apellido", nullable = false, length = 15)
+    @Column(name = "apellido", nullable = false, length = 45)
     @NotBlank
+    @Pattern(regexp = "^[A-Za-z]+$", message = "El apellido debe contener solo letras")
     private String apellido;
 
     @Column(name = "correo", nullable = false, length = 45)
@@ -59,9 +61,11 @@ public class Usuario {
     private Cuadrilla cuadrilla;
 
     @Column(name = "dni")
+    @Digits(integer = 8, fraction = 0, message = "El DNI debe ser un número de 8 dígitos")
     private Integer dni;
 
     @Column(name = "descripcion", length = 130)
+    @Size(max = 130, message = "La descripción no puede tener más de 130 caracteres")
     private String descripcion;
 
 }
