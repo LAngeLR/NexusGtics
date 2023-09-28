@@ -30,7 +30,13 @@
       <div class="row">
         <div class="rounded p-5" style="background-color: #FFFFFF;">
           <div class="pagetitle">
-            <h1 class="card-title">Información de usuario</h1>
+            <h1 class="card-title">Editar información de usuario</h1>
+          </div>
+          <div class="alert alert-danger" role="alert" th:if="${msgCargo != null}" th:text="${msgCargo}">
+            A simple success alert—check it out!
+          </div>
+          <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}">
+            A simple success alert—check it out!
           </div>
           <form method="POST" th:action="@{/admin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
             <div class="row">
@@ -40,17 +46,38 @@
 
                 <div class="mb-3">
                   <label class="form-label">Nombres:</label>
-                  <input type="text" class="form-control" th:field="*{nombre}">
+                  <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
+                    Mensaje de error de nombre
+                  </div>
                 </div>
 
                 <div class="mb-3">
                   <label class="form-label">Apellidos:</label>
-                  <input type="text" class="form-control" th:field="*{apellido}">
+                  <input th:field="*{apellido}" type="text" th:class="${#fields.hasErrors('apellido')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}">
+                    Mensaje de error de nombre
+                  </div>
                 </div>
 
                 <div class="mb-3">
                   <label class="form-label">Correo:</label>
-                  <input type="text" class="form-control" th:field="*{correo}">
+                  <input th:field="*{correo}" type="text" th:class="${#fields.hasErrors('correo')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
+                    Mensaje de error de correo
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">DNI:</label>
+                  <input th:field="*{dni}" type="text" th:class="${#fields.hasErrors('dni')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">
+                    Mensaje de error de correo
+                  </div>
                 </div>
 
                 <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
@@ -62,6 +89,16 @@
                 <input type="hidden" name="archivo" id="archivo" th:field="*{archivo.idArchivos}">
 
                 <div class="mb-3">
+                  <label class="form-label">Cargo</label>
+                  <select class="form-select" name="cargo" id="cargo">
+                    <option th:each="cargo: ${listaCargo}"
+                            th:unless="${cargo.nombreCargo == 'Superadmin' || cargo.nombreCargo == 'Administrador'}"
+                            th:text="${cargo.nombreCargo}" th:value="${cargo.idCargos}"
+                            th:selected="${usuario.cargo.idCargos == cargo.idCargos}">Open this select menu</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
                   <label class="form-label">Empresa</label>
                   <select class="form-select" name="empresa" id="empresa">
                     <option th:each="empresa: ${listaEmpresa}"
@@ -71,13 +108,12 @@
                 </div>
 
                 <div class="mb-3">
-                  <label class="form-label">Cargo</label>
-                  <select class="form-select" name="cargo" id="cargo">
-                    <option th:each="cargo: ${listaCargo}"
-                            th:unless="${cargo.nombreCargo == 'Superadmin' || cargo.nombreCargo == 'Administrador'}"
-                            th:text="${cargo.nombreCargo}" th:value="${cargo.idCargos}"
-                            th:selected="${usuario.cargo.idCargos == cargo.idCargos}">Open this select menu</option>
-                  </select>
+                  <label class="form-label">Descripción:</label>
+                  <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
+                    Mensaje de error de descripcion
+                  </div>
                 </div>
 
               </div>
