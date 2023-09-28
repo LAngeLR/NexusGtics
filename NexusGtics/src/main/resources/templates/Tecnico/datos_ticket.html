@@ -33,7 +33,102 @@
 
 <body>
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('Técnico')"><!-- End Header --></header><!-- End Header -->
+<header class="header fixed-top d-flex align-items-center" style="background-color: #090B21">
+
+    <div class="d-flex align-items-center justify-content-between">
+        <a th:href="@{/}" class="logo d-flex align-items-center">
+            <img th:src="@{/assets/img/logo.png}" alt="">
+            <span class="d-none d-lg-block text-light">exus</span>
+        </a>
+        <i class="bi bi-list toggle-sidebar-btn text-light"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar">
+        <form class="search-form d-flex align-items-center" method="POST" action="#">
+            <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        </form>
+    </div><!-- End Search Bar -->
+
+    <nav class="header-nav ms-auto">
+        <ul class="d-flex align-items-center">
+
+            <li class="nav-item d-block d-lg-none">
+                <a class="nav-link nav-icon search-bar-toggle " href="#">
+                    <i class="bi bi-search"></i>
+                </a>
+            </li><!-- End Search Icon-->
+
+
+            <li class="nav-item dropdown">
+
+                <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-chat-left-text text-light"></i>
+                    <span class="badge bg-success badge-number" ></span>
+                </a><!-- End Messages Icon -->
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages" style="position: absolute; inset: 0px 0px auto auto; margin: 0px;transform: translate3d(-19.5px, 35px, 0px);" data-popper-placement="bottom-end">
+                    <li class="dropdown-divider">
+                        Tú tienes nuevos mensajes
+                    </li>
+                    <li class="message-item" th:each=" ticket, info : ${listaTicket}" th:if="${ticket.estado==2}">
+                        <a th:href="@{'/tecnico/verTicket?id='+${ticket.idTickets}}">
+                            <div>
+                                <h4 th:text="${ticket.usuarioSolicitante}"></h4>
+                                <p th:text="${'ID del Ticket: '+ticket.idTickets}"></p>
+                                <p th:text="${ticket.descripcion}" style="font-size: xx-small"></p>
+                                <p th:if="${ticket.estado==2}"><span class="badge text-bg-primary">Nuevo</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                </ul><!-- End Messages Dropdown Items -->
+            </li><!-- End Messages Nav -->
+
+            <li class="nav-item dropdown pe-3">
+
+                <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                    <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2 text-light">K. Anderson</span>
+                </a><!-- End Profile Iamge Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                    <li class="dropdown-header">
+                        <h6>Kevin Anderson</h6>
+                        <span th:text="${cargo}">Admin</span>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{'/' + ${cargo} +'/perfil'}">
+                            <i class="bi bi-person"></i>
+                            <span>Mi perfil</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+
+
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/login}">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Cerrar sesión</span>
+                        </a>
+                    </li>
+
+                </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
+
+        </ul>
+    </nav><!-- End Icons Navigation -->
+</header>
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuTecnico :: menu"></aside><!-- End Sidebar-->
 
@@ -52,7 +147,7 @@
     <section class="section dashboard">
         <div class="row">
             <div class="rounded p-5" style="background-color: #FFFFFF;">
-                <form method="POST"  enctype="multipart/form-data" th:object="${ticket}">
+                <form method="POST"  enctype="multipart/form-data" th:object="${ticket}" th:action="@{/tecnico/guardarEstado}">
                      <div class="row">
                         <div class="col-xl-6">
                             <div class="pagetitle">
@@ -94,65 +189,61 @@
 
                                 <div class="mb-3 row">
                                     <div class="mb-3 ">
-                                        <!--<label for="estado" class="form-label">Estado</label>
-                                        <select class="form-select" name="estado" id="estado">
-                                            <option value="-1">--Seleccione el estado--</option>
-                                            <option th:each="cargo: ${ticket}"
-                                                    th:unless="${ticket.estado == 6 || ticket.estado == 2 || ticket.estado == 1}"
-                                                    th:text="${ticket.estado}" th:value="${ticket.estado}">Open this select menu</option>
-                                            <td th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5}">
-                                                <span class="badge text-bg-success">En progreso</span>
-                                            </td>
-                                        </select> -->
+                                        <label>Estado: </label>
+                                        <select name="estado" id="estado" class="form-select" aria-label="Default select example">
+                                            <!--<option th:each="ticket1: ${listaTicket}"
+                                                    th:text="${ticket1.estado}" th:value="${ticket1.idTickets}"
+                                                    th:selected="${ticket.estado == ticket1.estado}">Open this menu</option>-->
 
-                                        <select class="form-select" aria-label="Default select example">
                                             <option value="-1"
                                                     th:each="estado: ${ticket}"
                                                     th:if="${ticket.estado==1 || ticket.estado==2 || ticket.estado==3 || ticket.estado==4 || ticket.estado==5}"
                                                     th:selected="${ticket.estado==1 || ticket.estado==2 || ticket.estado==3}">--Seleccione el estado--</option>
-                                            <!--cuando pasa al tecnico-->
+
                                             <option th:each="estado: ${ticket}"
                                                     th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5 || ticket.estado==2 || ticket.estado==1}"
                                                     th:value="${ticket.estado}"
                                                     th:selected="${ticket.estado == 4 || ticket.estado==5}">Progreso</option>
-                                            <!--Finalizar el trabajo del ticket-->
+
                                             <option th:each="estado: ${ticket}"
                                                     th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5 || ticket.estado==2 || ticket.estado==1 || ticket.estado== 6}"
                                                     th:value="${ticket.estado}"
                                                     th:selected="${ticket.estado==6}"
                                             >Termino del trabajo
                                             </option>
-                                            <!--Supervisor cerró el ticket-->
+
                                             <option th:each="estado: ${ticket}"
                                                     th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5 || ticket.estado==7 || ticket.estado==6 || ticket.estado==2 || ticket.estado==1}"
                                                     th:value="${ticket.estado}"
                                                     th:selected="${ticket.estado == 7}" disabled>Cerrado</option>
+                                            <input type="hidden" class="form-control" th:field="*{estado}">
                                         </select>
+
                                     </div>
                                 </div>
                             <br>
                             <center><a class="btn" style="background-color: #82DEAC" th:href="@{'/tecnico/formulario?id=' + ${ticket.idTickets}}">Formulario</a>
-                                <a class="btn btn-info" th:href="@{/tecnico/desplazamiento}">
+                                <a class="btn btn-info" th:href="@{'/tecnico/desplazamiento?id=' + ${ticket.idTickets}}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-fill" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z"/>
                                     </svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe-americas" viewBox="0 0 16 16">
                                     <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM2.04 4.326c.325 1.329 2.532 2.54 3.717 3.19.48.263.793.434.743.484-.08.08-.162.158-.242.234-.416.396-.787.749-.758 1.266.035.634.618.824 1.214 1.017.577.188 1.168.38 1.286.983.082.417-.075.988-.22 1.52-.215.782-.406 1.48.22 1.48 1.5-.5 3.798-3.186 4-5 .138-1.243-2-2-3.5-2.5-.478-.16-.755.081-.99.284-.172.15-.322.279-.51.216-.445-.148-2.5-2-1.5-2.5.78-.39.952-.171 1.227.182.078.099.163.208.273.318.609.304.662-.132.723-.633.039-.322.081-.671.277-.867.434-.434 1.265-.791 2.028-1.12.712-.306 1.365-.587 1.579-.88A7 7 0 1 1 2.04 4.327Z"/>
                                 </svg>
                                 </a><br><br>
-                                <a class="btn" style="background-color: #E0AD4B" th:href="@{/tecnico/comentarios}">Comentarios</a>
-                                <a class="btn btn-danger" th:href="@{/tecnico/ticketasignado}">Guardar</a></center>
+                                <a class="btn" style="background-color: #E0AD4B" th:href="@{'/tecnico/comentarios?id=' + ${ticket.idTickets}}">Comentarios</a>
+                                <a class="btn btn-danger" type="submit">Guardar</a></center>
 
                         </div>
 
                         <div class="col-xl-6">
                             <div class="mb-3 row">
                                 <h5 class="card-title" style="color: #095444">Formulario:</h5>
-                                <img th:object="${formulario}" th:src="@{|image/${formulario.archivo}}" alt="Profile" style="max-height:14rem">
+                                <img th:object="${formulario}" th:src="@{|image/${formulario.archivo}|}" alt="Profile" style="max-height:14rem">
                             </div>
                             <div class="mb-3 row">
                                 <label class="col-sm-4 form-label" style="color: #095444">Comentario:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control-plaintext"  th:object="${comentario}" th:field="*{comentario}" disabled>
+                                    <input type="text" class="form-control-plaintext"  th:object="${ticket}" th:field="*{descripcion}" disabled>
                                 </div>
                             </div>
                             <div class="mb-3 row">
@@ -176,7 +267,7 @@
                             <div class="mb-3 row">
                                 <label class="col-sm-4 form-label">Tiempo Transcurrido:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control-plaintext" placeholder="2hrs:10min:10sec">
+                                    <input type="text" class="form-control-plaintext" placeholder="2hrs:10min:10sec" disabled>
                                 </div>
                             </div>
                          </div>

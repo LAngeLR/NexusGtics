@@ -33,7 +33,102 @@
 
 <body>
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('Técnico')"><!-- End Header --></header><!-- End Header -->
+<header class="header fixed-top d-flex align-items-center" style="background-color: #090B21">
+
+    <div class="d-flex align-items-center justify-content-between">
+        <a th:href="@{/}" class="logo d-flex align-items-center">
+            <img th:src="@{/assets/img/logo.png}" alt="">
+            <span class="d-none d-lg-block text-light">exus</span>
+        </a>
+        <i class="bi bi-list toggle-sidebar-btn text-light"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar">
+        <form class="search-form d-flex align-items-center" method="POST" action="#">
+            <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        </form>
+    </div><!-- End Search Bar -->
+
+    <nav class="header-nav ms-auto">
+        <ul class="d-flex align-items-center">
+
+            <li class="nav-item d-block d-lg-none">
+                <a class="nav-link nav-icon search-bar-toggle " href="#">
+                    <i class="bi bi-search"></i>
+                </a>
+            </li><!-- End Search Icon-->
+
+
+            <li class="nav-item dropdown">
+
+                <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-chat-left-text text-light"></i>
+                    <span class="badge bg-success badge-number" ></span>
+                </a><!-- End Messages Icon -->
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages" style="position: absolute; inset: 0px 0px auto auto; margin: 0px;transform: translate3d(-19.5px, 35px, 0px);" data-popper-placement="bottom-end">
+                    <li class="dropdown-divider">
+                        Tú tienes nuevos mensajes
+                    </li>
+                    <li class="message-item" th:each=" ticket, info : ${listaTicket}" th:if="${ticket.estado==2}">
+                        <a th:href="@{'/tecnico/verTicket?id='+${ticket.idTickets}}">
+                            <div>
+                                <h4 th:text="${ticket.usuarioSolicitante}"></h4>
+                                <p th:text="${'ID del Ticket: '+ticket.idTickets}"></p>
+                                <p th:text="${ticket.descripcion}" style="font-size: xx-small"></p>
+                                <p th:if="${ticket.estado==2}"><span class="badge text-bg-primary">Nuevo</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                </ul><!-- End Messages Dropdown Items -->
+            </li><!-- End Messages Nav -->
+
+            <li class="nav-item dropdown pe-3">
+
+                <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                    <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2 text-light">K. Anderson</span>
+                </a><!-- End Profile Iamge Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                    <li class="dropdown-header">
+                        <h6>Kevin Anderson</h6>
+                        <span th:text="${cargo}">Admin</span>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{'/' + ${cargo} +'/perfil'}">
+                            <i class="bi bi-person"></i>
+                            <span>Mi perfil</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+
+
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/login}">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Cerrar sesión</span>
+                        </a>
+                    </li>
+
+                </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
+
+        </ul>
+    </nav><!-- End Icons Navigation -->
+</header>
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuTecnico :: menu"></aside><!-- End Sidebar-->
 
@@ -56,12 +151,10 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="info-box card">
-                            <h3>Luis Medina Salazar</h3>
-                            <p>Llegando al lugar - comentar
-                                Llegando al lugar - comentar
-                                Llegando al lugar - comentar
-                            </p>
-                            <p class="text-sm-end">April 05, 2023 10:50 am</p>
+                            <input class="form-control-plaintext" th:object="${ticket}" th:field="*{idCuadrilla.tecnico.apellido}" disabled style="font-size: large;color: #00489b;"></input>
+                            <input class="form-control-plaintext"  th:object="${ticket}" th:field="*{idCuadrilla.tecnico.nombre}" disabled style="font-size: medium;color: #00489b;"></input>
+                            <input class="form-control-plaintext" th:object="${ticket}" th:field="*{descripcion}" disabled style="font-size: small"></input>
+                            <input class="form-control-plaintext text-sm-end" th:object="${ticket}" th:field="*{fechaCreacion}" disabled style="font-size: x-small;"></input>
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -100,27 +193,33 @@
 
             <div class="col-xl-6">
                 <div class="card p-4">
-                    <form action="forms/contact.php" method="post" class="php-email-form">
+                    <form method="POST"  enctype="multipart/form-data" th:object="${ticket}" th:action="@{/tecnico/save}">
                         <div class="row gy-4">
-
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-lg-5 col-md-4 label "><b>Nombre del Técnico:</b></div>
-                                    <div class="col-lg-7 col-md-8">Luis Medina Salazar</div>
+                                    <label class="col-sm-6 label "><b>Nombre del Técnico:</b></label>
+                                    <div class="col-sm-6"><input type="text" class="form-control-plaintext" th:field="*{idCuadrilla.tecnico.nombre}" disabled></div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <label class="col-sm-6 label "><b>Apellido del Técnico:</b></label>
+                                    <div class="col-sm-6"><input type="text" class="form-control-plaintext" th:field="*{idCuadrilla.tecnico.apellido}" disabled></div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <label class="col-sm-6 label "><b>ID:</b></label>
+                                    <div class="col-sm-6"><input type="text" class="form-control-plaintext" th:field="*{idTickets}" disabled></div>
                                 </div>
                             </div>
 
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-lg-5 col-md-4 label "><b>ID:</b></div>
-                                    <div class="col-lg-7 col-md-8">18297223</div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-lg-5 col-md-4 label "><b>Servicio:</b></div>
-                                    <div class="col-lg-7 col-md-8">Mantenimiento de Gabinete</div>
+                                    <label class="col-sm-6 label "><b>Servicio:</b></label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control-plaintext" th:field="*{idTipoTicket.nombreTipoTicket}" disabled>
+                                    </div>
                                 </div>
                             </div>
 
