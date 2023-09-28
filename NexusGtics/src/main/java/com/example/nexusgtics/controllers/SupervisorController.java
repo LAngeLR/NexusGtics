@@ -3,6 +3,7 @@ package com.example.nexusgtics.controllers;
 import com.example.nexusgtics.entity.Sitio;
 import com.example.nexusgtics.entity.Ticket;
 import com.example.nexusgtics.entity.Usuario;
+import com.example.nexusgtics.repository.SitioRepository;
 import com.example.nexusgtics.repository.TicketRepository;
 import com.example.nexusgtics.repository.UsuarioRepository;
 import org.springframework.ui.Model;
@@ -25,13 +26,16 @@ public class SupervisorController {
     private final CuadrillaRepository cuadrillaRepository;
     private final UsuarioRepository usuarioRepository;
     private final TicketRepository ticketRepository;
+    private final SitioRepository sitioRepository;
 
     public SupervisorController(CuadrillaRepository cuadrillaRepository,
                                 UsuarioRepository usuarioRepository,
-                                TicketRepository ticketRepository) {
+                                TicketRepository ticketRepository,
+                                SitioRepository sitioRepository) {
         this.cuadrillaRepository = cuadrillaRepository;
         this.usuarioRepository = usuarioRepository;
         this.ticketRepository = ticketRepository;
+        this.sitioRepository = sitioRepository;
     }
 
     @GetMapping( {"/",""})
@@ -200,7 +204,13 @@ public class SupervisorController {
     }
 
     @GetMapping("/mapaTickets")
-    public String mapaTickets(){
+    public String mapaTickets(Model model){
+
+        List<Ticket> listaT= ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+        List<Sitio> sitioList = sitioRepository.findAll();
+        model.addAttribute("sitioList", sitioList);
+
         return "Supervisor/mapaTickets";
     }
 
