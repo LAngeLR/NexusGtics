@@ -34,6 +34,9 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query(nativeQuery = true, value = "SELECT estado FROM tickets where idTickets=?1")
     int obtenerEstado(int idTicket);
 
+    @Query(nativeQuery = true, value = "SELECT * FROM tickets where estado=7 and idCuadrilla = ?1")
+    List<Ticket> listaTicketsCerradosPorCuadrilla (int id);
+
     //------------------------ Tecnico --------------------//
 
     @Transactional

@@ -99,15 +99,15 @@
 
                                             <!--direccion de vistas segun estado-->
                                             <td th:if="${tickets.estado!=2 && tickets.estado!=7 && tickets.estado!=6}">
-                                                <center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/supervisor/ticketProceso?id=' + ${tickets.idTickets}}">+</a></center>
+                                                <center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/ticketProceso?id=' + ${tickets.idTickets}}">+</a></center>
                                             </td>
 
                                             <td th:if="${tickets.estado==2}">
-                                                <center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/supervisor/ticketNuevo?id=' + ${tickets.idTickets}}">+</a></center>
+                                                <center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/ticketNuevo?id=' + ${tickets.idTickets}}">+</a></center>
                                             </td>
 
                                             <td th:if="${tickets.estado==7 || tickets.estado==6}">
-                                                <center><a type="button" class="btn btn-warning btn-sm" th:href="@{'/supervisor/ticketCerrado?id=' + ${tickets.idTickets}}">+</a></center>
+                                                <center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/ticketCerrado?id=' + ${tickets.idTickets}}">+</a></center>
                                             </td>
                                     </tr>
 
