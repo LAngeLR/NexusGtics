@@ -74,22 +74,27 @@ public class AdminController {
 
     // DESACTIVAR USUARIO
     @GetMapping("/banearUsuario")
-    public String desabilitarUsuario(@RequestParam("id") int id) {
+    public String desabilitarUsuario(@RequestParam("id") int id, RedirectAttributes attr) {
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         if (optionalUsuario.isPresent()) {
+            Usuario usuario = optionalUsuario.get();
             usuarioRepository.desactivarUsuario(id);
+            attr.addFlashAttribute("msg1", "El usuario '" + usuario.getNombre() + " " +usuario.getApellido() + "' se sido desactivado exitosamente");
+
         }
         return "redirect:/admin/listaUsuario";
     }
 
     // ACTIVAR USUARIO
     @GetMapping("/activarUsuario")
-    public String activarUsuario(@RequestParam("id") int id) {
+    public String activarUsuario(@RequestParam("id") int id, RedirectAttributes attr) {
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         if (optionalUsuario.isPresent()) {
+            Usuario usuario = optionalUsuario.get();
             usuarioRepository.activarUsuario(id);
+            attr.addFlashAttribute("msg1", "El usuario '" + usuario.getNombre() + " " +usuario.getApellido() + "' se sido activado exitosamente");
         }
-        return "redirect:/admin/banearUsuario";
+        return "redirect:/admin/listaBaneados";
     }
 
     @GetMapping({"/crearUsuario","crearusuario"})
@@ -168,6 +173,8 @@ public class AdminController {
                 int idImagen = archivo.getIdArchivos();
                 usuario.getArchivo().setIdArchivos(idImagen);
                 usuarioRepository.save(usuario);
+                attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+
                 return "redirect:/admin/listaUsuario";
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -254,6 +261,8 @@ public class AdminController {
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             empresaRepository.save(empresa);
+            attr.addFlashAttribute("msg1", "La empresa '" + empresa.getNombre() + "' ha sido creado exitosamente");
+
             return "redirect:/admin/listaEmpresa";
         } else { //hay al menos 1 error
             return "Administrador/crearEmpresa";
@@ -395,6 +404,8 @@ public class AdminController {
                 int idImagen = archivo.getIdArchivos();
                 sitio.getArchivo().setIdArchivos(idImagen);
                 sitioRepository.save(sitio);
+                attr.addFlashAttribute("msg1", "El sitio en '" + sitio.getDistrito() + "' ha sido creado exitosamente");
+
                 return "redirect:/admin/listaSitio";
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -414,10 +425,14 @@ public class AdminController {
 
     /* Eliminar sitio */
     @GetMapping("/eliminarSitio")
-    public String eliminarSitio(@RequestParam("id") int id) {
+    public String eliminarSitio(@RequestParam("id") int id, RedirectAttributes attr) {
         Optional<Sitio> optionalSitio = sitioRepository.findById(id);
         if (optionalSitio.isPresent()) {
+            Sitio sitio = optionalSitio.get();
             sitioRepository.eliminarEmpresa(id);
+
+            attr.addFlashAttribute("msg2", "El sitio '" + sitio.getDistrito() + "' ha sido eliminado exitosamente");
+
         }
         return "redirect:/admin/listaSitio";
     }

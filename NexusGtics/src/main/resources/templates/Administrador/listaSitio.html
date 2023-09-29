@@ -70,6 +70,9 @@
                   </div>
 
                   <h5 class="card-title">Lista de sitios</h5>
+                  <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
+                  <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success" role="alert"></div>
+
                 </div>
                 <!-- Table with stripped rows -->
                 <table class="table datatable">
@@ -104,7 +107,7 @@
                           </button>
                           <ul class="dropdown-menu">
                             <li><a th:href="@{'/admin/editarSitio?id=' + ${sitio.idSitios}}" class="dropdown-item me-2">Editar</a></li>
-                            <li><a th:href="@{'/admin/eliminarSitio?id=' + ${sitio.idSitios}}" class="dropdown-item me-2">Eliminar</a></li>
+                            <li><a th:href="@{'/admin/eliminarSitio?id=' + ${sitio.idSitios}}" class="dropdown-item me-2 text-danger">Eliminar</a></li>
                             <li><a th:href="@{'/admin/verSitio?id=' + ${sitio.idSitios}}" class="dropdown-item me-2">Visualizar</a></li>
                           </ul>
                         </div>
