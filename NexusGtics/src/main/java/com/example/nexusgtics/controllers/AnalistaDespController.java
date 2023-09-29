@@ -3,11 +3,9 @@ package com.example.nexusgtics.controllers;
 import com.example.nexusgtics.entity.Archivo;
 import com.example.nexusgtics.entity.Equipo;
 import com.example.nexusgtics.entity.Sitio;
+import com.example.nexusgtics.repository.EmpresaRepository;
 import com.example.nexusgtics.entity.Ticket;
-import com.example.nexusgtics.repository.ArchivoRepository;
-import com.example.nexusgtics.repository.EquipoRepository;
-import com.example.nexusgtics.repository.SitioRepository;
-import com.example.nexusgtics.repository.TicketRepository;
+import com.example.nexusgtics.repository.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,15 +26,21 @@ public class AnalistaDespController {
     final TicketRepository ticketRepository;
     final SitioRepository sitioRepository;
 
+    final EmpresaRepository empresaRepository;
+
     final EquipoRepository equipoRepository;
     final ArchivoRepository archivoRepository;
+
 
     public AnalistaDespController(TicketRepository ticketRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository, ArchivoRepository archivoRepository){
         this.ticketRepository = ticketRepository;
         this.sitioRepository = sitioRepository;
         this.equipoRepository = equipoRepository;
+        this.empresaRepository = empresaRepository;
+
 
         this.archivoRepository = archivoRepository;
+
     }
 
 
@@ -182,33 +186,64 @@ public class AnalistaDespController {
     @GetMapping("/ticket")
     public String listaTicket(Model model){
         //'listar'
-        List<Ticket> lista = ticketRepository.findAll();
-        model.addAttribute("listaTicket", lista);
+        List<Ticket> listaTicket = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaTicket);
         return "AnalistaDespliegue/despliegueListaTickets";
     }
 
 
+
     @GetMapping("/crearTicket")
-    public String crearTicket(){
+    public String crearTicket(Model model) {
+        model.addAttribute("listaEmpresa", empresaRepository.findAll());
+        model.addAttribute("listaSitios", sitioRepository.findAll());
+
         return "AnalistaDespliegue/despliegueCrearTicket";
     }
 
+    @PostMapping("/saveTicket")
+    public String saveTicket( Ticket ticket,
+                              RedirectAttributes attr){
+
+        ticketRepository.save(ticket);
+        return "redirect:/analistaDespliegue/ticket";
+    }
+
+
     @GetMapping("/editarTicket")
-    public String editarTicket(){
-        return "AnalistaDespliegue/despliegueEditarTicket";
+    public String editarTicket(Model model, @RequestParam("id") int id){
+
+        Optional<Ticket> optTicket = ticketRepository.findById(id);
+        if(optTicket.isPresent()){
+            Ticket ticket = optTicket.get();
+            model.addAttribute("ticket", ticket);
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.findAll());
+            return "AnalistaDespliegue/despliegueEditarTicket";
+
+        }else{
+            return "redirect:/analistaDespliegue/ticket";
+        }
+
+    }
+
+
+    @GetMapping("/verTicket")
+    public String verticket(Model model, @RequestParam("id") int id){
+        Optional<Ticket> optionalTicket = ticketRepository.findById(id);
+        if(optionalTicket.isPresent()){
+            Ticket ticket = optionalTicket.get();
+            model.addAttribute("ticket", ticket);
+            return "AnalistaDespliegue/despliegueVistaTicket";
+        }else{
+            return "redirect:/analistaDespliegue/ticket";
+        }
     }
 
     @GetMapping("/dashboard")
     public String dashboard(){
         return "AnalistaDespliegue/despliegueDashboard";
     }
-
-    @GetMapping("/verTicket")
-    public String verticket(){
-        return "AnalistaDespliegue/despliegueVistaTicket";
-    }
-
-
     @GetMapping("/comentarios")
     public String comentarios(){
         return "AnalistaDespliegue/despliegueComentarios";
