@@ -135,7 +135,7 @@ public class AnalistaDespController {
 
             return "redirect:/analistaDespliegue/listaSitio";
         } else {
-            return "redirect:/analistaDespliegue/listaEquipo";
+            return "redirect:/analistaDespliegue/listaSitio";
         }
     }
 
@@ -147,14 +147,22 @@ public class AnalistaDespController {
         return "AnalistaDespliegue/despliegueListaEquipos";
     }
     @GetMapping("/verEquipo")
-    public String verEquipo(Model model, @RequestParam("id") int id){
+    public String verEquipo(Model model, @RequestParam("id") String idStr){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !equipoRepository.existsById(id)) {
+                return "redirect:/analistaDespliegue/listaSitio";
+            }
         Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
         if(optionalEquipo.isPresent()){
             Equipo equipo = optionalEquipo.get();
             model.addAttribute("equipo", equipo);
             return "AnalistaDespliegue/despliegueVerEquipos";
         }else {
-            return "redirect:/analistaDespliegue/listaEquipo";
+            return "redirect:/analistaDespliegue/listaSitio";
+        }
+        } catch (NumberFormatException e) {
+            return "redirect:/analistaDespliegue/listaSitio";
         }
     }
 
