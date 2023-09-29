@@ -77,7 +77,7 @@
                   </div>
                 </div>
 
-                <div class="input-group mb-3">
+                <div class="mb-3">
                   <label class="form-label">Sitio de despliegue:</label>
                   <select name="sitio" id="sitio" class="form-control">
                     <option value="">--Seleccione un sitio--</option>
@@ -85,21 +85,19 @@
                             th:text="${sitio.distrito}" th:value="${sitio.idSitios}">Sitio de Tipo</option>
                   </select>
                   </div>
+                <div class="mb-3">
+                    <label class="form-label">Tipo de Equipo:</label>
+                    <select name="tipoequipo" id="tipoequipo" class="form-control">
+                      <option value="">--Seleccione un tipo de Equipo--</option>
+                      <option th:each="equipo: ${listaTipoEquipos}"
+                              th:text="${equipo.nombreTipo}" th:value="${equipo.idTipoEquipo}">Sitio de Tipo</option>
+                    </select>
                 </div>
-                <div class="input-group mb-3">
-                  <label class="form-label">Tipo de Equipo:</label>
-                  <select name="tipoequipo" id="tipoequipo" class="form-control">
-                    <option value="">--Seleccione un tipo de Equipo--</option>
-                    <option th:each="equipo: ${listaTipoEquipos}"
-                            th:text="${equipo.nombreTipo}" th:value="${equipo.idTipoEquipo}">Sitio de Tipo</option>
-                  </select>
-                  </div>
-                </div>
-                <input type="hidden" name="habilitado" id="habilitado" value="1">
               </div>
+
               <br><br>
               <div class="col-md-6">
-
+                <input type="hidden" name="habilitado" id="habilitado" value="1">
                 <div class="mb-3">
                   <label for="imagenSubida" class="form-label">Foto de Equipo:</label>
                   <div class="card mx-auto" style="width: 250px; max-height: 250px">

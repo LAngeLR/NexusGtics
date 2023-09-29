@@ -5,6 +5,7 @@ import com.example.nexusgtics.repository.*;
 import com.sun.net.httpserver.HttpsServer;
 import jakarta.validation.Valid;
 import org.springframework.boot.Banner;
+import org.springframework.data.repository.query.parser.Part;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -190,7 +191,6 @@ public class AdminController {
             }
         }
     }
-
     /*EDITAR USUARIO*/
     @GetMapping({"/editarUsuario","editarusuario"})
     public String editarUsuario(Model model, @RequestParam("id") String idStr,
