@@ -87,7 +87,8 @@
                       <option value="">--Seleccione un cargo--</option>
                       <option th:each="cargo: ${listaCargo}"
                               th:unless="${cargo.nombreCargo == 'Super administrador' || cargo.nombreCargo == 'Administrador'}"
-                              th:text="${cargo.nombreCargo}" th:value="${cargo.idCargos}">Open this select menu</option>
+                              th:text="${cargo.nombreCargo}" th:value="${cargo.idCargos}"
+                      >Open this select menu</option>
                     </select>
                   </div>
 
@@ -96,7 +97,8 @@
                     <select class="form-select" name="empresa" id="empresa">
                       <option value="">--Seleccione una empresa--</option>
                       <option th:each="empresa: ${listaEmpresa}"
-                              th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}">Open this select menu</option>
+                              th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
+                      >Open this select menu</option>
                     </select>
                   </div>
                   <div class="mb-3">
