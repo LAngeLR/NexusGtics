@@ -122,6 +122,12 @@ public class SuperAdminController {
                               Model model,
                               RedirectAttributes attr){
 
+        if (!file.getContentType().startsWith("image/")) {
+            // El archivo no es una imagen, maneja el caso de error aquí
+            model.addAttribute("msgArchivo", "El archivo seleccionado no es una imagen.");
+            return "Superadmin/crearUsuario";
+        }
+
         if(usuario.getNombre().length() > 45){
             model.addAttribute("msgNombreLargo", "El nombre es demasiado largo.");
             return "Superadmin/crearUsuario";

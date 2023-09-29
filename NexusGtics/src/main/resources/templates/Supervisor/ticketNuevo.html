@@ -7,10 +7,12 @@
 <!-- ======= Header ======= -->
 <header th:replace="Fragmentos/header :: header('supervisor')"><!-- End Header --></header><!-- End Header -->
 <style>
-    #mi_mapa{
-        min-height: 25rem;
-        min-width: 30rem;
+    #map { height: 98vh; width: 100hw; }
+    select {
+        width: 30%;
+        font-size: 0.8rem
     }
+
 </style>
 
 <!-- ======= Sidebar ======= -->
@@ -130,7 +132,7 @@
                     <div class="card-body pt-3">
                         <div class="col-md-8 col-lg-9">
                             <h5 class="card-title" style="color: #095444">Foto del Sitio:</h5>
-                            <img th:src="@{https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg}" alt="Profile" style="max-height: 50rem;">
+                            <img th:src="@{https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg}" alt="Profile" style="max-width: 100%; height: auto; display: block; margin: 0 auto; max-height: 70vh;">
                             <br>
                             <div class="tab-content pt-2">
 
@@ -154,12 +156,12 @@
             <div class="card">
                 <div class="card-body pt-3">
                     <h5 class="card-title" style="color: #095444; text-align: center; ">Ubicacion</h5>
-                    <div id="mi_mapa" ></div>
+                    <div id="map" ></div>
                     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
                     <script>
                         var latitud = [[${ticket.idSitios.latitud}]];
                         var longitud = [[${ticket.idSitios.longitud}]];
-                        let map = L.map('mi_mapa').setView([latitud,longitud],18)
+                        let map = L.map('map').setView([latitud,longitud],18)
                         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         }).addTo(map);
