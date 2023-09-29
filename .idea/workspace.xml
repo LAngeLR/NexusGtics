@@ -8,8 +8,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AdminController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/entity/Sitio.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/entity/Sitio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/entity/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/entity/Usuario.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/crearSitio.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/crearSitio.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/editarEquipo.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/editarEquipo.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/editarSitio.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Administrador/editarSitio.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

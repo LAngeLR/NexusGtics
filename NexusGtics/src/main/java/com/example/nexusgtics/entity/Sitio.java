@@ -22,13 +22,13 @@ public class Sitio {
 
     @Column(name = "provincia", nullable = false, length = 45)
     @Size(max = 45)
-    @Pattern(regexp = "^[A-Za-z]+$", message = "La Provincia debe contener solo letras")
+    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "La Provincia debe contener solo letras")
     @NotBlank(message = "El campo no debe estar vacío")
     private String provincia;
 
     @Column(name = "distrito", nullable = false, length = 45)
     @Size(max = 45)
-    @Pattern(regexp = "^[A-Za-z]+$", message = "El distrito debe contener solo letras")
+    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "El distrito debe contener solo letras")
     @NotBlank(message = "El campo no debe estar vacío")
     private String distrito;
 
@@ -40,6 +40,7 @@ public class Sitio {
 
     @Column(name = "departamento", nullable = false, length = 45)
     @Size(max = 45)
+    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "El departamento debe contener solo letras")
     @NotBlank(message = "El campo no debe estar vacío")
     private String departamento;
 

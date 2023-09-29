@@ -363,11 +363,22 @@ public class AdminController {
 
         if (sitio.getTipo() == null || sitio.getTipo().equals("-1")) {
             model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
-            return "Administrador/crearSitio";
+
+            if (sitio.getIdSitios() == null) {
+                System.out.println("se mando en sitio, Tipo");
+                return "Administrador/crearSitio";
+            } else {
+                return "Administrador/editarSitio";
+            }
         }
         if (sitio.getTipoZona() == null || sitio.getTipoZona().equals("-1")) {
             model.addAttribute("msgZona", "Escoger un tipo de zona");
-            return "Administrador/crearSitio";
+            if (sitio.getIdSitios() == null) {
+                System.out.println("se mando en sitio, TipoZona");
+                return "Administrador/crearSitio";
+            } else {
+                return "Administrador/editarSitio";
+            }
         }
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (sitio.getArchivo() == null) {
@@ -390,7 +401,13 @@ public class AdminController {
             }
 
         } else { //hay al menos 1 error
-            return "Administrador/crearSitio";
+            System.out.println("se mando en sitio, Binding");
+            if (sitio.getIdSitios() == null) {
+                System.out.println("se mando en sitio, TipoZona");
+                return "Administrador/crearSitio";
+            } else {
+                return "Administrador/editarSitio";
+            }
         }
     }
 

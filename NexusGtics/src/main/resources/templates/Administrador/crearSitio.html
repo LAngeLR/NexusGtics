@@ -97,8 +97,8 @@
                 </div>
 
                 <div class="mb-3">
-                  <label for="tipoZona" class="form-label">Selector de Zona</label>
-                  <select class="form-select" name="tipoZona" id="tipoZona">
+                  <label class="form-label" >Selector de Zona</label>
+                  <select class="form-select" th:field="*{tipoZona}">
                     <option value="-1">--Seleccione una Zona--</option>
                     <option value="Urbana">Urbana</option>
                     <option value="Rural">Rural</option>
@@ -106,8 +106,8 @@
                 </div>
 
                 <div class="mb-3">
-                  <label for="tipo">Selector de Sitio:</label>
-                  <select name="tipo" id="tipo" class="form-control">
+                  <label class="form-label">Selector de Sitio:</label>
+                  <select th:field="*{tipo}" class="form-control">
                     <option value="-1">--Seleccione un Sitio--</option>
                     <option value="Movil">Móvil</option>
                     <option value="Fijo">Fijo</option>

@@ -19,13 +19,13 @@ public class Usuario {
 
     @Column(name = "nombre", nullable = false, length = 45)
     @NotBlank(message = "El campo no debe estar vacío")
-    @Pattern(regexp = "^[A-Za-z ]+$", message = "El nombre solo debe contener letras")
+    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "El nombre solo debe contener letras")
     @Size(max = 45)
     private String nombre;
 
     @Column(name = "apellido", nullable = false, length = 45)
     @NotBlank(message = "El campo no debe estar vacío")
-    @Pattern(regexp = "^[A-Za-z]+$", message = "El apellido debe contener solo letras")
+    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "El apellido debe contener solo letras")
     @Size(max = 45)
     private String apellido;
 

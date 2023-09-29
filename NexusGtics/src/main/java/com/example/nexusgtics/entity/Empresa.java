@@ -53,7 +53,7 @@ public class Empresa {
 
     @Column(name = "representante", nullable = false, length = 75)
     @NotBlank(message = "El campo no debe estar vacío")
-    @Pattern(regexp = "^[A-Za-z]+$", message = "El nombre del representante debe contener solo letras")
+    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "El nombre del representante debe contener solo letras")
     @Size(max = 75)
     private String representante;
 
