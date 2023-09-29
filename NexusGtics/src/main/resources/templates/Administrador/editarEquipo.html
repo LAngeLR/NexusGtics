@@ -50,30 +50,46 @@
 
                   <div class="mb-3">
                     <label class="form-label">Marca:</label>
-                    <input type="text" class="form-control" th:field="*{marca}">
+                    <input th:field="*{marca}" type="text" th:class="${#fields.hasErrors('marca')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}">
+                      Mensaje de error de marca
+                    </div>
                   </div>
 
                   <div class="mb-3">
                     <label class="form-label">Modelo:</label>
-                    <input type="text" class="form-control" th:field="*{modelo}">
+                    <input th:field="*{modelo}" type="text" th:class="${#fields.hasErrors('modelo')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('modelo')}" th:errors="*{modelo}">
+                      Mensaje de error de modelo
+                    </div>
                   </div>
 
                   <div class="mb-3">
                     <label class="form-label">Descripción:</label>
-                    <input class="form-control" aria-label="With textarea" th:field="*{descripcion}">
+                    <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
+                      Mensaje de error de descripcion
+                    </div>
                   </div>
 
                   <div class="mb-3">
                     <label class="form-label">Ficha técnica (fabricante):</label>
-                    <input type="text" class="form-control" th:field="*{paginaModelo}">
+                    <input th:field="*{paginaModelo}" type="text" th:class="${#fields.hasErrors('paginaModelo')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('paginaModelo')}" th:errors="*{paginaModelo}">
+                      Mensaje de error de paginaModelo
+                    </div>
                   </div>
+
                   <div class="mb-3">
                     <label>Sitio de despliegue:</label>
                     <select name="sitio" id="sitio" class="form-select">
                       <option th:each="sitio1: ${listaSitios}"
                               th:text="${sitio1.distrito}" th:value="${sitio1.idSitios}"
                               th:selected="${equipo.sitio.idSitios == sitio1.idSitios}">Open this select menu</option>
-                      <!--input type="hidden" class="form-control" th:field="*{sitio.idSitios}"-->
                     </select>
                   </div>
 
