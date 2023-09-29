@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Formulario</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
+  <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+</head>
+
+<body>
+<!-- ======= Header ======= -->
+<header class="header fixed-top d-flex align-items-center" style="background-color: #090B21">
+
+  <div class="d-flex align-items-center justify-content-between">
+    <a th:href="@{/}" class="logo d-flex align-items-center">
+      <img th:src="@{/assets/img/logo.png}" alt="">
+      <span class="d-none d-lg-block text-light">exus</span>
+    </a>
+    <i class="bi bi-list toggle-sidebar-btn text-light"></i>
+  </div><!-- End Logo -->
+
+  <div class="search-bar">
+    <form class="search-form d-flex align-items-center" method="POST" action="#">
+      <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+      <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+    </form>
+  </div><!-- End Search Bar -->
+
+  <nav class="header-nav ms-auto">
+    <ul class="d-flex align-items-center">
+
+      <li class="nav-item d-block d-lg-none">
+        <a class="nav-link nav-icon search-bar-toggle " href="#">
+          <i class="bi bi-search"></i>
+        </a>
+      </li><!-- End Search Icon-->
+
+
+      <li class="nav-item dropdown">
+
+        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-chat-left-text text-light"></i>
+          <span class="badge bg-success badge-number" ></span>
+        </a><!-- End Messages Icon -->
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages" style="position: absolute; inset: 0px 0px auto auto; margin: 0px;transform: translate3d(-19.5px, 35px, 0px);" data-popper-placement="bottom-end">
+          <li class="dropdown-divider">
+            Tú tienes nuevos mensajes
+          </li>
+          <li class="message-item" th:each=" ticket, info : ${listaTicket}" th:if="${ticket.estado==2}">
+            <a th:href="@{'/tecnico/verTicket?id='+${ticket.idTickets}}">
+              <div>
+                <h6 th:text="${ticket.usuarioSolicitante}"></h6>
+                <p style="font-size: xx-small" th:text="${ticket.fechaCreacion}"></p>
+                <p th:text="${'ID del Ticket: '+ticket.idTickets}"></p>
+                <p th:text="${ticket.descripcion}" style="font-size: xx-small"></p>
+                <p th:if="${ticket.estado==2}"><span class="badge text-bg-primary">Nuevo</span></p>
+              </div>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+        </ul><!-- End Messages Dropdown Items -->
+      </li><!-- End Messages Nav -->
+
+      <li class="nav-item dropdown pe-3">
+
+        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+          <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+          <span class="d-none d-md-block dropdown-toggle ps-2 text-light">K. Anderson</span>
+        </a><!-- End Profile Iamge Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+          <li class="dropdown-header">
+            <h6>Kevin Anderson</h6>
+            <span th:text="${cargo}">Admin</span>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" th:href="@{'/' + ${cargo} +'/perfil'}">
+              <i class="bi bi-person"></i>
+              <span>Mi perfil</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" th:href="@{/login}">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Cerrar sesión</span>
+            </a>
+          </li>
+
+        </ul><!-- End Profile Dropdown Items -->
+      </li><!-- End Profile Nav -->
+
+    </ul>
+  </nav><!-- End Icons Navigation -->
+</header>
+<!-- ======= Sidebar ======= -->
+<aside th:replace="Fragmentos/menuTecnico :: menu"></aside><!-- End Sidebar-->
+
+<main id="main" class="main">
+  <div class="container">
+    <div class="pagetitle">
+      <h1>Formulario</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a th:href="@{/tecnico/}">Home</a></li>
+          <li class="breadcrumb-item active">Tickets Asignados</li>
+          <li class="breadcrumb-item active">Datos del ticket</li>
+          <li class="breadcrumb-item active">Formulario</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section profile" th:object="${formulario}">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Información del cliente y ticket:</h5>
+              <!-- Advanced Form Elements -->
+              <div class="tab-pane fade show active profile-overview" id="datos-overview">
+                <div class="row">
+                  <div class="col-sm-10">
+                    <!--<input type="hidden" class="form-control" th:field="*{}">
+                    <input type="hidden" class="form-control" th:field="*{}">-->
+
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">ID del Ticket:</div>
+                      <div class="col-lg-9 col-md-8" th:text="${formulario.ticket.idTickets}"></div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">Nombre completo</div>
+                      <div class="col-lg-9 col-md-8" th:text="${formulario.ticket.usuarioSolicitante}"></div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">Prioridad del Ticket</div>
+                      <div class="col-lg-9 col-md-8" th:text="${formulario.ticket.prioridad}"></div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">Servicio</div>
+                      <div class="col-lg-9 col-md-8" th:text="${formulario.ticket.idTipoTicket.nombreTipoTicket}"></div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">Fecha</div>
+                      <div class="col-lg-9 col-md-8" th:text="${formulario.fechaLlenado}"></div>
+                    </div>
+
+                  </div>
+                  <div class="mb-3">
+                    <h5>Descripción:</h5>
+                    <div class="col-lg-3 col-md-4 label">Del trabajo realizado</div>
+                    <div class="col-lg-9 col-md-8" th:text="${formulario.descripcion}"></div>
+                  </div>
+                </div>
+
+                <!--<div class="mb-3">
+                    <h5><b>Subir foto:</b></h5>
+                    <label for="imagenSubida" class="form-label">Agregar imagen</label>
+                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida" accept="image/*"
+                           onchange="previewImage(event, '#imgPreview')">
+                </div> -->
+
+                <div class="mb-3">
+                  <label class="form-label">Foto de trabajo realizado:</label>
+                  <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                    <img id="imgPreview" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                  </div>
+                </div>
+
+                <div class="row mb-5">
+                  <h5><b>Datos del técnico:</b></h5>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Nombre</div>
+                    <div class="col-lg-9 col-md-8" th:text="${formulario.tecnico.nombre}"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Apellido</div>
+                    <div class="col-lg-9 col-md-8" th:text="${formulario.tecnico.apellido}"></div>
+                  </div>
+                  </div>
+              </div><!-- End General Form Elements -->
+              <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicketCerrado?id='+${formulario.ticket.idTickets}}">Regresar</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </div>
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+  <div class="credits" style="font-size: x-small;color:#5e5d5d">
+    Contacto: ☎ | 2758403  ✉ | <a href="mailto:nexus.empresatcom@gmail.com" style="color:#5e5d5d"> nexus.empresatcom@gmail.com</a>
+  </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/foto.js}"></script>
+
+</body>
+
+</html>
