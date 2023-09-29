@@ -84,7 +84,7 @@
                   <div class="mb-3">
                     <label for="cargo" class="form-label">Selector de cargos</label>
                     <select class="form-select" name="cargo" id="cargo">
-                      <option value="-1">--Seleccione un cargo--</option>
+                      <option value="">--Seleccione un cargo--</option>
                       <option th:each="cargo: ${listaCargo}"
                               th:unless="${cargo.nombreCargo == 'Super administrador' || cargo.nombreCargo == 'Administrador'}"
                               th:text="${cargo.nombreCargo}" th:value="${cargo.idCargos}">Open this select menu</option>
@@ -94,7 +94,7 @@
                   <div class="mb-3">
                     <label for="empresa" class="form-label">Selector de Empresas</label>
                     <select class="form-select" name="empresa" id="empresa">
-                      <option value="-1">--Seleccione una empresa--</option>
+                      <option value="">--Seleccione una empresa--</option>
                       <option th:each="empresa: ${listaEmpresa}"
                               th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}">Open this select menu</option>
                     </select>

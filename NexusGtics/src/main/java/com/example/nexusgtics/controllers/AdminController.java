@@ -4,6 +4,7 @@ import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
 import com.sun.net.httpserver.HttpsServer;
 import jakarta.validation.Valid;
+import org.springframework.boot.Banner;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -293,7 +294,8 @@ public class AdminController {
     }
 
     @GetMapping({"/crearSitio","/crearsitio"})
-    public String crearSitio(Model model){
+    public String crearSitio(Model model,
+                                @ModelAttribute("sitio") Sitio sitio){
         return "Administrador/crearSitio";
     }
 
@@ -320,7 +322,8 @@ public class AdminController {
 
     /*EDITAR Sitio*/
     @GetMapping({"/editarSitio"})
-    public String editarSitio(Model model, @RequestParam("id") String idStr){
+    public String editarSitio(Model model, @RequestParam("id") String idStr,
+                              @ModelAttribute("sitio") @Valid Sitio sitio, BindingResult bindingResult){
 
         try{
             int id = Integer.parseInt(idStr);
@@ -329,7 +332,7 @@ public class AdminController {
             }
             Optional<Sitio> optionalSitio = sitioRepository.findById(id);
             if (optionalSitio.isPresent()){
-                Sitio sitio = optionalSitio.get();
+                sitio = optionalSitio.get();
                 model.addAttribute("sitio", sitio);
                 return "Administrador/editarSitio";
             }else {
@@ -353,26 +356,41 @@ public class AdminController {
     /*CREAR NUEVO SITIO*/
     @PostMapping("/saveSitio")
     public String saveSitio(@RequestParam("imagenSubida") MultipartFile file,
-                              Sitio sitio,
+                            @ModelAttribute("sitio") @Valid Sitio sitio,
+                              BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
-        if (sitio.getArchivo() == null) {
-            sitio.setArchivo(new Archivo());
+
+        if (sitio.getTipo() == null || sitio.getTipo().equals("-1")) {
+            model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
+            return "Administrador/crearSitio";
         }
-        String fileName = file.getOriginalFilename();
-        try{
-            Archivo archivo = sitio.getArchivo();
-            archivo.setNombre(fileName);
-            archivo.setTipo(1);
-            archivo.setArchivo(file.getBytes());
-            archivo.setContentType(file.getContentType());
-            archivoRepository.save(archivo);
-            int idImagen = archivo.getIdArchivos();
-            sitio.getArchivo().setIdArchivos(idImagen);
-            sitioRepository.save(sitio);
-            return "redirect:/admin/listaSitio";
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (sitio.getTipoZona() == null || sitio.getTipoZona().equals("-1")) {
+            model.addAttribute("msgZona", "Escoger un tipo de zona");
+            return "Administrador/crearSitio";
+        }
+        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+            if (sitio.getArchivo() == null) {
+                sitio.setArchivo(new Archivo());
+            }
+            String fileName = file.getOriginalFilename();
+            try{
+                Archivo archivo = sitio.getArchivo();
+                archivo.setNombre(fileName);
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+                int idImagen = archivo.getIdArchivos();
+                sitio.getArchivo().setIdArchivos(idImagen);
+                sitioRepository.save(sitio);
+                return "redirect:/admin/listaSitio";
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        } else { //hay al menos 1 error
+            return "Administrador/crearSitio";
         }
     }
 

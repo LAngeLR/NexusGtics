@@ -69,11 +69,11 @@
                   </div>
                   <div class="mb-3">
                     <label>Sitio de despliegue:</label>
-                    <select name="idSitios" id="idSitios" class="form-select">
+                    <select name="sitio" id="sitio" class="form-select">
                       <option th:each="sitio1: ${listaSitios}"
                               th:text="${sitio1.distrito}" th:value="${sitio1.idSitios}"
                               th:selected="${equipo.sitio.idSitios == sitio1.idSitios}">Open this select menu</option>
-                      <input type="hidden" class="form-control" th:field="*{sitio.idSitios}">
+                      <!--input type="hidden" class="form-control" th:field="*{sitio.idSitios}"-->
                     </select>
                   </div>
 
