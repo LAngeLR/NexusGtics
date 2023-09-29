@@ -127,20 +127,11 @@ public class AnalistaDespController {
     }
 
     @PostMapping("/agregarEquipo")
-    public String agregarEquipo(@RequestParam("idSitios") int idSitios,
-                                @RequestParam("idEquipos") int idEquipos, RedirectAttributes attr){
+    public String agregarEquipo(@RequestParam("idEquipos") int idEquipos) {
         Optional<Equipo> optionalEquipo = equipoRepository.findById(idEquipos);
-        Optional<Sitio> optionalSitio = sitioRepository.findById(idSitios);
 
-        if (optionalEquipo.isPresent() && optionalSitio.isPresent()) {
-            Equipo equipo = optionalEquipo.get();
-            System.out.println(equipo.getIdEquipos());
-            Sitio sitio = optionalSitio.get();
-            System.out.println(sitio.getIdSitios());
-
-            equipo.setSitio(sitio);
-
-            equipoRepository.agregarEquipo(sitio.getIdSitios(), equipo.getIdEquipos());
+        if (optionalEquipo.isPresent()) {
+            equipoRepository.agregarEquipo(idEquipos);
 
             return "redirect:/analistaDespliegue/listaSitio";
         } else {

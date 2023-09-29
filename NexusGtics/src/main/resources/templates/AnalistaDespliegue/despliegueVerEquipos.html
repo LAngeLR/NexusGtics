@@ -36,7 +36,8 @@
                     <form method="POST" th:action="@{/analistaDespliegue/agregarEquipo}" th:object="${equipo}">
                         <div class="row">
                             <div class="col-md-6">
-
+                                <input type="hidden"  name="equipo" id="equipo" class="form-control" th:field="*{idEquipos}">
+                                <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
                                 <div class="mb-3">
                                     <label class="form-label">Tipo de equipo:</label>
                                     <input type="text" class="form-control" th:field="*{tipoequipo.nombreTipo}" disabled>

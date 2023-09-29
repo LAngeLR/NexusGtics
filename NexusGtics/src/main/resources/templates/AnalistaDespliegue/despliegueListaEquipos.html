@@ -25,7 +25,7 @@
         </nav>
       </div><!-- End Page Title -->
 
-      <section class="section">
+      <section class="section" >
         <div class="row">
           <div class="col-lg-12">
 
@@ -53,7 +53,18 @@
                     <td th:text="${equipo.tipoequipo.nombreTipo}">Tipo</td>
                     <td th:text="${equipo.marca}">Marca</td>
                     <td th:text="${equipo.modelo}">Modelo</td>
-                    <td><a type="button" class="btn btn-outline-dark" th:href="@{'/analistaDespliegue/verEquipo?id=' + ${equipo.idEquipos}}">Ver</a></td>
+                    <td>
+                      <div class="dropdown">
+                        <button class="btn btn-light dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                          </svg>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" th:href="@{'/analistaDespliegue/verEquipo?id=' + ${equipo.idEquipos}}">Visualizar</a></li>
+                        </ul>
+                      </div>
+                    </td>
                   </tr>
                   </tbody>
                 </table>
