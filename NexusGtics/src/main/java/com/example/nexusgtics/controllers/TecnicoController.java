@@ -1,7 +1,9 @@
 package com.example.nexusgtics.controllers;
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
+import org.hibernate.mapping.Formula;
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
+import org.springframework.http.codec.FormHttpMessageReader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,7 +35,7 @@ public class TecnicoController {
                              TipoticketRepository tipoticketRepository, SitioRepository sitioRepository, ComentarioRepository comentarioRepository,
                              CuadrillaRepository cuadrillaRepository, ArchivoRepository archivoRepository,
                              FormularioRepository formularioRepository,
-                             EquipoRepository equipoRepository){
+                             EquipoRepository equipoRepository) {
         this.ticketRepository = ticketRepository;
         this.usuarioRepository = usuarioRepository;
         this.tipoticketRepository = tipoticketRepository;
@@ -43,20 +45,22 @@ public class TecnicoController {
         this.formularioRepository = formularioRepository;
 
     }
+
     @GetMapping(value = {"/", ""})
-    public String paginaPrincipal(Model model){
-        List<Ticket> listaT= ticketRepository.findAll();
+    public String paginaPrincipal(Model model) {
+        List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
-            return "Tecnico/tecnico";
+        return "Tecnico/tecnico";
     }
+
     @GetMapping("/perfiltecnico")
-    public String perfilTecnico(Model model, @RequestParam("id") int id){
+    public String perfilTecnico(Model model, @RequestParam("id") int id) {
         Optional<Usuario> optUsuario = usuarioRepository.findById(id);
-        if(optUsuario.isPresent()){
+        if (optUsuario.isPresent()) {
             Usuario usuario = optUsuario.get();
-            model.addAttribute("usuario",usuario);
+            model.addAttribute("usuario", usuario);
             return "Tecnico/perfiltecnico";
-        }else {
+        } else {
             return "redirect:/Tecnico/perfiltecnico";
         }
     }
@@ -64,77 +68,161 @@ public class TecnicoController {
     //-----------------------------------------------------------------------
 
     @GetMapping("/comentarios")
-    public String pagcomentarios(Model model,@RequestParam("id") int id,
-    RedirectAttributes attr){
-        List<Ticket> listaT= ticketRepository.findAll();
+    public String pagcomentarios(Model model, @RequestParam("id") int id,
+                                 RedirectAttributes attr) {
+        List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
-        if(optionalTicket.isPresent()){
+        if (optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaTicket", ticketRepository.findAll());
             return "Tecnico/comentarios";
-        }else{
+        } else {
             return "redirect:/ticket/verticket";
         }
     }
+
     //-----------------------------------------------------------------------
     @GetMapping("/dashboard")
-    public String pagdashboard(Model model){
+    public String pagdashboard(Model model) {
         List<Ticket> lista = ticketRepository.findAll();
         model.addAttribute("ticketList", lista);
-        List<Ticket> listaT= ticketRepository.findAll();
+        List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
         return "Tecnico/dashboard";
     }
 
     //YA ESTA CRUD LISTAR
     @GetMapping("/ticketasignado")
-    public String pagtickasignado(Model model){
+    public String pagtickasignado(Model model) {
         //'listar'
         List<Ticket> lista = ticketRepository.findAll();
         model.addAttribute("ticketList", lista);
-        List<Ticket> listaT= ticketRepository.findAll();
+        List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
         return "Tecnico/ticket_asignado";
     }
+
     //-----------------------------------------------------------------------
-    @GetMapping({"/verTicket","/verticket"})
+    @GetMapping({"/verTicket", "/verticket"})
     public String pagdatostick(Model model, @RequestParam("id") int id,
-                               RedirectAttributes attr){
-       // Optional <Ticket> optionalTicket = ticketRepository.findById(id);
+                               RedirectAttributes attr) {
+        // Optional <Ticket> optionalTicket = ticketRepository.findById(id);
         //Optional <Comentario> optionalComentario = comentarioRepository.findById(id);
         //Optional <Formulario> optionalFormulario = formularioRepository.findById(id);
         //if(optionalTicket.isPresent() && optionalComentario.isPresent() && optionalFormulario.isPresent()){
-          //  Ticket ticket = optionalTicket.get();
-            //Comentario comentario = optionalComentario.get();
-           // Formulario formulario = optionalFormulario.get();
-           // model.addAttribute("ticket", ticket);
-           // model.addAttribute("comentario", comentario);
-           // model.addAttribute("formulario", formulario);
-           // return "Tecnico/datos_ticket";
-      //  }else{
+        //  Ticket ticket = optionalTicket.get();
+        //Comentario comentario = optionalComentario.get();
+        // Formulario formulario = optionalFormulario.get();
+        // model.addAttribute("ticket", ticket);
+        // model.addAttribute("comentario", comentario);
+        // model.addAttribute("formulario", formulario);
+        // return "Tecnico/datos_ticket";
+        //  }else{
         //    return "Tecnico/ticket_asignado";
-      //  }
-        List<Ticket> listaT= ticketRepository.findAll();
+        //  }
+        List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
-        try{
-            if(id <=0 || !ticketRepository.existsById(id)){
+        try {
+            if (id <= 0 || !ticketRepository.existsById(id)) {
                 return "redirect:/ticket/ticketasignado";
             }
             Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
             Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
-            if(optionalTicket1.isPresent() && optionalFormulario.isPresent()){
+            if (optionalTicket1.isPresent() && optionalFormulario.isPresent()) {
                 Ticket ticket = optionalTicket1.get();
                 Formulario formulario = optionalFormulario.get();
                 model.addAttribute("ticket", ticket);
                 model.addAttribute("formulario", formulario);
                 model.addAttribute("listaTicket", ticketRepository.findAll());
                 return "Tecnico/datos_ticket";
-            }else{
+            } else {
                 return "redirect:/ticket/ticketasignado";
             }
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
+            return "redirect:/tecnico/ticketasignado";
+        }
+    }
+
+    //------------------- DATOS DE PROGRESO---------------------------------//
+    @GetMapping({"/verTicketProgreso", "/verticketprogreso"})
+    public String pagdatostickProgreso(Model model, @RequestParam("id") int id,
+                               RedirectAttributes attr) {
+        List<Ticket> listaT1 = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT1);
+        try {
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/ticket/ticketasignado";
+            }
+            Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            if (optionalTicket1.isPresent() && optionalFormulario.isPresent()) {
+                Ticket ticket = optionalTicket1.get();
+                Formulario formulario = optionalFormulario.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("formulario", formulario);
+                model.addAttribute("listaTicket", ticketRepository.findAll());
+                return "Tecnico/datost_progreso";
+            } else {
+                return "redirect:/ticket/ticketasignado";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/tecnico/ticketasignado";
+        }
+    }
+
+    //------------------- DATOS DE NUEVO---------------------------------//
+    @GetMapping({"/verTicketNuevo", "/verticketnuevo"})
+    public String pagdatostickNuevo(Model model, @RequestParam("id") int id,
+                                       RedirectAttributes attr) {
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+        try {
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/ticket/ticketasignado";
+            }
+            Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            if (optionalTicket1.isPresent() && optionalFormulario.isPresent()) {
+                Ticket ticket = optionalTicket1.get();
+                Formulario formulario = optionalFormulario.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("formulario", formulario);
+                model.addAttribute("listaTicket", ticketRepository.findAll());
+                return "Tecnico/datost_nuevo";
+            } else {
+                return "redirect:/ticket/ticketasignado";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/tecnico/ticketasignado";
+        }
+    }
+
+
+    //------------------- DATOS DE CERRADO---------------------------------//
+    @GetMapping({"/verTicketCerrado", "/verticketcerrado"})
+    public String pagdatostickCerrado(Model model, @RequestParam("id") int id,
+                                       RedirectAttributes attr) {
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+        try {
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/ticket/ticketasignado";
+            }
+            Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            if (optionalTicket1.isPresent() && optionalFormulario.isPresent()) {
+                Ticket ticket = optionalTicket1.get();
+                Formulario formulario = optionalFormulario.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("formulario", formulario);
+                model.addAttribute("listaTicket", ticketRepository.findAll());
+                return "Tecnico/datost_cerrado";
+            } else {
+                return "redirect:/ticket/ticketasignado";
+            }
+        } catch (NumberFormatException e) {
             return "redirect:/tecnico/ticketasignado";
         }
     }
@@ -142,8 +230,8 @@ public class TecnicoController {
     @PostMapping("/guardarEstado")
     public String guardarEstado(Ticket ticket,
                                 @RequestParam("estado") int estado,
-                                RedirectAttributes attributes){
-        try{
+                                RedirectAttributes attributes) {
+        try {
             ticketRepository.guardarEstado(estado);
             return "redirect:/tecnico/ticketasignado";
         } catch (Exception e) {
@@ -155,7 +243,7 @@ public class TecnicoController {
     //-----------------------------------------------------------------------
     @PostMapping("/actualizarEstado")
     public String actualizarEstado(@ModelAttribute("ticket") @Valid Ticket ticket, BindingResult bindingResult,
-                                   Model model, RedirectAttributes attr){
+                                   Model model, RedirectAttributes attr) {
 
         if (!bindingResult.hasErrors()) {
 
@@ -182,20 +270,19 @@ public class TecnicoController {
     //-----------------------------------------------------------------------
 
 
-
     @GetMapping("/desplazamiento")
-    public String pagdesplazamiento(Model model,@RequestParam("id") int id,
-                                    RedirectAttributes attr){
-        List<Ticket> listaT= ticketRepository.findAll();
+    public String pagdesplazamiento(Model model, @RequestParam("id") int id,
+                                    RedirectAttributes attr) {
+        List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket1", listaT);
 
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
-        if(optionalTicket.isPresent()){
+        if (optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaTicket", ticketRepository.findAll());
             return "Tecnico/desplazamiento";
-        }else{
+        } else {
             return "redirect:/ticket/verticket";
         }
 
@@ -205,7 +292,7 @@ public class TecnicoController {
     /*Formulario*/
     @GetMapping({"/formulario", "formulario"})
     public String pagformulario(Model model, @RequestParam("id") String idStr,
-                                @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult){
+                                @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult) {
         /*List<Ticket> lista = ticketRepository.findAll();
         model.addAttribute("ticketList", lista);
 
@@ -226,24 +313,23 @@ public class TecnicoController {
         model.addAttribute("listaUsuario", usuarioRepository.findAll());
         model.addAttribute("ticketList", ticketRepository.findAll());
         return "Tecnico/formulario";*/
-        List<Ticket> listaT= ticketRepository.findAll();
+        List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
         try {
             int id = Integer.parseInt(idStr);
-            if(id <=0 || !formularioRepository.existsById(id)){
+            if (id <= 0 || !formularioRepository.existsById(id)) {
                 return "redirect:/tecnico/verTicket";
             }
             Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
-            if(optionalFormulario.isPresent()){
+            if (optionalFormulario.isPresent()) {
                 formulario = optionalFormulario.get();
                 model.addAttribute("formulario", formulario);
                 model.addAttribute("idTick", formularioRepository.obtenerid(id));
                 return "Tecnico/formulario";
-            }else{
+            } else {
                 return "redirect:/tecnico/verTicket";
             }
-        }
-        catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return "redirect:/tecnico/verTicket";
         }
     }
@@ -252,8 +338,8 @@ public class TecnicoController {
     @PostMapping("/saveFormulario")
     public String saveFormulario(@RequestParam("imagenSubida") MultipartFile file,
                                  @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult,
-                                 Model model, RedirectAttributes attr){
-        if(!bindingResult.hasErrors()) {
+                                 Model model, RedirectAttributes attr) {
+        if (!bindingResult.hasErrors()) {
             if (formulario.getArchivo() == null) {
                 formulario.setArchivo(new Archivo());
             }
@@ -276,20 +362,39 @@ public class TecnicoController {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }
-        else{
+        } else {
             return "Tecnico/formulario";
         }
     }
 
     //-----------------------------------------------------------------------
     @GetMapping("/mapa")
-    public String pagmapa(Model model){
-        List<Ticket> listaT= ticketRepository.findAll();
+    public String pagmapa(Model model) {
+        List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
         List<Sitio> sitioList = sitioRepository.findAll();
         model.addAttribute("sitioList", sitioList);
         return "Tecnico/mapa";
+    }
+
+    @GetMapping("/formularioCerrado")
+    public String formularioCerrado(Model model, @RequestParam("id") String idStr) {
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !formularioRepository.existsById(id)) {
+                return "redirect:/tecnico/datostickets";
+            }
+            Optional<Formulario> formularioOptional = formularioRepository.findById(id);
+            if (formularioOptional.isPresent()) {
+                Formulario formulario = formularioOptional.get();
+                model.addAttribute("formulario", formulario);
+                return "Tecnico/formularioCerrado";
+            } else {
+            return "redirect:/tecnico/datostickets";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/tecnico/datosticket";
+        }
     }
 
 }
