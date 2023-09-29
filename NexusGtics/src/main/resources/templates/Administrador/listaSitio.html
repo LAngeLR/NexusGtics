@@ -35,39 +35,8 @@
                 <div class="container">
 
                   <a th:href="@{/admin/crearSitio}" class="btn btn-outline-primary me-2 mt-3 float-end">Nuevo sitio</a>
-                  <a th:href="@{/admin/crearUsuario}" class="btn btn-outline-dark me-2 mt-3 float-end" data-bs-toggle="modal" data-bs-target="#prueba">Añadir campo</a>
+                  <a th:href="@{/admin/crearCampo}" class="btn btn-outline-dark me-2 mt-3 float-end">Añadir campo</a>
 
-                  <!-- MODAL -->
-                  <div class="modal fade" id="prueba" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="staticBackdropLabel">Añadir nuevo campo</h1>
-                        </div>
-                        <div class="modal-body">
-                          <div class="mb-3">
-                            <label for="descripcion">Nombre del campo:</label>
-                            <input type="text" class="form-control" name="descripcion" id="descripcion">
-                          </div>
-                          <div class="input-group mb-3">
-                            <label for="consola">Formato del campo:</label>
-                            <div class="col-12">
-                              <select name="consola" id="consola" class="form-control">
-                                <option value="Cargo1">Boolean</option>
-                                <option value="Cargo2">String</option>
-                                <option value="Cargo3">Int</option>
-                                <option value="Cargo4">Double</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cerrar</button>
-                          <button type="button" class="btn btn-outline-primary">Añadir</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
 
                   <h5 class="card-title">Lista de sitios</h5>
                   <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>

@@ -660,4 +660,30 @@ public class AdminController {
         return "redirect:/admin/listaEquipo";
     }
 
+
+
+    // Direcciona al form CAMPOS DINAMICOS
+    @GetMapping({"/crearCampo","/crearcampo"})
+    public String crearCampo(Model model,
+                             @ModelAttribute("equipo") Equipo equipo){
+        model.addAttribute("listaSitios",sitioRepository.findAll());
+        model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+        return "Administrador/campoDinamico";
+    }
+
+    // CREAR NUEVO CAMPO DINAMICO (POST)
+    @GetMapping({"/saveCampo","/savecampo"})
+    public String saveCampo( @ModelAttribute("sitio") Sitio sitio,
+                             @RequestParam("campo") String campo,
+                             @RequestParam("valor") String valor){
+        CampoDinamico nuevoCampo = new CampoDinamico();
+        nuevoCampo.setNombre(campo);
+        nuevoCampo.setValor(valor);
+        nuevoCampo.setSitio(sitio);
+
+        // sitio.getCamposDinamicos().add(nuevoCampo);
+        return "redirect:/admin/listaSitio";
+    }
+
+
 }

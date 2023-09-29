@@ -66,5 +66,8 @@ public class Sitio {
     @ManyToOne
     @JoinColumn(name = "idArchivos")
     private Archivo archivo;
-
+    /*
+    @OneToMany(mappedBy = "sitio", cascade = CascadeType.ALL)
+    private List<CampoDinamico> camposDinamicos = new ArrayList<>();
+*/
 }
