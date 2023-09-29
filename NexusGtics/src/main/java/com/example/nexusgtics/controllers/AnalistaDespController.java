@@ -62,7 +62,12 @@ public class AnalistaDespController {
             Optional<Sitio> optSitio = sitioRepository.findById(id);
             if(optSitio.isPresent()){
                 Sitio sitio = optSitio.get();
+
+                // Obtén la lista de equipos por sitio
+                List<Equipo> listaEquipos = equipoRepository.listaEquiposPorSitio(id);
+
                 model.addAttribute("sitio", sitio);
+                model.addAttribute("listaEquipos", listaEquipos);
                 return "AnalistaDespliegue/despliegueEditarSitio";
             }else {
                 return "redirect:/analistaDespliegue/listaSitio";
@@ -121,34 +126,43 @@ public class AnalistaDespController {
         }
     }
 
-    @PostMapping("/guardarEquipo")
-    public String agregarEquipo(@RequestParam("idSitios") int idSitios,
-                                @RequestParam("idEquipos") int idEquipos, RedirectAttributes attr){
+    @PostMapping("/agregarEquipo")
+    public String agregarEquipo(@RequestParam("idEquipos") int idEquipos) {
         Optional<Equipo> optionalEquipo = equipoRepository.findById(idEquipos);
-        if(optionalEquipo.isPresent()){
-            equipoRepository.agregarEquipo(idSitios, idEquipos);
+
+        if (optionalEquipo.isPresent()) {
+            equipoRepository.agregarEquipo(idEquipos);
+
             return "redirect:/analistaDespliegue/listaSitio";
-        }else {
-            return "redirect:/analistaDespliegue/listaEquipo";
+        } else {
+            return "redirect:/analistaDespliegue/listaSitio";
         }
     }
 
 
     @GetMapping("/listaEquipo")
-    public String listaEquipo(Model model ){
-        List<Equipo> listaEquipo = equipoRepository.findAll();
+        public String listaEquipo(Model model, @RequestParam("id") int id){
+        List<Equipo> listaEquipo = equipoRepository.listaEquiposNoSitio(id);
         model.addAttribute("listaEquipo",listaEquipo);
         return "AnalistaDespliegue/despliegueListaEquipos";
     }
     @GetMapping("/verEquipo")
-    public String verEquipo(Model model, @RequestParam("id") int id){
+    public String verEquipo(Model model, @RequestParam("id") String idStr){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !equipoRepository.existsById(id)) {
+                return "redirect:/analistaDespliegue/listaSitio";
+            }
         Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
         if(optionalEquipo.isPresent()){
             Equipo equipo = optionalEquipo.get();
             model.addAttribute("equipo", equipo);
             return "AnalistaDespliegue/despliegueVerEquipos";
         }else {
-            return "redirect:/analistaDespliegue/listaEquipo";
+            return "redirect:/analistaDespliegue/listaSitio";
+        }
+        } catch (NumberFormatException e) {
+            return "redirect:/analistaDespliegue/listaSitio";
         }
     }
 

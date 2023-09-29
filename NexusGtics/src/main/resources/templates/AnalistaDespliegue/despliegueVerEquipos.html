@@ -33,10 +33,11 @@
                     <div class="pagetitle">
                         <h1 class="card-title">Vista de equipo</h1>
                     </div>
-                    <form method="POST" action="" enctype="multipart/form-data" th:object="${equipo}" >
+                    <form method="POST" th:action="@{/analistaDespliegue/agregarEquipo}" th:object="${equipo}">
                         <div class="row">
                             <div class="col-md-6">
-
+                                <input type="hidden"  name="equipo" id="equipo" class="form-control" th:field="*{idEquipos}">
+                                <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
                                 <div class="mb-3">
                                     <label class="form-label">Tipo de equipo:</label>
                                     <input type="text" class="form-control" th:field="*{tipoequipo.nombreTipo}" disabled>
@@ -62,11 +63,11 @@
                                     <input type="text" class="form-control" th:field="*{paginaModelo}" disabled>
                                 </div>
 
-                                <div-- class="mb-3">
+                                <div class="mb-3">
                                     <label class="form-label">Sitio de despliegue:</label>
                                     <input type="text" class="form-control" th:value="${equipo.sitio.distrito}" disabled>
 
-                                </div-->
+                                </div>
 
 
                             </div>
@@ -79,14 +80,15 @@
                                     <img th:src="@{|image/${equipo.archivo.idArchivos}|}" style="max-width: 600px;" alt="">
                                 </div>
 
-                                <!--button type="submit" class="btn btn-outline-primary float-end"  >Editar</button>
-                                <button type="submit" class="btn btn-outline-danger float-start">Desactivar</button-->
-
                             </div>
 
                             <div>
                                 <br>
+                                <input type="hidden" name="idSitios" th:value="${equipo.sitio.idSitios}" />
+                                <input type="hidden" name="idEquipos" th:value="${equipo.idEquipos}" />
                                 <button  type="submit" class="btn btn-outline-primary " >Agregar</button>
+                                <button  th:href="@{/analistaDespliegue/listaEquipo}" class="btn btn-outline-danger " >Regresar</button>
+
                             </div>
                         </div>
                     </form>
