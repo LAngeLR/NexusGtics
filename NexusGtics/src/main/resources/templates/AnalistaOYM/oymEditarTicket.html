@@ -70,8 +70,10 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <input type="hidden" class="form-control" th:field="*{idTickets}">
-                                <input type="hidden" name="estado" id="estado" value="1">
-
+                                <input type="hidden" name="estado" id="estado" th:field="*{estado}">
+                                <input type="hidden" name="fechaCreacion" id="fechaCreacion" th:field="*{fechaCreacion}">
+                                <input type="hidden" name="idTipoTicket" id="idTipoTicket" value="1">
+                                <input type="hidden" name="idUsuarioCreador" id="idUsuarioCreador" value="4">
 
                                 <div class="mb-3">
                                     <label class="form-label">Empresa</label>
@@ -119,8 +121,6 @@
                                 <div class="mb-3">
                                     <label for="prioridad" class="form-label">Selector de Prioridad</label>
                                     <select class="form-select" name="prioridad" id="prioridad">
-
-                                        <option value="-1" >--Seleccione una Prioridad--</option>
                                         <option value="Baja prioridad">Baja prioridad</option>
                                         <option value="Hacer">Hacer</option>
                                         <option value="No critico">No critico</option>
@@ -142,7 +142,7 @@
                             </div>
 
                         </div>
-
+                        <button type="submit" class="btn btn-outline-primary float-end">Aceptar</button>
                     </form>
                 </div>
                 <br><br>
@@ -153,10 +153,10 @@
         <br>
 
         <div>
-            <a  type="submit" class="btn btn-outline-primary " th:href="@{/analistaOYM/ticket}">Aceptar</a>
             <a  type="submit" class="btn btn-outline-danger " th:href="@{/analistaOYM/ticket}">Cancelar</a>
         </div>
-    </main><!-- End #main -->
+    </div>
+</main><!-- End #main -->
 
 <!-- ======= Footer ======= -->
 <footer th:replace="Fragmentos/footer :: footer"></footer>
