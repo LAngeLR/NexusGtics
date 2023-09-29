@@ -73,7 +73,8 @@
                     <li class="message-item" th:each=" ticket, info : ${listaTicket}" th:if="${ticket.estado==2}">
                         <a th:href="@{'/tecnico/verTicket?id='+${ticket.idTickets}}">
                             <div>
-                                <h4 th:text="${ticket.usuarioSolicitante}"></h4>
+                                <h6 th:text="${ticket.usuarioSolicitante}"></h6>
+                                <p style="font-size: xx-small" th:text="${ticket.fechaCreacion}"></p>
                                 <p th:text="${'ID del Ticket: '+ticket.idTickets}"></p>
                                 <p th:text="${ticket.descripcion}" style="font-size: xx-small"></p>
                                 <p th:if="${ticket.estado==2}"><span class="badge text-bg-primary">Nuevo</span></p>

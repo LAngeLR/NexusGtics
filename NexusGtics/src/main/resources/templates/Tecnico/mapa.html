@@ -80,13 +80,26 @@
                     <li class="message-item" th:each=" ticket, info : ${listaTicket}" th:if="${ticket.estado==2}">
                         <a th:href="@{'/tecnico/verTicket?id='+${ticket.idTickets}}">
                             <div>
-                                <h4 th:text="${ticket.usuarioSolicitante}"></h4>
+                                <h6 th:text="${ticket.usuarioSolicitante}"></h6>
+                                <p style="font-size: xx-small" th:text="${ticket.fechaCreacion}"></p>
                                 <p th:text="${'ID del Ticket: '+ticket.idTickets}"></p>
                                 <p th:text="${ticket.descripcion}" style="font-size: xx-small"></p>
                                 <p th:if="${ticket.estado==2}"><span class="badge text-bg-primary">Nuevo</span></p>
                             </div>
                         </a>
                     </li>
+                    <!--Otra forma probando
+                    <li><i class="fas fa-bell" ></i></li>
+                    <li th:each="notificacion, iterStat : ${listaTicket}" th:if="${iterStat.index} &lt; 3 and ${notificacion.estado} == 2">
+                        <a th:href="@{'/tecnico/verTicket?id='+${notificacion.idTickets}}">
+                        <div>
+                            <h6 th:text="${notificacion.usuarioSolicitante}"></h6>
+                            <p style="font-size: xx-small" th:text="${notificacion.fechaCreacion}"></p>
+                            <p th:text="${'ID del Ticket: '+notificacion.idTickets}"></p>
+                            <p th:text="${notificacion.descripcion}" style="font-size: xx-small"></p>
+                            <p><span class="badge text-bg-primary">Nuevo</span></p>
+                        </div></a>
+                    </li>-->
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -119,10 +132,6 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-
-
-
-
                     <li>
                         <a class="dropdown-item d-flex align-items-center" th:href="@{/login}">
                             <i class="bi bi-box-arrow-right"></i>

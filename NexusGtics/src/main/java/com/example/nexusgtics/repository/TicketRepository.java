@@ -44,17 +44,18 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query(nativeQuery = true, value = "insert into ticket (estado) values (?1)")
     void guardarEstado(int estado);
 
-
     //obtener descripcion de formulario
 
-    @Query(nativeQuery = true, value = "SELECT descripcion FROM formularios where idTickets=?1")
-    int obtenerDescripcion(int idTicket);
+    //@Query(nativeQuery = true, value = "SELECT descripcion FROM formularios where idTickets=?1")
+    //int obtenerDescripcion(int idTicket);
     //List<Formulario> obtenerDescripcion(int idTicket);
 
-    @Query(nativeQuery = true, value = "SELECT estado FROM tickets WHERE  estado = 1 OR estado=2")
-    List<Ticket> listaEstado(int valor1);
+    //@Query(nativeQuery = true, value = "SELECT estado FROM tickets WHERE  estado = 1 OR estado=2")
+    //List<Ticket> listaEstado(int valor1);
 
-    @Query(nativeQuery = true, value = "SELECT COUNT(estado) FROM tickets WHERE  estado = 1 OR estado=2;")
-    int contarEstado(int idTicket);
+    //@Query(nativeQuery = true, value = "SELECT COUNT(estado) FROM tickets WHERE  estado = 1 OR estado=2;")
+    //int contarEstado(int idTicket);
+
+
 
 }
