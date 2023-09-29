@@ -30,43 +30,67 @@
           <div class="pagetitle" style="margin-top: -35px;">
             <h1 class="card-title">Creación de equipo</h1>
           </div>
-          <form method="POST" th:action="@{/admin/guardarEquipo}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+          <div class="alert alert-danger" role="alert" th:if="${msgSitio != null}" th:text="${msgSitio}">
+            A simple success alert—check it out!
+          </div>
+          <div class="alert alert-danger" role="alert" th:if="${msgTipoEquipo != null}" th:text="${msgTipoEquipo}">
+            A simple success alert—check it out!
+          </div>
+          <form method="POST" th:action="@{/admin/saveEquipo}" th:object="${equipo}" enctype="multipart/form-data" style="margin-bottom: -35px;">
             <div class="row">
               <div class="col-md-6">
 
                 <div class="mb-3">
-                  <label for="marca">Marca:</label>
-                  <input type="text" class="form-control" name="marca" id="marca" >
+                  <label class="form-label">Marca:</label>
+                  <input th:field="*{marca}" type="text" th:class="${#fields.hasErrors('marca')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}">
+                    Mensaje de error de marca
+                  </div>
                 </div>
 
                 <div class="mb-3">
-                  <label for="modelo">Modelo:</label>
-                  <input type="text" class="form-control" name="modelo" id="modelo">
+                  <label class="form-label">Modelo:</label>
+                  <input th:field="*{modelo}" type="text" th:class="${#fields.hasErrors('modelo')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('modelo')}" th:errors="*{modelo}">
+                    Mensaje de error de modelo
+                  </div>
                 </div>
 
                 <div class="mb-3">
-                  <label for="descripcion">Descripción:</label>
-                  <input type="text" class="form-control" name="descripcion" id="descripcion" >
+                  <label class="form-label">Descripción:</label>
+                  <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
+                    Mensaje de error de descripcion
+                  </div>
                 </div>
 
                 <div class="mb-3">
-                  <label for="paginaModelo">Ficha técnica (fabricante)::</label>
-                  <input type="text" class="form-control" name="paginaModelo" id="paginaModelo" >
+                  <label class="form-label">Ficha técnica (fabricante):</label>
+                  <input th:field="*{paginaModelo}" type="text" th:class="${#fields.hasErrors('paginaModelo')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('paginaModelo')}" th:errors="*{paginaModelo}">
+                    Mensaje de error de paginaModelo
+                  </div>
                 </div>
 
                 <div class="input-group mb-3">
-                  <label for="idSitios">Sitio de despliegue:</label>
+                  <label for="sitio">Sitio de despliegue:</label>
                   <div class="col-12">
-                    <select name="idSitios" id="idSitios" class="form-control">
+                    <select name="sitio" id="sitio" class="form-control">
+                      <option value="">--Seleccione un sitio--</option>
                       <option th:each="sitio: ${listaSitios}"
                               th:text="${sitio.distrito}" th:value="${sitio.idSitios}">Sitio de Tipo</option>
                     </select>
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <label for="idTipoEquipo">Tipo de Equipo:</label>
+                  <label for="tipoequipo">Tipo de Equipo:</label>
                   <div class="col-12">
-                    <select name="idTipoEquipo" id="idTipoEquipo" class="form-control">
+                    <select name="tipoequipo" id="tipoequipo" class="form-control">
+                      <option value="">--Seleccione un tipo de Equipo--</option>
                       <option th:each="equipo: ${listaTipoEquipos}"
                               th:text="${equipo.nombreTipo}" th:value="${equipo.idTipoEquipo}">Sitio de Tipo</option>
                     </select>
