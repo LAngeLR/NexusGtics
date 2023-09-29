@@ -152,6 +152,28 @@
                 </div>
               </div>
               <br>
+              <div>
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Tipo de equipo</th>
+                    <th scope="col">Marca </th>
+                    <th scope="col">Modelo</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:each="equipo, info : ${listaEquipos}">
+                    <td th:text = "${info.index + 1}" >  </td>
+                    <td th:text="${equipo.tipoequipo.nombreTipo}"></td>
+                    <td th:text="${equipo.marca}">Marca</td>
+                    <td th:text="${equipo.modelo}">Modelo</td>
+                    <td><a type="button" class="btn btn-outline-dark" th:href="@{'/analistaDespliegue/verEquipo?id=' + ${equipo.idEquipos}}">Ver</a></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
               <button type="button" class="btn btn-outline-success">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
                   <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"></path>
@@ -159,7 +181,7 @@
                 </svg>
                 Descargar csv
               </button>
-              <a type="submit" class="btn btn-outline-success" th:href="@{/analistaDespliegue/listaEquipo}">Ver equipos</a>
+              <a type="submit" class="btn btn-outline-success" th:href="@{'/analistaDespliegue/listaEquipo?id=' + ${sitio.idSitios}}">Ver todos los equipos</a>
               <br>
               <br>
               <div>

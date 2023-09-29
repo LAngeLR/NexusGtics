@@ -62,7 +62,12 @@ public class AnalistaDespController {
             Optional<Sitio> optSitio = sitioRepository.findById(id);
             if(optSitio.isPresent()){
                 Sitio sitio = optSitio.get();
+
+                // Obtén la lista de equipos por sitio
+                List<Equipo> listaEquipos = equipoRepository.listaEquiposPorSitio(id);
+
                 model.addAttribute("sitio", sitio);
+                model.addAttribute("listaEquipos", listaEquipos);
                 return "AnalistaDespliegue/despliegueEditarSitio";
             }else {
                 return "redirect:/analistaDespliegue/listaSitio";
@@ -121,22 +126,32 @@ public class AnalistaDespController {
         }
     }
 
-    @PostMapping("/guardarEquipo")
+    @PostMapping("/agregarEquipo")
     public String agregarEquipo(@RequestParam("idSitios") int idSitios,
                                 @RequestParam("idEquipos") int idEquipos, RedirectAttributes attr){
         Optional<Equipo> optionalEquipo = equipoRepository.findById(idEquipos);
-        if(optionalEquipo.isPresent()){
-            equipoRepository.agregarEquipo(idSitios, idEquipos);
+        Optional<Sitio> optionalSitio = sitioRepository.findById(idSitios);
+
+        if (optionalEquipo.isPresent() && optionalSitio.isPresent()) {
+            Equipo equipo = optionalEquipo.get();
+            System.out.println(equipo.getIdEquipos());
+            Sitio sitio = optionalSitio.get();
+            System.out.println(sitio.getIdSitios());
+
+            equipo.setSitio(sitio);
+
+            equipoRepository.agregarEquipo(sitio.getIdSitios(), equipo.getIdEquipos());
+
             return "redirect:/analistaDespliegue/listaSitio";
-        }else {
+        } else {
             return "redirect:/analistaDespliegue/listaEquipo";
         }
     }
 
 
     @GetMapping("/listaEquipo")
-    public String listaEquipo(Model model ){
-        List<Equipo> listaEquipo = equipoRepository.findAll();
+        public String listaEquipo(Model model, @RequestParam("id") int id){
+        List<Equipo> listaEquipo = equipoRepository.listaEquiposNoSitio(id);
         model.addAttribute("listaEquipo",listaEquipo);
         return "AnalistaDespliegue/despliegueListaEquipos";
     }

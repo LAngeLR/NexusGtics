@@ -33,7 +33,7 @@
                     <div class="pagetitle">
                         <h1 class="card-title">Vista de equipo</h1>
                     </div>
-                    <form method="POST" action="" enctype="multipart/form-data" th:object="${equipo}" >
+                    <form method="POST" th:action="@{/analistaDespliegue/agregarEquipo}" th:object="${equipo}">
                         <div class="row">
                             <div class="col-md-6">
 
@@ -79,13 +79,12 @@
                                     <img th:src="@{|image/${equipo.archivo.idArchivos}|}" style="max-width: 600px;" alt="">
                                 </div>
 
-                                <!--button type="submit" class="btn btn-outline-primary float-end"  >Editar</button>
-                                <button type="submit" class="btn btn-outline-danger float-start">Desactivar</button-->
-
                             </div>
 
                             <div>
                                 <br>
+                                <input type="hidden" name="idSitios" th:value="${equipo.sitio.idSitios}" />
+                                <input type="hidden" name="idEquipos" th:value="${equipo.idEquipos}" />
                                 <button  type="submit" class="btn btn-outline-primary " >Agregar</button>
                             </div>
                         </div>
