@@ -486,6 +486,8 @@ public class AdminController {
         model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
         return "Administrador/crearEquipo";
     }
+
+    /*
     @PostMapping("/guardarEquipo") //con Query, ya no se usa
     public String guardarEquipo(Equipo equipo,
                                 @RequestParam("marca") String marca,
@@ -515,6 +517,9 @@ public class AdminController {
             throw new RuntimeException(e);
         }
     }
+    */
+
+
     @PostMapping("/saveEquipo")
     public String saveEquipo(@RequestParam("imagenSubida") MultipartFile file,
                              @ModelAttribute("equipo") @Valid Equipo equipo, BindingResult bindingResult,
@@ -562,6 +567,8 @@ public class AdminController {
                 equipo.getArchivo().setIdArchivos(idImagen);
                 equipoRepository.save(equipo);
                 System.out.println(equipo.getSitio());
+                attr.addFlashAttribute("msg", "El equipo '" + equipo.getTipoequipo().getNombreTipo() + "' ha sido creado exitosamente");
+
                 return "redirect:/admin/listaEquipo";
             } catch (IOException e) {
                 System.out.println("error save");
@@ -642,10 +649,13 @@ public class AdminController {
     }
 
     @GetMapping("/deshabilitarEquipo")
-    public String deshabilitarEquipo(@RequestParam("id") int id) {
+    public String deshabilitarEquipo(@RequestParam("id") int id, RedirectAttributes attr) {
         Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
         if (optionalEquipo.isPresent()) {
+            Equipo equipo = optionalEquipo.get();
             equipoRepository.deshabilitarEquipo(id);
+            attr.addFlashAttribute("msg1", "El equipo '" + equipo.getTipoequipo().getNombreTipo() + "' ha sido eliminado exitosamente");
+
         }
         return "redirect:/admin/listaEquipo";
     }
