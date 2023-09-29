@@ -466,12 +466,12 @@ public class AdminController {
     }
 
     @GetMapping({"/crearEquipo","/crearequipo"})
-    public String crearEquipo(Model model){
+    public String crearEquipo(Model model, @ModelAttribute("equipo") Equipo equipo){
         model.addAttribute("listaSitios",sitioRepository.findAll());
         model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
         return "Administrador/crearEquipo";
     }
-    @PostMapping("/guardarEquipo")
+    @PostMapping("/guardarEquipo") //con Query, ya no se usa
     public String guardarEquipo(Equipo equipo,
                                 @RequestParam("marca") String marca,
                                @RequestParam("modelo") String modelo,
@@ -502,30 +502,65 @@ public class AdminController {
     }
     @PostMapping("/saveEquipo")
     public String saveEquipo(@RequestParam("imagenSubida") MultipartFile file,
-                              Equipo equipo,
+                             @ModelAttribute("equipo") @Valid Equipo equipo, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
 
-        if (equipo.getArchivo() == null) {
-            equipo.setArchivo(new Archivo());
+        if(equipo.getSitio() == null || equipo.getSitio().getIdSitios() == null){
+            model.addAttribute("msgSitio", "Escoger un Sitio para su despliegue");
+            model.addAttribute("listaSitios",sitioRepository.findAll());
+            model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+
+            if (equipo.getIdEquipos() == null) {
+                return "Administrador/crearEquipo";
+            } else {
+                return "Administrador/editarEquipo";
+            }
         }
 
-        String fileName = file.getOriginalFilename();
-        try{
-            Archivo archivo = equipo.getArchivo();
-            archivo.setNombre(fileName);
-            archivo.setTipo(1);
-            archivo.setArchivo(file.getBytes());
-            archivo.setContentType(file.getContentType());
-            archivoRepository.save(archivo);
-            int idImagen = archivo.getIdArchivos();
-            equipo.getArchivo().setIdArchivos(idImagen);
-            equipoRepository.save(equipo);
-            System.out.println(equipo.getSitio());
-            return "redirect:/admin/listaEquipo";
-        } catch (IOException e) {
-            System.out.println("error save");
-            throw new RuntimeException(e);
+        if(equipo.getTipoequipo() == null || equipo.getTipoequipo().getIdTipoEquipo() == null){
+            model.addAttribute("msgTipoEquipo", "Escoger un tipo de Equipo");
+            model.addAttribute("listaSitios",sitioRepository.findAll());
+            model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+
+            if (equipo.getIdEquipos() == null) {
+                return "Administrador/crearEquipo";
+            } else {
+                return "Administrador/editarEquipo";
+            }
+        }
+
+        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+            if (equipo.getArchivo() == null) {
+                equipo.setArchivo(new Archivo());
+            }
+
+            String fileName = file.getOriginalFilename();
+            try{
+                Archivo archivo = equipo.getArchivo();
+                archivo.setNombre(fileName);
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+                int idImagen = archivo.getIdArchivos();
+                equipo.getArchivo().setIdArchivos(idImagen);
+                equipoRepository.save(equipo);
+                System.out.println(equipo.getSitio());
+                return "redirect:/admin/listaEquipo";
+            } catch (IOException e) {
+                System.out.println("error save");
+                throw new RuntimeException(e);
+            }
+
+        } else { //hay al menos 1 error
+            model.addAttribute("listaSitios",sitioRepository.findAll());
+            model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+            if (equipo.getIdEquipos() == null) {
+                return "Administrador/crearEquipo";
+            } else {
+                return "Administrador/editarEquipo";
+            }
         }
     }
 
@@ -551,7 +586,7 @@ public class AdminController {
 
 
     @GetMapping({"/editarEquipo","/editarequipo"})
-    public String editarEquipo(Model model, @RequestParam("id") String idStr){
+    public String editarEquipo(Model model, @RequestParam("id") String idStr, @ModelAttribute("equipo") Equipo equipo){
         try{
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !equipoRepository.existsById(id)) {
@@ -559,7 +594,7 @@ public class AdminController {
             }
             Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
             if(optionalEquipo.isPresent()){
-                Equipo equipo = optionalEquipo.get();
+                equipo = optionalEquipo.get();
                 model.addAttribute("equipo", equipo);
                 model.addAttribute("listaSitios",sitioRepository.findAll());
                 model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());

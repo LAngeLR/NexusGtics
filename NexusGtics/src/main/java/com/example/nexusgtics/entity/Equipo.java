@@ -1,6 +1,8 @@
 package com.example.nexusgtics.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,12 +17,18 @@ public class Equipo {
     private Integer idEquipos;
 
     @Column(name = "marca", nullable = false, length = 45)
+    @NotBlank(message = "El campo no debe estar vacío")
+    @Size(max = 45)
     private String marca;
 
     @Column(name = "descripcion", nullable = false, length = 45)
+    @NotBlank(message = "El campo no debe estar vacío")
+    @Size(max = 45)
     private String descripcion;
 
     @Column(name = "modelo", nullable = false, length = 45)
+    @NotBlank(message = "El campo no debe estar vacío")
+    @Size(max = 45)
     private String modelo;
 
     @Column(name = "paginaModelo", length = 130)
