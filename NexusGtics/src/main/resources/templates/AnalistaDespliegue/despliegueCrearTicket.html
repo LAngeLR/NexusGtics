@@ -19,8 +19,8 @@
         <div class="pagetitle">
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/listaSitio}">Lista de sitios</a></li>
-                    <li class="breadcrumb-item active">Editar sitio</li>
+                    <li class="breadcrumb-item"><a th:href="@{/analistaOYM/ticket}">Lista de tickets</a></li>
+                    <li class="breadcrumb-item active">Crear Ticket</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -31,59 +31,109 @@
                     <div class="pagetitle">
                         <h1 class="card-title">Crear ticket</h1>
                     </div>
-                    <form method="POST" action="" enctype="multipart/form-data">
+                    <form method="POST" th:action="@{/analistaDespliegue/saveTicket}" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
 
-                                    <label for="nombre">Id de ticket:</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre" value="123" disabled>
+                                <div class="mb-3">
+                                    <label for="idEmpresaAsignada" class="form-label">Empresa</label>
+                                    <select class="form-select" name="idEmpresaAsignada" id="idEmpresaAsignada">
+                                        <option value="-1">--Seleccione una empresa--</option>
+                                        <option th:each="empresa: ${listaEmpresa}"
+                                                th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}">Open this select menu</option>
+                                    </select>
+                                </div>
+
+
+
+                                <input type="hidden" name="estado" id="estado" value="1">
+
+                                <input type="hidden" name="fechaCreacion" id="fechaCreacion" th:value="${fechaActual}">
+
+
+                                <!-- id usuario creador -->
+                                <input type="hidden" name="idUsuarioCreador" id="idUsuarioCreador" value="4">
+
+
+                                <input type="hidden" name="idTipoTicket" id="idTipoTicket" value="1">
+
+
+                                <div class="input-group mb-3">
+                                    <label for="idSitios">Sitio de despliegue:</label>
+                                    <div class="col-12">
+                                        <select name="idSitios" id="idSitios" class="form-control">
+                                            <option value="-1">--Seleccione el sitio--</option>
+                                            <option th:each="sitio: ${listaSitios}"
+                                                    th:text="${sitio.distrito}" th:value="${sitio.idSitios}">Sitio de Tipo</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
-
-                                    <label for="nombre">Tipo de ticket:</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre" value="Mantenimiento" disabled>
+                                    <label for="fechaCierre">Fecha de Cierre</label>
+                                    <input type="date" class="form-control" name="fechaCierre" id="fechaCierre" >
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="precio">Sitio Asignado</label>
-                                    <input type="text" class="form-control" name="precio" id="precio" value="Sitio 1">
-                                </div>
+
+
+
 
 
                             </div>
-                            <br><br>
+
                             <div class="col-md-6">
+
                                 <div class="mb-3">
-                                    <label for="nombre">Usuario Creador:</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre" value="K. Anderson" disabled>
+                                    <label for="usuarioSolicitante">Usuario Solicitante</label>
+                                    <input type="text" class="form-control" name="usuarioSolicitante" id="usuarioSolicitante" >
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="descripcion">Empresa proveedora</label>
-                                    <input type="text" class="form-control" name="descripcion" id="descripcion" value="Ingresa empresa">
+                                    <label for="prioridad" class="form-label">Selector de Prioridad</label>
+                                    <select class="form-select" name="prioridad" id="prioridad">
+                                        <option value="-1">--Seleccione una Prioridad--</option>
+                                        <option value="Baja prioridad">Baja prioridad</option>
+                                        <option value="Hacer">Hacer</option>
+                                        <option value="No critico">No critico</option>
+                                        <option value="Urgente">Urgente</option>
+                                    </select>
                                 </div>
 
+                                <div class="mb-3">
+                                    <label for="descripcion">Descripcion</label>
+                                    <input type="text" class="form-control" name="descripcion" id="descripcion" >
+                                </div>
+                                <div>
 
+
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-outline-primary float-end">Crear ticket</button>
+                            <div>
+                                <a  type="submit" class="btn btn-outline-danger " th:href="@{/analistaDespliegue/ticket}">Cancelar</a>
 
                             </div>
-
                         </div>
+
+
 
                     </form>
                 </div>
                 <br><br>
 
-
             </div>
         </section>
         <br>
 
-        <div>
-            <a  type="submit" class="btn btn-outline-primary " th:href="@{/analistaDespliegue/ticket}">Aceptar</a>
-            <a  type="submit" class="btn btn-outline-danger " th:href="@{/analistaDespliegue/ticket}">Cancelar</a>
-        </div>
+
+    </div>
 </main><!-- End #main -->
 
 <!-- ======= Footer ======= -->

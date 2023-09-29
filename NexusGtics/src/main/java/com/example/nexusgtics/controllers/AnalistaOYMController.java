@@ -33,7 +33,7 @@ public class AnalistaOYMController {
         this.ticketRepository = ticketRepository;
         this.equipoRepository = equipoRepository;
 
-        this.empresaRepository = empresaRepository1;
+        this.empresaRepository = empresaRepository;
     }
 
     @GetMapping("/")
