@@ -29,14 +29,14 @@
 
                     <div class="card">
 
-                        <div class="card-body">
+                        <div class="card-body table-responsive">
                             <div class="container">
 
                                 <a th:href="@{/supervisor/crearCuadrilla}" class="btn btn-outline-primary me-2 mt-3 float-end">Nueva Cuadrilla</a>
                                 <h5 class="card-title">Lista de Cuadrillas</h5>
                             </div>
                             <!-- Table with stripped rows -->
-                            <table class="table datatable">
+                            <table class="table datatable-borderless datatable">
                                 <thead>
                                 <tr>
                                     <th scope="col">Nro. de Cuadrilla</th>
@@ -55,8 +55,18 @@
                                         <td th:text="${trabajosFinalizadosPorCuadrilla[cuadrilla.idCuadrillas]}"></td>
                                         <td> 5</td>
                                         <td> 1</td>
-                                        <td th:if="${numeroTecnicosPorCuadrilla[cuadrilla.idCuadrillas] == 5}"><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/detallesCuadrilla?id=' + ${cuadrilla.idCuadrillas}}">+</a></center></td>
-                                        <td th:if="${numeroTecnicosPorCuadrilla[cuadrilla.idCuadrillas] < 5}"><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/crearCuadrilla?id=' + ${cuadrilla.idCuadrillas}}">+</a></center></td>
+                                        <td th:if="${numeroTecnicosPorCuadrilla[cuadrilla.idCuadrillas] == 5}"><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/detallesCuadrilla?id=' + ${cuadrilla.idCuadrillas}}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                                            </svg>
+                                        </a></center></td>
+                                        <td th:if="${numeroTecnicosPorCuadrilla[cuadrilla.idCuadrillas] < 5}"><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/crearCuadrilla?id=' + ${cuadrilla.idCuadrillas}}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                                            </svg>
+                                        </a></center></td>
                                     </tr>
                                 </tbody>
                             </table>
