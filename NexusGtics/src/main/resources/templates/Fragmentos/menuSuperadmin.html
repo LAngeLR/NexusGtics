@@ -2,33 +2,33 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <!-- ======= Sidebar ======= -->
-<aside id="sidebar" class="sidebar" th:fragment="menu">
+<aside id="sidebar" class="sidebar" th:fragment="menu(currentPage)">
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#forms-nav" th:href="@{/superadmin/}">
+            <a th:class="${currentPage == 'inicio' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#forms-nav" th:href="@{/superadmin/}">
                 <i class="bi bi-house"></i><span>Inicio</span>
             </a>
         </li><!-- End Tables Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+            <a th:class="${currentPage == 'crearAdmin' or currentPage == 'listaUsuario' or currentPage == 'listaBaneados' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-people"></i><span>Gestión de usuarios</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="charts-nav" th:classappend="${currentPage == 'crearAdmin' or currentPage == 'listaUsuario' or currentPage == 'listaBaneados' ? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:href="@{/superadmin/crearusuario}">
+                    <a th:classappend="${currentPage == 'crearAdmin' ? 'active' : ''}" th:href="@{/superadmin/crearusuario}">
                         <i class="bi bi-circle"></i><span>Crear Administrador</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/superadmin/listausuarios}">
+                    <a th:classappend="${currentPage == 'listaUsuario' ? 'active' : ''}" th:href="@{/superadmin/listausuarios}">
                         <i class="bi bi-circle"></i><span>Lista de Usuarios</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/superadmin/listaBaneados}">
+                    <a th:classappend="${currentPage == 'listaBaneados' ? 'active' : ''}" th:href="@{/superadmin/listaBaneados}">
                         <i class="bi bi-circle"></i><span>Lista de Baneados</span>
                     </a>
                 </li>
