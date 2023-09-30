@@ -47,7 +47,8 @@ public class AdminController {
     }
 
     @GetMapping({"/","","admin","administrador"})
-    public String paginaPrincipal(){
+    public String paginaPrincipal(Model model){
+        model.addAttribute("currentPage", "Inicio");
         return "Administrador/admin";
     }
 
@@ -62,6 +63,8 @@ public class AdminController {
     @GetMapping({"/listaUsuario","listausuario"})
     public String listaUsuario(Model model){
         List<Usuario> listaUsuarioNoAdmin = usuarioRepository.listaDeUsuariosNoAdmin();
+        model.addAttribute("currentPage", "Lista de Usuarios");
+
         model.addAttribute("listaUsuario", listaUsuarioNoAdmin);
         return "Administrador/listaUsuario";
     }
@@ -69,6 +72,8 @@ public class AdminController {
     @GetMapping({"/listaBaneados"})
     public String listaBaneado(Model model){
         List<Usuario> listaUsuarioBaneado = usuarioRepository.listaDeUsuariosBaneados();
+        model.addAttribute("currentPage", "Lista de Baneados");
+
         model.addAttribute("listaUsuario", listaUsuarioBaneado);
         return "Administrador/listaUsuarioBaneado";
     }

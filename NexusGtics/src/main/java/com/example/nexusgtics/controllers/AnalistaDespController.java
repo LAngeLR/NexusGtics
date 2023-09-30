@@ -32,12 +32,11 @@ public class AnalistaDespController {
     final ArchivoRepository archivoRepository;
 
 
-    public AnalistaDespController(TicketRepository ticketRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository, ArchivoRepository archivoRepository){
+    public AnalistaDespController(TicketRepository ticketRepository, SitioRepository sitioRepository, EmpresaRepository empresaRepository, EquipoRepository equipoRepository, ArchivoRepository archivoRepository){
         this.ticketRepository = ticketRepository;
         this.sitioRepository = sitioRepository;
-        this.equipoRepository = equipoRepository;
         this.empresaRepository = empresaRepository;
-
+        this.equipoRepository = equipoRepository;
 
         this.archivoRepository = archivoRepository;
 
