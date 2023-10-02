@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<aside id="sidebar" class="sidebar" th:fragment="menu">
+<aside id="sidebar" class="sidebar" th:fragment="menu(currentPage)">
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav" th:href="@{/tecnico/}">
+            <a th:class="${currentPage == 'inicio' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#tables-nav" th:href="@{/tecnico/}">
                 <i class="bi bi-house"></i><span>Inicio</span>
             </a>
         </li><!-- End Tables Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+            <a th:class="${currentPage == 'dashboard' or currentPage == 'ticketAsignado' or currentPage == 'mapa' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-bar-chart"></i><span>Servicios</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="charts-nav" th:classappend="${currentPage == 'dashboard' or currentPage == 'ticketAsignado' or currentPage == 'mapa' ? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:href="@{/tecnico/dashboard}">
+                    <a th:classappend="${currentPage == 'dashboard' ? 'active' : ''}" th:href="@{/tecnico/dashboard}">
                         <i class="bi bi-circle"></i><span>Mi Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/tecnico/ticketasignado}">
+                    <a th:classappend="${currentPage == 'ticketAsignado' ? 'active' : ''}" th:href="@{/tecnico/ticketasignado}">
                         <i class="bi bi-circle"></i><span>Tickets Asignados</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/tecnico/mapa}">
+                    <a th:classappend="${currentPage == 'mapa' ? 'active' : ''}" th:href="@{/tecnico/mapa}">
                         <i class="bi bi-circle"></i><span>Ver Mapa</span>
                     </a>
                 </li>
