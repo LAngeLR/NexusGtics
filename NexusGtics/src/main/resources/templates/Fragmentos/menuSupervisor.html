@@ -6,22 +6,22 @@
 
         <li class="nav-item">
             <a th:class="${currentPage == 'inicio' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#tables-nav" th:href="@{/supervisor/}">
-                <i class="bi bi-layout-text-window-reverse"></i><span>Inicio</span>
+                <i class="bi bi-house"></i><span>Inicio</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+            <a th:class="${currentPage == 'dashboard' or currentPage == 'listaTicket' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-card-list"></i><span>Tickets</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="tables-nav" th:classappend="${currentPage == 'listaTicket' or currentPage == 'dashboard' ? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:href="@{/supervisor/listaTickets}">
+                    <a th:classappend="${currentPage == 'listaTicket' ? 'active' : ''}" th:href="@{/supervisor/listaTickets}">
                         <i class="bi bi-circle"></i><span>Ver Tickets</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/supervisor/dashboard}">
+                    <a th:classappend="${currentPage == 'dashboard' ? 'active' : ''}" th:href="@{/supervisor/dashboard}">
                         <i class="bi bi-circle"></i><span>Dashboard</span>
                     </a>
                 </li>
@@ -31,14 +31,14 @@
 
 
         <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/supervisor/listaCuadrillas}">
+            <a th:class="${currentPage == 'listaCuadrilla' ? 'nav-link' : 'nav-link collapsed'}" th:href="@{/supervisor/listaCuadrillas}">
                 <i class="bi bi-layout-text-window-reverse"></i>
                 <span>Cuadrillas</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/supervisor/mapaTickets}">
+            <a th:class="${currentPage == 'mapaTicket' ? 'nav-link' : 'nav-link collapsed'}" th:href="@{/supervisor/mapaTickets}">
                 <i class="bi bi-grid"></i>
                 <span>Mapa</span>
             </a>

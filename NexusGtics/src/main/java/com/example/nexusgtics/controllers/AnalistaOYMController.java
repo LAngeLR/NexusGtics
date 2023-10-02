@@ -36,7 +36,7 @@ public class AnalistaOYMController {
         this.empresaRepository = empresaRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping(value = {"/",""})
     public String paginaPrincipal(){
         return "AnalistaOYM/analistaOYM";
     }

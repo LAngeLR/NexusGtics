@@ -1,71 +1,71 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<aside id="sidebar" class="sidebar" th:fragment="menu">
+<aside id="sidebar" class="sidebar" th:fragment="menu(currentPage)">
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/analistaDespliegue/}">
+            <a th:class="${currentPage == 'inicio' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#tables-nav" data-bs-toggle="collapse" th:href="@{/analistaDespliegue/}">
                 <i class="bi bi-house"></i><span>Inicio</span>
             </a>
         </li><!-- End Tables Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#sit-nav" data-bs-toggle="collapse" href="#">
+            <a th:class="${currentPage == 'listaSitio' or currentPage == 'mapaSitio' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#sit-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-bar-chart"></i><span>Sitios</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="sit-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="sit-nav" th:classappend="${currentPage == 'listaSitio' or currentPage == 'mapaSitio' ? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:href="@{/analistaDespliegue/listaSitio}">
+                    <a th:classappend="${currentPage == 'listaSitio' ? 'active' : ''}" th:href="@{/analistaDespliegue/listaSitio}">
                         <i class="bi bi-circle"></i><span>Lista de sitios</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/analistaDespliegue/mapaSitios}">
+                    <a th:classappend="${currentPage == 'mapaSitio' ? 'active' : ''}" th:href="@{/analistaDespliegue/mapaSitios}">
                         <i class="bi bi-circle"></i><span>Mapa de sitios</span>
                     </a>
                 </li>
             </ul>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tick-nav" data-bs-toggle="collapse" href="#">
+            <a th:class="${currentPage == 'listaTicket' or currentPage == 'crearTicket' or currentPage == 'dashboard' or currentPage == 'mapaTicket' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#tick-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-card-list"></i><span>Tickets</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="tick-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="tick-nav" th:classappend="${currentPage == 'listaTicket' or currentPage == 'crearTicket' or currentPage == 'dashboard' or currentPage == 'mapaTicket' ? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:href="@{/analistaDespliegue/ticket}">
+                    <a th:classappend="${currentPage == 'listaTicket' ? 'active' : ''}" th:href="@{/analistaDespliegue/ticket}">
                         <i class="bi bi-circle"></i><span>Lista de Tickets</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/analistaDespliegue/crearTicket}">
+                    <a th:classappend="${currentPage == 'crearTicket' ? 'active' : ''}" th:href="@{/analistaDespliegue/crearTicket}">
                         <i class="bi bi-circle"></i><span>Crear Ticket</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/analistaDespliegue/dashboard}">
+                    <a th:classappend="${currentPage == 'dashboard' ? 'active' : ''}" th:href="@{/analistaDespliegue/dashboard}">
                         <i class="bi bi-circle"></i><span>Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/analistaDespliegue/mapaTickets}">
+                    <a th:classappend="${currentPage == 'mapaTicket' ? 'active' : ''}" th:href="@{/analistaDespliegue/mapaTickets}">
                         <i class="bi bi-circle"></i><span>Mapa de Tickets</span>
                     </a>
                 </li>
             </ul>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#map-nav" data-bs-toggle="collapse" href="#">
+            <a th:class="${currentPage == 'mapaTicket' or currentPage == 'mapaSitio' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#map-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-map"></i><span>Mapas</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="map-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="map-nav" th:classappend="${currentPage == 'mapaSitio' or currentPage == 'mapaTicket' ? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:href="@{/analistaDespliegue/mapaSitios}">
+                    <a th:classappend="${currentPage == 'mapaSitio' ? 'active' : ''}" th:href="@{/analistaDespliegue/mapaSitios}">
                         <i class="bi bi-circle"></i><span>Mapa de sitios</span>
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/analistaDespliegue/mapaTickets}">
+                    <a th:classappend="${currentPage == 'mapaTicket' ? 'active' : ''}" th:href="@{/analistaDespliegue/mapaTickets}">
                         <i class="bi bi-circle"></i><span>Mapa de tickets</span>
                     </a>
                 </li>
