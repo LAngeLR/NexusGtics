@@ -301,7 +301,19 @@
    */
   const datatables = select('.datatable', true)
   datatables.forEach(datatable => {
-    new simpleDatatables.DataTable(datatable);
+
+    const languageFile='cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json';
+
+    fetch(languageFile)
+        .then(response => response.json())
+        .then(language => {
+          const options = {
+            language, // Establece el idioma personalizado
+            // Otras opciones de configuración de DataTables aquí
+          };
+
+          new simpleDatatables.DataTable(datatable, options);
+        });
   })
 
   /**
