@@ -1,13 +1,10 @@
 package com.example.nexusgtics.config;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.nexusgtics.repository.UsuarioRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,26 +12,24 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 
 @Configuration
 public class WebSecurityConfig {
-
+    //final UsuarioRepository usuarioRepository;
     final DataSource dataSource;
 
     public WebSecurityConfig(DataSource dataSource) {
         this.dataSource = dataSource;
+        //this.usuarioRepository = usuarioRepository;
     }
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,10 +37,15 @@ public class WebSecurityConfig {
         http.formLogin()
                 .loginPage("/openLoginWindow")
                 .loginProcessingUrl("/processLogin")
+                .usernameParameter("yourUsername")
+                .passwordParameter("yourPassword")
                 .successHandler((request, response, authentication) -> {
 
                     DefaultSavedRequest defaultSavedRequest =
                             (DefaultSavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+
+//                    HttpSession session = request.getSession();
+//                    session.setAttribute("usuario", usuarioRepository.findByCorreo(authentication.getName()));
 
                     //si vengo por url -> defaultSR existe
                     if(defaultSavedRequest != null){
@@ -58,28 +58,44 @@ public class WebSecurityConfig {
                             break;
                         }
 
-                        if(rol.equals("admin")){
-                            response.sendRedirect("/shipper");
-                        }else{
-                            response.sendRedirect("/employee");
+                        if(rol.equals("Super administrador")){
+                            response.sendRedirect("/superadmin");
+
+                        } else if (rol.equals("Administrador")) {
+                            response.sendRedirect("/admin");
+
+                        } else if (rol.equals("Analista de OyM")) {
+                            response.sendRedirect("/analistaOYM");
+
+                        } else if (rol.equals("Analista de Planificación o Ingeniería")) {
+                            response.sendRedirect("/analistaDespliegue");
+
+                        } else if (rol.equals("Supervisor de Campo")) {
+                            response.sendRedirect("/supervisor");
+
+                        } else if (rol.equals("Técnico")){
+                            response.sendRedirect("/tecnico");
+
+                        } else {
+                            response.sendRedirect("/login");
                         }
+
                     }
                 });
-        /*
-            /employee -> ruta protegida -> rol admin y logistica (oscar.diaz|victor.chang)
-            /shipper -> ruta protegida -> rol admin (oscar.diaz)
-            todo lo demas (en este ejemplo, product) -> libre
-         */
+
         http.authorizeHttpRequests()
                 .requestMatchers("/superadmin", "/superadmin/**").hasAnyAuthority("Super administrador")
                 .requestMatchers("/admin", "/admin/**").hasAnyAuthority("Administrador")
                 .requestMatchers("/analistaOYM", "/analistaOYM/**").hasAnyAuthority("Analista de OyM")
                 .requestMatchers("/analistaDespliegue", "/analistaDespliegue/**").hasAnyAuthority("Analista de Planificación o Ingeniería")
                 .requestMatchers("/supervisor", "/supervisor/**").hasAnyAuthority("Supervisor de Campo")
-                .requestMatchers("/tecnico", "/tecnico/**").hasAnyAuthority("Técnico")
-                .anyRequest().permitAll();
+                .requestMatchers("/tecnico", "/tecnico/**").hasAnyAuthority("Técnico");
 
-        http.logout().logoutSuccessUrl("/product");
+        http.logout()
+                .logoutSuccessUrl("/closeSession")
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true);
+
 
         return http.build();
     }
@@ -100,7 +116,6 @@ public class WebSecurityConfig {
 
         return users;
     }
-
 
 
 }

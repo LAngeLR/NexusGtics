@@ -11,5 +11,10 @@ public class LoginController {
         return "Sistema/login";
     }
 
+    @GetMapping("/closeSession")
+    public String closeSession(){
+        return "Sistema/cerrarsesion";
+    }
+
 
 }

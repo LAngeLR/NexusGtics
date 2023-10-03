@@ -80,6 +80,15 @@
                   </div>
                 </div>
 
+                <div class="mb-3">
+                  <label class="form-label">Contraseñia:</label>
+                  <input th:field="*{contrasenia}" type="text" th:class="${#fields.hasErrors('contrasenia')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('contrasenia')}" th:errors="*{contrasenia}">
+                    Mensaje de error de correo
+                  </div>
+                </div>
+
                 <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
 
                 <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">

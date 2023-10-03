@@ -38,6 +38,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(value ="update nexus.usuarios set habilitado = true where idUsuarios = ?1", nativeQuery = true )
     void activarUsuario(int id);
 
+    public Usuario findByCorreo(String correo);
+
 
     // ------------------------------ ANALISTA OYM --------------------------------------- //
 
