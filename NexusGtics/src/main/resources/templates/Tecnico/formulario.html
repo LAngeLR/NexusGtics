@@ -332,8 +332,73 @@
                                     </div>
                                     <input class="form-control" type="file" name="imagenSubida3" id="imagenSubida3"
                                            accept="image/*" onchange="previewImage(event, '#imgPreview')">
-
                                 </div>
+                            </div>
+                            <div class="row mb-5">
+                                <h5><b>Trabajo realizado</b></h5>
+                                <div class="mb-3 row">
+                                    <label class="col-sm-2 col-form-label">¿Se realizó construcción de infraestructura? </label>
+                                    <div class="col-sm-10">
+                                        <div class="form-check form-switch">
+                                            <p>No</p>
+                                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked2" checked>
+                                            <label class="form-check-label" for="flexSwitchCheckChecked2">Sí</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-sm-2 col-form-label">¿Se realizó instalaciones electricas? </label>
+                                    <div class="col-sm-10">
+                                        <div class="form-check form-switch">
+                                            <p>No</p>
+                                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked3" checked>
+                                            <label class="form-check-label" for="flexSwitchCheckChecked3">Sí</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-sm-2 col-form-label">Tecnología instalada: </label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                        <label class="form-check-label" for="flexCheckDefault">FFTH</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
+                                        <label class="form-check-label" for="flexCheckDefault1">HFC</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2">
+                                        <label class="form-check-label" for="flexCheckDefault2">2G</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault3">
+                                        <label class="form-check-label" for="flexCheckDefault3">3G</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault4">
+                                        <label class="form-check-label" for="flexCheckDefault4">4G</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault5">
+                                        <label class="form-check-label" for="flexCheckDefault5">5G</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <p>Descripción</p>
+                                    <label class="col-sm-2 col-form-label">Trabajos realizados: </label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="text" placeholder="Se procedió con lel montaje de la torre, además de la adecuación del gabinete para la correcta operación de los equipos a instalarse. Se instalron: BBU, RRU, Router, Switch, Rectificadores y baterías." disabled>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-sm-2 col-form-label">Foto del sitio </label>
+                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                        <img id="imgPreview4" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                                    </div>
+                                    <input class="form-control" type="file" name="imagenSubida3" id="imagenSubida4"
+                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                                </div>
+
                             </div>
 
                         </form><!-- End General Form Elements -->
