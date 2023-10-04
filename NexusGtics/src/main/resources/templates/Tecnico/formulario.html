@@ -227,9 +227,42 @@
                                         <input class="form-control" type="text" th:field="*{tecnico.apellido}" disabled>
                                     </div>
                                 </div>
+
+                            </div>
+                            <div class="row mb-5">
+                                <h5><b>Información General del ticket</b></h5>
+                                <p>Llegada a sitio:</p>
+                                <div class="mb-3 row">
+                                    <label class="col-sm-2 col-form-label">Foto del técnico </label>
+                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                        <img id="imgPreview1" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                                    </div>
+                                    <input class="form-control" type="file" name="imagenSubida1" id="imagenSubida1"
+                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                                </div>
+                                <div class="mb-3 row">
+                                    <p>Descripción</p>
+                                    <label class="col-sm-2 col-form-label">Hechos relevantes: </label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" type="text" placeholder="He colocado la maquina en su lugar despues de repararlo" disabled>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-sm-2 col-form-label">Foto del sitio </label>
+                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                        <img id="imgPreview2" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                                    </div>
+                                    <input class="form-control" type="file" name="imagenSubida2" id="imagenSubida2"
+                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                                </div>
+
                                 <center><button type="submit" class="btn btn-danger">Enviar</button>
                                     <a type="button" class="btn btn-secondary" th:href="@{'/tecnico/verTicket?id='+${formulario.ticket.idTickets}}">Cancelar</a></center>
                             </div>
+                            <div class="row mb-5">
+
+                            </div>
+
                         </form><!-- End General Form Elements -->
 
                     </div>
