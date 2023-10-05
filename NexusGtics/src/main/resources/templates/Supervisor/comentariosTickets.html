@@ -5,7 +5,7 @@
 
 <body>
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('Supervisor')"><!-- End Header --></header><!-- End Header -->
+<header th:replace="Fragmentos/header :: header('supervisor')"><!-- End Header --></header><!-- End Header -->
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuSupervisor :: menu('comentariosTicket')">
 </aside><!-- End Sidebar-->
@@ -126,9 +126,9 @@
                 <div class="card">
                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                         <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-                        <h2 style="color: #095444">German Cisneros</h2>
-                        <h3>Supervisor</h3>
-                        <h3>ID: 113253983</h3>
+                        <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">German Cisneros</h2>
+                        <h3 th:text="${session.usuario.cargo.nombreCargo}">Supervisor</h3>
+                        <h3 th:text="${session.usuario.dni}">ID: 113253983</h3>
                     </div>
                 </div>
 
@@ -139,7 +139,7 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-lg-5 col-md-4 label "><b>Empresa:</b></div>
-                                    <div class="col-lg-7 col-md-8">Cisco</div>
+                                    <div class="col-lg-7 col-md-8" th:text="${session.usuario.empresa.nombre}">Cisco</div>
                                 </div>
                             </div>
 

@@ -1,14 +1,8 @@
 package com.example.nexusgtics.controllers;
 
-import com.example.nexusgtics.entity.Sitio;
-import com.example.nexusgtics.entity.Ticket;
-import com.example.nexusgtics.entity.Usuario;
-import com.example.nexusgtics.repository.SitioRepository;
-import com.example.nexusgtics.repository.TicketRepository;
-import com.example.nexusgtics.repository.UsuarioRepository;
+import com.example.nexusgtics.entity.*;
+import com.example.nexusgtics.repository.*;
 import org.springframework.ui.Model;
-import com.example.nexusgtics.entity.Cuadrilla;
-import com.example.nexusgtics.repository.CuadrillaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,15 +21,18 @@ public class SupervisorController {
     private final UsuarioRepository usuarioRepository;
     private final TicketRepository ticketRepository;
     private final SitioRepository sitioRepository;
+    private final FormularioRepository formularioRepository;
 
     public SupervisorController(CuadrillaRepository cuadrillaRepository,
                                 UsuarioRepository usuarioRepository,
                                 TicketRepository ticketRepository,
-                                SitioRepository sitioRepository) {
+                                SitioRepository sitioRepository,
+                                FormularioRepository formularioRepository) {
         this.cuadrillaRepository = cuadrillaRepository;
         this.usuarioRepository = usuarioRepository;
         this.ticketRepository = ticketRepository;
         this.sitioRepository = sitioRepository;
+        this.formularioRepository = formularioRepository;
     }
 
     @GetMapping( {"/",""})
@@ -194,8 +191,23 @@ public class SupervisorController {
     }
 
     @GetMapping("/formulario")
-    public String formulario(){
-        return "Supervisor/formulario";
+    public String formulario(Model model, @RequestParam("id") String idStr){
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/supervisor/ticketCerrado?id="+idStr;
+            }
+            List<Formulario> formularioOptional = formularioRepository.formulariosSD(id);
+            if (!formularioOptional.isEmpty()) {
+                Formulario formulario = formularioOptional.get(0);
+                model.addAttribute("formulario", formulario);
+                return "Supervisor/formulario";
+            } else {
+                return "redirect:/supervisor/ticketCerrado?id="+idStr;
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/supervisor/ticketCerrado?id="+idStr;
+        }
     }
 
     @GetMapping("/perfil")

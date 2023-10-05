@@ -5,7 +5,7 @@
 
 <body>
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('Supervisor')"><!-- End Header --></header><!-- End Header -->
+<header th:replace="Fragmentos/header :: header('supervisor')"><!-- End Header --></header><!-- End Header -->
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuSupervisor :: menu('perfilSupervisor')">
 </aside><!-- End Sidebar-->
@@ -29,9 +29,9 @@
                 <div class="card">
                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                         <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-                        <h2 style="color: #095444">German Cisneros</h2>
-                        <h3>Supervisor</h3>
-                        <h3>ID: 113253983</h3>
+                        <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">German Cisneros</h2>
+                        <h3 th:text="${session.usuario.cargo.nombreCargo}">Supervisor</h3>
+                        <h3 th:text="${session.usuario.dni}">ID: 113253983</h3>
                     </div>
                 </div>
 
@@ -60,39 +60,34 @@
                         <div class="tab-content pt-2">
 
                             <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                <h5 class="card-title" style="color: #095444">Sobre German:</h5>
+                                <h5 class="card-title" style="color: #095444" th:text="'Sobre: '+${session.usuario.nombre}">Sobre German:</h5>
                                 <p class="small fst-italic">Ingeniero en el rubro de Telecomunicaciones, soy egresado de la Universidad "Universidad". Con 6 años de experiencia en diferentes empresas de telecomunicaciones.</p>
 
                                 <h5 class="card-title" style="color: #095444">Detalles del Perfil</h5>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label ">Nombre y apellidos</div>
-                                    <div class="col-lg-9 col-md-8">German Cisneros Gonzales</div>
+                                    <div class="col-lg-9 col-md-8" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">German Cisneros Gonzales</div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">DNI</div>
-                                    <div class="col-lg-9 col-md-8">728963541</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${session.usuario.dni}">728963541</div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Compañía</div>
-                                    <div class="col-lg-9 col-md-8">Cisco</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${session.usuario.empresa.nombre}">Cisco</div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Trabajo</div>
-                                    <div class="col-lg-9 col-md-8">Supervisor de Campo</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">País</div>
-                                    <div class="col-lg-9 col-md-8">Perú</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${session.usuario.cargo.nombreCargo}">Supervisor de Campo</div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Correo</div>
-                                    <div class="col-lg-9 col-md-8">germancis.cisco@gmail.com</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${session.usuario.correo}">germancis.cisco@gmail.com</div>
                                 </div>
 
                             </div>
@@ -155,12 +150,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="row mb-3">
-                                        <label for="Country" class="col-md-4 col-lg-3 col-form-label">Pais</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="country" type="text" class="form-control" id="Country" value="Perú">
-                                        </div>
-                                    </div>
 
                                     <div class="row mb-3">
                                         <label for="Email" class="col-md-4 col-lg-3 col-form-label">Correo</label>
