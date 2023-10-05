@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(value = {"/analistaOYM",""})
+@RequestMapping(value = {"/analistaOYM"})
 public class AnalistaOYMController {
     final TicketRepository ticketRepository;
     final SitioRepository sitioRepository;
