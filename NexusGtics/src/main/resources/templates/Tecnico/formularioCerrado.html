@@ -213,8 +213,169 @@
                     <div class="col-lg-9 col-md-8" th:text="${formulario.tecnico.apellido}"></div>
                   </div>
                   </div>
+
+                <div class="row mb-5">
+                  <h5><b>Información General del ticket</b></h5>
+                  <p>Llegada a sitio:</p>
+                  <div class="mb-3 row">
+                    <label for="imagenSubida1" class="form-label">Foto del técnico </label>
+                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                      <img id="imgPreview1" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                    </div>
+                    <input class="form-control" type="file" name="imagenSubida1" id="imagenSubida1"
+                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                  </div>
+                  <div class="mb-3 row">
+                    <p>Descripción</p>
+                    <label class="col-sm-4 col-form-label">Hechos relevantes: </label>
+                    <div class="form-floating col-sm-8">
+                      <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" style="height: 100px" disabled>He colocado la maquina en su lugar despues de repararlo</textarea>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="imagenSubida2" class="form-label">Foto del sitio </label>
+                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                      <img id="imgPreview2" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                    </div>
+                    <input class="form-control" type="file" name="imagenSubida2" id="imagenSubida2"
+                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                  </div>
+
+                </div>
+                <div class="row mb-5">
+                  <h5><b>Validación de Sitio</b></h5>
+                  <div class="mb-3 row">
+                    <label class="col-sm-6 col-form-label">¿Existe conexión de energía? </label>
+                    <div class="col-sm-6">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked disabled>
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Sí</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label class="col-sm-5 col-form-label">Nombre de arrendatario: </label>
+                    <div class="col-sm-7">
+                      <input type="text" class="form-control"  th:field="*{ticket.usuarioSolicitante}" disabled>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label class="col-sm-5 col-form-label">DNI del arrendatario: </label>
+                    <div class="col-sm-7">
+                      <input class="form-control" type="text" placeholder="72495536" disabled>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label class="col-sm-6 col-form-label">¿La movilidad llega al sitio?</label>
+                    <div class="col-sm-6">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked1" checked disabled>
+                        <label class="form-check-label" for="flexSwitchCheckChecked1">Sí</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label class="col-sm-6 col-form-label">Área del sitio /m2: </label>
+                    <div class="col-sm-6">
+                      <input class="form-control" type="number" placeholder="25,2" disabled>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <p>Observaciones</p>
+                    <label class="col-sm-4 col-form-label">Descripción: </label>
+                    <div class="form-floating col-sm-8">
+                      <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" disabled></textarea>
+                      <label for="floatingTextarea2">Comments</label>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <div id="map" ></div>
+                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                    <script>
+                      let map = L.map('map').setView([-12.06802,-77.03462],14)
+                      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      }).addTo(map);
+                      L.marker([-12.06802,-77.03462]).addTo(map).bindPopup('Sitio').openPopup();
+
+                    </script>
+                  </div>
+                  <div class="mb-3 row">
+                    <label for="imagenSubida3" class="form-label">Foto del sitio </label>
+                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                      <img id="imgPreview3" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                    </div>
+                    <input class="form-control" type="file" name="imagenSubida3" id="imagenSubida3"
+                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                  </div>
+                </div>
+                <div class="row mb-5">
+                  <h5><b>Trabajo realizado</b></h5>
+                  <div class="mb-3 row">
+                    <label class="col-sm-6 col-form-label">¿Se realizó construcción de infraestructura? </label>
+                    <div class="col-sm-6">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked2" checked disabled>
+                        <label class="form-check-label" for="flexSwitchCheckChecked2">Sí</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label class="col-sm-6 col-form-label">¿Se realizó instalaciones electricas? </label>
+                    <div class="col-sm-6">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked3" checked disabled>
+                        <label class="form-check-label" for="flexSwitchCheckChecked3">Sí</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label class="col-sm-6 col-form-label">Tecnología instalada: </label>
+                    <div class="col-sm-6">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" >
+                        <label class="form-check-label" for="flexCheckDefault">FFTH</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
+                        <label class="form-check-label" for="flexCheckDefault1">HFC</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2">
+                        <label class="form-check-label" for="flexCheckDefault2">2G</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault3">
+                        <label class="form-check-label" for="flexCheckDefault3">3G</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault4">
+                        <label class="form-check-label" for="flexCheckDefault4">4G</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault5">
+                        <label class="form-check-label" for="flexCheckDefault5">5G</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <p><b>Descripción</b></p>
+                    <label class="col-sm-4 col-form-label">Trabajos realizados: </label>
+                    <div class="form-floating col-sm-8">
+                      <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled1" style="height: 100px" disabled>Se procedió con lel montaje de la torre, además de la adecuación del gabinete para la correcta operación de los equipos a instalarse. Se instalron: BBU, RRU, Router, Switch, Rectificadores y baterías.</textarea>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Foto del sitio </label>
+                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                      <img id="imgPreview4" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                    </div>
+                    <input class="form-control" type="file" name="imagenSubida3" id="imagenSubida4"
+                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                  </div>
+                  </div>
               </div><!-- End General Form Elements -->
-              <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicketCerrado?id='+${formulario.ticket.idTickets}}">Regresar</a>
+              <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicketCerrado?id='+${formulario.ticket.idTickets}}" style="background-color: rgba(43,48,53,0.51)">Regresar</a>
             </div>
           </div>
 
