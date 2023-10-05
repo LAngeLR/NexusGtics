@@ -80,16 +80,12 @@ public class WebSecurityConfig {
                 .requestMatchers("/supervisor", "/supervisor/**").hasAnyAuthority("Supervisor de Campo")
                 .requestMatchers("/tecnico", "/tecnico/**").hasAnyAuthority("Técnico")
                 .anyRequest().permitAll();
-
         http.logout()
                 .logoutSuccessUrl("/closeSession")
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true);
-
-
         return http.build();
     }
-
     @Bean
     public UserDetailsManager users(DataSource dataSource) {
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
