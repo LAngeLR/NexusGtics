@@ -5,16 +5,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class LoginController {
-
     @GetMapping("/openLoginWindow")
     public String loginWindow(){
         return "Sistema/login";
     }
-
     @GetMapping("/closeSession")
     public String closeSession(){
         return "Sistema/cerrarsesion";
     }
-
-
 }
