@@ -96,8 +96,7 @@
                   </div>
 
                   <center><br>
-
-                    <a class="btn" type="button" style="background-color: #82DEAC" th:href="@{/supervisor/formulario}" >Formulario</a>
+                    <a type="button" class="btn btn-outline-success" th:href="@{'/supervisor/formulario?id=' + ${tickets.idTickets}}">Formulario</a>
                     <a type="button" class="btn btn-outline-warning" th:href="@{'/supervisor/comentarios?id=' + ${tickets.idTickets}}">comentarios</a>
                     <button type="submit" class="btn btn-outline-danger" th:if="${tickets.estado==6}">Guardar</button>
                   </center>
@@ -116,7 +115,7 @@
           <div class="card-body pt-3">
             <div class="col-md-8 col-lg-9">
               <h5 class="card-title" style="color: #095444">Formulario:</h5>
-              <img th:src="@{https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg}" alt="Profile" style="max-width: 100%; height: auto; display: block; margin: 0 auto; max-height: 70vh;">
+              <img th:src="@{|image/${tickets.idSitios.archivo.archivo}|}" alt="Profile" style="max-width: 100%; height: auto; display: block; margin: 0 auto; max-height: 70vh;">
             </div>
             <div class="tab-content pt-2">
 
@@ -144,7 +143,7 @@
           <h5 class="card-title" style="color: #095444; text-align: center; ">Ubicacion</h5>
 
           <style>
-            #map { height: 98vh; width: 100hw; }
+            #map { height: 50vh; width: 100hw; }
             select {
               width: 30%;
               font-size: 0.8rem
