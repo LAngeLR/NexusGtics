@@ -42,6 +42,7 @@
         <div class="card">
           <div class="card-body pt-3">
             <!-- Bordered Tabs -->
+
             <div class="tab-content pt-2">
               <a th:href="@{/admin/perfilAdmin}" class="btn btn-outline-dark me-2 mt-3">General</a>
               <a th:href="@{/admin/perfilEditar}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
@@ -50,41 +51,61 @@
 
             <div class="tab-content pt-2">
 
-              <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                <h5 class="card-title" style="color: #095444" th:text="|Sobre ${session.usuario.nombre} ${session.usuario.apellido}|">Sobre Luis:</h5>
-                <p class="small fst-italic" th:text="|${session.usuario.descripcion}|"></p>
+              <div class="tab-pane show active fade profile-edit pt-3" id="profile-edit">
 
-                <h5 class="card-title" style="color: #095444">Detalles del Perfil</h5>
+                <form method="POST" th:action="@{/admin/saveUsuario}" th:object="${session.usuario}" enctype="multipart/form-data">
+                  <div class="row mb-3">
+                    <label class="col-md-4 col-lg-3 col-form-label">Foto de Perfil</label>
+                    <div class="col-md-8 col-lg-9">
+                      <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile">
+                      <div class="pt-2">
+                        <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                      </div>
+                    </div>
+                  </div>
 
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label ">Nombre y apellidos</div>
-                  <div class="col-lg-9 col-md-8" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</div>
-                </div>
+                  <div class="row mb-3">
+                    <label for="nombre" class="col-md-4 col-lg-3 col-form-label">Nombres</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="nombre" type="text" class="form-control" id="nombre" th:value="${session.usuario.nombre}">
+                    </div>
+                  </div>
 
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label">DNI</div>
-                  <div class="col-lg-9 col-md-8" th:text="|${session.usuario.dni}|">76631684</div>
-                </div>
+                  <div class="row mb-3">
+                    <label for="apellido" class="col-md-4 col-lg-3 col-form-label">Apellidos</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="apellido" type="text" class="form-control" id="apellido" th:value="${session.usuario.apellido}">
+                    </div>
+                  </div>
 
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label">Compañía</div>
-                  <div class="col-lg-9 col-md-8" th:text="${session.usuario.empresa.nombre}">Nexus</div>
-                </div>
 
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label">Trabajo</div>
-                  <div class="col-lg-9 col-md-8" th:text="${session.usuario.cargo.nombreCargo}">Administrador</div>
-                </div>
+                  <div class="row mb-3">
+                    <label for="descripcion" class="col-md-4 col-lg-3 col-form-label">Sobre ti</label>
+                    <div class="col-md-8 col-lg-9">
+                      <textarea name="descripcion" class="form-control" id="descripcion" th:text="${session.usuario.descripcion}" style="height: 100px"></textarea>
+                    </div>
+                  </div>
 
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label">País</div>
-                  <div class="col-lg-9 col-md-8">Perú</div>
-                </div>
+                  <div class="row mb-3">
+                    <label for="cargo" class="col-md-4 col-lg-3 col-form-label">Trabajo</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="cargo" type="text" class="form-control" id="cargo" th:value="${session.usuario.cargo.nombreCargo}">
+                    </div>
+                  </div>
 
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label">Correo</div>
-                  <div class="col-lg-9 col-md-8" th:text="${session.usuario.correo}">k.anderson@gmail.com</div>
-                </div>
+
+                  <div class="row mb-3">
+                    <label for="correo" class="col-md-4 col-lg-3 col-form-label">Correo</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="correo" type="email" class="form-control" id="correo" th:value="${session.usuario.correo}">
+                    </div>
+                  </div>
+
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-danger">Guardar cambios</button>
+                  </div>
+                </form><!-- End Profile Edit Form -->
 
               </div>
 
