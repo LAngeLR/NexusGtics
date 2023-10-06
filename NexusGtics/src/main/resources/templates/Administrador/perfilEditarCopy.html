@@ -53,57 +53,54 @@
 
               <div class="tab-pane show active fade profile-edit pt-3" id="profile-edit">
 
-                <form method="POST" th:action="@{/admin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data">
-                  <input type="hidden" class="form-control" th:field="*{id}">
-                  <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
-
-                  <div class="mb-3">
-                    <label for="imagenSubida" class="form-label">Foto de perfil:</label>
-                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                      <img th:src="@{|image/${usuario.archivo.idArchivos}|}" style="max-width: 300px;" alt="">
-                    </div>
-                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
-                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                  </div>
-
-
-                  <div class="mb-3">
-                    <label class="form-label">Nombres:</label>
-                    <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
-                    <div class="invalid-feedback"
-                         th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
-                      Mensaje de error de nombre
+                <form method="POST" th:action="@{/admin/saveUsuario}" th:object="${session.usuario}" enctype="multipart/form-data">
+                  <div class="row mb-3">
+                    <label class="col-md-4 col-lg-3 col-form-label">Foto de Perfil</label>
+                    <div class="col-md-8 col-lg-9">
+                      <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile">
+                      <div class="pt-2">
+                        <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                      </div>
                     </div>
                   </div>
 
-                  <div class="mb-3">
-                    <label class="form-label">Apellidos:</label>
-                    <input th:field="*{apellido}" type="text" th:class="${#fields.hasErrors('apellido')?'form-control is-invalid':'form-control'}"/>
-                    <div class="invalid-feedback"
-                         th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}">
-                      Mensaje de error de nombre
+                  <div class="row mb-3">
+                    <label for="nombre" class="col-md-4 col-lg-3 col-form-label">Nombres</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="nombre" type="text" class="form-control" id="nombre" th:value="${session.usuario.nombre}">
                     </div>
                   </div>
 
-                  <div class="mb-3">
-                    <label class="form-label">Apellidos:</label>
-                    <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
-                    <div class="invalid-feedback"
-                         th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
-                      Mensaje de error de descripcion
-                    </div>
-                  </div>
-
-                  <div class="mb-3">
-                    <label class="form-label">Correo:</label>
-                    <input th:field="*{correo}" type="text" th:class="${#fields.hasErrors('correo')?'form-control is-invalid':'form-control'}"/>
-                    <div class="invalid-feedback"
-                         th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
-                      Mensaje de error de correo
+                  <div class="row mb-3">
+                    <label for="apellido" class="col-md-4 col-lg-3 col-form-label">Apellidos</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="apellido" type="text" class="form-control" id="apellido" th:value="${session.usuario.apellido}">
                     </div>
                   </div>
 
 
+                  <div class="row mb-3">
+                    <label for="descripcion" class="col-md-4 col-lg-3 col-form-label">Sobre ti</label>
+                    <div class="col-md-8 col-lg-9">
+                      <textarea name="descripcion" class="form-control" id="descripcion" th:text="${session.usuario.descripcion}" style="height: 100px"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <label for="cargo" class="col-md-4 col-lg-3 col-form-label">Trabajo</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="cargo" type="text" class="form-control" id="cargo" th:value="${session.usuario.cargo.nombreCargo}">
+                    </div>
+                  </div>
+
+
+                  <div class="row mb-3">
+                    <label for="correo" class="col-md-4 col-lg-3 col-form-label">Correo</label>
+                    <div class="col-md-8 col-lg-9">
+                      <input name="correo" type="email" class="form-control" id="correo" th:value="${session.usuario.correo}">
+                    </div>
+                  </div>
 
                   <div class="text-center">
                     <button type="submit" class="btn btn-danger">Guardar cambios</button>
@@ -140,12 +137,7 @@
 
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
-<script th:src="@{/assets/js/foto.js}"></script>
-<script>
-  document.getElementById('uploadButton').addEventListener('click', function () {
-    document.getElementById('fileInput').click();
-  });
-</script>
+
 </body>
 
 </html>

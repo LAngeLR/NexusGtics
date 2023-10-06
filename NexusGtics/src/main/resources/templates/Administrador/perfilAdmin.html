@@ -44,7 +44,7 @@
             <!-- Bordered Tabs -->
             <div class="tab-content pt-2">
               <a th:href="@{/admin/perfilAdmin}" class="btn btn-outline-dark me-2 mt-3">General</a>
-              <a th:href="@{/admin/perfilEditar}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
+              <a th:href="@{'/admin/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
               <a th:href="@{/admin/perfilContra}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
             </div>
 
