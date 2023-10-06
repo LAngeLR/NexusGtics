@@ -4,12 +4,14 @@ import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
 import com.sun.net.httpserver.HttpsServer;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.data.repository.query.parser.Part;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +28,8 @@ import java.util.Optional;
 @RequestMapping("/admin")
 public class AdminController {
 
+
+
     final EmpresaRepository empresaRepository;
     final SitioRepository sitioRepository;
     final EquipoRepository equipoRepository;
@@ -34,9 +38,10 @@ public class AdminController {
 
     final CargoRepository cargoRepository;
     private final ArchivoRepository archivoRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository, UsuarioRepository usuarioRepository, CargoRepository cargoRepository,
-                           ArchivoRepository archivoRepository) {
+                           ArchivoRepository archivoRepository, PasswordEncoder passwordEncoder) {
         this.empresaRepository = empresaRepository;
         this.sitioRepository = sitioRepository;
         this.equipoRepository = equipoRepository;
@@ -44,6 +49,7 @@ public class AdminController {
         this.usuarioRepository = usuarioRepository;
         this.cargoRepository = cargoRepository;
         this.archivoRepository = archivoRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping({"/","","admin","administrador"})
@@ -58,14 +64,6 @@ public class AdminController {
     public String perfilAdmin(){
         return "Administrador/perfilAdmin";
     }
-
-
-
-    @GetMapping({"/perfilContra"})
-    public String perfilContra(){
-        return "Administrador/perfilContra";
-    }
-
 
 //---------------------------- GESTION DE USUARIOS -------------------------------------------
 
@@ -259,10 +257,43 @@ public class AdminController {
 
     }
 
+    @GetMapping({"/perfilContra"})
+    public String perfilContra(Model model, @RequestParam("id") String idStr){
 
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/admin/listaUsuario";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                model.addAttribute("idUsuario",id);
+                return "Administrador/perfilContra";
+            } else {
+                return "redirect:/admin";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaUsuario";
+        }
+    }
 
+    @PostMapping({"/actualizarContra"})
+    public String actualizarContra(Model model, @RequestParam("id") int id, @RequestParam("password") String contrasenia,
+                                   @RequestParam("newpassword") String contraseniaNueva, @RequestParam("renewpassword") String contraseniaConfirm, RedirectAttributes redirectAttributes){
 
+        String idStr=String.valueOf(id);
 
+        String contraseniaAlmacenada = usuarioRepository.obtenerContraseña(id);
+
+        if (passwordEncoder.matches(contrasenia, contraseniaAlmacenada)) {
+            String contraseniaNuevaEncriptada = passwordEncoder.encode(contraseniaNueva);
+            usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
+            return "redirect:/admin/perfilAdmin";
+        } else {
+            redirectAttributes.addFlashAttribute("error","La contraseña actual no es correcta.");
+            return "redirect:/admin/perfilContra?id="+idStr;
+        }
+    }
 //------------------------------ GESTION DE EMPRESAS -----------------------------------------
     @GetMapping({"/listaEmpresa","/listaempresa"})
     public String listaEmpresa(Model model){
