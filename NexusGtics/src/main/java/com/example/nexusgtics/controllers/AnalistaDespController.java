@@ -6,11 +6,13 @@ import com.example.nexusgtics.entity.Sitio;
 import com.example.nexusgtics.repository.EmpresaRepository;
 import com.example.nexusgtics.entity.Ticket;
 import com.example.nexusgtics.repository.*;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,7 +58,8 @@ public class AnalistaDespController {
     }
 
     @GetMapping("/editarSitio")
-    public String editarSitio(Model model, @RequestParam("id") String idStr){
+    public String editarSitio(Model model, @RequestParam("id") String idStr,
+                              @ModelAttribute("sitio") @Valid Sitio sitio, BindingResult bindingResult){
         try{
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !sitioRepository.existsById(id)) {
@@ -64,11 +67,10 @@ public class AnalistaDespController {
             }
             Optional<Sitio> optSitio = sitioRepository.findById(id);
             if(optSitio.isPresent()){
-                Sitio sitio = optSitio.get();
+                 sitio = optSitio.get();
 
                 // Obtén la lista de equipos por sitio
                 List<Equipo> listaEquipos = equipoRepository.listaEquiposPorSitio(id);
-
                 model.addAttribute("sitio", sitio);
                 model.addAttribute("listaEquipos", listaEquipos);
                 return "AnalistaDespliegue/despliegueEditarSitio";
@@ -126,6 +128,65 @@ public class AnalistaDespController {
             return "redirect:/analistaDespliegue/listaSitio";
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("/saveSitio")
+    public String saveSitio(@RequestParam("imagenSubida") MultipartFile file,
+                            @ModelAttribute("sitio") @Valid Sitio sitio,
+                            BindingResult bindingResult,
+                            Model model,
+                            RedirectAttributes attr){
+
+        if (sitio.getTipo() == null || sitio.getTipo().equals("-1")) {
+            model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
+
+            if (sitio.getIdSitios() == null) {
+                System.out.println("se mando en sitio, Tipo");
+                return "AnalistaDespliegue/despliegueListaSitio";
+            } else {
+                return "AnalistaDespliegue/despliegueEditarSitio";
+            }
+        }
+        if (sitio.getTipoZona() == null || sitio.getTipoZona().equals("-1")) {
+            model.addAttribute("msgZona", "Escoger un tipo de zona");
+            if (sitio.getIdSitios() == null) {
+                System.out.println("se mando en sitio, TipoZona");
+                return "AnalistaDespliegue/despliegueListaSitio";
+            } else {
+                return "AnalistaDespliegue/despliegueEditarSitio";
+            }
+        }
+        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+            if (sitio.getArchivo() == null) {
+                sitio.setArchivo(new Archivo());
+            }
+            String fileName = file.getOriginalFilename();
+            try{
+                Archivo archivo = sitio.getArchivo();
+                archivo.setNombre(fileName);
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+                int idImagen = archivo.getIdArchivos();
+                sitio.getArchivo().setIdArchivos(idImagen);
+                sitioRepository.save(sitio);
+                attr.addFlashAttribute("msg1", "El sitio en '" + sitio.getDistrito() + "' ha sido editado exitosamente");
+
+                return "redirect:/analistaDespliegue/listaSitio";
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        } else { //hay al menos 1 error
+            System.out.println("se mando en sitio, Binding");
+            if (sitio.getIdSitios() == null) {
+                System.out.println("se mando en sitio, TipoZona");
+                return "AnalistaDespliegue/despliegueListaSitio";
+            } else {
+                return "AnalistaDespliegue/despliegueEditarSitio";
+            }
         }
     }
 
