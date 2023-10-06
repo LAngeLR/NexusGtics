@@ -35,10 +35,6 @@ public class Equipo {
     private String paginaModelo;
 
     @ManyToOne
-    @JoinColumn(name = "idSitios", nullable = false , referencedColumnName = "idSitios")
-    private Sitio sitio;
-
-    @ManyToOne
     @JoinColumn(name = "idImagenes")
     private Archivo archivo;
 
