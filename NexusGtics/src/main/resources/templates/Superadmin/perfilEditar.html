@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head th:include="Fragmentos/head :: head('Perfil')"></head>
+
+<body>
+<!-- ======= Header ======= -->
+<header th:replace="Fragmentos/header :: header('admin')"><!-- End Header --></header>
+
+<!-- ======= Sidebar ======= -->
+<aside th:replace="Fragmentos/menuAdmin :: menu('perfil')">
+</aside><!-- End Sidebar-->
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1 th:text="|Perfil|"></h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a th:href="@{/Admin/listaUsuario}" th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
+        <li class="breadcrumb-item active">Perfil</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <section class="section profile">
+    <div class="row">
+      <div class="col-xl-4">
+
+        <div class="card">
+          <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+            <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+            <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</h2>
+            <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Administrador</h3>
+            <h3 th:text="|${session.usuario.dni}|">ID: 123456789</h3>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-xl-8">
+
+        <div class="card">
+          <div class="card-body pt-3">
+            <!-- Bordered Tabs -->
+
+            <div class="tab-content pt-2">
+              <a th:href="@{/admin/perfilAdmin}" class="btn btn-outline-dark me-2 mt-3">General</a>
+              <a th:href="@{/admin/perfilEditar}" class="btn btn-dark me-2 mt-3">Editar perfil</a>
+              <a th:href="@{/admin/perfilContra}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
+            </div>
+
+            <div class="tab-content pt-2">
+
+              <div class="tab-pane show active fade profile-edit pt-3" id="profile-edit">
+
+                <form method="POST" th:action="@{/admin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data">
+                  <input type="hidden" class="form-control" th:field="*{id}">
+                  <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
+                  <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
+                  <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
+                  <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:field="*{fechaRegistro}">
+                  <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" th:field="*{tecnicoConCuadrilla}">
+                  <input type="hidden" name="cuadrilla" id="cuadrilla" th:field="*{cuadrilla}">
+                  <input type="hidden" name="cargo" id="cargo" th:field="*{cargo}">
+                  <input type="hidden" name="empresa" id="empresa" th:field="*{empresa}">
+                  <input type="hidden" name="dni" id="dni" th:field="*{dni}">
+
+
+
+
+                  <div class="mb-3">
+                    <label for="imagenSubida" class="form-label">Foto de perfil:</label>
+                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                      <img th:src="@{|image/${usuario.archivo.idArchivos}|}" style="max-width: 300px;" alt="">
+                    </div>
+                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label">Nombres:</label>
+                    <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
+                      Mensaje de error de nombre
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Apellidos:</label>
+                    <input th:field="*{apellido}" type="text" th:class="${#fields.hasErrors('apellido')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}">
+                      Mensaje de error de nombre
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Correo:</label>
+                    <input th:field="*{correo}" type="text" th:class="${#fields.hasErrors('correo')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
+                      Mensaje de error de correo
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Descripción:</label>
+                    <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
+                      Mensaje de error de correo
+                    </div>
+                  </div>
+
+
+
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-danger">Guardar cambios</button>
+                  </div>
+                </form><!-- End Profile Edit Form -->
+
+              </div>
+
+            </div><!-- End Bordered Tabs -->
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer th:replace="Fragmentos/footer :: footer"></footer>
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/foto.js}"></script>
+<script>
+  document.getElementById('uploadButton').addEventListener('click', function () {
+    document.getElementById('fileInput').click();
+  });
+</script>
+</body>
+
+</html>

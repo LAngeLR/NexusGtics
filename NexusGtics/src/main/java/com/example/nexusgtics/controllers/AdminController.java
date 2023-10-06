@@ -59,7 +59,27 @@ public class AdminController {
         return "Administrador/perfilAdmin";
     }
 
+    @GetMapping({"/perfilEditar"})
+    public String perfilEditar(Model model, @RequestParam("id") String idStr,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/admin/listaUsuario";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
+                model.addAttribute("usuario", usuario);
+                return "Administrador/perfilEditar";
+            } else {
+                return "redirect:/admin";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaUsuario";
+        }
 
+    }
 
     @GetMapping({"/perfilContra"})
     public String perfilContra(){
@@ -233,32 +253,6 @@ public class AdminController {
             return "redirect:/admin/listaUsuario";
         }
     }
-
-
-    @GetMapping({"/perfilEditar"})
-    public String perfilEditar(Model model, @RequestParam("id") String idStr,
-                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
-        try{
-            int id = Integer.parseInt(idStr);
-            if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/admin/listaUsuario";
-            }
-            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-            if (optionalUsuario.isPresent()) {
-                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
-                model.addAttribute("usuario", usuario);
-                model.addAttribute("listaEmpresa", empresaRepository.findAll());
-                model.addAttribute("listaCargo", cargoRepository.findAll());
-                return "Administrador/perfilEditar";
-            } else {
-                return "redirect:/admin";
-            }
-        } catch (NumberFormatException e) {
-            return "redirect:/admin/listaUsuario";
-        }
-
-    }
-
 
 
 

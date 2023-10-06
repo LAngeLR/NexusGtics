@@ -2,12 +2,11 @@ package com.example.nexusgtics.controllers;
 
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
+import jakarta.validation.Valid;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.Instant;
 
@@ -39,6 +38,40 @@ public class SupervisorController {
     public String paginaPrincipal(){
         return "Supervisor/menuSupervisor";
     }
+
+    /* -------------------------- PERFIL -------------------------- */
+    @GetMapping({"/perfil","perfilAdmin","perfiladmin"})
+    public String perfilAdmin(){
+        return "Administrador/perfilAdmin";
+    }
+
+    @GetMapping({"/perfilEditar"})
+    public String perfilEditar(Model model, @RequestParam("id") String idStr,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/admin/listaUsuario";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
+                model.addAttribute("usuario", usuario);
+                return "Administrador/perfilEditar";
+            } else {
+                return "redirect:/admin";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaUsuario";
+        }
+
+    }
+
+    @GetMapping({"/perfilContra"})
+    public String perfilContra(){
+        return "Administrador/perfilContra";
+    }
+    /* -------------------------- FIN PERFIL -------------------------- */
 
     @GetMapping("/listaTickets")
     public String Tickets(Model model){

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head th:include="Fragmentos/head :: head('Perfil')"></head>
+
+<body>
+<!-- ======= Header ======= -->
+<header th:replace="Fragmentos/header :: header('admin')"><!-- End Header --></header>
+
+<!-- ======= Sidebar ======= -->
+<aside th:replace="Fragmentos/menuAdmin :: menu('perfil')">
+</aside><!-- End Sidebar-->
+
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1 th:text="|Perfil|"></h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a th:href="@{/Admin/listaUsuario}" th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
+        <li class="breadcrumb-item active">Perfil</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <section class="section profile">
+    <div class="row">
+      <div class="col-xl-4">
+
+        <div class="card">
+          <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+            <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+            <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</h2>
+            <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Administrador</h3>
+            <h3 th:text="|${session.usuario.dni}|">ID: 123456789</h3>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-xl-8">
+
+        <div class="card">
+          <div class="card-body pt-3">
+            <!-- Bordered Tabs -->
+            <div class="tab-content pt-2">
+              <a th:href="@{/admin/perfilAdmin}" class="btn btn-dark me-2 mt-3">General</a>
+              <a th:href="@{'/admin/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
+              <a th:href="@{/admin/perfilContra}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
+            </div>
+
+            <div class="tab-content pt-2">
+
+              <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                <h5 class="card-title" style="color: #095444" th:text="|Sobre ${session.usuario.nombre} ${session.usuario.apellido}|">Sobre Luis:</h5>
+                <p class="small fst-italic" th:text="|${session.usuario.descripcion}|"></p>
+
+                <h5 class="card-title" style="color: #095444">Detalles del Perfil</h5>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label ">Nombre y apellidos</div>
+                  <div class="col-lg-9 col-md-8" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">DNI</div>
+                  <div class="col-lg-9 col-md-8" th:text="|${session.usuario.dni}|">76631684</div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Compañía</div>
+                  <div class="col-lg-9 col-md-8" th:text="${session.usuario.empresa.nombre}">Nexus</div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Trabajo</div>
+                  <div class="col-lg-9 col-md-8" th:text="${session.usuario.cargo.nombreCargo}">Administrador</div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">País</div>
+                  <div class="col-lg-9 col-md-8">Perú</div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Correo</div>
+                  <div class="col-lg-9 col-md-8" th:text="${session.usuario.correo}">k.anderson@gmail.com</div>
+                </div>
+
+              </div>
+
+            </div><!-- End Bordered Tabs -->
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer th:replace="Fragmentos/footer :: footer"></footer>
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+</body>
+
+</html>
