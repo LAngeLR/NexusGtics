@@ -34,6 +34,26 @@
                     <i class="bi bi-chat-left-text text-light"></i>
                     <span class="badge bg-success badge-number" ></span>
                 </a><!-- End Messages Icon -->
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages" style="position: absolute; inset: 0px 0px auto auto; margin: 0px;transform: translate3d(-19.5px, 35px, 0px);" data-popper-placement="bottom-end">
+                    <li class="dropdown-divider">
+                        Tú tienes nuevos mensajes
+                    </li>
+<!--                    <li class="message-item" th:each=" ticket, info : ${listaTicket}" th:if="${ticket.estado==2}">-->
+<!--                        <a th:href="@{'/tecnico/verTicket?id='+${ticket.idTickets}}">-->
+<!--                            <div>-->
+<!--                                <h6 th:text="${ticket.usuarioSolicitante}"></h6>-->
+<!--                                <p style="font-size: xx-small" th:text="${ticket.fechaCreacion}"></p>-->
+<!--                                <p th:text="${'ID del Ticket: '+ticket.idTickets}"></p>-->
+<!--                                <p th:text="${ticket.descripcion}" style="font-size: xx-small"></p>-->
+<!--                                <p th:if="${ticket.estado==2}"><span class="badge text-bg-primary">Nuevo</span></p>-->
+<!--                            </div>-->
+<!--                        </a>-->
+<!--                    </li>-->
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                </ul><!-- End Messages Dropdown Items -->
                 <!-- End Messages Dropdown Items -->
             </li><!-- End Messages Nav -->
 

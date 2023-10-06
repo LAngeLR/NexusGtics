@@ -52,10 +52,23 @@ public class AdminController {
         return "Administrador/admin";
     }
 
+    /* --------------------- PERFIL ---------------------------- */
+
     @GetMapping({"/perfil","perfilAdmin","perfiladmin"})
     public String perfilAdmin(){
         return "Administrador/perfilAdmin";
     }
+
+    @GetMapping({"/perfilEditar"})
+    public String perfilEditar(){
+        return "Administrador/perfilEditar";
+    }
+
+    @GetMapping({"/perfilContra"})
+    public String perfilContra(){
+        return "Administrador/perfilContra";
+    }
+
 
 //---------------------------- GESTION DE USUARIOS -------------------------------------------
 
@@ -618,6 +631,5 @@ public class AdminController {
         // sitio.getCamposDinamicos().add(nuevoCampo);
         return "redirect:/admin/listaSitio";
     }
-
 
 }
