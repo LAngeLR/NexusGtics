@@ -1,19 +1,14 @@
 package com.example.nexusgtics.controllers;
 
 import com.example.nexusgtics.entity.*;
-import com.example.nexusgtics.repository.EmpresaRepository;
-import com.example.nexusgtics.repository.EquipoRepository;
-import com.example.nexusgtics.repository.SitioRepository;
-import com.example.nexusgtics.repository.TicketRepository;
+import com.example.nexusgtics.repository.*;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,23 +18,59 @@ public class AnalistaOYMController {
     final TicketRepository ticketRepository;
     final SitioRepository sitioRepository;
 
-
+    final UsuarioRepository usuarioRepository;
     final EquipoRepository equipoRepository;
     final EmpresaRepository empresaRepository;
 
 
-    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1){
+    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1, UsuarioRepository usuarioRepository){
         this.sitioRepository = sitioRepository;
         this.ticketRepository = ticketRepository;
         this.equipoRepository = equipoRepository;
 
         this.empresaRepository = empresaRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @GetMapping(value = {"/",""})
     public String paginaPrincipal(){
         return "AnalistaOYM/analistaOYM";
     }
+
+    /* -------------------------- PERFIL -------------------------- */
+    @GetMapping({"/perfil","perfilAdmin","perfiladmin"})
+    public String perfilAdmin(){
+        return "Administrador/perfilAdmin";
+    }
+
+    @GetMapping({"/perfilEditar"})
+    public String perfilEditar(Model model, @RequestParam("id") String idStr,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/admin/listaUsuario";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
+                model.addAttribute("usuario", usuario);
+                return "Administrador/perfilEditar";
+            } else {
+                return "redirect:/admin";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaUsuario";
+        }
+
+    }
+
+    @GetMapping({"/perfilContra"})
+    public String perfilContra(){
+        return "Administrador/perfilContra";
+    }
+    /* -------------------------- FIN PERFIL -------------------------- */
+
 
     @GetMapping("/listaSitio")
     public String listaSitio(Model model){

@@ -59,6 +59,41 @@ public class TecnicoController {
         return "Tecnico/tecnico";
     }
 
+
+    /* -------------------------- PERFIL -------------------------- */
+    @GetMapping({"/perfil","perfilAdmin","perfiladmin"})
+    public String perfilAdmin(){
+        return "Administrador/perfilAdmin";
+    }
+
+    @GetMapping({"/perfilEditar"})
+    public String perfilEditar(Model model, @RequestParam("id") String idStr,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/admin/listaUsuario";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
+                model.addAttribute("usuario", usuario);
+                return "Administrador/perfilEditar";
+            } else {
+                return "redirect:/admin";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaUsuario";
+        }
+
+    }
+
+    @GetMapping({"/perfilContra"})
+    public String perfilContra(){
+        return "Administrador/perfilContra";
+    }
+    /* -------------------------- FIN PERFIL -------------------------- */
+
     @GetMapping("/perfiltecnico")
     public String perfilTecnico(Model model, @RequestParam("id") int id) {
         Optional<Usuario> optUsuario = usuarioRepository.findById(id);
