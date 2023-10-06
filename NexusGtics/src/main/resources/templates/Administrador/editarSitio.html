@@ -36,7 +36,7 @@
           <div class="alert alert-danger" role="alert" th:if="${msgZona != null}" th:text="${msgZona}">
             A simple success alert—check it out!
           </div>
-          <form method="POST" th:action="@{/admin/saveSitio}" th:object="${sitio}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+          <form method="POST" th:action="@{/admin/updateSitio}" th:object="${sitio}" enctype="multipart/form-data" style="margin-bottom: -35px;">
             <div class="row">
               <div class="col-md-6">
 
