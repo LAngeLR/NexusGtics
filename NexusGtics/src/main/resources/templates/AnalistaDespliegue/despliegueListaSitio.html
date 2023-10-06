@@ -67,6 +67,10 @@
                   </div>
 
                   <h5 class="card-title">Lista de sitios</h5>
+
+                  <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
+                  <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success" role="alert"></div>
+
                 </div>
                 <!-- Table with stripped rows -->
                 <table class="table datatable">
