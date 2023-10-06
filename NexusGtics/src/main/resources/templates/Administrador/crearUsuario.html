@@ -113,11 +113,11 @@
                 <br><br>
                 <div class="col-md-6">
                   <div class="mb-3">
-                    <label for="imagenSubida" class="form-label">Foto de perfil:</label>
-                    <div class="card mx-auto" style="width: 250px; max-height: 250px; .round-image {border-radius: 50%;}">
-                      <img class="card-img-top rounded-circle" id="imgPreview" th:src="@{/assets/img/subirFoto.png}" style="max-height: 250px; " alt="">
+                    <label for="imagenSubida" class="form-label">Foto de Perfil:</label>
+                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                      <img id="imgPreview" th:src="@{/assets/img/fotoSitio.png}" class="card-img-top" style="max-height: 250px" alt="">
                     </div>
-                    <input style="display: none;" class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
                            accept="image/*" onchange="previewImage(event, '#imgPreview')">
                   </div>
 

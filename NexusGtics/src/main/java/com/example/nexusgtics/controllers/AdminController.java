@@ -229,6 +229,81 @@ public class AdminController {
             }
         }
     }
+
+    @PostMapping("/updateUsuario")
+    public String updateUsuario(@RequestParam("imagenSubida") MultipartFile file,
+                                @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+                                Model model,
+                                RedirectAttributes attr){
+        if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
+            model.addAttribute("msgCargo", "Escoger un cargo");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+
+            if (usuario.getId() == null) {
+                return "Administrador/crearUsuario";
+            } else {
+                return "Administrador/editarUsuario";
+            }
+        }
+        if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
+            model.addAttribute("msgEmpresa", "Escoger una empresa");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (usuario.getId() == null) {
+                return "Administrador/crearUsuario";
+            } else {
+                return "Administrador/editarUsuario";
+            }
+        }
+        // Verificar si se cargó un nuevo archivo
+        if (!file.isEmpty()) {
+            try {
+                // Procesar el archivo
+                Archivo archivo = new Archivo();
+                archivo.setNombre(file.getOriginalFilename());
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+
+                // Asignar el nuevo archivo al equipo
+                usuario.setArchivo(archivo);
+            } catch (IOException e) {
+                System.out.println("Error al procesar el archivo");
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (!bindingResult.hasErrors()) {
+            // Si no hay errores, se realiza el flujo normal
+            if (usuario.getArchivo() == null) {
+                usuario.setArchivo(new Archivo());
+            }
+
+            try {
+                if (usuario.getId() == null) {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                }
+                usuarioRepository.save(usuario);
+                return "redirect:/admin/listaUsuario";
+            } catch (Exception e) {
+                System.out.println("Error al guardar el equipo");
+                throw new RuntimeException(e);
+            }
+        } else { //hay al menos 1 error
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (usuario.getId() == null) {
+                return "Administrador/crearUsuario";
+            } else {
+                return "Administrador/editarUsuario";
+            }
+        }
+    }
+
     /*EDITAR USUARIO*/
     @GetMapping({"/editarUsuario","editarusuario"})
     public String editarUsuario(Model model, @RequestParam("id") String idStr,
