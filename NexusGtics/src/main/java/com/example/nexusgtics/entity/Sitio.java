@@ -46,15 +46,15 @@ public class Sitio {
 
     @Column(name = "latitud", nullable = false, precision = 10, scale = 7)
     @NotNull(message = "El campo no debe estar vacío")
-    @DecimalMin(value = "-999.9999999", message = "La latitud debe ser mayor o igual a -999.9999999")
-    @DecimalMax(value = "999.9999999", message = "La latitud debe ser menor o igual a 999.9999999")
+    @DecimalMin(value = "-90.0000000", message = "La latitud debe ser mayor o igual a -90.0000000")
+    @DecimalMax(value = "90.0000000", message = "La latitud debe ser menor o igual a 90.0000000")
     private BigDecimal latitud;
 
 
     @Column(name = "longitud", nullable = false, precision = 10, scale = 7)
     @NotNull(message = "El campo no debe estar vacío")
-    @DecimalMin(value = "-999.9999999", message = "La longitud debe ser mayor o igual a -999.9999999")
-    @DecimalMax(value = "999.9999999", message = "La longitud debe ser menor o igual a 999.9999999")
+    @DecimalMin(value = "-180.0000000", message = "La longitud debe ser mayor o igual a -180.0000000")
+    @DecimalMax(value = "180.0000000", message = "La longitud debe ser menor o igual a 180.0000000")
     private BigDecimal longitud;
 
     @Column(name = "habilitado", nullable = false)
@@ -66,7 +66,13 @@ public class Sitio {
     @ManyToOne
     @JoinColumn(name = "idArchivos")
     private Archivo archivo;
-    /*
+
+    @Column(name = "nombre", length = 45)
+    @Size(max = 45)
+    @NotBlank(message = "El campo no debe estar vacío")
+    private String nombre;
+
+/*
     @OneToMany(mappedBy = "sitio", cascade = CascadeType.ALL)
     private List<CampoDinamico> camposDinamicos = new ArrayList<>();
 */

@@ -45,6 +45,15 @@
                 <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
 
                 <div class="mb-3">
+                  <label class="form-label">Nombre del Sitio:</label>
+                  <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
+                    Mensaje de error de nombre
+                  </div>
+                </div>
+
+                <div class="mb-3">
                   <label class="form-label">Departamento:</label>
                   <input th:field="*{departamento}" type="text" th:class="${#fields.hasErrors('departamento')?'form-control is-invalid':'form-control'}"/>
                   <div class="invalid-feedback"

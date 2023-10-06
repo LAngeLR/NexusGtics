@@ -191,9 +191,12 @@ public class AdminController {
                 archivoRepository.save(archivo);
                 int idImagen = archivo.getIdArchivos();
                 usuario.getArchivo().setIdArchivos(idImagen);
+                if (usuario.getId() == null) {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                }
                 usuarioRepository.save(usuario);
-                attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
-
                 return "redirect:/admin/listaUsuario";
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -419,9 +422,13 @@ public class AdminController {
                 archivoRepository.save(archivo);
                 int idImagen = archivo.getIdArchivos();
                 sitio.getArchivo().setIdArchivos(idImagen);
-                sitioRepository.save(sitio);
-                attr.addFlashAttribute("msg1", "El sitio en '" + sitio.getDistrito() + "' ha sido creado exitosamente");
 
+                if (sitio.getIdSitios() == null) {
+                    attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido actualizado exitosamente");
+                }
+                sitioRepository.save(sitio);
                 return "redirect:/admin/listaSitio";
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -452,38 +459,6 @@ public class AdminController {
         return "redirect:/admin/listaSitio";
     }
 
-
-
-    @PostMapping("/guardarSitio")
-    public String guardarSitio(Sitio sitio,
-                               @RequestParam("departamento") String departamento,
-                               @RequestParam("provincia") String provincia,
-                               @RequestParam("distrito") String distrito,
-                               @RequestParam("ubigeo") Integer ubigeo,
-                               @RequestParam("latitud") BigDecimal latitud,
-                               @RequestParam("longitud") BigDecimal longitud,
-                               @RequestParam("tipo") String tipo,
-                               @RequestParam("tipoZona") String tipoZona,
-                               @RequestParam("imagenSubida") MultipartFile file, RedirectAttributes attr) {
-
-        if (sitio.getArchivo() == null) {
-            sitio.setArchivo(new Archivo());
-        }
-        String fileName = file.getOriginalFilename();
-        try{
-            Archivo archivo = sitio.getArchivo();
-            archivo.setNombre(fileName);
-            archivo.setTipo(1);
-            archivo.setArchivo(file.getBytes());
-            archivo.setContentType(file.getContentType());
-            archivoRepository.save(archivo);
-            int idArchivos = archivo.getIdArchivos();
-            sitioRepository.guardarSitio(departamento, provincia, distrito, ubigeo, latitud, longitud, tipo, tipoZona, idArchivos);
-            return "redirect:/admin/listaSitio";
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 //-----------------------------------------------------------------------
 
@@ -534,9 +509,12 @@ public class AdminController {
                 archivoRepository.save(archivo);
                 int idImagen = archivo.getIdArchivos();
                 equipo.getArchivo().setIdArchivos(idImagen);
+                if (equipo.getIdEquipos() == null) {
+                    attr.addFlashAttribute("msg", "El equipo '" + equipo.getModelo() + "' ha sido creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg", "El equipo '" + equipo.getModelo() + "' ha sido actualizado exitosamente");
+                }
                 equipoRepository.save(equipo);
-                attr.addFlashAttribute("msg", "El equipo '" + equipo.getModelo() + "' ha sido creado exitosamente");
-
                 return "redirect:/admin/listaEquipo";
             } catch (IOException e) {
                 System.out.println("error save");
