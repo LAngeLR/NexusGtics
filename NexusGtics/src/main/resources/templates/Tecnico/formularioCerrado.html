@@ -146,22 +146,125 @@
     </div><!-- End Page Title -->
 
     <section class="section profile" th:object="${formulario}">
+      <table class="table table-bordered border-primary">
+        <thead>
+          <tr>
+            <td style="background-color: #619ae5"></td>
+            <td style="background-color: #619ae5"></td>
+            <td style="background-color: #619ae5; color: white">FORMULARIO</td>
+            <td style="background-color: #619ae5"></td>
+            <td style="background-color: #619ae5"></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Información del cliente y ticket:</td>
+            <td>Nombre completo:</td>
+            <td th:text="${formulario.ticket.usuarioSolicitante}"></td>
+            <td>Prioridad del Ticket:</td>
+            <td th:text="${formulario.ticket.prioridad}"></td>
+          </tr>
+          <tr>
+            <td>Servicio</td>
+            <td th:text="${formulario.ticket.idTipoTicket.nombreTipoTicket}"></td>
+            <td>Fecha</td>
+            <td th:text="${formulario.fechaLlenado}"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+          </tr>
+          <tr>
+            <td>Descripción:</td>
+            <td th:text="${formulario.descripcion}"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+          </tr>
+          <tr>
+            <td>Datos del técnico:</td>
+            <td>Nombre:</td>
+            <td th:text="${formulario.tecnico.nombre}"></td>
+            <td>Apellido</td>
+            <td th:text="${formulario.tecnico.apellido}"></td>
+          </tr>
+          <tr>
+            <td>Información General del ticket</td>
+            <td>Llegada a sitio:</td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+
+          </tr>
+          <tr>
+            <td>Hechos relevantes:</td>
+            <td>He colocado la maquina en su lugar despues de repararlo</td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+          </tr>
+          <tr>
+            <td>Validación de Sitio</td>
+            <td>¿Existe conexión de energía?</td>
+            <td>Sí</td>
+            <td>Nombre de arrendatario:</td>
+            <td th:field="*{ticket.usuarioSolicitante}"></td>
+          </tr>
+          <tr>
+            <td>DNI del arrendatario:</td>
+            <td>72896453</td>
+            <td></td>
+            <td>¿La movilidad llega al sitio?</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Área del sitio /m2:</td>
+            <td>25 m2</td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+          </tr>
+          <tr>
+            <td>Observaciones</td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+          </tr>
+          <tr>
+            <td>Trabajo realizado</td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+          </tr>
+          <tr>
+            <td>¿Se realizó construcción de infraestructura?</td>
+            <td>Si</td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td>¿Se realizó instalaciones electricas?</td>
+            <td>Sí</td>
+          </tr>
+          <tr>
+            <td>Tecnología instalada:</td>
+            <td>FFTH</td>
+            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td>Trabajos realizados:</td>
+            <td>Se procedió con lel montaje de la torre, además de la adecuación del gabinete para la correcta operación de los equipos a instalarse. Se instalron: BBU, RRU, Router, Switch, Rectificadores y baterías.</td>
+          </tr>
+        </tbody>
+      </table>
+      <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicketCerrado?id='+${formulario.ticket.idTickets}}" style="background-color: rgba(43,48,53,0.51)">Regresar</a>
+    </section>
+
+
+    <!--<section class="section profile" th:object="${formulario}">
       <div class="row">
         <div class="col-lg-8">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Información del cliente y ticket:</h5>
-              <!-- Advanced Form Elements -->
+
               <div class="tab-pane fade show active profile-overview" id="datos-overview">
                 <div class="row">
                   <div class="col-sm-10">
-                    <!--<input type="hidden" class="form-control" th:field="*{}">
-                    <input type="hidden" class="form-control" th:field="*{}">-->
-
-                    <div class="row">
-                      <div class="col-lg-3 col-md-4 label">ID del Ticket:</div>
-                      <div class="col-lg-9 col-md-8" th:text="${formulario.ticket.idTickets}"></div>
-                    </div>
 
                     <div class="row">
                       <div class="col-lg-3 col-md-4 label">Nombre completo</div>
@@ -188,12 +291,12 @@
                   </div>
                 </div>
 
-                <!--<div class="mb-3">
+                <div class="mb-3">
                     <h5><b>Subir foto:</b></h5>
                     <label for="imagenSubida" class="form-label">Agregar imagen</label>
                     <input class="form-control" type="file" name="imagenSubida" id="imagenSubida" accept="image/*"
                            onchange="previewImage(event, '#imgPreview')">
-                </div> -->
+                </div>
 
                 <div class="mb-3">
                   <label class="form-label">Foto de trabajo realizado:</label>
@@ -374,14 +477,14 @@
                            accept="image/*" onchange="previewImage(event, '#imgPreview')">
                   </div>
                   </div>
-              </div><!-- End General Form Elements -->
+              </div>
               <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicketCerrado?id='+${formulario.ticket.idTickets}}" style="background-color: rgba(43,48,53,0.51)">Regresar</a>
             </div>
           </div>
 
         </div>
       </div>
-    </section>
+    </section>-->
   </div>
 </main><!-- End #main -->
 

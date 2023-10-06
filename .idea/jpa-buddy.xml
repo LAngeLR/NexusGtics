@@ -3,5 +3,7 @@
   <component name="JpaBuddyIdeaProjectConfig">
     <option name="defaultUnitInitialized" value="true" />
     <option name="renamerInitialized" value="true" />
+    <option name="reverseEngineeringLastDbConnectionId" value="7d281804-f29f-48f8-a247-757cf5ea443c__nexus" />
+    <option name="reLastEntityCreationPackage" value="NexusGtics/src/main/java/com/example/nexusgtics/entity" />
   </component>
 </project>
