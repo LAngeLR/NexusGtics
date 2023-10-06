@@ -39,11 +39,10 @@
 
                   <div class="mb-3">
                     <label class="form-label">Tipo de equipo:</label>
-                    <select class="form-select" name="tipoEquipo" id="tipoEquipo">
+                    <select class="form-select" name="tipoequipo" id="tipoequipo">
                       <option th:each="tipo: ${listaTipoEquipos}"
                               th:text="${tipo.nombreTipo}" th:value="${tipo.idTipoEquipo}"
                               th:selected="${equipo.tipoequipo.idTipoEquipo == tipo.idTipoEquipo}">Open this select menu</option>
-                      <input type="hidden" class="form-control" th:field="*{tipoequipo.idTipoEquipo}">
                     </select>
                   </div>
 

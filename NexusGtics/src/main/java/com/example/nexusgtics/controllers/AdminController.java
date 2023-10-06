@@ -379,7 +379,6 @@ public class AdminController {
             model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
 
             if (sitio.getIdSitios() == null) {
-                System.out.println("se mando en sitio, Tipo");
                 return "Administrador/crearSitio";
             } else {
                 return "Administrador/editarSitio";
@@ -388,7 +387,6 @@ public class AdminController {
         if (sitio.getTipoZona() == null || sitio.getTipoZona().equals("-1")) {
             model.addAttribute("msgZona", "Escoger un tipo de zona");
             if (sitio.getIdSitios() == null) {
-                System.out.println("se mando en sitio, TipoZona");
                 return "Administrador/crearSitio";
             } else {
                 return "Administrador/editarSitio";
@@ -419,7 +417,6 @@ public class AdminController {
         } else { //hay al menos 1 error
             System.out.println("se mando en sitio, Binding");
             if (sitio.getIdSitios() == null) {
-                System.out.println("se mando en sitio, TipoZona");
                 return "Administrador/crearSitio";
             } else {
                 return "Administrador/editarSitio";
@@ -487,42 +484,9 @@ public class AdminController {
 
     @GetMapping({"/crearEquipo","/crearequipo"})
     public String crearEquipo(Model model, @ModelAttribute("equipo") Equipo equipo){
-        model.addAttribute("listaSitios",sitioRepository.findAll());
         model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
         return "Administrador/crearEquipo";
     }
-
-    /*
-    @PostMapping("/guardarEquipo") //con Query, ya no se usa
-    public String guardarEquipo(Equipo equipo,
-                                @RequestParam("marca") String marca,
-                               @RequestParam("modelo") String modelo,
-                               @RequestParam("descripcion") String descripcion,
-                               @RequestParam("paginaModelo") String paginaModelo,
-                               @RequestParam("idSitios") Integer idSitios,
-                               @RequestParam("idTipoEquipo") Integer idTipoEquipo,
-                               @RequestParam("imagenSubida") MultipartFile file,RedirectAttributes attr) {
-
-        if (equipo.getArchivo() == null) {
-            equipo.setArchivo(new Archivo());
-        }
-
-        String fileName = file.getOriginalFilename();
-        try{
-            Archivo archivo = equipo.getArchivo();
-            archivo.setNombre(fileName);
-            archivo.setTipo(1);
-            archivo.setArchivo(file.getBytes());
-            archivo.setContentType(file.getContentType());
-            archivoRepository.save(archivo);
-            int idImagenes = archivo.getIdArchivos();
-            equipoRepository.guardarEquipo(marca, modelo, descripcion, paginaModelo, idSitios, idTipoEquipo, idImagenes);
-            return "redirect:/admin/listaEquipo";
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    */
 
 
     @PostMapping("/saveEquipo")
@@ -531,21 +495,8 @@ public class AdminController {
                               Model model,
                               RedirectAttributes attr){
 
-        if(equipo.getSitio() == null || equipo.getSitio().getIdSitios() == null){
-            model.addAttribute("msgSitio", "Escoger un Sitio para su despliegue");
-            model.addAttribute("listaSitios",sitioRepository.findAll());
-            model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
-
-            if (equipo.getIdEquipos() == null) {
-                return "Administrador/crearEquipo";
-            } else {
-                return "Administrador/editarEquipo";
-            }
-        }
-
         if(equipo.getTipoequipo() == null || equipo.getTipoequipo().getIdTipoEquipo() == null){
             model.addAttribute("msgTipoEquipo", "Escoger un tipo de Equipo");
-            model.addAttribute("listaSitios",sitioRepository.findAll());
             model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
 
             if (equipo.getIdEquipos() == null) {
@@ -571,8 +522,7 @@ public class AdminController {
                 int idImagen = archivo.getIdArchivos();
                 equipo.getArchivo().setIdArchivos(idImagen);
                 equipoRepository.save(equipo);
-                System.out.println(equipo.getSitio());
-                attr.addFlashAttribute("msg", "El equipo '" + equipo.getTipoequipo().getNombreTipo() + "' ha sido creado exitosamente");
+                attr.addFlashAttribute("msg", "El equipo '" + equipo.getModelo() + "' ha sido creado exitosamente");
 
                 return "redirect:/admin/listaEquipo";
             } catch (IOException e) {
@@ -581,7 +531,6 @@ public class AdminController {
             }
 
         } else { //hay al menos 1 error
-            model.addAttribute("listaSitios",sitioRepository.findAll());
             model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
             if (equipo.getIdEquipos() == null) {
                 return "Administrador/crearEquipo";
@@ -623,33 +572,13 @@ public class AdminController {
             if(optionalEquipo.isPresent()){
                 equipo = optionalEquipo.get();
                 model.addAttribute("equipo", equipo);
-                model.addAttribute("listaSitios",sitioRepository.findAll());
                 model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
-                System.out.println("se envió a editar");
                 return "Administrador/editarEquipo";
             }else {
                 return "redirect:/admin/listaEquipo";
             }
         } catch (NumberFormatException e) {
             return "redirect:/admin/listaEquipo";
-        }
-    }
-    @PostMapping("/actualizarEquipo")
-    public String actualizarEquipo(@RequestParam("marca") String marca,
-                                   @RequestParam("modelo") String modelo,
-                                   @RequestParam("descripcion") String descripcion,
-                                   @RequestParam("paginaModelo") String paginaModelo,
-                                   @RequestParam("idSitios") int idSitios,
-                                   @RequestParam("idTipoEquipo") int idTipoEquipo,
-                                   @RequestParam("idImagenes") int idImagenes,
-                                   @RequestParam("idEquipos") int idEquipos, RedirectAttributes attr) {
-
-        Optional<Equipo> optionalEquipo = equipoRepository.findById(idEquipos);
-        if(optionalEquipo.isPresent()){
-            equipoRepository.actualizarEquipo(marca, modelo, descripcion, paginaModelo, idSitios, idTipoEquipo, idImagenes, idEquipos);
-            return "redirect:/ruta/donde/redirigir";
-        }else {
-            return "redirect:/Administrador/listaEquipo";
         }
     }
 
