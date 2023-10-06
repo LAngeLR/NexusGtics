@@ -30,7 +30,7 @@
             <div class="pagetitle">
               <h1 class="card-title">Edición de equipo</h1>
             </div>
-            <form method="POST" th:action="@{/admin/saveEquipo}" th:object="${equipo}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+            <form method="POST" th:action="@{/admin/updateEquipo}" th:object="${equipo}" enctype="multipart/form-data" style="margin-bottom: -35px;">
               <div class="row">
                 <div class="col-md-6">
                   <input type="hidden" class="form-control" th:field="*{idEquipos}">

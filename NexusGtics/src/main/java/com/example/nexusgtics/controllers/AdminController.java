@@ -465,6 +465,77 @@ public class AdminController {
             }
         }
     }
+    @PostMapping("/updateSitio")
+    public String updateSitio(@RequestParam("imagenSubida") MultipartFile file,
+                              @ModelAttribute("sitio") @Valid Sitio sitio,
+                              BindingResult bindingResult,
+                              Model model,
+                              RedirectAttributes attr){
+
+        if (sitio.getTipo() == null || sitio.getTipo().equals("-1")) {
+            model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
+
+            if (sitio.getIdSitios() == null) {
+                return "Administrador/crearSitio";
+            } else {
+                return "Administrador/editarSitio";
+            }
+        }
+        if (sitio.getTipoZona() == null || sitio.getTipoZona().equals("-1")) {
+            model.addAttribute("msgZona", "Escoger un tipo de zona");
+            if (sitio.getIdSitios() == null) {
+                return "Administrador/crearSitio";
+            } else {
+                return "Administrador/editarSitio";
+            }
+        }
+
+        // Verificar si se cargó un nuevo archivo
+        if (!file.isEmpty()) {
+            try {
+                // Procesar el archivo
+                Archivo archivo = new Archivo();
+                archivo.setNombre(file.getOriginalFilename());
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+
+                // Asignar el nuevo archivo al equipo
+                sitio.setArchivo(archivo);
+            } catch (IOException e) {
+                System.out.println("Error al procesar el archivo");
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (!bindingResult.hasErrors()) {
+            // Si no hay errores, se realiza el flujo normal
+            if (sitio.getArchivo() == null) {
+                sitio.setArchivo(new Archivo());
+            }
+
+            try {
+                if (sitio.getIdSitios() == null) {
+                    attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido actualizado exitosamente");
+                }
+                sitioRepository.save(sitio);
+                return "redirect:/admin/listaSitio";
+            } catch (Exception e) {
+                System.out.println("Error al guardar el equipo");
+                throw new RuntimeException(e);
+            }
+        } else { //hay al menos 1 error
+            System.out.println("se mando en sitio, Binding");
+            if (sitio.getIdSitios() == null) {
+                return "Administrador/crearSitio";
+            } else {
+                return "Administrador/editarSitio";
+            }
+        }
+    }
 
 
     /* Eliminar sitio */
@@ -544,6 +615,71 @@ public class AdminController {
             }
 
         } else { //hay al menos 1 error
+            model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+            if (equipo.getIdEquipos() == null) {
+                return "Administrador/crearEquipo";
+            } else {
+                return "Administrador/editarEquipo";
+            }
+        }
+    }
+    @PostMapping("/updateEquipo")
+    public String updateEquipo(@RequestParam("imagenSubida") MultipartFile file,
+                             @ModelAttribute("equipo") @Valid Equipo equipo, BindingResult bindingResult,
+                             Model model,
+                             RedirectAttributes attr){
+
+        if(equipo.getTipoequipo() == null || equipo.getTipoequipo().getIdTipoEquipo() == null){
+            model.addAttribute("msgTipoEquipo", "Escoger un tipo de Equipo");
+            model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+
+            if (equipo.getIdEquipos() == null) {
+                return "Administrador/crearEquipo";
+            } else {
+                return "Administrador/editarEquipo";
+            }
+        }
+
+        // Verificar si se cargó un nuevo archivo
+        if (!file.isEmpty()) {
+            try {
+                // Procesar el archivo
+                Archivo archivo = new Archivo();
+                archivo.setNombre(file.getOriginalFilename());
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+
+                // Asignar el nuevo archivo al equipo
+                equipo.setArchivo(archivo);
+            } catch (IOException e) {
+                System.out.println("Error al procesar el archivo");
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (!bindingResult.hasErrors()) {
+            // Si no hay errores, se realiza el flujo normal
+            if (equipo.getArchivo() == null) {
+                equipo.setArchivo(new Archivo());
+            }
+
+            try {
+                if (equipo.getIdEquipos() == null) {
+                    attr.addFlashAttribute("msg", "El equipo '" + equipo.getModelo() + "' ha sido creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg", "El equipo '" + equipo.getModelo() + "' ha sido actualizado exitosamente");
+                }
+
+                equipoRepository.save(equipo);
+                return "redirect:/admin/listaEquipo";
+            } catch (Exception e) {
+                System.out.println("Error al guardar el equipo");
+                throw new RuntimeException(e);
+            }
+        } else {
+            // Hay al menos 1 error
             model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
             if (equipo.getIdEquipos() == null) {
                 return "Administrador/crearEquipo";
