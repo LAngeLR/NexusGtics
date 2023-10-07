@@ -4,6 +4,7 @@ import com.example.nexusgtics.entity.Archivo;
 import com.example.nexusgtics.entity.Usuario;
 import com.example.nexusgtics.repository.*;
 import jakarta.validation.Valid;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,95 +28,79 @@ public class SuperAdminController {
 
     private final ArchivoRepository archivoRepository;
 
-    public SuperAdminController(UsuarioRepository usuarioRepository, CargoRepository cargoRepository,
-                                ArchivoRepository archivoRepository, EmpresaRepository empresaRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public SuperAdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository, UsuarioRepository usuarioRepository, CargoRepository cargoRepository,
+                                ArchivoRepository archivoRepository, PasswordEncoder passwordEncoder) {
+        this.empresaRepository = empresaRepository;
         this.usuarioRepository = usuarioRepository;
         this.cargoRepository = cargoRepository;
         this.archivoRepository = archivoRepository;
-        this.empresaRepository = empresaRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping({"/","","superadmin"})
-    public String paginaPrincipal(){
+    @GetMapping({"/","","superadmin","SuperAdmin"})
+    public String paginaPrincipal(Model model){
+        model.addAttribute("currentPage", "Inicio");
         return "Superadmin/superadmin";
     }
 
+    /* --------------------- PERFIL ---------------------------- */
 
-    /* -------------------------- PERFIL -------------------------- */
-    @GetMapping({"/perfil","perfilAdmin","perfiladmin"})
+    @GetMapping({"/perfil","perfilSuperadmin","perfilsuperadmin"})
     public String perfilAdmin(){
         return "Administrador/perfilAdmin";
     }
 
-    @GetMapping({"/perfilEditar"})
-    public String perfilEditar(Model model, @RequestParam("id") String idStr,
-                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
-        try{
-            int id = Integer.parseInt(idStr);
-            if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/admin/listaUsuario";
-            }
-            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-            if (optionalUsuario.isPresent()) {
-                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
-                model.addAttribute("usuario", usuario);
-                return "Administrador/perfilEditar";
-            } else {
-                return "redirect:/admin";
-            }
-        } catch (NumberFormatException e) {
-            return "redirect:/admin/listaUsuario";
-        }
+//---------------------------- GESTION DE USUARIOS -------------------------------------------
 
-    }
-
-    @GetMapping({"/perfilContra"})
-    public String perfilContra(){
-        return "Administrador/perfilContra";
-    }
-    /* -------------------------- FIN PERFIL -------------------------- */
-
-    @GetMapping({"/perfilsuperadmin", "/perfil", "/perfilSuperadmin"})
-    public String perfilsuperadmin(){
-        return "Superadmin/perfilSuperadmin";
-    }
-
-    @GetMapping({"/listaUsuario","listausuario", "listausuarios","listaUsuarios"})
+    // Lista de usuarios no admin
+    @GetMapping({"/listaUsuario","listausuario","listausuarios","listaUsuarios"})
     public String listaUsuario(Model model){
-        List<Usuario> listaUsuarioNoAdmin = usuarioRepository.listaDeUsuariosNoSuperadmin();
-        model.addAttribute("listaUsuario", listaUsuarioNoAdmin);
+        List<Usuario> listaDeUsuariosTotal = usuarioRepository.listaDeUsuariosTotal();
+        model.addAttribute("currentPage", "Lista de Usuarios");
+
+        model.addAttribute("listaUsuario", listaDeUsuariosTotal);
         return "Superadmin/listaUsuario";
     }
 
     @GetMapping({"/listaBaneados"})
     public String listaBaneado(Model model){
         List<Usuario> listaUsuarioBaneado = usuarioRepository.listaDeUsuariosBaneados();
+        model.addAttribute("currentPage", "Lista de Baneados");
+
         model.addAttribute("listaUsuario", listaUsuarioBaneado);
         return "Superadmin/listaUsuarioBaneado";
     }
 
-    // Desactivar USUARIO
+    // DESACTIVAR USUARIO
     @GetMapping("/banearUsuario")
-    public String desabilitarUsuario(@RequestParam("id") int id) {
+    public String desabilitarUsuario(@RequestParam("id") int id, RedirectAttributes attr) {
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         if (optionalUsuario.isPresent()) {
+            Usuario usuario = optionalUsuario.get();
             usuarioRepository.desactivarUsuario(id);
+            attr.addFlashAttribute("msg1", "El usuario '" + usuario.getNombre() + " " +usuario.getApellido() + "' se sido desactivado exitosamente");
+
         }
         return "redirect:/superadmin/listaUsuario";
     }
 
     // ACTIVAR USUARIO
     @GetMapping("/activarUsuario")
-    public String activarUsuario(@RequestParam("id") int id) {
+    public String activarUsuario(@RequestParam("id") int id, RedirectAttributes attr) {
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
         if (optionalUsuario.isPresent()) {
+            Usuario usuario = optionalUsuario.get();
             usuarioRepository.activarUsuario(id);
+            attr.addFlashAttribute("msg1", "El usuario '" + usuario.getNombre() + " " +usuario.getApellido() + "' se sido activado exitosamente");
         }
         return "redirect:/superadmin/listaBaneados";
     }
 
     @GetMapping({"/crearUsuario","crearusuario"})
-    public String crearUsuario(Model model){
+    public String crearUsuario(Model model,
+                               @ModelAttribute("usuario") Usuario usuario){
 
         model.addAttribute("listaEmpresa", empresaRepository.findAll());
         model.addAttribute("listaCargo", cargoRepository.findAll());
@@ -124,113 +109,268 @@ public class SuperAdminController {
     }
 
     @GetMapping({"/verUsuario","verusuario"})
-    public String verUsuario(Model model, @RequestParam("id") int id){
-        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+    public String verUsuario(Model model, @RequestParam("id") String idStr){
 
-        if(optUsuario.isPresent()){
-            Usuario usuario = optUsuario.get();
-            model.addAttribute("usuario", usuario);
-            return "Superadmin/vistaUsuario";
-        } else {
-            return "redirect:/Superadmin/listaUsuario";
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/superadmin/listaUsuario";
+            }
+            Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+            if(optUsuario.isPresent()){
+                Usuario usuario1 = optUsuario.get();
+                model.addAttribute("usuario", usuario1);
+                return "Superadmin/vistaUsuario";
+            } else {
+                return "redirect:/superadmin/listaUsuario";
+            }
+        } catch (NumberFormatException e) { //errores
+            return "Superadmin/crearUsuario";
         }
     }
 
     @GetMapping({"/verUsuarioA","verusuarioa"})
-    public String verUsuarioA(Model model, @RequestParam("id") int id){
-        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+    public String verUsuarioA(Model model, @RequestParam("id") String idStr){
 
-        if(optUsuario.isPresent()){
-            Usuario usuario = optUsuario.get();
-            model.addAttribute("usuario", usuario);
-            return "Superadmin/vistaUsuarioA";
-        } else {
-            return "redirect:/superadmin/listaUsuario";
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/superadmin/listaUsuario";
+            }
+            Optional<Usuario> optUsuario = usuarioRepository.findById(id);
+            if(optUsuario.isPresent()){
+                Usuario usuario1 = optUsuario.get();
+                model.addAttribute("usuario", usuario1);
+                return "Superadmin/vistaUsuarioA";
+            } else {
+                return "redirect:/superadmin/listaUsuario";
+            }
+        } catch (NumberFormatException e) { //errores
+            return "Superadmin/crearUsuario";
         }
     }
 
     /*CREAR NUEVO USUARIO*/
     @PostMapping("/saveUsuario")
     public String saveUsuario(@RequestParam("imagenSubida") MultipartFile file,
-                              Usuario usuario,
+                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
+        if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
+            model.addAttribute("msgCargo", "Escoger un cargo");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
 
-        if (!file.getContentType().startsWith("image/")) {
-            // El archivo no es una imagen, maneja el caso de error aquí
-            model.addAttribute("msgArchivo", "El archivo seleccionado no es una imagen.");
-            return "Superadmin/crearUsuario";
+            if (usuario.getId() == null) {
+                return "Superadmin/crearUsuario";
+            } else {
+                return "Superadmin/editarUsuario";
+            }
+        }
+        if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
+            model.addAttribute("msgEmpresa", "Escoger una empresa");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (usuario.getId() == null) {
+                return "Superadmin/crearUsuario";
+            } else {
+                return "Superadmin/editarUsuario";
+            }
+        }
+        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+            if (usuario.getArchivo() == null) {
+                usuario.setArchivo(new Archivo());
+            }
+            String fileName = file.getOriginalFilename();
+            try{
+                //validación de nombre, apellido y correo
+                Archivo archivo = usuario.getArchivo();
+                archivo.setNombre(fileName);
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+                int idImagen = archivo.getIdArchivos();
+                usuario.getArchivo().setIdArchivos(idImagen);
+                if (usuario.getId() == null) {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                }
+                usuarioRepository.save(usuario);
+                return "redirect:/superadmin/listaUsuario";
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        } else { //hay al menos 1 error
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (usuario.getId() == null) {
+                return "Superadmin/crearUsuario";
+            } else {
+                return "Superadmin/editarUsuario";
+            }
+        }
+    }
+
+    @PostMapping("/updateUsuario")
+    public String updateUsuario(@RequestParam("imagenSubida") MultipartFile file,
+                                @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+                                Model model,
+                                RedirectAttributes attr){
+        if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
+            model.addAttribute("msgCargo", "Escoger un cargo");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+
+            if (usuario.getId() == null) {
+                return "Superadmin/crearUsuario";
+            } else {
+                return "Superadmin/editarUsuario";
+            }
+        }
+        if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
+            model.addAttribute("msgEmpresa", "Escoger una empresa");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (usuario.getId() == null) {
+                return "Superadmin/crearUsuario";
+            } else {
+                return "Superadmin/editarUsuario";
+            }
+        }
+        // Verificar si se cargó un nuevo archivo
+        if (!file.isEmpty()) {
+            try {
+                // Procesar el archivo
+                Archivo archivo = new Archivo();
+                archivo.setNombre(file.getOriginalFilename());
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+
+                // Asignar el nuevo archivo al equipo
+                usuario.setArchivo(archivo);
+            } catch (IOException e) {
+                System.out.println("Error al procesar el archivo");
+                throw new RuntimeException(e);
+            }
         }
 
-        if(usuario.getNombre().length() > 45){
-            model.addAttribute("msgNombreLargo", "El nombre es demasiado largo.");
-            return "Superadmin/crearUsuario";
+        if (!bindingResult.hasErrors()) {
+            // Si no hay errores, se realiza el flujo normal
+            if (usuario.getArchivo() == null) {
+                usuario.setArchivo(new Archivo());
+            }
 
-        }
-        if(!usuario.getNombre().matches("^[a-zA-Z]+$")){
-            model.addAttribute("msgNombreMalo", "El nombre tiene caracteres inválidos.");
-            return "Superadmin/crearUsuario";
-        }
-
-        if(usuario.getApellido().length() > 45){
-            model.addAttribute("msgApellidoLargo", "El apellido es demasiado largo.");
-            return "Superadmin/crearUsuario";
-
-        }
-        if(!usuario.getApellido().matches("^[a-zA-Z]+$")) {
-            model.addAttribute("msgApellidoMalo", "El apellido tiene caracteres inválidos.");
-            return "Superadmin/crearUsuario";
-        }
-
-        if(usuario.getCorreo().length() > 45){
-            model.addAttribute("msgCorreoLargo", "El correo es demasiado largo.");
-            return "Superadmin/crearUsuario";
-        }
-
-        if(!usuario.getCorreo().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")){
-            model.addAttribute("msgCorreoLargo", "El correo tiene caracteres inválidos.");
-            return "Superadmin/crearUsuario";
-        }
-
-
-
-        if (usuario.getArchivo() == null) {
-            usuario.setArchivo(new Archivo());
-        }
-
-        String fileName = file.getOriginalFilename();
-        try{
-            Archivo archivo = usuario.getArchivo();
-            archivo.setNombre(fileName);
-            archivo.setTipo(1);
-            archivo.setArchivo(file.getBytes());
-            archivo.setContentType(file.getContentType());
-            archivoRepository.save(archivo);
-            int idImagen = archivo.getIdArchivos();
-            usuario.getArchivo().setIdArchivos(idImagen);
-            usuarioRepository.save(usuario);
-            return "redirect:/superadmin/listaUsuario";
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            try {
+                if (usuario.getId() == null) {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                }
+                usuarioRepository.save(usuario);
+                return "redirect:/superadmin/listaUsuario";
+            } catch (Exception e) {
+                System.out.println("Error al guardar el equipo");
+                throw new RuntimeException(e);
+            }
+        } else { //hay al menos 1 error
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (usuario.getId() == null) {
+                return "Superadmin/crearUsuario";
+            } else {
+                return "Superadmin/editarUsuario";
+            }
         }
     }
 
     /*EDITAR USUARIO*/
     @GetMapping({"/editarUsuario","editarusuario"})
-    public String editarUsuario(Model model, @RequestParam("id") int id){
+    public String editarUsuario(Model model, @RequestParam("id") String idStr,
+                                @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
 
-        Optional<Usuario> usuario1 = usuarioRepository.findById(id);
-
-        if (usuario1.isPresent()) {
-            Usuario usuario = usuario1.get();
-            model.addAttribute("usuario", usuario);
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-            return "Superadmin/editarUsuario";
-        } else {
-            return "redirect:/Superadmin";
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/superadmin/listaUsuario";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
+                model.addAttribute("usuario", usuario);
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Superadmin/editarUsuario";
+            } else {
+                return "redirect:/superadmin";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/superadmin/listaUsuario";
         }
     }
 
+    @GetMapping({"/perfilEditar"})
+    public String perfilEditar(Model model, @RequestParam("id") String idStr,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/superadmin/listaUsuario";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
+                model.addAttribute("usuario", usuario);
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Superadmin/perfilEditar";
+            } else {
+                return "redirect:/superadmin";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/superadmin/listaUsuario";
+        }
 
+    }
+
+    @GetMapping({"/perfilContra"})
+    public String perfilContra(Model model, @RequestParam("id") String idStr){
+
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/superadmin/listaUsuario";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                model.addAttribute("idUsuario",id);
+                return "Superadmin/perfilContra";
+            } else {
+                return "redirect:/superadmin";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/superadmin/listaUsuario";
+        }
+    }
+
+    @PostMapping({"/actualizarContra"})
+    public String actualizarContra(Model model, @RequestParam("id") int id, @RequestParam("password") String contrasenia,
+                                   @RequestParam("newpassword") String contraseniaNueva, @RequestParam("renewpassword") String contraseniaConfirm, RedirectAttributes redirectAttributes){
+        String idStr=String.valueOf(id);
+
+        String contraseniaAlmacenada = usuarioRepository.obtenerContraseña(id);
+
+        if (passwordEncoder.matches(contrasenia, contraseniaAlmacenada)) {
+            String contraseniaNuevaEncriptada = passwordEncoder.encode(contraseniaNueva);
+            usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
+            return "redirect:/superadmin/perfilAdmin";
+        } else {
+            redirectAttributes.addFlashAttribute("error","La contraseña actual no es correcta.");
+            return "redirect:/superadmin/perfilContra?id="+idStr;
+        }
+    }
 }

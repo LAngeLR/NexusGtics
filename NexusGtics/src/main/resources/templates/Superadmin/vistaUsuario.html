@@ -8,7 +8,7 @@
 <header th:replace="Fragmentos/header :: header('superadmin')"><!-- End Header --></header>
 
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuSuperadmin :: menu">
+<aside th:replace="Fragmentos/menuSuperadmin :: menu('vistaUsuario')">
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
@@ -43,19 +43,30 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Empresa:</label>
-                                    <input type="text" class="form-control" th:field="*{empresa.nombre}" disabled>
+                                    <label class="form-label">Correo:</label>
+                                    <input type="text" class="form-control" th:field="*{correo}" disabled>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Correo:</label>
-                                    <input type="text" class="form-control" th:field="*{correo}" disabled>
+                                    <label class="form-label">DNI:</label>
+                                    <input type="text" class="form-control" th:field="*{dni}" disabled>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Cargo:</label>
                                     <input type="text" class="form-control" th:field="*{cargo.nombreCargo}" disabled>
                                 </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Empresa:</label>
+                                    <input type="text" class="form-control" th:field="*{empresa.nombre}" disabled>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Descripción:</label>
+                                    <input type="text" class="form-control" th:field="*{descripcion}" disabled>
+                                </div>
+
                                 <div class="mb-3">
                                     <label class="form-label">Fecha de registro:</label>
                                     <input type="text" class="form-control" th:field="*{fechaRegistro}" disabled>
@@ -68,9 +79,8 @@
                                     <label class="form-label">Foto de perfil:</label>
                                     <br>
                                     <br>
-                                    <img th:src="@{/assets/img/yo_2.jfif}" style="max-width: 300px;" alt="">
+                                    <img th:src="@{|image/${usuario.archivo.idArchivos}|}" style="max-width: 300px;" alt="">
                                 </div>
-                                <br>
                             </div>
                         </div>
                     </form>

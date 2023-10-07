@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:include="Fragmentos/head :: head('Crear usuario')"></head>
+<head th:include="Fragmentos/head :: head('Crear usuario administrador')"></head>
 
 <body>
 <!-- ======= Header ======= -->
 <header th:replace="Fragmentos/header :: header('superadmin')"><!-- End Header --></header>
 
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuSuperadmin :: menu('crearAdmin')">
+<aside th:replace="Fragmentos/menuSuperadmin :: menu(currentPage='crearAdministrador')">
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
@@ -16,8 +16,8 @@
         <div class="pagetitle">
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item">Gestión de usuarios</li>
-                    <li class="breadcrumb-item active">Crear administrador</li>
+                    <li class="breadcrumb-item"><a href="#">Gestión de usuario</a></li>
+                    <li class="breadcrumb-item active">Crear usuario administrador</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -26,50 +26,100 @@
             <div class="row">
                 <div class="rounded p-5" style="background-color: #FFFFFF;">
                     <div class="pagetitle" style="margin-top: -35px;">
-                        <h1 class="card-title">Creación de Administrador</h1>
+                        <h1 class="card-title">Creación de usuario</h1>
                     </div>
-                    <form method="POST" th:action="@{/superadmin/saveUsuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+                    <div class="alert alert-danger" role="alert" th:if="${msgCargo != null}" th:text="${msgCargo}">
+                        A simple success alert—check it out!
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}">
+                        A simple success alert—check it out!
+                    </div>
+                    <form method="POST" th:action="@{/superadmin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row">
                             <div class="col-md-6">
                                 <input type="hidden" class="form-control" name="idJuego" id="idJuego">
                                 <div class="mb-3">
-                                    <label for="nombre">Nombres:</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre" required pattern="[A-Z][a-zA-Z]*">
+                                    <label class="form-label">Nombres:</label>
+                                    <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
+                                        Mensaje de error de nombre
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="apellido">Apellidos:</label>
-                                    <input type="text" class="form-control" name="apellido" id="apellido" required pattern="[A-Z][a-zA-Z]*">
+                                    <label class="form-label">Apellidos:</label>
+                                    <input th:field="*{apellido}" type="text" th:class="${#fields.hasErrors('apellido')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}">
+                                        Mensaje de error de nombre
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="correo">Correo:</label>
-                                    <input type="text" class="form-control" name="correo" id="correo" >
+                                    <label class="form-label">Correo:</label>
+                                    <input th:field="*{correo}" type="text" th:class="${#fields.hasErrors('correo')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
+                                        Mensaje de error de correo
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">DNI:</label>
+                                    <input th:field="*{dni}" type="text" th:class="${#fields.hasErrors('dni')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">
+                                        Mensaje de error de correo
+                                    </div>
                                 </div>
 
                                 <input type="hidden" name="contrasenia" id="contrasenia" th:value="${codigoAleatorio}">
 
                                 <input type="hidden" name="habilitado" id="habilitado" value="1">
-                                <input type="hidden" name="cargo" id="cargo" value="2">
 
                                 <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:value="${fechaActual}">
                                 <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" value="0">
 
+                                <div class="mb-3">
+                                    <label for="cargo" class="form-label">Selector de cargos</label>
+                                    <select class="form-select" name="cargo" id="cargo">
+                                        <option value="">--Seleccione un cargo--</option>
+                                        <option th:each="cargo: ${listaCargo}"
+                                                th:unless="${cargo.nombreCargo == 'Super administrador'}"
+                                                th:text="${cargo.nombreCargo}" th:value="${cargo.idCargos}"
+                                                th:selected="${cargo.idCargos == 2}" th:disabled="${cargo.idCargos != 2}">Open this select menu</option>
+                                    </select>
+                                </div>
 
-                                <input type="hidden" name="empresa" id="empresa" value="1">
+                                <div class="mb-3">
+                                    <label for="empresa" class="form-label">Selector de Empresas</label>
+                                    <select class="form-select" name="empresa" id="empresa">
+                                        <option value="">--Seleccione una empresa--</option>
+                                        <option th:each="empresa: ${listaEmpresa}"
+                                                th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
+                                                th:selected="${empresa.idEmpresas == 1}" th:disabled="${empresa.idEmpresas != 1}">Open this select menu</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Descripción:</label>
+                                    <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
+                                        Mensaje de error de descripcion
+                                    </div>
+                                </div>
                             </div>
                             <br><br>
                             <div class="col-md-6">
-
                                 <div class="mb-3">
-                                    <label for="imagenSubida" class="form-label">Foto de perfil:</label>
+                                    <label for="imagenSubida" class="form-label">Foto de Perfil:</label>
                                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img id="imgPreview" th:src="@{/assets/img/fotoSubir.webp}" class="card-img-top" style="max-height: 250px" alt="">
+                                        <img id="imgPreview" th:src="@{/assets/img/fotoSitio.png}" class="card-img-top" style="max-height: 250px" alt="">
                                     </div>
                                     <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
                                            accept="image/*" onchange="previewImage(event, '#imgPreview')">
                                 </div>
-
 
                                 <button type="submit" class="btn btn-outline-primary float-end">Crear</button>
                             </div>
@@ -130,6 +180,22 @@
     fechaRegistro2Input.value = fechaActual;
 </script>
 
+<script>
+    function previewImage(event, imageId) {
+        const input = event.target;
+        const image = document.querySelector(imageId);
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                image.src = e.target.result;
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
 
 
 

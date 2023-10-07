@@ -8,7 +8,7 @@
 <header th:replace="Fragmentos/header :: header('superadmin')"><!-- End Header --></header>
 
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuSuperadmin :: menu">
+<aside th:replace="Fragmentos/menuSuperadmin :: menu('vistaUsuario')">
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
@@ -18,7 +18,7 @@
     <div class="pagetitle">
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Gestión de usuarios</a></li>
+          <li class="breadcrumb-item"><a href="#">Gestión de usuario</a></li>
           <li class="breadcrumb-item active">Vista detallada</li>
         </ol>
       </nav>
@@ -43,27 +43,33 @@
                 </div>
 
                 <div class="mb-3">
-                  <label class="form-label">Empresa:</label>
-                  <input type="text" class="form-control" th:field="*{empresa.nombre}" disabled>
+                  <label class="form-label">Correo:</label>
+                  <input type="text" class="form-control" th:field="*{correo}" disabled>
                 </div>
 
                 <div class="mb-3">
-                  <label class="form-label">Correo:</label>
-                  <input type="text" class="form-control" th:field="*{correo}" disabled>
+                  <label class="form-label">DNI:</label>
+                  <input type="text" class="form-control" th:field="*{dni}" disabled>
                 </div>
 
                 <div class="mb-3">
                   <label class="form-label">Cargo:</label>
                   <input type="text" class="form-control" th:field="*{cargo.nombreCargo}" disabled>
                 </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Empresa:</label>
+                  <input type="text" class="form-control" th:field="*{empresa.nombre}" disabled>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Descripción:</label>
+                  <input type="text" class="form-control" th:field="*{descripcion}" disabled>
+                </div>
+
                 <div class="mb-3">
                   <label class="form-label">Fecha de registro:</label>
                   <input type="text" class="form-control" th:field="*{fechaRegistro}" disabled>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Estado</label>
-                  <input type="text" class="form-control"
-                         th:text="${habilitado == 1 ? 'Activado' : 'Desactivado'}" disabled>
                 </div>
               </div>
               <br><br>
@@ -73,12 +79,13 @@
                   <label class="form-label">Foto de perfil:</label>
                   <br>
                   <br>
-                  <img th:src="@{/assets/img/yo_2.jfif}" style="max-width: 300px;" alt="">
+                  <img th:src="@{|image/${usuario.archivo.idArchivos}|}" style="max-width: 300px;" alt="">
                 </div>
-                <br>
-                      <button type="submit" class="btn btn-primary">Confirmar Cambios</button>
+
+                <a th:href="@{'/superadmin/editarUsuario?id=' + ${usuario.id}}" class="btn btn-outline-primary me-2 float-end">Editar</a>
               </div>
             </div>
+          </form>
         </div>
         <br><br>
 
