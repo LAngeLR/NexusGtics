@@ -2,13 +2,16 @@ package com.example.nexusgtics.controllers;
 
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
+import jakarta.validation.Valid;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
 import java.time.Instant;
 
 import java.util.*;
@@ -22,17 +25,30 @@ public class SupervisorController {
     private final TicketRepository ticketRepository;
     private final SitioRepository sitioRepository;
     private final FormularioRepository formularioRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ArchivoRepository archivoRepository;
+    final CargoRepository cargoRepository;
+    final EmpresaRepository empresaRepository;
+
 
     public SupervisorController(CuadrillaRepository cuadrillaRepository,
                                 UsuarioRepository usuarioRepository,
                                 TicketRepository ticketRepository,
                                 SitioRepository sitioRepository,
-                                FormularioRepository formularioRepository) {
+                                FormularioRepository formularioRepository,
+                                PasswordEncoder passwordEncoder,
+                                EmpresaRepository empresaRepository,
+                                CargoRepository cargoRepository,
+                                ArchivoRepository archivoRepository) {
         this.cuadrillaRepository = cuadrillaRepository;
         this.usuarioRepository = usuarioRepository;
         this.ticketRepository = ticketRepository;
         this.sitioRepository = sitioRepository;
         this.formularioRepository = formularioRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.cargoRepository = cargoRepository;
+        this.empresaRepository = empresaRepository;
+        this.archivoRepository = archivoRepository;
     }
 
     @GetMapping( {"/",""})
@@ -310,5 +326,102 @@ public class SupervisorController {
         } catch (NumberFormatException e) {
             return "redirect:/supervisor/listaCuadrillas";
         }
+    }
+
+    @PostMapping("/saveUsuario")
+    public String saveUsuario(@RequestParam("imagenSubida") MultipartFile file,
+                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+                              Model model,
+                              RedirectAttributes attr){
+
+        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+            if (usuario.getArchivo() == null) {
+                usuario.setArchivo(new Archivo());
+            }
+            String fileName = file.getOriginalFilename();
+            try{
+                //validación de nombre, apellido y correo
+                Archivo archivo = usuario.getArchivo();
+                archivo.setNombre(fileName);
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+                int idImagen = archivo.getIdArchivos();
+                usuario.getArchivo().setIdArchivos(idImagen);
+
+                attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+
+                usuarioRepository.save(usuario);
+                return "redirect:/supervisor/perfil";
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        } else { //hay al menos 1 error
+            return "redirect:/supervisor/perfilEditar?id="+usuario.getId();
+        }
+    }
+
+    @PostMapping("/actualizarContra")
+    public String actualizarContra(Model model, @RequestParam("id") int id, @RequestParam("password") String contrasenia, @RequestParam("newpassword") String contraseniaNueva, @RequestParam("renewpassword") String contraseniaConfirm, RedirectAttributes redirectAttributes){
+
+        String idStr=String.valueOf(id);
+
+        String contraseniaAlmacenada = usuarioRepository.obtenerContraseña(id);
+
+        if (passwordEncoder.matches(contrasenia, contraseniaAlmacenada)) {
+            String contraseniaNuevaEncriptada = passwordEncoder.encode(contraseniaNueva);
+            usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
+            return "redirect:/supervisor/perfil";
+        } else {
+            redirectAttributes.addFlashAttribute("error","La contraseña actual no es correcta.");
+            return "redirect:/supervisor/perfilContra?id="+idStr;
+        }
+    }
+
+    @GetMapping("/perfilContra")
+
+    public String perfilContra(Model model, @RequestParam("id") String idStr){
+
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/supervisor/perfil";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                model.addAttribute("idUsuario",id);
+                return "Supervisor/perfilContra";
+            } else {
+                return "redirect:/perfil";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/supervisor/perfil";
+        }
+    }
+
+    @GetMapping({"/perfilEditar"})
+    public String perfilEditar(Model model, @RequestParam("id") String idStr,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/supervisor/perfil";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
+                model.addAttribute("usuario", usuario);
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Supervisor/perfilEditar";
+            } else {
+                return "redirect:/supervisor/perfil";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/supervisor/perfil";
+        }
+
     }
 }

@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 
 <head th:include="Fragmentos/head :: head('Perfil')"></head>
 
 <body>
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('supervisor')"><!-- End Header --></header><!-- End Header -->
+<header th:replace="Fragmentos/header :: header('supervisor')"><!-- End Header --></header>
+
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuSupervisor :: menu('perfilSupervisor')">
+<aside th:replace="Fragmentos/menuAdmin :: menu('perfilSupervisor')">
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
-
     <div class="pagetitle">
-        <h1>Detalles</h1>
+        <h1 th:text="|Perfil|"></h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/supervisor/}">Home</a></li>
@@ -29,9 +29,9 @@
                 <div class="card">
                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                         <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-                        <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">German Cisneros</h2>
-                        <h3 th:text="${session.usuario.cargo.nombreCargo}">Supervisor</h3>
-                        <h3 th:text="${session.usuario.dni}">ID: 113253983</h3>
+                        <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</h2>
+                        <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Administrador</h3>
+                        <h3 th:text="|${session.usuario.dni}|">ID: 123456789</h3>
                     </div>
                 </div>
 
@@ -42,158 +42,49 @@
                 <div class="card">
                     <div class="card-body pt-3">
                         <!-- Bordered Tabs -->
-                        <ul class="nav nav-tabs nav-tabs-bordered">
+                        <div class="tab-content pt-2">
+                            <a th:href="@{/supervisor/perfil}" class="btn btn-dark me-2 mt-3">General</a>
+                            <a th:href="@{'/supervisor/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
+                            <a th:href="@{'/supervisor/perfilContra?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
+                        </div>
 
-                            <li class="nav-item">
-                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">General</button>
-                            </li>
-
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Editar Perfil</button>
-                            </li>
-
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Cambiar Contraseña</button>
-                            </li>
-
-                        </ul>
                         <div class="tab-content pt-2">
 
                             <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                <h5 class="card-title" style="color: #095444" th:text="'Sobre: '+${session.usuario.nombre}">Sobre German:</h5>
-                                <p class="small fst-italic">Ingeniero en el rubro de Telecomunicaciones, soy egresado de la Universidad "Universidad". Con 6 años de experiencia en diferentes empresas de telecomunicaciones.</p>
+                                <h5 class="card-title" style="color: #095444" th:text="|Sobre ${session.usuario.nombre} ${session.usuario.apellido}|">Sobre Luis:</h5>
+                                <p class="small fst-italic" th:text="|${session.usuario.descripcion}|"></p>
 
                                 <h5 class="card-title" style="color: #095444">Detalles del Perfil</h5>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label ">Nombre y apellidos</div>
-                                    <div class="col-lg-9 col-md-8" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">German Cisneros Gonzales</div>
+                                    <div class="col-lg-9 col-md-8" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">DNI</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${session.usuario.dni}">728963541</div>
+                                    <div class="col-lg-9 col-md-8" th:text="|${session.usuario.dni}|">76631684</div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Compañía</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${session.usuario.empresa.nombre}">Cisco</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${session.usuario.empresa.nombre}">Nexus</div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Trabajo</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${session.usuario.cargo.nombreCargo}">Supervisor de Campo</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${session.usuario.cargo.nombreCargo}">Administrador</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">País</div>
+                                    <div class="col-lg-9 col-md-8">Perú</div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Correo</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${session.usuario.correo}">germancis.cisco@gmail.com</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${session.usuario.correo}">k.anderson@gmail.com</div>
                                 </div>
-
-                            </div>
-
-                            <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                                <form>
-                                    <div class="row mb-3">
-                                        <label class="col-md-4 col-lg-3 col-form-label">Foto de Perfil</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile">
-                                            <div class="pt-2">
-                                                <style>
-                                                    .btn-primary.btn-sm i {
-                                                        color: #fff;
-                                                    }
-                                                </style>
-
-                                                <input type="file" id="fileInput" style="display: none;">
-                                                <label for="fileInput" class="btn btn-primary btn-sm" title="Upload new profile image">
-                                                    <i class="bi bi-upload"></i>
-                                                </label>
-
-                                                <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Nombre y apellidos</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="fullName" type="text" class="form-control" id="fullName" value="German Cisneros Gonzales">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="company" class="col-md-4 col-lg-3 col-form-label">DNI</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="dni" type="text" class="form-control" id="dni" value="728963541">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="about" class="col-md-4 col-lg-3 col-form-label">Sobre ti</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <textarea name="about" class="form-control" id="about" style="height: 100px">Ingeniero en el rubro de Telecomunicaciones, soy egresado de la Universidad "Universidad". Con 6 años de experiencia en diferentes empresas de telecomunicaciones.</textarea>
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="company" class="col-md-4 col-lg-3 col-form-label">Compañia</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="company" type="text" class="form-control" id="company" value="Cisco">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Trabajo</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="job" type="text" class="form-control" id="Job" value="Supervisor de Campo">
-                                        </div>
-                                    </div>
-
-
-                                    <div class="row mb-3">
-                                        <label for="Email" class="col-md-4 col-lg-3 col-form-label">Correo</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="email" type="email" class="form-control" id="Email" value="germancis.cisco@gmail.com">
-                                        </div>
-                                    </div>
-
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-danger">Guardar cambios</button>
-                                    </div>
-                                </form><!-- End Profile Edit Form -->
-
-                            </div>
-
-                            <div class="tab-pane fade pt-3" id="profile-change-password">
-                                <!-- Change Password Form -->
-                                <form>
-
-                                    <div class="row mb-3">
-                                        <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Contraseña actual</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="password" type="password" class="form-control" id="currentPassword">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Contraseña nueva</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="newpassword" type="password" class="form-control" id="newPassword">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Vuelve a escribir tu contraseña</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="renewpassword" type="password" class="form-control" id="renewPassword">
-                                        </div>
-                                    </div>
-
-                                    <div class="text-center">
-                                        <button type="submit" class="btn" style="background-color: #2BC8A9">Cambiar contraseña</button>
-                                    </div>
-                                </form><!-- End Change Password Form -->
 
                             </div>
 
@@ -209,7 +100,7 @@
 </main><!-- End #main -->
 
 <!-- ======= Footer ======= -->
-<footer th:replace="Fragmentos/footer :: footer"></footer><!-- End Footer -->
+<footer th:replace="Fragmentos/footer :: footer"></footer>
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

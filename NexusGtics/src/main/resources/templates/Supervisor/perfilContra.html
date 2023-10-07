@@ -5,18 +5,23 @@
 
 <body>
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('admin')"><!-- End Header --></header>
+<header th:replace="Fragmentos/header :: header('supervisor')"><!-- End Header --></header>
 
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuAdmin :: menu('perfil')">
+<aside th:replace="Fragmentos/menuSupervisor :: menu('perfilSupervisor')">
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
+
+  <div class="alert alert-danger" role="alert" th:if="${error!=null}" th:text="${error}">
+    abc
+  </div>
+
   <div class="pagetitle">
     <h1 th:text="|Perfil|"></h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/Admin/listaUsuario}" th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
+        <li class="breadcrumb-item"><a th:href="@{/supervisor/}">Home</a></li>
         <li class="breadcrumb-item active">Perfil</li>
       </ol>
     </nav>
@@ -30,7 +35,7 @@
           <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
             <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
             <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</h2>
-            <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Administrador</h3>
+            <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Supervisor</h3>
             <h3 th:text="|${session.usuario.dni}|">ID: 123456789</h3>
           </div>
         </div>
@@ -44,35 +49,37 @@
             <!-- Bordered Tabs -->
 
             <div class="tab-content pt-2">
-              <a th:href="@{/admin/perfilAdmin}" class="btn btn-outline-dark me-2 mt-3">General</a>
-              <a th:href="@{'/admin/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
-              <a th:href="@{/admin/perfilContra}" class="btn btn-dark me-2 mt-3 ">Cambiar contraseña</a>
+              <a th:href="@{/supervisor/perfil}" class="btn btn-outline-dark me-2 mt-3">General</a>
+              <a th:href="@{'/supervisor/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
+              <a th:href="@{'/supervisor/perfilContra?id=' +${session.usuario.id}}" class="btn btn-dark me-2 mt-3 ">Cambiar contraseña</a>
             </div>
 
             <div class="tab-content pt-2">
 
               <div class="tab-pane show active fade pt-3" id="profile-change-password">
                 <!-- Change Password Form -->
-                <form>
+                <form method="POST" th:action="@{/supervisor/actualizarContra}" onsubmit="return validarFormulario()">
+
+                  <input th:value="${idUsuario}" name="id" type="hidden"/>
 
                   <div class="row mb-3">
                     <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Contraseña actual</label>
                     <div class="col-md-8 col-lg-9">
-                      <input name="password" type="password" class="form-control" id="currentPassword">
+                      <input name="password" type="password" class="form-control" id="currentPassword" required>
                     </div>
                   </div>
 
                   <div class="row mb-3">
                     <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Contraseña nueva</label>
                     <div class="col-md-8 col-lg-9">
-                      <input name="newpassword" type="password" class="form-control" id="newPassword">
+                      <input name="newpassword" type="password" class="form-control" id="newPassword" required>
                     </div>
                   </div>
 
                   <div class="row mb-3">
                     <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Vuelve a escribir tu contraseña</label>
                     <div class="col-md-8 col-lg-9">
-                      <input name="renewpassword" type="password" class="form-control" id="renewPassword">
+                      <input name="renewpassword" type="password" class="form-control" id="renewPassword" required>
                     </div>
                   </div>
 
@@ -80,6 +87,19 @@
                     <button type="submit" class="btn" style="background-color: #2BC8A9">Cambiar contraseña</button>
                   </div>
                 </form><!-- End Change Password Form -->
+
+                <script>
+                  function validarFormulario() {
+                    var nuevaContrasenia = document.getElementById("newPassword").value;
+                    var confirmarContrasenia = document.getElementById("renewPassword").value;
+
+                    if (nuevaContrasenia !== confirmarContrasenia) {
+                      alert("La nueva contraseña y la confirmación de la contraseña no coinciden.");
+                      return false;
+                    }
+                    return true;
+                  }
+                </script>
 
               </div>
 

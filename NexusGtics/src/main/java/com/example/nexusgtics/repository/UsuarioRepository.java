@@ -40,7 +40,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     public Usuario findByCorreo(String correo);
 
-    @Query(value ="select contrasenia from nexus.usuarios where idCargos=?1", nativeQuery = true )
+    @Query(value ="select contrasenia from nexus.usuarios where idUsuarios=?1", nativeQuery = true )
     String obtenerContraseña(int id);
 
     @Modifying

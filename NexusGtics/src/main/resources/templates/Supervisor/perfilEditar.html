@@ -5,10 +5,10 @@
 
 <body>
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('admin')"><!-- End Header --></header>
+<header th:replace="Fragmentos/header :: header('supervisor')"><!-- End Header --></header>
 
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuAdmin :: menu('perfil')">
+<aside th:replace="Fragmentos/menuAdmin :: menu('perfilSupervisor')">
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
@@ -16,7 +16,7 @@
     <h1 th:text="|Perfil|"></h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/Admin/listaUsuario}" th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
+        <li class="breadcrumb-item"><a th:href="@{/supervisor/}">Home</a></li>
         <li class="breadcrumb-item active">Perfil</li>
       </ol>
     </nav>
@@ -44,16 +44,16 @@
             <!-- Bordered Tabs -->
 
             <div class="tab-content pt-2">
-              <a th:href="@{/admin/perfilAdmin}" class="btn btn-outline-dark me-2 mt-3">General</a>
-              <a th:href="@{/admin/perfilEditar}" class="btn btn-dark me-2 mt-3">Editar perfil</a>
-              <a th:href="@{/admin/perfilContra}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
+              <a th:href="@{/supervisor/perfil}" class="btn btn-outline-dark me-2 mt-3">General</a>
+              <a th:href="@{'/supervisor/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
+              <a th:href="@{'/supervisor/perfilContra?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
             </div>
 
             <div class="tab-content pt-2">
 
               <div class="tab-pane show active fade profile-edit pt-3" id="profile-edit">
 
-                <form method="POST" th:action="@{/admin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data">
+                <form method="POST" th:action="@{/supervisor/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data">
                   <input type="hidden" class="form-control" th:field="*{id}">
                   <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
                   <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
