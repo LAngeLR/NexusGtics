@@ -302,8 +302,6 @@ public class SuperAdminController {
             if (optionalUsuario.isPresent()) {
                 usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
                 model.addAttribute("usuario", usuario);
-                model.addAttribute("listaEmpresa", empresaRepository.findAll());
-                model.addAttribute("listaCargo", cargoRepository.findAll());
                 return "Superadmin/editarUsuario";
             } else {
                 return "redirect:/superadmin";
