@@ -78,6 +78,11 @@
             <artifactId>spring-session-jdbc</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>spring-cloud-gcp-starter-storage</artifactId>
+        </dependency>
+
 
     </dependencies>
 
