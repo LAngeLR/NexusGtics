@@ -138,9 +138,9 @@ public class TecnicoController {
     @GetMapping("/ticketasignado")
     public String pagtickasignado(Model model) {
         //'listar'
-        List<Ticket> lista = ticketRepository.findAll();
+        List<Ticket> lista = ticketRepository.listarEstado();
         model.addAttribute("ticketList", lista);
-        List<Ticket> listaT = ticketRepository.findAll();
+        List<Ticket> listaT = ticketRepository.listarEstado();
         model.addAttribute("listaTicket", listaT);
         return "Tecnico/ticket_asignado";
     }
