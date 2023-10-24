@@ -70,14 +70,14 @@
           <li class="dropdown-divider">
             Tú tienes nuevos mensajes
           </li>
-          <li class="message-item" th:each=" ticket, info : ${listaTicket}" th:if="${ticket.estado==2}">
+          <li class="message-item" th:each=" ticket, info : ${listaTicket}" th:if="${ticket.estado==3}">
             <a th:href="@{'/tecnico/verTicket?id='+${ticket.idTickets}}">
               <div>
                 <h6 th:text="${ticket.usuarioSolicitante}"></h6>
                 <p style="font-size: xx-small" th:text="${ticket.fechaCreacion}"></p>
                 <p th:text="${'ID del Ticket: '+ticket.idTickets}"></p>
                 <p th:text="${ticket.descripcion}" style="font-size: xx-small"></p>
-                <p th:if="${ticket.estado==2}"><span class="badge text-bg-primary">Nuevo</span></p>
+                <p th:if="${ticket.estado==3}"><span class="badge text-bg-primary">Nuevo</span></p>
               </div>
             </a>
           </li>
@@ -183,9 +183,14 @@
                 <input type="text" class="form-control-plaintext" th:field="*{ticket.idTipoTicket.nombreTipoTicket}" disabled>
               </div>
             </div>
-            <div class="mb-3 row" th:if="${ticket.estado==1 || ticket.estado==2 ||ticket.estado==3}">
-              <div class="col-lg-3 col-md-4 label">Estado:</div>
-              <div class="col-lg-9 col-md-8"><span class="badge text-bg-primary">Asignado/Nuevo</span></div>
+            <div class="row" th:if="${ticket.estado==3}">
+              <div class="col-sm-4 label">Estado:</div>
+              <div class="col-sm-6 label">
+                <select class="form-select small select" aria-label="Default select example" name="cambioEstado">
+                  <option value="Nuevo">Nuevo</option>
+                  <option value="En Camino">En camino</option>
+                </select>
+              </div>
             </div>
             <!--   <select name="estado" id="estado" class="form-select" aria-label="Default select example">
                 <option th:each="ticket1: ${listaTicket}" th:value="${ticket1.idTickets}"
