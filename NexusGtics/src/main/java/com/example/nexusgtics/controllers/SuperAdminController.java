@@ -48,8 +48,8 @@ public class SuperAdminController {
     /* --------------------- PERFIL ---------------------------- */
 
     @GetMapping({"/perfil","perfilSuperadmin","perfilsuperadmin"})
-    public String perfilAdmin(){
-        return "Administrador/perfilAdmin";
+    public String perfilSuperadmin(){
+        return "Superadmin/perfilSuperadmin";
     }
 
 //---------------------------- GESTION DE USUARIOS -------------------------------------------
@@ -365,7 +365,7 @@ public class SuperAdminController {
         if (passwordEncoder.matches(contrasenia, contraseniaAlmacenada)) {
             String contraseniaNuevaEncriptada = passwordEncoder.encode(contraseniaNueva);
             usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
-            return "redirect:/superadmin/perfilAdmin";
+            return "redirect:/superadmin/perfilSuperadmin";
         } else {
             redirectAttributes.addFlashAttribute("error","La contraseña actual no es correcta.");
             return "redirect:/superadmin/perfilContra?id="+idStr;
