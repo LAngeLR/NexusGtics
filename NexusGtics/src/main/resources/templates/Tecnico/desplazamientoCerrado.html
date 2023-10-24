@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Desplazamiento</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link th:href="@{/assets/img/favicon.png}" rel="icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
+    <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" th:href="@{/leaflet/dist/leaflet-routing-machine.css}"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script th:href="@{/leaflet/dist/leaflet-routing-machine.js}"></script>
+
+    <style>
+        #map{
+            min-height: 35rem;
+            min-width: 20rem;
+        }
+    </style>
+</head>
+<body>
+<!-- ======= Header ======= -->
+<header class="header fixed-top d-flex align-items-center" style="background-color: #090B21">
+
+    <div class="d-flex align-items-center justify-content-between">
+        <a th:href="@{/}" class="logo d-flex align-items-center">
+            <img th:src="@{/assets/img/logo.png}" alt="">
+            <span class="d-none d-lg-block text-light">exus</span>
+        </a>
+        <i class="bi bi-list toggle-sidebar-btn text-light"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar">
+        <form class="search-form d-flex align-items-center" method="POST" action="#">
+            <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        </form>
+    </div><!-- End Search Bar -->
+
+    <nav class="header-nav ms-auto">
+        <ul class="d-flex align-items-center">
+
+            <li class="nav-item d-block d-lg-none">
+                <a class="nav-link nav-icon search-bar-toggle " href="#">
+                    <i class="bi bi-search"></i>
+                </a>
+            </li><!-- End Search Icon-->
+
+
+            <li class="nav-item dropdown">
+
+                <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-chat-left-text text-light"></i>
+                    <span class="badge bg-success badge-number" ></span>
+                </a><!-- End Messages Icon -->
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages" style="position: absolute; inset: 0px 0px auto auto; margin: 0px;transform: translate3d(-19.5px, 35px, 0px);" data-popper-placement="bottom-end">
+                    <li class="dropdown-divider">
+                        Tú tienes nuevos mensajes
+                    </li>
+                    <li class="message-item" th:each=" ticket, info : ${listaTicket1}" th:if="${ticket.estado==3}">
+                        <a th:href="@{'/tecnico/verTicket?id='+${ticket.idTickets}}">
+                            <div>
+                                <h6 th:text="${ticket.usuarioSolicitante}"></h6>
+                                <p style="font-size: xx-small" th:text="${ticket.fechaCreacion}"></p>
+                                <p th:text="${'ID del Ticket: '+ticket.idTickets}"></p>
+                                <p th:text="${ticket.descripcion}" style="font-size: xx-small"></p>
+                                <p th:if="${ticket.estado==3}"><span class="badge text-bg-primary">Nuevo</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                </ul><!-- End Messages Dropdown Items -->
+            </li><!-- End Messages Nav -->
+
+            <li class="nav-item dropdown pe-3">
+
+                <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                    <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2 text-light">K. Anderson</span>
+                </a><!-- End Profile Iamge Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                    <li class="dropdown-header">
+                        <h6>Kevin Anderson</h6>
+                        <span th:text="${cargo}">Admin</span>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{'/' + ${cargo} +'/perfil'}">
+                            <i class="bi bi-person"></i>
+                            <span>Mi perfil</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+
+
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{/login}">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Cerrar sesión</span>
+                        </a>
+                    </li>
+
+                </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
+
+        </ul>
+    </nav><!-- End Icons Navigation -->
+</header>
+<!-- ======= Sidebar ======= -->
+<aside th:replace="Fragmentos/menuTecnico :: menu(currentPage='desplazamiento')"></aside><!-- End Sidebar-->
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Mapa</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/Tecnico/tecnico.html}">Home</a></li>
+                <li class="breadcrumb-item active">Servicio</li>
+                <li class="breadcrumb-item active">Desplazamiento</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section profile">
+        <div class="row">
+            <div class="col-xl-4">
+                <div class="card">
+                    <div class="card-body">
+                        <br>
+                        <h5>Ingrese los datos pedidos antes de empezar:</h5>
+                        <div class="row g-3 align-items-center">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div class="col-auto">
+                                            <label for="suId" class="col-form-label">Su DNI:</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-auto">
+                                            <!--<input type="text"  class="form-control" aria-describedby="Id">-->
+                                            <input type="text" id="suId" class="form-control-plaintext" th:object="${ticket}" th:field="*{idCuadrilla.tecnico.dni}" disabled style="font-size: medium;color: #00489b;">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-auto">
+                                            <label for="ticketid" class="col-form-label">Ticket ID:</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-auto">
+                                            <input type="text" id="ticketid" class="form-control-plaintext" th:object="${ticket}" th:field="*{idTickets}" disabled style="font-size: medium;color: #00489b;">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-auto">
+                                            <label for="lugarinicio" class="col-form-label" style="font-size: small">Lugar inicio:</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-auto">
+                                            <input type="text" id="lugarinicio" class="form-control" th:object="${ticket}" th:field="*{idSitios.nombre}" disabled style="font-size: medium;color: #00489b;">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-auto">
+                                            <label for="hora" class="col-form-label" style="font-size: small">Hora de comienzo:</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-auto">
+                                            <input type="text" id="hora" class="form-control" aria-describedby="horastart">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br>
+                        <h5>Ingrese los datos pedidos antes de terminar su turno:</h5>
+                        <div class="row g-3 align-items-center">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div class="col-auto">
+                                            <label for="suId2" class="col-form-label">Su DNI:</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-auto">
+                                            <input type="text" id="suId2" class="form-control-plaintext" th:object="${ticket}" th:field="*{idCuadrilla.tecnico.dni}" disabled style="font-size: medium;color: #00489b;">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-auto">
+                                            <label for="ticketid2" class="col-form-label">Ticket ID:</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-auto">
+                                            <input type="text" id="ticketid2" class="form-control-plaintext" th:object="${ticket}" th:field="*{idTickets}" disabled style="font-size: medium;color: #00489b;">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-auto">
+                                            <label for="sitioCerrado" class="col-form-label">Lugar Final:</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-auto">
+                                            <input type="text" id="sitioCerrado" class="form-control-plaintext" th:object="${ticket}" th:field="*{idsitioCerrado.nombre}" disabled style="font-size: medium;color: #00489b;">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="col-auto">
+                                            <label for="hora2" class="col-form-label" style="font-size: small">Hora término:</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="col-auto">
+                                            <input type="hour" id="hora2" class="form-control" aria-describedby="horastart">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <center> <p style="font-size: x-small">Para completar servicio dar click en "Terminar"</p><button type="button" class="btn btn-danger">Terminar</button></center>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-xl-8">
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <div id="map"></div>
+                        <!--<script>
+                            let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
+                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            }).addTo(map);
+                            L.marker([-12.06802,-77.03462]).addTo(map)
+                                .bindPopup('Ticket aquí')
+                                .openPopup();
+                        </script>-->
+                        <!-- MAPA -->
+                        <script>
+                            var map = L.map('map').setView([-12.06802,-77.03462],18)
+                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            }).addTo(map);
+                            var marker = L.marker([-12.07319, -77.03498].addTo(map));
+                            //click event
+                            map.on('click', function (e){
+                                var endMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+
+                                L.Routing.control({
+                                    waypoints: [
+                                        L.latLng(-12.07319, -77.03498),
+                                        L.latLng(e.latlng.lat, e.latlng.lng) ]
+                                }).addTo(map);
+                            })
+                        </script>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</main><!-- End #main -->
+
+
+<!-- MAPA
+    <div id="mi_mapa"></div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+        <script>
+            let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            L.marker([-12.06802,-77.03462]).addTo(map)
+                .bindPopup('A pretty CSS popup.<br> Easily customizable.')
+                .openPopup();
+        </script>
+MAPA -->
+
+<footer id="footer" class="footer">
+    <div class="credits" style="font-size: x-small;color:#5e5d5d">
+        Contacto: ☎ | 2758403  ✉ | <a href="mailto:nexus.empresatcom@gmail.com" style="color:#5e5d5d"> nexus.empresatcom@gmail.com</a>
+    </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+
+</body>
+</html>

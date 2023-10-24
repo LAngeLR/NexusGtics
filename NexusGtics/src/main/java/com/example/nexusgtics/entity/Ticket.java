@@ -53,6 +53,10 @@ public class Ticket {
     private Sitio idSitios;
 
     @ManyToOne
+    @JoinColumn(name = "idsitioCerrado", nullable = false)
+    private Sitio idsitioCerrado;
+
+    @ManyToOne
     @JoinColumn(name = "idTipoTicket", nullable = false)
     private Tipoticket idTipoTicket;
 

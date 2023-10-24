@@ -239,12 +239,12 @@
                               </table> -->
                                 <form th:action="@{/tecnico/actualizarEstado}" class="search-form" method="POST">
                                     <input th:value="${ticket.idTickets}" name="idTickets" type="hidden" />
-                                    <div class="row" th:if="${ticket.estado==4 || ticket.estado==5 ||ticket.estado==6}">
+                                    <div class="row" th:if="${ticket.estado==4}">
                                         <div class="col-sm-4 label">Estado:</div>
                                         <div class="col-sm-6 label">
                                             <select class="form-select small select" aria-label="Default select example" name="cambioEstado">
-                                                <option value="Progreso">Progreso</option>
-                                                <option value="Termino">Termino del trabajo</option>
+                                                <option value="4">En camino</option>
+                                                <option value="5">Progreso</option>
                                             </select>
                                         </div>
                                     </div>

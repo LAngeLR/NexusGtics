@@ -2,9 +2,6 @@ package com.example.nexusgtics.controllers;
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
 import jakarta.servlet.http.HttpSession;
-import org.hibernate.mapping.Formula;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
-import org.springframework.http.codec.FormHttpMessageReader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,9 +11,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
-import javax.swing.*;
+
 import java.io.IOException;
-import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +25,7 @@ public class TecnicoController {
     final TipoticketRepository tipoticketRepository;
 
     final SitioRepository sitioRepository;
+    final SitioCerradoRepository sitioCerradoRepository;
     final ComentarioRepository comentarioRepository;
     final ArchivoRepository archivoRepository;
     private final FormularioRepository formularioRepository;
@@ -38,7 +35,7 @@ public class TecnicoController {
                              TipoticketRepository tipoticketRepository, SitioRepository sitioRepository, ComentarioRepository comentarioRepository,
                              CuadrillaRepository cuadrillaRepository, ArchivoRepository archivoRepository,
                              FormularioRepository formularioRepository,
-                             EquipoRepository equipoRepository) {
+                             EquipoRepository equipoRepository, SitioCerradoRepository sitioCerradoRepository) {
         this.ticketRepository = ticketRepository;
         this.usuarioRepository = usuarioRepository;
         this.tipoticketRepository = tipoticketRepository;
@@ -47,6 +44,7 @@ public class TecnicoController {
         this.archivoRepository = archivoRepository;
         this.formularioRepository = formularioRepository;
 
+        this.sitioCerradoRepository = sitioCerradoRepository;
     }
 
     @GetMapping(value = {"/", ""})
@@ -328,6 +326,45 @@ public class TecnicoController {
         }
 
     }
+
+    //Desplazamiento en progreso para cerrado
+    @GetMapping("/desplazamientoProgreso")
+    public String desplazamientoProgreso(Model model, @RequestParam("id") int id,
+                                    RedirectAttributes attr) {
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicketP", listaT);
+        Optional<Ticket> optionalTicket = ticketRepository.findById(id);
+        if (optionalTicket.isPresent()) {
+            Ticket ticket = optionalTicket.get();
+            model.addAttribute("tickets", ticket);
+            model.addAttribute("listaTicket", ticketRepository.findAll());
+            return "Tecnico/desplazamientoProgreso";
+        } else {
+            return "redirect:/ticket/verTicketProgreso";
+        }
+
+    }
+
+    //Desplazamiento cerrado, sin datos por modificar - Listar
+    @GetMapping("/desplazamientoCerrado")
+    public String desplazamientoCerrado(Model model, @RequestParam("id") int id,
+                                        RedirectAttributes attr) {
+        //'listar'
+        List<Ticket> lista = ticketRepository.listarEstado();
+        model.addAttribute("ticketList", lista);
+        List<Sitio> sitio = sitioRepository.findAll();
+        model.addAttribute("sitioListC",sitio);
+        Optional<Ticket> optionalTicket = ticketRepository.findById(id);
+        if (optionalTicket.isPresent()) {
+            Ticket ticket = optionalTicket.get();
+            model.addAttribute("ticket", ticket);
+            model.addAttribute("listaTicket", ticketRepository.findAll());
+            return "Tecnico/desplazamientoCerrado";
+        } else {
+            return "redirect:/ticket/verTicketCerrado";
+        }
+    }
+
 
 
     /*Formulario*/
