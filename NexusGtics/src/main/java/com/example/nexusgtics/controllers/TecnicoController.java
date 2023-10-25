@@ -211,7 +211,7 @@ public class TecnicoController {
         }
     }
 
-    //------------------- DATOS NUEVO---------------------------------//
+    //------------------- DATOS NUEVO ---------------------------------//
     @GetMapping({"/verTicketNuevo", "/verticketnuevo"})
     public String pagdatostickNuevo(Model model, @RequestParam("id") int id,
                                        RedirectAttributes attr) {
