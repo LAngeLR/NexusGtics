@@ -5,10 +5,10 @@
 
 <body>
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('admin')"><!-- End Header --></header>
+<header th:replace="Fragmentos/header :: header('tecnico')"><!-- End Header --></header>
 
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuAdmin :: menu('perfil')">
+<aside th:replace="Fragmentos/menuTecnico :: menu('perfil')">
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
@@ -16,7 +16,7 @@
     <h1 th:text="|Perfil|"></h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/Admin/listaUsuario}" th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
+        <li class="breadcrumb-item"><a th:href="@{/Tecnico/perfilTecnico}" th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
         <li class="breadcrumb-item active">Perfil</li>
       </ol>
     </nav>
@@ -30,7 +30,7 @@
           <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
             <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
             <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</h2>
-            <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Administrador</h3>
+            <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Técnico</h3>
             <h3 th:text="|${session.usuario.dni}|">ID: 123456789</h3>
           </div>
         </div>
@@ -44,9 +44,9 @@
             <!-- Bordered Tabs -->
 
             <div class="tab-content pt-2">
-              <a th:href="@{/admin/perfilAdmin}" class="btn btn-outline-dark me-2 mt-3">General</a>
-              <a th:href="@{'/admin/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
-              <a th:href="@{/admin/perfilContra}" class="btn btn-dark me-2 mt-3 ">Cambiar contraseña</a>
+              <a th:href="@{/tecnico/perfilTecnico}" class="btn btn-outline-dark me-2 mt-3">General</a>
+              <a th:href="@{'/tecnico/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
+              <a th:href="@{/tecnico/perfilContra}" class="btn btn-dark me-2 mt-3 ">Cambiar contraseña</a>
             </div>
 
             <div class="tab-content pt-2">

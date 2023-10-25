@@ -59,9 +59,9 @@ public class TecnicoController {
 
 
     /* -------------------------- PERFIL -------------------------- */
-    @GetMapping({"/perfil","perfilAdmin","perfiladmin"})
-    public String perfilAdmin(){
-        return "Administrador/perfilAdmin";
+    @GetMapping({"/perfil","perfilTecnico","perfiltecnico"})
+    public String perfilTecnico(){
+        return "Tecnico/perfilTecnico";
     }
 
     @GetMapping({"/perfilEditar"})
@@ -70,29 +70,43 @@ public class TecnicoController {
         try{
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/admin/listaUsuario";
+                return "redirect:/tecnico/perfil";
             }
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
                 usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
                 model.addAttribute("usuario", usuario);
-                return "Administrador/perfilEditar";
+                return "Tecnico/perfilEditar";
             } else {
-                return "redirect:/admin";
+                return "redirect:/tecnico/perfil";
             }
         } catch (NumberFormatException e) {
-            return "redirect:/admin/listaUsuario";
+            return "redirect:/tecnico/perfil";
         }
 
     }
 
     @GetMapping({"/perfilContra"})
-    public String perfilContra(){
-        return "Administrador/perfilContra";
+    public String perfilContra(Model model, @RequestParam("id") String idStr){
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/tecnico/perfil";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                model.addAttribute("idUsuario",id);
+                return "Tecnico/perfilContra";
+            } else {
+                return "redirect:/perfil";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/tecnico/perfil";
+        }
     }
     /* -------------------------- FIN PERFIL -------------------------- */
 
-    @GetMapping("/perfiltecnico")
+    /*@GetMapping("/perfiltecnico")
     public String perfilTecnico(Model model, @RequestParam("id") int id) {
         Optional<Usuario> optUsuario = usuarioRepository.findById(id);
         if (optUsuario.isPresent()) {
@@ -102,7 +116,7 @@ public class TecnicoController {
         } else {
             return "redirect:/Tecnico/perfiltecnico";
         }
-    }
+    }*/
 
     //-----------------------------------------------------------------------
 
@@ -147,20 +161,6 @@ public class TecnicoController {
     @GetMapping({"/verTicket", "/verticket"})
     public String pagdatostick(Model model, @RequestParam("id") int id,
                                RedirectAttributes attr) {
-        // Optional <Ticket> optionalTicket = ticketRepository.findById(id);
-        //Optional <Comentario> optionalComentario = comentarioRepository.findById(id);
-        //Optional <Formulario> optionalFormulario = formularioRepository.findById(id);
-        //if(optionalTicket.isPresent() && optionalComentario.isPresent() && optionalFormulario.isPresent()){
-        //  Ticket ticket = optionalTicket.get();
-        //Comentario comentario = optionalComentario.get();
-        // Formulario formulario = optionalFormulario.get();
-        // model.addAttribute("ticket", ticket);
-        // model.addAttribute("comentario", comentario);
-        // model.addAttribute("formulario", formulario);
-        // return "Tecnico/datos_ticket";
-        //  }else{
-        //    return "Tecnico/ticket_asignado";
-        //  }
         List<Ticket> listaT = ticketRepository.listarEstado();
         model.addAttribute("listaTicket", listaT);
         try {
@@ -211,7 +211,7 @@ public class TecnicoController {
         }
     }
 
-    //------------------- DATOS DE NUEVO---------------------------------//
+    //------------------- DATOS NUEVO---------------------------------//
     @GetMapping({"/verTicketNuevo", "/verticketnuevo"})
     public String pagdatostickNuevo(Model model, @RequestParam("id") int id,
                                        RedirectAttributes attr) {
