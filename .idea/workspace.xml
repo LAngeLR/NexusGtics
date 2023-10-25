@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f646692a-d729-46f1-8cbf-604bcf613df0" name="Changes" comment="todo menos img previa">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/editarUsuario.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/Superadmin/editarUsuario.html" afterDir="false" />
+    <list default="true" id="f646692a-d729-46f1-8cbf-604bcf613df0" name="Changes" comment="dependencias gcp">
+      <change afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/GcsController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,8 +16,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="com.haulmont.jpb.JpaEntity" />
-        <option value="Class" />
         <option value="HTML File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -60,7 +58,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
     "spring.configuration.checksum": "3f2e67f494e6d5fb837d4c0e6ddc61c7",
     "vue.rearranger.settings.migration": "true"
   },
@@ -95,7 +93,7 @@
       <updated>1696609775204</updated>
       <workItem from="1696609776661" duration="6308000" />
       <workItem from="1696616177223" duration="15600000" />
-      <workItem from="1698174478604" duration="12294000" />
+      <workItem from="1698174478604" duration="14361000" />
     </task>
     <task id="LOCAL-00001" summary="detalles sadmin 2">
       <created>1696643792919</created>
@@ -118,7 +116,14 @@
       <option name="project" value="LOCAL" />
       <updated>1698185184954</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="dependencias gcp">
+      <created>1698191739316</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1698191739316</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -139,6 +144,7 @@
     <MESSAGE value="detalles sadmin 2" />
     <MESSAGE value="rezo" />
     <MESSAGE value="todo menos img previa" />
-    <option name="LAST_COMMIT_MESSAGE" value="todo menos img previa" />
+    <MESSAGE value="dependencias gcp" />
+    <option name="LAST_COMMIT_MESSAGE" value="dependencias gcp" />
   </component>
 </project>
