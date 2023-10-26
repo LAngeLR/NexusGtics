@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -44,5 +47,8 @@ public class Equipo {
 
     @Column(name = "habilitado")
     private Boolean habilitado;
+
+    @ManyToMany(mappedBy = "equipos")
+    private Set<Sitio> sitios = new LinkedHashSet<>();
 
 }

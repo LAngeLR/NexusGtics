@@ -31,8 +31,10 @@ public class AnalistaDespController {
     final EquipoRepository equipoRepository;
     final ArchivoRepository archivoRepository;
 
+    final SitiosHasEquiposRepository sitiosHasEquiposRepository;
 
-    public AnalistaDespController(TicketRepository ticketRepository, SitioRepository sitioRepository, UsuarioRepository usuarioRepository, EmpresaRepository empresaRepository, EquipoRepository equipoRepository, ArchivoRepository archivoRepository){
+
+    public AnalistaDespController(TicketRepository ticketRepository, SitioRepository sitioRepository, UsuarioRepository usuarioRepository, EmpresaRepository empresaRepository, EquipoRepository equipoRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository){
         this.ticketRepository = ticketRepository;
         this.sitioRepository = sitioRepository;
         this.usuarioRepository = usuarioRepository;
@@ -41,6 +43,7 @@ public class AnalistaDespController {
 
         this.archivoRepository = archivoRepository;
 
+        this.sitiosHasEquiposRepository = sitiosHasEquiposRepository;
     }
 
 
@@ -104,7 +107,7 @@ public class AnalistaDespController {
                  sitio = optSitio.get();
 
                 // Obtén la lista de equipos por sitio
-                List<Equipo> listaEquipos = equipoRepository.listaEquiposPorSitio(id);
+                List<SitiosHasEquipo> listaEquipos = sitiosHasEquiposRepository.listaEquiposPorSitio(id);
                 model.addAttribute("sitio", sitio);
                 model.addAttribute("listaEquipos", listaEquipos);
                 return "AnalistaDespliegue/despliegueEditarSitio";

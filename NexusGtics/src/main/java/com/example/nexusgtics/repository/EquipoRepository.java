@@ -38,8 +38,6 @@ public interface EquipoRepository extends JpaRepository<Equipo, Integer> {
     @Query(value = "update equipos set idSitios = 9 where idEquipos = ?1", nativeQuery = true )
     void agregarEquipo( int id);
 
-    @Query(value ="select * from equipos where  idSitios = ?1", nativeQuery = true )
-    List<Equipo> listaEquiposPorSitio(int idSitios);
 
     @Query(value ="select * from equipos where  idSitios != ?1", nativeQuery = true )
     List<Equipo> listaEquiposNoSitio(int idSitios);

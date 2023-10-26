@@ -187,12 +187,12 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr th:each="equipo, info : ${listaEquipos}">
+                  <tr th:each="sitiosHasEquipo, info : ${listaEquipos}">
                     <td th:text = "${info.index + 1}" >  </td>
-                    <td th:text="${equipo.tipoequipo.nombreTipo}"></td>
-                    <td th:text="${equipo.marca}">Marca</td>
-                    <td th:text="${equipo.modelo}">Modelo</td>
-                    <td><a type="button" class="btn btn-outline-dark" th:href="@{'/analistaDespliegue/verEquipo?id=' + ${equipo.idEquipos}}">Ver</a></td>
+                    <td th:text="${sitiosHasEquipo.idEquipos.tipoequipo.nombreTipo}"></td>
+                    <td th:text="${sitiosHasEquipo.idEquipos.marca}">Marca</td>
+                    <td th:text="${sitiosHasEquipo.idEquipos.modelo}">Modelo</td>
+                    <td><a type="button" class="btn btn-outline-dark" th:href="@{'/analistaDespliegue/verEquipo?id=' + ${sitiosHasEquipo.idEquipos}}">Ver</a></td>
                   </tr>
                   </tbody>
                 </table>

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -71,6 +73,15 @@ public class Sitio {
     @Size(max = 45)
     @NotBlank(message = "El campo no debe estar vacío")
     private String nombre;
+
+    @OneToMany(mappedBy = "idSitios")
+    private Set<Dinamicasitiovalor> dinamicasitiovalors = new LinkedHashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "sitios_has_equipos",
+            joinColumns = @JoinColumn(name = "idSitios"),
+            inverseJoinColumns = @JoinColumn(name = "idEquipos"))
+    private Set<Equipo> equipos = new LinkedHashSet<>();
 
 /*
     @OneToMany(mappedBy = "sitio", cascade = CascadeType.ALL)
