@@ -139,9 +139,9 @@ public class TecnicoController {
     //-----------------------------------------------------------------------
     @GetMapping("/dashboard")
     public String pagdashboard(Model model) {
-        List<Ticket> lista = ticketRepository.findAll();
+        List<Ticket> lista = ticketRepository.listarEstado();
         model.addAttribute("ticketList", lista);
-        List<Ticket> listaT = ticketRepository.findAll();
+        List<Ticket> listaT = ticketRepository.listarEstado();
         model.addAttribute("listaTicket", listaT);
         return "Tecnico/dashboard";
     }
