@@ -195,7 +195,7 @@
           </tr>
           <tr>
             <td>Hechos relevantes:</td>
-            <td>He colocado la maquina en su lugar despues de repararlo</td>
+            <td th:text="${formulario.hrelevantes}">He colocado la maquina en su lugar despues de repararlo</td>
             <td style="background-color: rgba(97,154,229,0.55)"></td>
             <td style="background-color: rgba(97,154,229,0.55)"></td>
             <td style="background-color: rgba(97,154,229,0.55)"></td>
@@ -203,51 +203,79 @@
           <tr>
             <td>Validación de Sitio</td>
             <td>¿Existe conexión de energía?</td>
-            <td>Sí</td>
+            <td>
+              <div th:if="${formulario.conexion == 1}">
+                <span class="badge text-bg-info">Sí</span>
+              </div>
+              <div th:if="${formulario.conexion == 0}">
+                <span class="badge text-bg-success">No</span>
+              </div>
+            </td>
             <td>Nombre de arrendatario:</td>
-            <td th:field="*{ticket.usuarioSolicitante}"></td>
+            <td th:text="${formulario.nomredantario}"></td>
           </tr>
           <tr>
             <td>DNI del arrendatario:</td>
-            <td>72896453</td>
+            <td th:text="${formulario.dni}">72896453</td>
             <td></td>
             <td>¿La movilidad llega al sitio?</td>
-            <td>No</td>
+            <td>
+              <div th:if="${formulario.movilidad == 1}">
+                <span class="badge text-bg-info">Sí</span>
+              </div>
+              <div th:if="${formulario.movilidad == 0}">
+                <span class="badge text-bg-success">No</span>
+              </div>
+            </td>
           </tr>
           <tr>
             <td>Área del sitio /m2:</td>
-            <td>25 m2</td>
+            <td th:text="${formulario.area}">25 m2</td>
             <td style="background-color: rgba(97,154,229,0.55)"></td>
             <td style="background-color: rgba(97,154,229,0.55)"></td>
             <td style="background-color: rgba(97,154,229,0.55)"></td>
           </tr>
           <tr>
             <td>Observaciones</td>
-            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td th:text="${formulario.observaciones}"></td>
             <td style="background-color: rgba(97,154,229,0.55)"></td>
             <td style="background-color: rgba(97,154,229,0.55)"></td>
             <td style="background-color: rgba(97,154,229,0.55)"></td>
           </tr>
           <tr>
             <td>Trabajo realizado</td>
-            <td style="background-color: rgba(97,154,229,0.55)"></td>
+            <td th:text="${formulario.trabarealizados}"></td>
             <td style="background-color: rgba(97,154,229,0.55)"></td>
             <td style="background-color: rgba(97,154,229,0.55)"></td>
             <td style="background-color: rgba(97,154,229,0.55)"></td>
           </tr>
           <tr>
             <td>¿Se realizó construcción de infraestructura?</td>
-            <td>Si</td>
+            <td >
+              <div th:if="${formulario.construccion == 1}">
+                <span class="badge text-bg-info">Sí</span>
+              </div>
+              <div th:if="${formulario.construccion == 0}">
+                <span class="badge text-bg-success">No</span>
+              </div>
+            </td>
             <td style="background-color: rgba(97,154,229,0.55)"></td>
             <td>¿Se realizó instalaciones electricas?</td>
-            <td>Sí</td>
+            <td>
+              <div th:if="${formulario.instalacion == 1}">
+                <span class="badge text-bg-info">Sí</span>
+              </div>
+              <div th:if="${formulario.instalacion == 0}">
+                <span class="badge text-bg-success">No</span>
+              </div>
+            </td>
           </tr>
           <tr>
             <td>Tecnología instalada:</td>
             <td>FFTH</td>
             <td style="background-color: rgba(97,154,229,0.55)"></td>
             <td>Trabajos realizados:</td>
-            <td>Se procedió con lel montaje de la torre, además de la adecuación del gabinete para la correcta operación de los equipos a instalarse. Se instalron: BBU, RRU, Router, Switch, Rectificadores y baterías.</td>
+            <td th:text="${formulario.trabarealizados}"></td>
           </tr>
         </tbody>
       </table>
