@@ -463,9 +463,12 @@ public class TecnicoController {
                 return "redirect:/tecnico/datostickets";
             }
             Optional<Formulario> formularioOptional = formularioRepository.findById(id);
-            if (formularioOptional.isPresent()) {
+            Optional<SitioCerrado> sitioCerradoOptional = sitioCerradoRepository.findById(id);
+            if (formularioOptional.isPresent() && sitioCerradoOptional.isPresent()) {
                 Formulario formulario = formularioOptional.get();
+                SitioCerrado sitioCerrado = sitioCerradoOptional.get();
                 model.addAttribute("formulario", formulario);
+                model.addAttribute("sitioCerrado", sitioCerrado);
                 return "Tecnico/formularioCerrado";
             } else {
             return "redirect:/tecnico/datostickets";
