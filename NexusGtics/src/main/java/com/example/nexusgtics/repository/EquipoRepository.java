@@ -25,21 +25,18 @@ public interface EquipoRepository extends JpaRepository<Equipo, Integer> {
     @Transactional
     @Modifying
     @org.springframework.transaction.annotation.Transactional
-    @Query(value ="update equipos set habilitado = false where idEquipos = ?1", nativeQuery = true )
+    @Query(value = "update equipos set habilitado = false where idEquipos = ?1", nativeQuery = true)
     void deshabilitarEquipo(int id);
 
     //lista de habilitados en 1
-    @Query(value ="select * from equipos where habilitado = 1", nativeQuery = true )
+    @Query(value = "select * from equipos where habilitado = 1", nativeQuery = true)
     List<Equipo> listaEquiposHabilitados();
 
     @Transactional
     @Modifying
     @org.springframework.transaction.annotation.Transactional
-    @Query(value = "update equipos set idSitios = 9 where idEquipos = ?1", nativeQuery = true )
-    void agregarEquipo( int id);
+    @Query(value = "update equipos set idSitios = 9 where idEquipos = ?1", nativeQuery = true)
+    void agregarEquipo(int id);
 
-
-    @Query(value ="select * from equipos where  idSitios != ?1", nativeQuery = true )
-    List<Equipo> listaEquiposNoSitio(int idSitios);
 
 }

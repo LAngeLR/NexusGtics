@@ -24,13 +24,10 @@ import java.util.Optional;
 public class AnalistaDespController {
     final TicketRepository ticketRepository;
     final SitioRepository sitioRepository;
-
     final UsuarioRepository usuarioRepository;
     final EmpresaRepository empresaRepository;
-
     final EquipoRepository equipoRepository;
     final ArchivoRepository archivoRepository;
-
     final SitiosHasEquiposRepository sitiosHasEquiposRepository;
 
 
@@ -243,7 +240,7 @@ public class AnalistaDespController {
 
     @GetMapping("/listaEquipo")
         public String listaEquipo(Model model, @RequestParam("id") int id){
-        List<Equipo> listaEquipo = equipoRepository.listaEquiposNoSitio(id);
+        List<SitiosHasEquipo> listaEquipo = sitiosHasEquiposRepository.listaEquiposNoSitio(id);
         model.addAttribute("listaEquipo",listaEquipo);
         return "AnalistaDespliegue/despliegueListaEquipos";
     }

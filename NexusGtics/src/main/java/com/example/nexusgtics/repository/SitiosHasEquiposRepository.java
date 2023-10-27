@@ -1,5 +1,6 @@
 package com.example.nexusgtics.repository;
 
+import com.example.nexusgtics.entity.Equipo;
 import com.example.nexusgtics.entity.SitiosHasEquipo;
 import com.example.nexusgtics.entity.SitiosHasEquipoId;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,7 @@ public interface SitiosHasEquiposRepository extends JpaRepository<SitiosHasEquip
 
     @Query(value ="select * from sitios_has_equipos where  idSitios = ?1", nativeQuery = true )
     List<SitiosHasEquipo> listaEquiposPorSitio(int idSitios);
+
+    @Query(value ="select * from sitios_has_equipos where  idSitios != ?1", nativeQuery = true )
+    List<SitiosHasEquipo> listaEquiposNoSitio(int idSitios);
 }

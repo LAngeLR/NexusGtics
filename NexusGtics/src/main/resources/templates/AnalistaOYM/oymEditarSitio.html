@@ -28,30 +28,12 @@
 
   <!-- Template Main CSS File -->
   <link th:href="@{/assets/css/style.css}" rel="stylesheet">
-<style>
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-top: 100px;
-  }
-  th, td {
-    border: 1px solid black;
-    padding: 8px;
-    text-align: center;
-    color: white;
-  }
-
-  th {
-    background-color: black;
-  }
-  td {
-    color: black;
-  }
-  .download-link {
-    text-decoration: underline;
-    color: blue;
-  }
-</style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <style>
+    #mi_mapa{
+      min-height: 200px;
+    }
+  </style>
 
   <!-- =======================================================
   * Template Name: NiceAdmin
@@ -70,8 +52,8 @@
 <aside th:replace="Fragmentos/menuAnalistaOYM :: menu('editarSitio')">
 </aside><!-- End Sidebar-->
 
-  <main id="main" class="main">
-    <div class="container">
+<main id="main" class="main">
+  <div class="container">
 
 
     <div class="pagetitle">
@@ -82,148 +64,168 @@
         </ol>
       </nav>
     </div><!-- End Page Title -->
-
     <section class="section dashboard">
       <div class="row">
         <div class="rounded p-5" style="background-color: #FFFFFF;">
           <div class="pagetitle">
-            <h1 class="card-title">Edición de sitio</h1>
+            <h1 class="card-title">Editar de sitio</h1>
           </div>
-          <form method="POST" action="" enctype="multipart/form-data">
+          <form method="POST" th:action="@{/analistaOYM/saveSitio}" enctype="multipart/form-data" th:object="${sitio}" >
             <div class="row">
               <div class="col-md-6">
+                <input type="hidden" class="form-control" th:field="*{idSitios}">
+                <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
                 <div class="mb-3">
-
-                  <label for="nombre">Id de sitio:</label>
-                  <input type="text" class="form-control" name="nombre" id="nombre" value="2" disabled>
+                  <label class="form-label">Departamento:</label>
+                  <input th:field="*{departamento}" type="text" th:class="${#fields.hasErrors('departamento')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('departamento')}" th:errors="*{departamento}">
+                    Mensaje de error de nombre
+                  </div>
                 </div>
 
                 <div class="mb-3">
-                  <label for="nombre">Departamento:</label>
-                  <input type="text" class="form-control" name="nombre" id="nombre" value="Lima">
+                  <label class="form-label">Provincia:</label>
+                  <input th:field="*{provincia}" type="text" th:class="${#fields.hasErrors('provincia')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('provincia')}" th:errors="*{provincia}">
+                    Mensaje de error de nombre
+                  </div>
                 </div>
 
                 <div class="mb-3">
-                  <label for="descripcion">Provincia:</label>
-                  <input type="text" class="form-control" name="descripcion" id="descripcion" value="Cañete">
+                  <label class="form-label">Distrito:</label>
+                  <input th:field="*{distrito}" type="text" th:class="${#fields.hasErrors('distrito')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('distrito')}" th:errors="*{distrito}">
+                    Mensaje de error de nombre
+                  </div>
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Distrito:</label>
-                  <input type="text" class="form-control" name="precio" id="precio" value="San Vicente">
+                  <label class="form-label">Ubigeo:</label>
+                  <input th:field="*{ubigeo}" type="number" th:class="${#fields.hasErrors('ubigeo')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('ubigeo')}" th:errors="*{ubigeo}">
+                    Mensaje de error de nombre
+                  </div>
                 </div>
 
                 <div class="mb-3">
-                  <label for="precio">Ubigeo:</label>
-                  <input type="text" class="form-control" name="precio" id="precio" value="195195">
+                  <label class="form-label">Latitud:</label>
+                  <input type="number" step="0.0000001" th:field="*{latitud}" th:class="${#fields.hasErrors('latitud')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('latitud')}" th:errors="*{latitud}">
+                    Mensaje de error de nombre
+                  </div>
                 </div>
 
                 <div class="mb-3">
-                  <label for="descuento">Latitud:</label>
-                  <input type="number" class="form-control" name="descuento" id="descuento" value="-12.0740">
+                  <label class="form-label">Longitud:</label>
+                  <input type="number" step="0.0000001" th:field="*{longitud}" th:class="${#fields.hasErrors('longitud')?'form-control is-invalid':'form-control'}"/>
+                  <div class="invalid-feedback"
+                       th:if="${#fields.hasErrors('longitud')}" th:errors="*{longitud}">
+                    Mensaje de error de nombre
+                  </div>
                 </div>
 
                 <div class="mb-3">
-                  <label for="descuento">Longitud:</label>
-                  <input type="number" class="form-control" name="descuento" id="descuento" value="-77.08975">
-                </div>
-
-                <div class="mb-3">
-                  <label for="precio">Tipo de zona:</label>
-                  <select name="consola" id="consola" class="form-control">
-                    <option value="Cargo1">Urbana</option>
-                    <option value="Cargo2">Rural</option>
+                  <label class="form-label" >Tipo de Zona</label>
+                  <select class="form-select" th:field="*{tipoZona}">
+                    <option value="Urbana">Urbana</option>
+                    <option value="Rural">Rural</option>
                   </select>
                 </div>
 
+
                 <div class="mb-3">
-                  <label for="precio">Tipo de sitio:</label>
-                  <select name="consola" id="consola" class="form-control">
-                    <option value="Cargo1">Móvil</option>
-                    <option value="Cargo2">Fijo</option>
+                  <label class="form-label">Tipo de Sitio:</label>
+                  <select th:field="*{tipo}" class="form-control">
+                    <option value="Movil" >Móvil</option>
+                    <option value="Fijo">Fijo</option>
                   </select>
                 </div>
-
               </div>
               <br><br>
               <div class="col-md-6">
-
                 <div class="mb-3">
-                  <label for="descuento">Foto de sitio:</label>
-                  <br>
-                  <br>
-                  <img th:src="@{/assets/img/sitio1.webp}" style="max-width: 300px;" alt="">
-
-
+                  <label for="imagenSubida" class="form-label">Foto de Sitio:</label>
+                  <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                    <img id="imgPreview" th:src="@{|image/${sitio.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                  </div>
+                  <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                         accept="image/*" onchange="previewImage(event, '#imgPreview')">
                 </div>
                 <div class="mb-3">
 
-                <table style=" width: 50%;">
-                  <tr>
-                    <th>Archivos</th>
-                  </tr>
-                  <tr>
-                    <td><a class="download-link" href="ruta-al-archivo/1.csv" download>archivo1.pdf </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><a class="download-link" href="ruta-al-archivo/1.csv" download>archivo2.pdf</a></td>
-                  </tr>
-                  <!-- Repite las filas y columnas según sea necesario -->
-                </table>
-                  <br>
-                  <div class="mb-3" style=" width: 70%;">
-                    <label for="formFile" class="form-label">Subir archivo</label>
-                    <input class="form-control" type="file" id="formFile">
-                  </div>
+                  <label >Ubicación del sitio:</label>
+                  <div class="d-flex justify-content-center align-items-center">
+                    <div class="card-body pt-3">
+                      <div id="mi_mapa" ></div>
+                      <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                      <script th:inline="javascript">
+                        var latitud = [[${sitio.latitud}]];
+                        var longitud = [[${sitio.longitud}]];
+                        let map = L.map('mi_mapa').setView([latitud,longitud],18)
+                        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        }).addTo(map);
+                        L.marker([latitud,longitud]).addTo(map).bindPopup('Sitio').openPopup();
 
+                      </script>
+                      <!-- MAPA -->
+
+                    </div>
+                  </div>
                 </div>
               </div>
-              <table style=" width: 50%;">
+            </div>
+            <br>
+            <div>
+              <table class="table">
                 <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Tipo de equipo</th>
-                  <th>Marca</th>
-                  <th>Modelo </th>
+                  <th scope="col">#</th>
+                  <th scope="col">Tipo de equipo</th>
+                  <th scope="col">Marca </th>
+                  <th scope="col">Modelo</th>
+                  <th scope="col">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Switch</td>
-                  <td>Cisco</td>
-                  <td>Catalyst 94000</td>
+                <tr th:each="sitiosHasEquipo, info : ${listaEquipos}">
+                  <td th:text = "${info.index + 1}" >  </td>
+                  <td th:text="${sitiosHasEquipo.idEquipos.tipoequipo.nombreTipo}"></td>
+                  <td th:text="${sitiosHasEquipo.idEquipos.marca}">Marca</td>
+                  <td th:text="${sitiosHasEquipo.idEquipos.modelo}">Modelo</td>
+                  <td><a type="button" class="btn btn-outline-dark" th:href="@{'/analistaOYM/verEquipo?id=' + ${sitiosHasEquipo.idEquipos.idEquipos}}">Ver</a></td>
                 </tr>
                 </tbody>
               </table>
             </div>
+            <button type="button" class="btn btn-outline-success">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"></path>
+                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"></path>
+              </svg>
+              Descargar csv
+            </button>
+            <a type="submit" class="btn btn-outline-success" th:href="@{'/analistaOYM/listaEquipo?id=' + ${sitio.idSitios}}">Ver todos los equipos</a>
+            <br>
+            <br>
+            <div>
+              <a  th:href="@{'/analistaOYM/listaSitio'}" class="btn btn-outline-danger " >Cancelar</a>
+              <button  type="submit" class="btn btn-outline-primary " >Aceptar</button>
+            </div>
 
           </form>
         </div>
-        <br><br>
-
 
       </div>
     </section>
-      <br>
-      <button type="button" class="btn btn-outline-success">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-          <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"></path>
-          <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"></path>
-        </svg>
-        Descargar csv
-      </button>
-      <a type="submit" class="btn btn-outline-success" th:href="@{/analistaOYM/listaEquipo}">Agregar equipos</a>
-      <br>
-      <br>
-      <div>
-        <a  type="submit" class="btn btn-outline-primary " th:href="@{/analistaOYM/listaSitio}">Aceptar</a>
-        <a  type="submit" class="btn btn-outline-danger " th:href="@{/analistaOYM/listaSitio}">Cancelar</a>
-      </div>
-    </div>
 
-  </main><!-- End #main -->
+  </div>
+</main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer th:replace="Fragmentos/footer :: footer"></footer>

@@ -192,7 +192,7 @@
                     <td th:text="${sitiosHasEquipo.idEquipos.tipoequipo.nombreTipo}"></td>
                     <td th:text="${sitiosHasEquipo.idEquipos.marca}">Marca</td>
                     <td th:text="${sitiosHasEquipo.idEquipos.modelo}">Modelo</td>
-                    <td><a type="button" class="btn btn-outline-dark" th:href="@{'/analistaDespliegue/verEquipo?id=' + ${sitiosHasEquipo.idEquipos}}">Ver</a></td>
+                    <td><a type="button" class="btn btn-outline-dark" th:href="@{'/analistaDespliegue/verEquipo?id=' + ${sitiosHasEquipo.idEquipos.idEquipos}}">Ver</a></td>
                   </tr>
                   </tbody>
                 </table>
