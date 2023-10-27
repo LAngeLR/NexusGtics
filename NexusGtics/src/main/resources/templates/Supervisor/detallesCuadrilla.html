@@ -90,7 +90,9 @@
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Fecha de Formacion</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${cuadrilla.fechaCreacion}"></div>
+                                    <div class="col-lg-9 col-md-8">
+                                        <span th:text="${#temporals.format(cuadrilla.fechaCreacion, 'yyyy-MM-dd')}"></span>
+                                    </div>
                                 </div>
 
                             </div>
@@ -113,20 +115,21 @@
                                                 <br>
                                                 <br>
                                                 <div th:text="'Tec. ' + ${integrante.nombre} + ${integrante.apellido}"></div>
+                                                <br>
                                             </div>
                                         </div>
                                         <style>
 
                                             .integrante-item {
-                                                margin-left: 340px; /* Ajusta este valor según tu preferencia */
-                                                margin-right: 300px; /* Ajusta este valor según tu preferencia */
+                                                margin-left: 40%; /* Ajusta este valor según tu preferencia */
+                                                margin-right: 30%; /* Ajusta este valor según tu preferencia */
                                             }
                                         </style>
                                         <style>
 
                                             .integrante-item2 {
-                                                margin-left: 50px; /* Ajusta este valor según tu preferencia */
-                                                margin-right: 10px; /* Ajusta este valor según tu preferencia */
+                                                margin-left: 5%; /* Ajusta este valor según tu preferencia */
+                                                margin-right: 3%; /* Ajusta este valor según tu preferencia */
                                             }
                                         </style>
 
@@ -150,54 +153,82 @@
     <br>
     <section class="section">
         <div class="row">
-            <div class="col-lg-6" th:each="cerrados: ${listaTicketsCerradosPorCuadrilla}">
+            <div class="col-lg-6" th:each="cerrados, info: ${listaTicketsCerradosPorCuadrilla}">
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title" th:text="'Ticket ' + ${cerrados.idTickets}"></h5>
+                        <h5 class="card-title" th:text="'Ticket ' + ${info.index + 1}"></h5>
 
-                        <div class="row">
-                            <div class="col-lg-3 col-md-4 label" style="color: #808080"><b>Fecha Apertura:</b></div>
-                            <div class="col-lg-9 col-md-8" th:text="${cerrados.fechaCreacion}"></div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-3 col-md-4 label" style="color: #808080"><b>Fecha Cierre:</b></div>
-                            <div class="col-lg-9 col-md-8" th:text="${cerrados.fechaCierre}"></div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-3 col-md-4 label" style="color: #808080"><b>Usuario:</b></div>
-                            <div class="col-lg-9 col-md-8" th:text="${cerrados.usuarioSolicitante}"></div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-3 col-md-4 label" style="color: #808080"><b>Provincia:</b></div>
-                            <div class="col-lg-9 col-md-8" th:text="${cerrados.idSitios.provincia}"></div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-3 col-md-4 label" style="color: #808080"><b>Distrito:</b></div>
-                            <div class="col-lg-9 col-md-8" th:text="${cerrados.idSitios.distrito}"></div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-3 col-md-4 label" style="color: #808080"><b>Tipo Zona:</b></div>
-                            <div class="col-lg-9 col-md-8" th:text="${cerrados.idSitios.tipoZona}"></div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-lg-3 col-md-4 label" style="color: #808080"><b>Prioridad:</b></div>
-                            <div class="col-lg-9 col-md-8" style="color: #D01515" th:if="${cerrados.prioridad eq 'Urgente'}"><span class="badge text-bg-danger" th:text="${cerrados.prioridad}"></span></div>
-                            <div class="col-lg-9 col-md-8" style="color: #3498DB" th:if="${cerrados.prioridad eq 'Baja prioridad'}"><span class="badge text-bg-info" th:text="${cerrados.prioridad}"></span></div>
-                            <div class="col-lg-9 col-md-8" style="color: #FFC300" th:if="${cerrados.prioridad eq 'Hacer'}"><span class="badge text-bg-warning" th:text="${cerrados.prioridad}"></span></div>
-                            <div class="col-lg-9 col-md-8" style="color: #4CAF50" th:if="${cerrados.prioridad eq 'No critico'}"><span class="badge text-bg-success" th:text="${cerrados.prioridad}"></span></div>
-                        </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label" style="color: #808080"><b>Fecha Apertura:</b></div>
+                                <div class="col-lg-9 col-md-8" th:text="${cerrados.fechaCreacion}"></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label" style="color: #808080"><b>Fecha Cierre:</b></div>
+                                <div class="col-lg-9 col-md-8" th:text="${cerrados.fechaCierre}"></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label" style="color: #808080"><b>Usuario:</b></div>
+                                <div class="col-lg-9 col-md-8" th:text="${cerrados.usuarioSolicitante}"></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label" style="color: #808080"><b>Provincia:</b></div>
+                                <div class="col-lg-9 col-md-8" th:text="${cerrados.idSitios.provincia}"></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label" style="color: #808080"><b>Distrito:</b></div>
+                                <div class="col-lg-9 col-md-8" th:text="${cerrados.idSitios.distrito}"></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label" style="color: #808080"><b>Tipo Zona:</b></div>
+                                <div class="col-lg-9 col-md-8" th:text="${cerrados.idSitios.tipoZona}"></div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label" style="color: #808080"><b>Prioridad:</b></div>
+                                <div class="col-lg-9 col-md-8" style="color: #D01515" th:if="${cerrados.prioridad eq 'Urgente'}"><span class="badge text-bg-danger" th:text="${cerrados.prioridad}"></span></div>
+                                <div class="col-lg-9 col-md-8" style="color: #3498DB" th:if="${cerrados.prioridad eq 'Baja prioridad'}"><span class="badge text-bg-info" th:text="${cerrados.prioridad}"></span></div>
+                                <div class="col-lg-9 col-md-8" style="color: #FFC300" th:if="${cerrados.prioridad eq 'Hacer'}"><span class="badge text-bg-warning" th:text="${cerrados.prioridad}"></span></div>
+                                <div class="col-lg-9 col-md-8" style="color: #4CAF50" th:if="${cerrados.prioridad eq 'No critico'}"><span class="badge text-bg-success" th:text="${cerrados.prioridad}"></span></div>
+                            </div>
+                            <br>
+                            <img class="ticket-image" th:src="@{https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg}" alt="Imagen del ticket" style="width: 100px; height: auto; float: right; cursor: pointer;">
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    <script th:inline="javascript">
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var images = document.querySelectorAll(".ticket-image");
+
+
+            images.forEach(function(image) {
+                var originalWidth = image.width;
+                var originalHeight = image.height;
+
+                image.addEventListener("click", function() {
+                    if (image.style.width === "100%" || image.style.width === "") {
+
+                        image.style.width = originalWidth + "px";
+                        image.style.height = originalHeight + "px";
+                    } else {
+
+                        image.style.width = "100%";
+                        image.style.height = "auto";
+                    }
+                });
+            });
+        });
+    </script>
+
+
 
 </main><!-- End #main -->
 
