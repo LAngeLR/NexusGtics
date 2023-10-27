@@ -52,7 +52,7 @@ public class AnalistaDespController {
     /* -------------------------- PERFIL -------------------------- */
     @GetMapping({"/perfil","perfilAdmin","perfiladmin"})
     public String perfilAdmin(){
-        return "Administrador/perfilAdmin";
+        return "AnalistaDespliegue/perfilDesp";
     }
 
     @GetMapping({"/perfilEditar"})
@@ -61,18 +61,18 @@ public class AnalistaDespController {
         try{
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/admin/listaUsuario";
+                return "redirect:/analistaDespliegue/listaUsuario";
             }
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
                 usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
                 model.addAttribute("usuario", usuario);
-                return "Administrador/perfilEditar";
+                return "AnalistaDespliegue/perfilEditar";
             } else {
                 return "redirect:/admin";
             }
         } catch (NumberFormatException e) {
-            return "redirect:/admin/listaUsuario";
+            return "redirect:/analistaDespliegue/listaUsuario";
         }
 
     }
@@ -219,7 +219,7 @@ public class AnalistaDespController {
                 System.out.println("se mando en sitio, TipoZona");
                 return "AnalistaDespliegue/despliegueListaSitio";
             } else {
-                return "AnalistaDespliegue/despliegueEditarSitio";
+                return "redirect:/analistaDespliegue/listaSitio";
             }
         }
     }
@@ -264,10 +264,6 @@ public class AnalistaDespController {
         }
     }
 
-    @GetMapping("/perfil")
-    public String perfilAD(){
-        return "AnalistaDespliegue/perfilAnalistaDespliegue";
-    }
     @GetMapping("/mapaSitios")
     public String mapaSitios(){
         return "AnalistaDespliegue/despliegueMapaSitios";

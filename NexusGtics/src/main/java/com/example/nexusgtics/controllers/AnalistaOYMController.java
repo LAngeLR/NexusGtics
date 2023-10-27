@@ -177,7 +177,7 @@ public class AnalistaOYMController {
                 System.out.println("se mando en sitio, Tipo");
                 return "AnalistaOYM/oymListaSitio";
             } else {
-                return "AnalistaOYM/oymEditarSitio";
+                return "AnalistaOYM/oymListaSitio";
             }
         }
         if (sitio.getTipoZona() == null || sitio.getTipoZona().equals("-1")) {
@@ -186,7 +186,7 @@ public class AnalistaOYMController {
                 System.out.println("se mando en sitio, TipoZona");
                 return "AnalistaOYM/oymListaSitio";
             } else {
-                return "AnalistaOYM/oymEditarSitio";
+                return "AnalistaOYM/oymListaSitio";
             }
         }
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
@@ -215,9 +215,9 @@ public class AnalistaOYMController {
             System.out.println("se mando en sitio, Binding");
             if (sitio.getIdSitios() == null) {
                 System.out.println("se mando en sitio, TipoZona");
-                return "AnalistaOYM/oymListaSitio";
-            } else {
                 return "AnalistaOYM/oymEditarSitio";
+            } else {
+                return "redirect:/analistaOYM/listaSitio";
             }
         }
     }
@@ -236,8 +236,8 @@ public class AnalistaOYMController {
     }
 
     @GetMapping("/listaEquipo")
-    public String listaEquipo(Model model){
-        List<Equipo> listaEquipo = equipoRepository.findAll();
+    public String listaEquipo(Model model, @RequestParam("id") int id){
+        List<SitiosHasEquipo> listaEquipo = sitiosHasEquiposRepository.listaEquiposNoSitio(id);
         model.addAttribute("listaEquipo",listaEquipo);
         return "AnalistaOYM/oymListaEquipos";
     }
