@@ -48,11 +48,11 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr th:each="equipo, info : ${listaEquipo}">
+                  <tr th:each="sitiosHasEquipo, info : ${listaEquipo}">
                     <td th:text = "${info.index + 1}" >  </td>
-                    <td th:text="${equipo.tipoequipo.nombreTipo}">Tipo</td>
-                    <td th:text="${equipo.marca}">Marca</td>
-                    <td th:text="${equipo.modelo}">Modelo</td>
+                    <td th:text="${sitiosHasEquipo.idEquipos.tipoequipo.nombreTipo}">Tipo</td>
+                    <td th:text="${sitiosHasEquipo.idEquipos.marca}">Marca</td>
+                    <td th:text="${sitiosHasEquipo.idEquipos.modelo}">Modelo</td>
                     <td>
                       <div class="dropdown">
                         <button class="btn btn-light dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -61,7 +61,7 @@
                           </svg>
                         </button>
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" th:href="@{'/analistaDespliegue/verEquipo?id=' + ${equipo.idEquipos}}">Visualizar</a></li>
+                          <li><a class="dropdown-item" th:href="@{'/analistaDespliegue/verEquipo?id=' + ${sitiosHasEquipo.idEquipos.idEquipos}}">Visualizar</a></li>
                         </ul>
                       </div>
                     </td>
