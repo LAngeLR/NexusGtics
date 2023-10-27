@@ -32,10 +32,10 @@
 
             <div class="card-body table-responsive">
               <div class="container">
-
-                <a th:href="@{/superadmin/crearUsuario}" class="btn btn-outline-primary me-2 mt-3 float-end">Nuevo administrador</a>
-                <h5 class="card-title">Usuarios Baneados</h5>
-              </div>
+                <h5 class="card-title">Usuarios Desactivados</h5>
+                <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
+                <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-primary" role="alert"></div>
+              </div>d
               <!-- Table with stripped rows -->
               <table class="table datatable">
                 <thead>
@@ -83,7 +83,7 @@
                                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
                               </div>
                               <div class="modal-body">
-                                <h3>¿Está seguro de banear el usuario?</h3>
+                                <h3>¿Está seguro de desactivar al usuario?</h3>
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>

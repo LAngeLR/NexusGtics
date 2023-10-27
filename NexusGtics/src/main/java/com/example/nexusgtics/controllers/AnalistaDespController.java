@@ -24,15 +24,14 @@ import java.util.Optional;
 public class AnalistaDespController {
     final TicketRepository ticketRepository;
     final SitioRepository sitioRepository;
-
     final UsuarioRepository usuarioRepository;
     final EmpresaRepository empresaRepository;
-
     final EquipoRepository equipoRepository;
     final ArchivoRepository archivoRepository;
+    final SitiosHasEquiposRepository sitiosHasEquiposRepository;
 
 
-    public AnalistaDespController(TicketRepository ticketRepository, SitioRepository sitioRepository, UsuarioRepository usuarioRepository, EmpresaRepository empresaRepository, EquipoRepository equipoRepository, ArchivoRepository archivoRepository){
+    public AnalistaDespController(TicketRepository ticketRepository, SitioRepository sitioRepository, UsuarioRepository usuarioRepository, EmpresaRepository empresaRepository, EquipoRepository equipoRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository){
         this.ticketRepository = ticketRepository;
         this.sitioRepository = sitioRepository;
         this.usuarioRepository = usuarioRepository;
@@ -41,6 +40,7 @@ public class AnalistaDespController {
 
         this.archivoRepository = archivoRepository;
 
+        this.sitiosHasEquiposRepository = sitiosHasEquiposRepository;
     }
 
 
@@ -52,7 +52,7 @@ public class AnalistaDespController {
     /* -------------------------- PERFIL -------------------------- */
     @GetMapping({"/perfil","perfilAdmin","perfiladmin"})
     public String perfilAdmin(){
-        return "Administrador/perfilAdmin";
+        return "AnalistaDespliegue/perfilDesp";
     }
 
     @GetMapping({"/perfilEditar"})
@@ -61,18 +61,18 @@ public class AnalistaDespController {
         try{
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/admin/listaUsuario";
+                return "redirect:/analistaDespliegue/listaUsuario";
             }
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
                 usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
                 model.addAttribute("usuario", usuario);
-                return "Administrador/perfilEditar";
+                return "AnalistaDespliegue/perfilEditar";
             } else {
                 return "redirect:/admin";
             }
         } catch (NumberFormatException e) {
-            return "redirect:/admin/listaUsuario";
+            return "redirect:/analistaDespliegue/listaUsuario";
         }
 
     }
@@ -104,7 +104,7 @@ public class AnalistaDespController {
                  sitio = optSitio.get();
 
                 // Obtén la lista de equipos por sitio
-                List<Equipo> listaEquipos = equipoRepository.listaEquiposPorSitio(id);
+                List<SitiosHasEquipo> listaEquipos = sitiosHasEquiposRepository.listaEquiposPorSitio(id);
                 model.addAttribute("sitio", sitio);
                 model.addAttribute("listaEquipos", listaEquipos);
                 return "AnalistaDespliegue/despliegueEditarSitio";
@@ -219,7 +219,7 @@ public class AnalistaDespController {
                 System.out.println("se mando en sitio, TipoZona");
                 return "AnalistaDespliegue/despliegueListaSitio";
             } else {
-                return "AnalistaDespliegue/despliegueEditarSitio";
+                return "redirect:/analistaDespliegue/listaSitio";
             }
         }
     }
@@ -240,7 +240,7 @@ public class AnalistaDespController {
 
     @GetMapping("/listaEquipo")
         public String listaEquipo(Model model, @RequestParam("id") int id){
-        List<Equipo> listaEquipo = equipoRepository.listaEquiposNoSitio(id);
+        List<SitiosHasEquipo> listaEquipo = sitiosHasEquiposRepository.listaEquiposNoSitio(id);
         model.addAttribute("listaEquipo",listaEquipo);
         return "AnalistaDespliegue/despliegueListaEquipos";
     }
@@ -264,10 +264,6 @@ public class AnalistaDespController {
         }
     }
 
-    @GetMapping("/perfil")
-    public String perfilAD(){
-        return "AnalistaDespliegue/perfilAnalistaDespliegue";
-    }
     @GetMapping("/mapaSitios")
     public String mapaSitios(){
         return "AnalistaDespliegue/despliegueMapaSitios";

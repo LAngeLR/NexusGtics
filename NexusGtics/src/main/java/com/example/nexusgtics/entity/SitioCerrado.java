@@ -1,23 +1,20 @@
 package com.example.nexusgtics.entity;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "sitios")
-public class Sitio {
+@Table(name = "sitiocerrado")
+public class SitioCerrado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idSitios", nullable = false)
-    private Integer idSitios;
+    @Column(name = "idsitioCerrado", nullable = false)
+    private Integer idsitioCerrado;
 
     @Column(name = "tipo", nullable = false)
     private String tipo;
@@ -65,26 +62,8 @@ public class Sitio {
     @Column(name = "tipoZona", nullable = false)
     private String tipoZona;
 
-    @ManyToOne
-    @JoinColumn(name = "idArchivos")
-    private Archivo archivo;
-
     @Column(name = "nombre", length = 45)
     @Size(max = 45)
     @NotBlank(message = "El campo no debe estar vacío")
     private String nombre;
-
-    @OneToMany(mappedBy = "idSitios")
-    private Set<Dinamicasitiovalor> dinamicasitiovalors = new LinkedHashSet<>();
-
-    @ManyToMany
-    @JoinTable(name = "sitios_has_equipos",
-            joinColumns = @JoinColumn(name = "idSitios"),
-            inverseJoinColumns = @JoinColumn(name = "idEquipos"))
-    private Set<Equipo> equipos = new LinkedHashSet<>();
-
-/*
-    @OneToMany(mappedBy = "sitio", cascade = CascadeType.ALL)
-    private List<CampoDinamico> camposDinamicos = new ArrayList<>();
-*/
 }

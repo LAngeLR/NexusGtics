@@ -30,7 +30,7 @@
                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                         <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
                         <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</h2>
-                        <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Administrador</h3>
+                        <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Superadmin</h3>
                         <h3 th:text="|${session.usuario.dni}|">ID: 123456789</h3>
                     </div>
                 </div>
@@ -44,14 +44,14 @@
                         <!-- Bordered Tabs -->
                         <div class="tab-content pt-2">
                             <a th:href="@{/superadmin/perfilSuperadmin}" class="btn btn-dark me-2 mt-3">General</a>
-                            <a th:href="@{'/admin/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
-                            <a th:href="@{/superadmin/perfilContra}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
+                            <a th:href="@{'/superadmin/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
+                            <a th:href="@{'/superadmin/perfilContra?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
                         </div>
 
                         <div class="tab-content pt-2">
 
                             <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                <h5 class="card-title" style="color: #095444" th:text="|Sobre ${session.usuario.nombre} ${session.usuario.apellido}|">Sobre Luis:</h5>
+                                <h5 class="card-title" style="color: #095444" th:text="|Sobre ti|">Sobre Luis:</h5>
                                 <p class="small fst-italic" th:text="|${session.usuario.descripcion}|"></p>
 
                                 <h5 class="card-title" style="color: #095444">Detalles del Perfil</h5>

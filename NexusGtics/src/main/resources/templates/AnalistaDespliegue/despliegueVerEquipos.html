@@ -7,7 +7,7 @@
 <body>
 
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('Analista de Despliegue')"><!-- End Header --></header><!-- End Header -->
+<header th:replace="Fragmentos/header :: header('analistaDespliegue')"><!-- End Header --></header><!-- End Header -->
 
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuDespliegue :: menu('verEquipo')">
@@ -63,13 +63,6 @@
                                     <input type="text" class="form-control" th:field="*{paginaModelo}" disabled>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Sitio de despliegue:</label>
-                                    <input type="text" class="form-control" th:value="${equipo.sitio.distrito}" disabled>
-
-                                </div>
-
-
                             </div>
                             <br><br>
                             <div class="col-md-6">
@@ -84,7 +77,6 @@
 
                             <div>
                                 <br>
-                                <input type="hidden" name="idSitios" th:value="${equipo.sitio.idSitios}" />
                                 <input type="hidden" name="idEquipos" th:value="${equipo.idEquipos}" />
                                 <button  type="submit" class="btn btn-outline-primary " >Agregar</button>
                                 <button  th:href="@{/analistaDespliegue/listaEquipo}" class="btn btn-outline-danger " >Regresar</button>

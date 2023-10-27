@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-        <meta charset="utf-8">
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-        <title>Desplazamiento</title>
-        <meta content="" name="description">
-        <meta content="" name="keywords">
+    <title>Desplazamiento</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
 
-        <!-- Favicons -->
-        <link th:href="@{/assets/img/favicon.png}" rel="icon">
-        <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+    <!-- Favicons -->
+    <link th:href="@{/assets/img/favicon.png}" rel="icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
-        <!-- Google Fonts -->
-        <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
-        <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
+    <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
 
-        <!-- Vendor CSS Files -->
-        <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-        <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-        <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
-        <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
-        <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
-        <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
-        <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
 
-        <!-- Template Main CSS File -->
-        <link th:href="@{/assets/css/style.css}" rel="stylesheet">
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-        <link rel="stylesheet" th:href="@{/leaflet/dist/leaflet-routing-machine.css}"/>
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-        <script th:href="@{/leaflet/dist/leaflet-routing-machine.js}"></script>
+    <!-- Template Main CSS File -->
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" th:href="@{/leaflet/dist/leaflet-routing-machine.css}"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script th:href="@{/leaflet/dist/leaflet-routing-machine.js}"></script>
 
     <style>
         #map{
@@ -190,12 +190,12 @@
                                 <tr>
                                     <td>
                                         <div class="col-auto">
-                                            <label for="lugarInicio" class="col-form-label" style="font-size: small">Lugar Inicio:</label>
+                                            <label for="lugarinicio" class="col-form-label" style="font-size: small">Lugar inicio:</label>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="col-auto">
-                                            <input type="text" id="lugarInicio" class="form-control" aria-describedby="lugarInicio">
+                                            <input type="text" id="lugarinicio" class="form-control" th:object="${ticket}" th:field="*{idSitios.nombre}" disabled style="font-size: medium;color: #00489b;">
                                         </div>
                                     </td>
                                 </tr>
@@ -212,7 +212,6 @@
                                     </td>
                                 </tr>
                             </table>
-                            <center><p style="font-size: x-small">Para empezar desplazamiento dar click en "Empezar"</p><button type="button" class="btn btn-success">Empezar</button></center>
                         </div>
                         <br>
                         <h5>Ingrese los datos pedidos antes de terminar su turno:</h5>
@@ -245,12 +244,12 @@
                                 <tr>
                                     <td>
                                         <div class="col-auto">
-                                            <label for="lugarFinal" class="col-form-label" style="font-size: small">Lugar Final:</label>
+                                            <label for="sitioCerrado" class="col-form-label">Lugar Final:</label>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="col-auto">
-                                            <input type="text" id="lugarFinal" class="form-control" aria-describedby="lugarFinal">
+                                            <input type="text" id="sitioCerrado" class="form-control-plaintext" th:object="${ticket}" th:field="*{idsitioCerrado.nombre}" disabled style="font-size: medium;color: #00489b;">
                                         </div>
                                     </td>
                                 </tr>
@@ -298,10 +297,10 @@
                             map.on('click', function (e){
                                 var endMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
 
-                            L.Routing.control({
-                                waypoints: [
-                                    L.latLng(-12.07319, -77.03498),
-                                    L.latLng(e.latlng.lat, e.latlng.lng) ]
+                                L.Routing.control({
+                                    waypoints: [
+                                        L.latLng(-12.07319, -77.03498),
+                                        L.latLng(e.latlng.lat, e.latlng.lng) ]
                                 }).addTo(map);
                             })
                         </script>

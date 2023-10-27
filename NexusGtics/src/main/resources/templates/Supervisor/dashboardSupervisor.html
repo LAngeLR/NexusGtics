@@ -81,9 +81,9 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body">
-                                            <h5 class="card-title">Felicidades Sup. Luis</h5>
+                                            <h5 class="card-title" th:text="'Felicidades Sup. ' + ${session.usuario.nombre}"></h5>
                                             <p class="card-text"> Luis, te has autoasignado 72% de los tickets asignados a tu empresa</p>
-                                            <p class="card-text"><small class="text-body-secondary"><a class="btn btn-light">Tickets</a></small></p>
+                                            <p class="card-text"><small class="text-body-secondary"><a th:href="@{/supervisor/listaTickets}" class="btn btn-light">Tickets</a></small></p>
                                         </div>
                                     </div>
                                 </div>
@@ -164,58 +164,41 @@
                     <div class="col-12">
                         <div class="card recent-sales overflow-auto">
                             <div class="card-body">
-                                <h5 class="card-title">Tickets de tu Empresa <span>| CISCO</span></h5>
+                                <h5 class="card-title">Tickets Nuevos <span>| CISCO</span></h5>
 
                                 <table class="table table-borderless datatable">
                                     <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Supervisor</th>
-                                        <th scope="col">Trabajo</th>
+                                        <th scope="col">Usuario</th>
                                         <th scope="col">Tipo de Ticket</th>
                                         <th scope="col">Prioridad</th>
+                                        <th scope="col">Fecha Creacion</th>
+                                        <th scope="col">Fecha Cierre</th>
 
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2457</a></th>
-                                        <td>Brandon Jacob</td>
-                                        <td>Mantenimiento de Gabinete</td>
-                                        <td>Mantenimiento</td>
-                                        <td><span class="badge bg-primary">Baja Prioridad</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2147</a></th>
-                                        <td>Bridie Kessler</td>
-                                        <td>Instalar Router</td>
-                                        <td>Instalacion</td>
-                                        <td><span class="badge bg-success">No critico</span></td>
-
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2049</a></th>
-                                        <td>Ashleigh Langosh</td>
-                                        <td>Reparar Router</td>
-                                        <td>Mantenimiento</td>
-                                        <td><span class="badge bg-danger">Urgente</span></td>
-
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2644</a></th>
-                                        <td>Angus Grady</td>
-                                        <td>Mantenimiento Gabinete</td>
-                                        <td>Mantenimiento</td>
-                                        <td><span class="badge bg-danger">Urgente</span></td>
-
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2644</a></th>
-                                        <td>Raheem Lehner</td>
-                                        <td>Reparar Switch</td>
-                                        <td>Mantenimiento</td>
-                                        <td><span class="badge bg-warning">Hacer</span></td>
-
+                                    <tr th:each=" ticket, info : ${listaTickets}">
+                                        <th th:text="${info.index + 1}"></th>
+                                        <td th:text="${ticket.usuarioSolicitante}"></td>
+                                        <td th:text="${ticket.idTipoTicket.nombreTipoTicket}"></td>
+                                        <td>
+                                            <div th:if="${ticket.prioridad == 'Baja prioridad'}">
+                                                <span class="badge text-bg-info" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                            </div>
+                                            <div th:if="${ticket.prioridad == 'No critico'}">
+                                                <span class="badge text-bg-success" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                            </div>
+                                            <div th:if="${ticket.prioridad == 'Urgente'}">
+                                                <span class="badge text-bg-danger" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                            </div>
+                                            <div th:if="${ticket.prioridad == 'Hacer'}">
+                                                <span class="badge text-bg-warning" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                            </div>
+                                        </td>
+                                        <td th:text="${ticket.fechaCreacion}"></td>
+                                        <td th:text="${ticket.fechaCierre}"></td>
                                     </tr>
                                     </tbody>
                                 </table>

@@ -2,6 +2,7 @@ package com.example.nexusgtics.controllers;
 
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
@@ -243,9 +244,14 @@ public class SupervisorController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(){
+    public String dashboard(Model model) {
+
+        List<Ticket> listaTickets = ticketRepository.listaDash(2);
+        model.addAttribute("listaTickets", listaTickets);
+
         return "Supervisor/dashboardSupervisor";
     }
+
 
     @GetMapping("/crearCuadrilla")
     public String crearCuadrilla(Model model,  @RequestParam(name = "id", required = false, defaultValue = "-1") int id){

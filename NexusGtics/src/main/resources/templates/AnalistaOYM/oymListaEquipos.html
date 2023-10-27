@@ -42,144 +42,80 @@
 <body>
 
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('Analista de Mantenimiento')"><!-- End Header --></header>
+<header th:replace="Fragmentos/header :: header('analistaOYM')"><!-- End Header --></header>
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuAnalistaOYM :: menu('listaEquipos')">
 </aside><!-- End Sidebar-->
 
-
-
   <main id="main" class="main">
-    <div class="container">
+  <div class="container">
 
-      <div class="pagetitle">
-        <nav>
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/analistaOYM/listaSitio}">Lista de Sitios</a></li>
-            <li class="breadcrumb-item"><a th:href="@{/analistaOYM/editarSitio}">Editar Sitio</a></li>
-            <li class="breadcrumb-item active">Lista de equipos</li>
-          </ol>
-        </nav>
-      </div><!-- End Page Title -->
+    <div class="pagetitle">
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a th:href="@{/analistaOYM/listaSitio}">Lista de Sitios</a></li>
+          <li class="breadcrumb-item"><a th:href="@{/analistaOYM/editarSitio}">Editar Sitio</a></li>
+          <li class="breadcrumb-item active">Lista de equipos</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
 
-      <section class="section">
-        <div class="row">
-          <div class="col-lg-12">
+    <section class="section" >
+      <div class="row">
+        <div class="col-lg-12">
 
-            <div class="card">
+          <div class="card">
 
-              <div class="card-body table-responsive">
-                <div class="container">
+            <div class="card-body table-responsive">
+              <div class="container">
 
-
-                  <!-- MODAL DE AÑADIR NUEVO CAMPO-->
-                  <div class="modal fade" id="nuevo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="staticBackdropLabel">Añadir nuevo campo</h1>
-                        </div>
-                        <div class="modal-body">
-                          <div class="mb-3">
-                            <label for="descripcion">Nombre del campo:</label>
-                            <input type="text" class="form-control" name="descripcion" id="descripcion">
-                          </div>
-                          <div class="input-group mb-3">
-                            <label for="consola">Formato del campo:</label>
-                            <div class="col-12">
-                              <select name="consola" id="consola" class="form-control">
-                                <option value="Cargo1">Boolean</option>
-                                <option value="Cargo2">String</option>
-                                <option value="Cargo3">Int</option>
-                                <option value="Cargo4">Double</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cerrar</button>
-                          <button type="button" class="btn btn-outline-success">Añadir</button>
-                        </div>
-                      </div>
+                <h5 class="card-title">Equipos en general</h5>
+              </div>
+              <!-- Table with stripped rows -->
+              <table class="table datatable">
+                <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Tipo de equipo</th>
+                  <th scope="col">Marca </th>
+                  <th scope="col">Modelo</th>
+                  <th scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="sitiosHasEquipo, info : ${listaEquipo}">
+                  <td th:text = "${info.index + 1}" >  </td>
+                  <td th:text="${sitiosHasEquipo.idEquipos.tipoequipo.nombreTipo}">Tipo</td>
+                  <td th:text="${sitiosHasEquipo.idEquipos.marca}">Marca</td>
+                  <td th:text="${sitiosHasEquipo.idEquipos.modelo}">Modelo</td>
+                  <td>
+                    <div class="dropdown">
+                      <button class="btn btn-light dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                          <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                        </svg>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{'/analistaOYM/verEquipo?id=' + ${sitiosHasEquipo.idEquipos.idEquipos}}">Visualizar</a></li>
+                      </ul>
                     </div>
-                  </div>
-
-                  <!-- MODAL DE ELIMINAR CAMPO-->
-                  <div class="modal fade" id="eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                        </div>
-                        <div class="modal-body">
-                          <h3>¿Está seguro de eliminar un campo?</h3>
-                          <p>Por el momento dicha funcionalidad no se encuentra disponible</p>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-                  <h5 class="card-title">Equipos en general</h5>
-                </div>
-                <!-- Table with stripped rows -->
-                <table class="table datatable">
-                  <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Tipo de equipo</th>
-                    <th scope="col">Tipo de sitio de implementación </th>
-                    <th scope="col">Acciones</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Switch</td>
-                    <td>Sitio de telefonía Móvil</td>
-
-                    <td>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <a th:href="@{/analistaOYM/editarSitio}" class="btn btn-outline-primary me-2">Agregar</a>
-                        <a th:href="@{/analistaOYM/verEquipo}" class="btn btn-outline-dark me-2">Visualizar</a>
-                        <!-- MODAL -->
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                              </div>
-                              <div class="modal-body">
-                                <h3>¿Está seguro de eliminar el equipo?</h3>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-
-
-                  </tbody>
-                </table>
-                <!-- End Table with stripped rows -->
-
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <!-- End Table with stripped rows -->
+              <div>
+                <a  th:href="@{'/analistaOYM/listaSitio'}" class="btn btn-outline-danger " >Cancelar</a>
               </div>
             </div>
-
           </div>
-        </div>
-      </section>
 
-    </div>
-  </main><!-- End #main -->
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer th:replace="Fragmentos/footer :: footer"></footer>

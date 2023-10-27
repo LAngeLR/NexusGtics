@@ -38,7 +38,7 @@
                     <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}">
                         A simple success alert—check it out!
                     </div>
-                    <form method="POST" th:action="@{/admin/updateUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+                    <form method="POST" th:action="@{/superadmin/updateUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row">
                             <div class="col-md-6">
                                 <input type="hidden" class="form-control" th:field="*{id}">
@@ -88,24 +88,18 @@
                                 <input type="hidden" name="cuadrilla" id="cuadrilla" th:field="*{cuadrilla}">
                                 <input type="hidden" name="descripcion" id="descripcion" th:field="*{descripcion}">
 
+                                <input type="hidden" name="cargo" id="cargo" th:field="*{cargo}">
+                                <input type="hidden" name="empresa" id="empresa" th:field="*{empresa}">
+
 
                                 <div class="mb-3">
-                                    <label class="form-label">Cargo</label>
-                                    <select class="form-select" name="cargo" id="cargo" disabled>
-                                        <option th:each="cargo: ${listaCargo}"
-                                                th:unless="${cargo.nombreCargo == 'Superadmin' || cargo.nombreCargo == 'Administrador'}"
-                                                th:text="${cargo.nombreCargo}" th:value="${cargo.idCargos}"
-                                                th:selected="${usuario.cargo.idCargos == cargo.idCargos}">Administrador</option>
-                                    </select>
+                                    <p class="form-label">Cargo (no modificable):</p>
+                                    <p class="form-control">Superadmin</p>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Empresa</label>
-                                    <select class="form-select" name="empresa" id="empresa" disabled>
-                                        <option th:each="empresa: ${listaEmpresa}"
-                                                th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
-                                                th:selected="${usuario.empresa.idEmpresas == empresa.idEmpresas}">Nexus</option>
-                                    </select>
+                                    <p class="form-label">Empresa (no modificable):</p>
+                                    <p class="form-control">Nexus</p>
                                 </div>
 
 
@@ -114,13 +108,16 @@
                             <div class="col-md-6">
 
                                 <div class="mb-3">
-                                    <label for="imagenSubida" class="form-label">Foto de perfil:</label>
+                                    <label class="form-label">Foto de perfil actual:</label>
                                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img th:src="@{|image/${usuario.archivo.idArchivos}|}" style="max-width: 300px;" alt="">
+                                        <img th:src="@{|image/${usuario.archivo.idArchivos}|}" style="max-width: 300px;" alt="Foto de perfil actual">
                                     </div>
-                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
-                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
                                 </div>
+                                <div class="mb-3">
+                                    <label for="imagenSubida" class="form-label">Cargar nueva foto de perfil:</label>
+                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida" accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                                </div>
+
 
                                 <button type="submit" class="btn btn-outline-primary float-end">Aplicar cambios</button>
                             </div>
