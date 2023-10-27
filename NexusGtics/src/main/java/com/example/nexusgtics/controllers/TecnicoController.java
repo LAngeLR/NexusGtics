@@ -251,11 +251,14 @@ public class TecnicoController {
             }
             Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
             Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
-            if (optionalTicket1.isPresent() && optionalFormulario.isPresent()) {
+            Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(id);
+            if (optionalTicket1.isPresent() && optionalFormulario.isPresent() && optionalSitioCerrado.isPresent()) {
                 Ticket ticket = optionalTicket1.get();
                 Formulario formulario = optionalFormulario.get();
+                SitioCerrado sitioCerrado = optionalSitioCerrado.get();
                 model.addAttribute("ticket", ticket);
                 model.addAttribute("formulario", formulario);
+                model.addAttribute("sitioCerrado", sitioCerrado);
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
                 return "Tecnico/datost_cerrado";
             } else {
@@ -355,8 +358,11 @@ public class TecnicoController {
         List<Sitio> sitio = sitioRepository.findAll();
         model.addAttribute("sitioListC",sitio);
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
-        if (optionalTicket.isPresent()) {
+        Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(id);
+        if (optionalTicket.isPresent() && optionalSitioCerrado.isPresent()) {
             Ticket ticket = optionalTicket.get();
+            SitioCerrado sitioCerrado = optionalSitioCerrado.get();
+            model.addAttribute("sitioCerrado", sitioCerrado);
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaTicket", ticketRepository.findAll());
             return "Tecnico/desplazamientoCerrado";
