@@ -51,8 +51,8 @@
         <h1>Comentarios del Ticket</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">Home</li>
-                <li class="breadcrumb-item active">Tickets</li>
+                <li class="breadcrumb-item"><a th:href="@{/analistaOYM/}">Home</a></li>
+                <li class="breadcrumb-item active">Tickets Asignados</li>
                 <li class="breadcrumb-item active">Datos del ticket</li>
                 <li class="breadcrumb-item active">Comentarios</li>
             </ol>
@@ -65,12 +65,9 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="info-box card">
-                            <h3>Luis Medina Salazar</h3>
-                            <p>Llegando al lugar - comentar
-                                Llegando al lugar - comentar
-                                Llegando al lugar - comentar
-                            </p>
-                            <p class="text-sm-end">April 05, 2023 10:50 am</p>
+                            <input class="form-control-plaintext" th:object="${ticket}" th:field="*{idCuadrilla.tecnico.apellido}" disabled style="font-size: large;color: #00489b;"></input>
+                            <input class="form-control-plaintext"  th:object="${ticket}" th:field="*{idCuadrilla.tecnico.nombre}" disabled style="font-size: medium;color: #00489b;"></input>
+
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -107,48 +104,7 @@
 
             </div>
 
-            <div class="col-xl-6">
-                <div class="card p-4">
-                    <form action="forms/contact.php" method="post" class="php-email-form">
-                        <div class="row gy-4">
 
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-lg-5 col-md-4 label "><b>Nombre de Usuario:</b></div>
-                                    <div class="col-lg-7 col-md-8">K. Anderson</div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-lg-5 col-md-4 label "><b>ID:</b></div>
-                                    <div class="col-lg-7 col-md-8">18297223</div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-lg-5 col-md-4 label "><b>Tipo de analista</b></div>
-                                    <div class="col-lg-7 col-md-8">Mantenimiento</div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <textarea class="form-control" name="comentario" rows="6" placeholder="Escribir aquí" required></textarea>
-                            </div>
-
-                            <div class="col-md-12 text-center">
-                                <button type="submit" style="background-color: #82DEAC">Agregar</button>
-                            </div>
-                            <div class="col-md-12 text-center">
-                                <a class="btn btn-danger" th:href="@{/analistaOYM/verTicket}">Regresar</a></center>
-                            </div>
-
-                        </div>
-                    </form>
-                </div>
-
-            </div>
 
         </div>
 

@@ -1,8 +1,12 @@
 package com.example.nexusgtics.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -18,6 +22,8 @@ public class Ticket {
     private Integer idTickets;
 
     @Column(name = "descripcion", nullable = false)
+    @NotBlank(message = "El campo no debe estar vacío")
+    @Size(max = 45)
     private String descripcion;
 
     @Column(name = "estado", nullable = false)
@@ -27,6 +33,8 @@ public class Ticket {
     private LocalDate fechaCreacion;
 
     @Column(name = "fechaCierre")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @FutureOrPresent(message="La fecha de cierre debe ser en el presente o en el futuro")
     private LocalDate fechaCierre;
 
     @Column(name = "usuarioSolicitante", length = 70)
