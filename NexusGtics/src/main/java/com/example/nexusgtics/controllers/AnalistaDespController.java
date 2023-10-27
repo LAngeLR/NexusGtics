@@ -24,13 +24,10 @@ import java.util.Optional;
 public class AnalistaDespController {
     final TicketRepository ticketRepository;
     final SitioRepository sitioRepository;
-
     final UsuarioRepository usuarioRepository;
     final EmpresaRepository empresaRepository;
-
     final EquipoRepository equipoRepository;
     final ArchivoRepository archivoRepository;
-
     final SitiosHasEquiposRepository sitiosHasEquiposRepository;
 
 
