@@ -73,4 +73,6 @@ public class Usuario implements Serializable {
     @Size(max = 130, message = "La descripción no puede tener más de 130 caracteres")
     private String descripcion;
 
+
+
 }
