@@ -29,7 +29,19 @@
   <!-- Template Main CSS File -->
   <link th:href="@{/assets/css/style.css}" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-
+  <style>
+    .card {
+      border: 2px solid #000; /* Establece un borde sólido */
+      border-image: linear-gradient(0deg, #000 50%, transparent 50%) 1; /* Crea un patrón de líneas */
+      background-color: #f0f0f0; /* Establece un color de fondo */
+      padding: 20px; /* Agrega espacio interior para que las líneas no estén demasiado cerca del contenido */
+    }
+    #map { height: 48vh; width: 50hw; }
+    select {
+      width: 30%;
+      font-size: 0.8rem
+    }
+  </style>
 </head>
 
 <body>
@@ -145,7 +157,244 @@
       </nav>
     </div><!-- End Page Title -->
 
+    <!-- Nuevo diseño de formulario-->
+
     <section class="section profile" th:object="${formulario}">
+      <div class="card">
+          <div class="card mb-3">
+            <div class="card-body table-responsive">
+              <h5 class="card-title">Formulario</h5>
+              <p class="card-text">Información del cliente y ticket</p>
+              <table class="table table-bordered border-primary">
+                <tr>
+                  <td>Nombre completo de la persona solicitante:</td>
+                  <td th:text="${formulario.ticket.usuarioSolicitante}"></td>
+                </tr>
+                <tr>
+                  <td>Prioridad del Ticket</td>
+                  <td th:text="${formulario.ticket.prioridad}"></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        <div class="card mb-3">
+          <div class="card-body table-responsive">
+            <h5 class="card-title" style="color:darkred">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-8 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+              </svg> Servicio
+            </h5>
+            <table class="table table-bordered border-primary">
+              <tr>
+                <td>Tipo de servicio:</td>
+                <td th:text="${formulario.ticket.idTipoTicket.nombreTipoTicket}"></td>
+              </tr>
+              <tr>
+                <td>Fecha:</td>
+                <td th:text="${formulario.fechaLlenado}"></td>
+              </tr>
+              <tr>
+                <td>Descripción:</td>
+                <td th:text="${formulario.descripcion}"></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-body table-responsive">
+            <h5 class="card-title" style="color:darkred">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-8 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+              </svg> Información general del ticket
+            </h5>
+            <table class="table table-bordered border-primary">
+              <tr>
+                <td>Hechos relevantes en la llegada al sitio</td>
+                <td th:text="${formulario.hrelevantes}"></td>
+              </tr>
+            </table>
+            <center><table>
+              <tr>
+                <td>
+                  <div class="card" style="width: 18rem;">
+                    <img src="https://img.freepik.com/fotos-premium/hombre-tecnico-telecomunicaciones-uniforme-arnes_749345-773.jpg?w=2000" class="card-img-top" alt="fotosTecnico" width="200" height="200">
+                    <div class="card-body">
+                      <p class="card-text">Foto del Técnico</p>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="card" style="width: 18rem;">
+                    <img src="https://www.adslzone.net/app/uploads-adslzone.net/2021/10/upnp-router.jpg" class="card-img-top" alt="fotosDelSitio" width="200" height="200">
+                    <div class="card-body">
+                      <p class="card-text">Foto del sitio</p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </table></center>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-body table-responsive">
+            <h5 class="card-title" style="color:darkred">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-8 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+              </svg> Validación de sitio
+            </h5>
+            <table class="table table-bordered border-primary">
+              <tr>
+                <td>Nombre del arrendatario:</td>
+                <td th:text="${formulario.nomredantario}"> </td>
+                <td>DNI:</td>
+                <td th:text="${formulario.dni}"></td>
+              </tr>
+              <tr>
+                <td>¿Existe conexión de energía?</td>
+                <td th:if="${formulario.conexion==1}">
+                  <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
+                </td>
+                <td th:if="${formulario.conexion==0}">
+                  <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
+                </td>
+                <!---->
+                <td>¿La movilidad llegó al sitio?</td>
+                <td th:if="${formulario.movilidad==1}">
+                  <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
+                </td>
+                <td th:if="${formulario.movilidad==0}">
+                  <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
+                </td>
+              </tr>
+              <tr>
+                <td>Área del sitio</td>
+                <td th:text="${formulario.area} + 'm2' ">Área del sitio</td>
+                <!---->
+                <td>Observación</td>
+                <td th:text="${formulario.observaciones}"></td>
+              </tr>
+              <tr>
+                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                <div id="map"></div>
+                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                <script>
+                  var latitud = [[${sitioCerrado.latitud}]];
+                  var longitud = [[${sitioCerrado.longitud}]];
+                  let map = L.map('map').setView([latitud,longitud],18)
+                  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  }).addTo(map);
+                  L.marker([latitud,longitud]).addTo(map).bindPopup('Sitio').openPopup();
+                </script>
+
+                <script>
+                  function centrarMapaEnCoordenadasIniciales() {
+                    map.setView([latitud, longitud], 18);
+                  }
+                  var botonCentrar = L.control({ position: 'bottomright' });
+
+                  botonCentrar.onAdd = function (map) {
+                    var container = L.DomUtil.create('div', 'boton-centrar');
+                    var button = L.DomUtil.create('button', 'btn btn-primary', container);
+                    button.type = 'button';
+                    var icono = L.DomUtil.create('i', 'bx bx-collapse', button);
+                    L.DomEvent.on(button, 'click', centrarMapaEnCoordenadasIniciales);
+                    return container;
+                  };
+                  botonCentrar.addTo(map);
+                </script>
+              </tr>
+              <tr>
+                <p>Fotos de sitio</p>
+                <div id="carouselExample" class="carousel slide">
+                  <div class="carousel-inner">
+                    <div class="carousel-item active">
+                      <img src="https://peruconstruye.net/wp-content/uploads/2021/11/huancavelica-7.jpg" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                      <img src="https://data-peru.itp.gob.pe/api/image?slug=geo&id=0907&size=thumb" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                      <img src="https://elperuano.pe/suplementosflipping/lonuestro/270/web/img/foto14.jpg" class="d-block w-100" alt="...">
+                    </div>
+                  </div>
+                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
+                </div>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div  class="card mb-3">
+          <div class="card-body table-responsive">
+            <h5 class="card-title" style="color:darkred">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-8 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+              </svg> Trabajo Realizado
+            </h5>
+            <table class="table table-bordered border-primary">
+              <tr>
+                <td>¿Se realizó construcción de infraestructura?</td>
+                <td th:if="${formulario.conexion==1}">
+                  <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
+                </td>
+                <td th:if="${formulario.conexion==0}">
+                  <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
+                </td>
+                <!---->
+                <td>¿Se realizó instalaciones electricas?</td>
+                <td th:if="${formulario.movilidad==1}">
+                  <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
+                </td>
+                <td th:if="${formulario.movilidad==0}">
+                  <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
+                </td>
+              </tr>
+              <tr>
+                <td>Tecnología instalada</td>
+                <td>2G, 3G, 4G</td>
+                <!---->
+                <td>Descripción de trabajos realizados</td>
+                <td th:text="${formulario.trabarealizados}"></td>
+              </tr>
+              <tr>
+                <p>Fotos de instalación</p>
+                <div id="carousel" class="carousel slide">
+                  <div class="carousel-inner">
+                    <div class="carousel-item active">
+                      <img src="https://cdn.www.gob.pe/uploads/document/file/1487402/standard_ANTENAS.jpg.jpg" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                      <img src="https://s1.eestatic.com/2020/12/23/omicrono/545706383_168200103_1706x960.jpg" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                      <img src="https://www.redusers.com/noticias/wp-content/uploads/2014/08/icampo.fw_-650x450.png" class="d-block w-100" alt="...">
+                    </div>
+                  </div>
+                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
+                </div>
+              </tr>
+            </table>
+          </div>
+        </div>
+        </div>
+      </section>
+      </div>
+    <!--Fin diseño de formulario-->
+    <!--<section class="section profile" th:object="${formulario}">
       <table class="table table-bordered border-primary">
         <thead>
           <tr>
@@ -280,240 +529,7 @@
         </tbody>
       </table>
       <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicketCerrado?id='+${formulario.ticket.idTickets}}" style="background-color: rgba(43,48,53,0.51)">Regresar</a>
-    </section>
-
-
-    <!--<section class="section profile" th:object="${formulario}">
-      <div class="row">
-        <div class="col-lg-8">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Información del cliente y ticket:</h5>
-
-              <div class="tab-pane fade show active profile-overview" id="datos-overview">
-                <div class="row">
-                  <div class="col-sm-10">
-
-                    <div class="row">
-                      <div class="col-lg-3 col-md-4 label">Nombre completo</div>
-                      <div class="col-lg-9 col-md-8" th:text="${formulario.ticket.usuarioSolicitante}"></div>
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-3 col-md-4 label">Prioridad del Ticket</div>
-                      <div class="col-lg-9 col-md-8" th:text="${formulario.ticket.prioridad}"></div>
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-3 col-md-4 label">Servicio</div>
-                      <div class="col-lg-9 col-md-8" th:text="${formulario.ticket.idTipoTicket.nombreTipoTicket}"></div>
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-3 col-md-4 label">Fecha</div>
-                      <div class="col-lg-9 col-md-8" th:text="${formulario.fechaLlenado}"></div>
-                    </div>
-
-                  </div>
-                  <div class="mb-3">
-                    <h5>Descripción:</h5>
-                    <div class="col-lg-3 col-md-4 label">Del trabajo realizado</div>
-                    <div class="col-lg-9 col-md-8" th:text="${formulario.descripcion}"></div>
-                  </div>
-                </div>
-
-                <div class="mb-3">
-                    <h5><b>Subir foto:</b></h5>
-                    <label for="imagenSubida" class="form-label">Agregar imagen</label>
-                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida" accept="image/*"
-                           onchange="previewImage(event, '#imgPreview')">
-                </div>
-
-                <div class="mb-3">
-                  <label class="form-label">Foto de trabajo realizado:</label>
-                  <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                    <img id="imgPreview" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                  </div>
-                </div>
-
-                <div class="row mb-5">
-                  <h5><b>Datos del técnico:</b></h5>
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Nombre</div>
-                    <div class="col-lg-9 col-md-8" th:text="${formulario.tecnico.nombre}"></div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Apellido</div>
-                    <div class="col-lg-9 col-md-8" th:text="${formulario.tecnico.apellido}"></div>
-                  </div>
-                  </div>
-
-                <div class="row mb-5">
-                  <h5><b>Información General del ticket</b></h5>
-                  <p>Llegada a sitio:</p>
-                  <div class="mb-3 row">
-                    <label for="imagenSubida1" class="form-label">Foto del técnico </label>
-                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                      <img id="imgPreview1" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                    </div>
-                    <input class="form-control" type="file" name="imagenSubida1" id="imagenSubida1"
-                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                  </div>
-                  <div class="mb-3 row">
-                    <p>Descripción</p>
-                    <label class="col-sm-4 col-form-label">Hechos relevantes: </label>
-                    <div class="form-floating col-sm-8">
-                      <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" style="height: 100px" disabled>He colocado la maquina en su lugar despues de repararlo</textarea>
-                    </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <label for="imagenSubida2" class="form-label">Foto del sitio </label>
-                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                      <img id="imgPreview2" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                    </div>
-                    <input class="form-control" type="file" name="imagenSubida2" id="imagenSubida2"
-                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                  </div>
-
-                </div>
-                <div class="row mb-5">
-                  <h5><b>Validación de Sitio</b></h5>
-                  <div class="mb-3 row">
-                    <label class="col-sm-6 col-form-label">¿Existe conexión de energía? </label>
-                    <div class="col-sm-6">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked disabled>
-                        <label class="form-check-label" for="flexSwitchCheckChecked">Sí</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <label class="col-sm-5 col-form-label">Nombre de arrendatario: </label>
-                    <div class="col-sm-7">
-                      <input type="text" class="form-control"  th:field="*{ticket.usuarioSolicitante}" disabled>
-                    </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <label class="col-sm-5 col-form-label">DNI del arrendatario: </label>
-                    <div class="col-sm-7">
-                      <input class="form-control" type="text" placeholder="72495536" disabled>
-                    </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <label class="col-sm-6 col-form-label">¿La movilidad llega al sitio?</label>
-                    <div class="col-sm-6">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked1" checked disabled>
-                        <label class="form-check-label" for="flexSwitchCheckChecked1">Sí</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <label class="col-sm-6 col-form-label">Área del sitio /m2: </label>
-                    <div class="col-sm-6">
-                      <input class="form-control" type="number" placeholder="25,2" disabled>
-                    </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <p>Observaciones</p>
-                    <label class="col-sm-4 col-form-label">Descripción: </label>
-                    <div class="form-floating col-sm-8">
-                      <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" disabled></textarea>
-                      <label for="floatingTextarea2">Comments</label>
-                    </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <div id="map" ></div>
-                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                    <script>
-                      let map = L.map('map').setView([-12.06802,-77.03462],14)
-                      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                      }).addTo(map);
-                      L.marker([-12.06802,-77.03462]).addTo(map).bindPopup('Sitio').openPopup();
-
-                    </script>
-                  </div>
-                  <div class="mb-3 row">
-                    <label for="imagenSubida3" class="form-label">Foto del sitio </label>
-                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                      <img id="imgPreview3" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                    </div>
-                    <input class="form-control" type="file" name="imagenSubida3" id="imagenSubida3"
-                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                  </div>
-                </div>
-                <div class="row mb-5">
-                  <h5><b>Trabajo realizado</b></h5>
-                  <div class="mb-3 row">
-                    <label class="col-sm-6 col-form-label">¿Se realizó construcción de infraestructura? </label>
-                    <div class="col-sm-6">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked2" checked disabled>
-                        <label class="form-check-label" for="flexSwitchCheckChecked2">Sí</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <label class="col-sm-6 col-form-label">¿Se realizó instalaciones electricas? </label>
-                    <div class="col-sm-6">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked3" checked disabled>
-                        <label class="form-check-label" for="flexSwitchCheckChecked3">Sí</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <label class="col-sm-6 col-form-label">Tecnología instalada: </label>
-                    <div class="col-sm-6">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" >
-                        <label class="form-check-label" for="flexCheckDefault">FFTH</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
-                        <label class="form-check-label" for="flexCheckDefault1">HFC</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2">
-                        <label class="form-check-label" for="flexCheckDefault2">2G</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault3">
-                        <label class="form-check-label" for="flexCheckDefault3">3G</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault4">
-                        <label class="form-check-label" for="flexCheckDefault4">4G</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault5">
-                        <label class="form-check-label" for="flexCheckDefault5">5G</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <p><b>Descripción</b></p>
-                    <label class="col-sm-4 col-form-label">Trabajos realizados: </label>
-                    <div class="form-floating col-sm-8">
-                      <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled1" style="height: 100px" disabled>Se procedió con lel montaje de la torre, además de la adecuación del gabinete para la correcta operación de los equipos a instalarse. Se instalron: BBU, RRU, Router, Switch, Rectificadores y baterías.</textarea>
-                    </div>
-                  </div>
-                  <div class="mb-3 row">
-                    <label class="col-sm-2 col-form-label">Foto del sitio </label>
-                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                      <img id="imgPreview4" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                    </div>
-                    <input class="form-control" type="file" name="imagenSubida3" id="imagenSubida4"
-                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                  </div>
-                  </div>
-              </div>
-              <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicketCerrado?id='+${formulario.ticket.idTickets}}" style="background-color: rgba(43,48,53,0.51)">Regresar</a>
-            </div>
-          </div>
-
-        </div>
-      </div>
     </section>-->
-  </div>
 </main><!-- End #main -->
 
 <!-- ======= Footer ======= -->
