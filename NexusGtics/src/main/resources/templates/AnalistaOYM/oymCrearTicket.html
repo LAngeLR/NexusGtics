@@ -42,7 +42,7 @@
 <body>
 
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('Analista de Mantenimiento')"><!-- End Header --></header>
+<header th:replace="Fragmentos/header :: header('analistaOYM')"><!-- End Header --></header>
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuAnalistaOYM :: menu('crearTicket')">
 </aside><!-- End Sidebar-->
@@ -66,6 +66,19 @@
                     <div class="pagetitle">
                         <h1 class="card-title">Crear ticket</h1>
                     </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}">
+                        A simple success alert—check it out!
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msgPrioridad != null}" th:text="${msgPrioridad}">
+                        A simple success alert—check it out!
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msgSitio != null}" th:text="${msgSitio}">
+                        A simple success alert—check it out!
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msg1 != null}" th:text="${msg1}">
+                        A simple success alert—check it out!
+                    </div>
+
                     <form method="POST" th:action="@{/analistaOYM/saveTicket}" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6">

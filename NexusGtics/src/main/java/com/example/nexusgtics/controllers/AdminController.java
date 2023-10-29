@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,7 @@ public class AdminController {
         this.archivoRepository = archivoRepository;
         this.passwordEncoder = passwordEncoder;
     }
+    List<String> extensionesPermitidas = Arrays.asList("jpg", "jpeg", "png");
 
     @GetMapping({"/","","admin","administrador"})
     public String paginaPrincipal(Model model){
@@ -171,6 +173,15 @@ public class AdminController {
                 return "Administrador/editarUsuario";
             }
         }
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+            if (usuario.getId() == null) {
+                return "Administrador/crearUsuario";
+            } else {
+                return "Administrador/editarUsuario";
+            }
+        }
+
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (usuario.getArchivo() == null) {
                 usuario.setArchivo(new Archivo());
@@ -534,6 +545,15 @@ public class AdminController {
                 return "Administrador/editarSitio";
             }
         }
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+            if (sitio.getIdSitios() == null) {
+                return "Administrador/crearSitio";
+            } else {
+                return "Administrador/editarSitio";
+            }
+        }
+
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (sitio.getArchivo() == null) {
                 sitio.setArchivo(new Archivo());
@@ -682,8 +702,17 @@ public class AdminController {
 
         if(equipo.getTipoequipo() == null || equipo.getTipoequipo().getIdTipoEquipo() == null){
             model.addAttribute("msgTipoEquipo", "Escoger un tipo de Equipo");
+            model.addAttribute("msgImagen", "Escoger un tipo de imagen valido");
             model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
 
+            if (equipo.getIdEquipos() == null) {
+                return "Administrador/crearEquipo";
+            } else {
+                return "Administrador/editarEquipo";
+            }
+        }
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
             if (equipo.getIdEquipos() == null) {
                 return "Administrador/crearEquipo";
             } else {
