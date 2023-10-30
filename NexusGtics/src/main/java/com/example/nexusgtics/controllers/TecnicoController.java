@@ -475,6 +475,8 @@ public class TecnicoController {
                 SitioCerrado sitioCerrado = sitioCerradoOptional.get();
                 model.addAttribute("formulario", formulario);
                 model.addAttribute("sitioCerrado", sitioCerrado);
+                List<Ticket> listaT = ticketRepository.listarEstado();
+                model.addAttribute("listaTicket", listaT);
                 return "Tecnico/formularioCerrado";
             } else {
             return "redirect:/tecnico/datostickets";
