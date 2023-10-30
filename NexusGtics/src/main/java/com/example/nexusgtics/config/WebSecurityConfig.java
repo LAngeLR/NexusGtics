@@ -62,10 +62,10 @@ public class WebSecurityConfig {
                             case "Super administrador" -> response.sendRedirect(request.getContextPath()+"/superadmin");
                             case "Administrador" -> response.sendRedirect(request.getContextPath()+"/admin");
                             case "Analista de OyM" -> response.sendRedirect(request.getContextPath()+"/analistaOYM");
-                            case "Analista de Planificación o Ingeniería" ->
+                            case "Analista de Planificacion o Ingenieria" ->
                                     response.sendRedirect(request.getContextPath()+"/analistaDespliegue");
                             case "Supervisor de Campo" -> response.sendRedirect(request.getContextPath()+"/supervisor");
-                            case "Técnico" -> response.sendRedirect(request.getContextPath()+"/tecnico");
+                            case "Tecnico" -> response.sendRedirect(request.getContextPath()+"/tecnico");
                             default -> response.sendRedirect(request.getContextPath()+"/login");
                         }
                     }
@@ -76,9 +76,9 @@ public class WebSecurityConfig {
                 .requestMatchers("/superadmin", "/superadmin/**").hasAnyAuthority("Super administrador")
                 .requestMatchers("/admin", "/admin/**").hasAnyAuthority("Administrador")
                 .requestMatchers("/analistaOYM", "/analistaOYM/**").hasAnyAuthority("Analista de OyM")
-                .requestMatchers("/analistaDespliegue", "/analistaDespliegue/**").hasAnyAuthority("Analista de Planificación o Ingeniería")
+                .requestMatchers("/analistaDespliegue", "/analistaDespliegue/**").hasAnyAuthority("Analista de Planificacion o Ingenieria")
                 .requestMatchers("/supervisor", "/supervisor/**").hasAnyAuthority("Supervisor de Campo")
-                .requestMatchers("/tecnico", "/tecnico/**").hasAnyAuthority("Técnico")
+                .requestMatchers("/tecnico", "/tecnico/**").hasAnyAuthority("Tecnico")
                 .anyRequest().permitAll();
         http.logout()
                 .logoutSuccessUrl("/closeSession")

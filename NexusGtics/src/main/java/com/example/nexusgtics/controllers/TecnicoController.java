@@ -49,9 +49,6 @@ public class TecnicoController {
 
     @GetMapping(value = {"/", ""})
     public String paginaPrincipal(Model model) {
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession();
-        System.out.println(session);
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
         return "Tecnico/tecnico";
