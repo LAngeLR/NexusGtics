@@ -255,8 +255,6 @@
                                 <a class="btn btn-outline-warning" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" th:href="@{'/tecnico/comentarios?id=' + ${ticket.idTickets}}"><b>Comentarios</b></a>
                                 <button type="submit" class="btn btn-outline-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" th:if="${ticket.estado==4 || ticket.estado==5 || ticket.estado==6}">Guardar</button>
                             </center>
-
-
                         </form>
                     </div>
                     <div class="col-xl-6">

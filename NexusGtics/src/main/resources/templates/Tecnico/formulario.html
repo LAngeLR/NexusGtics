@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="utf-8">
@@ -35,7 +35,11 @@
             width: 30%;
             font-size: 0.8rem
         }
-
+        .imagen-recortada {
+            width: 200px; /* Ancho deseado de la imagen recortada */
+            height: 200px; /* Altura deseada de la imagen recortada */
+            overflow: hidden; /* Oculta cualquier contenido que se extienda más allá del tamaño del div */
+        }
     </style>
 </head>
 
@@ -122,10 +126,6 @@
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <!--a class="dropdown-item d-flex align-items-center" th:href="@{/closeSession}">
-                            <i class="bi bi-box-arrow-right"></i>
-                            <span>Cerrar sesión</span>
-                        </a-->
                         <form th:action="@{/logout}" method="post">
                             <button type="submit" class="dropdown-item d-flex align-items-center">
                                 <i class="bi bi-box-arrow-right"></i>
@@ -143,19 +143,19 @@
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuTecnico :: menu('formulario')"></aside><!-- End Sidebar-->
 
-<main id="main" class="main">
+<!--<main id="main" class="main">
     <div class="container">
         <div class="pagetitle">
-        <h1>Formulario</h1>
-        <nav>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/tecnico/}">Home</a></li>
-                <li class="breadcrumb-item active">Tickets Asignados</li>
-                <li class="breadcrumb-item active">Datos del ticket</li>
-                <li class="breadcrumb-item active">Formulario</li>
-            </ol>
-        </nav>
-    </div><!-- End Page Title -->
+            <h1>Formulario</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/tecnico/}">Home</a></li>
+                    <li class="breadcrumb-item active">Tickets Asignados</li>
+                    <li class="breadcrumb-item active">Datos del ticket</li>
+                    <li class="breadcrumb-item active">Formulario</li>
+                </ol>
+            </nav>
+        </div>
 
         <section class="section">
         <div class="row">
@@ -163,22 +163,16 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Información del cliente y ticket:</h5>
-                        <!-- Advanced Form Elements -->
                         <form method="POST" th:action="@{/tecnico/saveFormulario}" th:object="${formulario}"  enctype="multipart/form-data" style="margin-bottom: -35px;">
                             <div class="row">
                                 <div class="col-sm-10">
-                                    <!--<input type="hidden" class="form-control" th:field="*{}">
-                                    <input type="hidden" class="form-control" th:field="*{}">-->
-
                                     <div class="mb-3 ">
                                         <label class="form-label">ID del Ticket</label>
                                         <input type="number" class="form-control"  th:field="*{ticket.idTickets}" disabled>
-
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Nombre completo</label>
                                         <input type="text" class="form-control"  th:field="*{ticket.usuarioSolicitante}" disabled>
-
                                     </div>
                                     <div class="mb-3 ">
                                         <label class=" form-label">Prioridad del Ticket</label>
@@ -191,9 +185,9 @@
 
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Fecha:</label>
-                                        <input type="text" class="form-control" th:field="*{fechaLlenado}">
-
+                                        <label class="form-label">Fecha y hora:</label>
+                                        <br>
+                                        <input type="datetime-local" class="form-control" name="fechahora" step="1" min="2023-01-01T00:00" max="2023-12-31T12:00" value="2023-01-01T12:00">
                                     </div>
 
                                 </div>
@@ -390,15 +384,7 @@
                                         <a type="button" class="btn btn-secondary" th:href="@{'/tecnico/verTicket?id='+${formulario.ticket.idTickets}}">Cancelar</a></center>
                                 </div>
                                 </div>
-
-                            <!--<div class="mb-3">
-                                <h5><b>Subir foto:</b></h5>
-                                <label for="imagenSubida" class="form-label">Agregar imagen</label>
-                                <input class="form-control" type="file" name="imagenSubida" id="imagenSubida" accept="image/*"
-                                       onchange="previewImage(event, '#imgPreview')">
-                            </div> -->
-
-                        </form><!-- End General Form Elements -->
+                        </form>
 
                     </div>
                 </div>
@@ -407,7 +393,75 @@
         </div>
     </section>
     </div>
-</main><!-- End #main -->
+</main>-->
+
+<main  id="main" class="main">
+        <div class="pagetitle">
+            <h1>Formulario</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/tecnico/}">Home</a></li>
+                    <li class="breadcrumb-item active">Tickets Asignados</li>
+                    <li class="breadcrumb-item active">Datos del ticket</li>
+                    <li class="breadcrumb-item active">Formulario</li>
+                </ol>
+            </nav>
+        </div>
+    <div class="container py-4">
+        <div class="p-5 mb-4 card" style="background-color: #f8fdfb;">
+            <h3 class="display-5 fw-bold" style="color:#7199a2">Formulario</h3>
+            <div class="row">
+                <div class="col-sm-3 mb-3 mb-sm-0">
+                        <div class="card-body">
+                            <div class="imagen-recortada">
+                                <img style="width: 105%;height:105%" src="https://static.vecteezy.com/system/resources/previews/024/658/992/non_2x/3d-male-character-pointing-left-free-png.png" class="img-fluid" alt="llegadasitio">
+                            </div>
+                        </div>
+                </div>
+                <div class="col-sm-9">
+                        <div class="card-body">
+                            <p>En la parte inferior encontrarás 3 formularios.</p>
+                            <p>- En el <b>primer</b> formulario completa en relación a tu llegada, ¿qué problema sucede?.</p>
+                            <p>- En el <b>segundo</b> formulario completa en relación al sitio, ¿en dondé te encuentras?, describe tu alrededor, ¿existe conexión, movilidad?, etc</p>
+                            <p>- Finalmente en el <b>tercer</b> formulario, responde las preguntas una vez finalizado todo el trabajo.</p>
+                            <p>No olvides que debes de llenar todos los formularios para que el Supervisor cierre el ticket.</p>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="button" class="btn" style="background-color:#202a3b; color: white">Atrás</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+       <center><div class="row align-items-md-stretch">
+            <div class="col-md-4">
+                <div class="h-100 p-5 rounded-3" style="background-color: #202a3b; color:white">
+                    <img style="width: 65%;height: 65%" src="https://us.123rf.com/450wm/massimosanti/massimosanti1802/massimosanti180200003/95316837-hombre-trabajando-los-t%C3%A9cnicos-est%C3%A1n-reparando-sistemas-de-transmisi%C3%B3n-de-alto-voltaje-en-los.jpg" class="img-fluid" alt="llegadasitio">
+                    <br><br>
+                    <h5><b>Llegada a sitio</b></h5>
+                    <button class="btn btn-outline-light" type="button">Formulario 1</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="h-100 p-5 bg-body-tertiary border rounded-3">
+                    <img style="width: 65%;height:65%"  src="https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/15/14620/7281" class="img-fluid" alt="validación">
+                    <br> <br>
+                    <h5><b>Validación de sitio</b></h5>
+                    <button class="btn btn-outline-secondary" type="button">Formulario 2</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="h-100 p-5 rounded-3" style="background-color: #202a3b; color:white">
+                    <img style="width:65%;height: 65%"  src="https://www.osiptel.gob.pe/media/ixnh1ufj/21613752-50b7-4024-975f-26de7c512368.jpg" class="img-fluid" alt="trabajo">
+                    <br><br>
+                    <h5><b>Trabajo realizado</b></h5>
+                    <button class="btn btn-outline-light" type="button">Formulario 3</button>
+                </div>
+            </div>
+        </div></center>
+    </div>
+</main>
+
 
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
