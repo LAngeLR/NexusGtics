@@ -48,12 +48,9 @@ public class TecnicoController {
     }
 
     @GetMapping(value = {"/", ""})
-    public String paginaPrincipal(Model model,HttpSession session) {
-        Usuario user=(Usuario) session.getAttribute("usuario");
-        System.out.println(user.getNombre());
+    public String paginaPrincipal(Model model) {
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
-
         return "Tecnico/tecnico";
     }
 
