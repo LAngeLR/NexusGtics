@@ -1,7 +1,11 @@
 package com.example.nexusgtics.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class HomeController {
@@ -25,4 +29,7 @@ public class HomeController {
     public String cerrarsesion(){
         return "Sistema/cerrarsesion";
     }
+
+
+
 }
