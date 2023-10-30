@@ -3,6 +3,7 @@ package com.example.nexusgtics.controllers;
 import com.example.nexusgtics.entity.Archivo;
 import com.example.nexusgtics.entity.Usuario;
 import com.example.nexusgtics.repository.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -312,10 +313,13 @@ public class SuperAdminController {
     }
 
     @GetMapping({"/perfilEditar"})
-    public String perfilEditar(Model model, @RequestParam("id") String idStr,
-                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
+    public String perfilEditar(Model model,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
+
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
         try{
-            int id = Integer.parseInt(idStr);
+            //int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/superadmin/listaUsuario";
             }
@@ -336,10 +340,11 @@ public class SuperAdminController {
     }
 
     @GetMapping({"/perfilContra"})
-    public String perfilContra(Model model, @RequestParam("id") String idStr){
-
+    public String perfilContra(Model model,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
         try{
-            int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/superadmin/listaUsuario";
             }
@@ -356,9 +361,11 @@ public class SuperAdminController {
     }
 
     @PostMapping({"/actualizarContra"})
-    public String actualizarContra(Model model, @RequestParam("id") int id, @RequestParam("password") String contrasenia,
+    public String actualizarContra(Model model, @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession,
+                                   @RequestParam("password") String contrasenia,
                                    @RequestParam("newpassword") String contraseniaNueva, @RequestParam("renewpassword") String contraseniaConfirm, RedirectAttributes redirectAttributes){
-        String idStr=String.valueOf(id);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
 
         String contraseniaAlmacenada = usuarioRepository.obtenerContraseña(id);
 
@@ -368,7 +375,7 @@ public class SuperAdminController {
             return "redirect:/superadmin/perfilSuperadmin";
         } else {
             redirectAttributes.addFlashAttribute("error","La contraseña actual no es correcta.");
-            return "redirect:/superadmin/perfilContra?id="+idStr;
+            return "redirect:/superadmin/perfilContra";
         }
     }
 }

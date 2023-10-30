@@ -85,6 +85,8 @@
                       <div class="invalid-feedback">Por favor, ingresa una contraseña</div>
                     </div>
 
+                    <h6 th:if="${param.error}" class="text-danger">Acceso denegado</h6>
+
                     <!--
                     <div class="col-12">
                       <div class="form-check">
