@@ -71,14 +71,14 @@
                     <li class="dropdown-divider">
                         Tú tienes nuevos mensajes
                     </li>
-                    <li class="message-item" th:each=" ticket, info : ${listaTicket}" th:if="${ticket.estado==2}">
+                    <li class="message-item" th:each=" ticket, info : ${listaTicket}" th:if="${ticket.estado==3}">
                         <a th:href="@{'/tecnico/verTicket?id='+${ticket.idTickets}}">
                             <div>
                                 <h6 th:text="${ticket.usuarioSolicitante}"></h6>
                                 <p style="font-size: xx-small" th:text="${ticket.fechaCreacion}"></p>
                                 <p th:text="${'ID del Ticket: '+ticket.idTickets}"></p>
                                 <p th:text="${ticket.descripcion}" style="font-size: xx-small"></p>
-                                <p th:if="${ticket.estado==2}"><span class="badge text-bg-primary">Nuevo</span></p>
+                                <p th:if="${ticket.estado==3}"><span class="badge text-bg-primary">Nuevo</span></p>
                             </div>
                         </a>
                     </li>
@@ -106,7 +106,7 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" th:href="@{'/' + ${cargo} +'/perfil'}">
+                        <a class="dropdown-item d-flex align-items-center" th:href="@{'/tecnico/perfilTecnico'}">
                             <i class="bi bi-person"></i>
                             <span>Mi perfil</span>
                         </a>
@@ -114,15 +114,17 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-
-
-
-
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" th:href="@{/login}">
+                        <!--a class="dropdown-item d-flex align-items-center" th:href="@{/closeSession}">
                             <i class="bi bi-box-arrow-right"></i>
                             <span>Cerrar sesión</span>
-                        </a>
+                        </a-->
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="dropdown-item d-flex align-items-center">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Cerrar sesión</span>
+                            </button>
+                        </form>
                     </li>
 
                 </ul>

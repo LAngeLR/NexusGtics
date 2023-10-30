@@ -48,12 +48,12 @@ public class TecnicoController {
     }
 
     @GetMapping(value = {"/", ""})
-    public String paginaPrincipal(Model model) {
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession();
-        System.out.println(session);
+    public String paginaPrincipal(Model model,HttpSession session) {
+        Usuario user=(Usuario) session.getAttribute("usuario");
+        System.out.println(user.getNombre());
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
+
         return "Tecnico/tecnico";
     }
 

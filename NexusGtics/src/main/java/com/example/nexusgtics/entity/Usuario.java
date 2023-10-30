@@ -40,7 +40,7 @@ public class Usuario implements Serializable {
     private String contrasenia;
 
     @Column(name = "habilitado")
-    private Boolean habilitado = false;
+    private Boolean habilitado;
 
     @Column(name = "fechaRegistro")
     private LocalDate fechaRegistro;
