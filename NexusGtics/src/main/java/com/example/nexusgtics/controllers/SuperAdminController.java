@@ -238,17 +238,38 @@ public class SuperAdminController {
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/superadmin/listaUsuario";
             }
+
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
+
                 usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
-                model.addAttribute("usuario", usuario);
-                return "Superadmin/editarUsuario";
+
+                List<Usuario> administradores = usuarioRepository.listaDeAdministradores();
+                boolean encontrado = false;
+                for (Usuario administrador : administradores) {
+                    System.out.println(administrador.getId());
+                    //int idAdministrador = administrador.getId();
+                    if (administrador.getId() == id) {
+                        encontrado = true;
+                        model.addAttribute("usuario", usuario);
+                        break;
+                    }
+                }
+
+                if (encontrado) {
+                    return "Superadmin/editarUsuario";
+                } else {
+                    return "redirect:/superadmin/listaUsuario";
+                }
+
+                //return "Superadmin/editarUsuario";
             } else {
                 return "redirect:/superadmin";
             }
         } catch (NumberFormatException e) {
             return "redirect:/superadmin/listaUsuario";
         }
+
     }
 
 
