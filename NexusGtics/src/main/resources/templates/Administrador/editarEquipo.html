@@ -18,7 +18,7 @@
       <div class="pagetitle">
         <nav>
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Gestión de equipos</a></li>
+            <li class="breadcrumb-item"><a >Gestión de equipos</a></li>
             <li class="breadcrumb-item active">Editar equipo</li>
           </ol>
         </nav>
@@ -29,6 +29,9 @@
           <div class="rounded p-5" style="background-color: #FFFFFF;">
             <div class="pagetitle">
               <h1 class="card-title">Edición de equipo</h1>
+            </div>
+            <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
+              A simple success alert—check it out!
             </div>
             <form method="POST" th:action="@{/admin/updateEquipo}" th:object="${equipo}" enctype="multipart/form-data" style="margin-bottom: -35px;">
               <div class="row">
