@@ -447,7 +447,6 @@ public class SuperAdminController {
         }
     }
 
-
     @GetMapping({"/perfilEditar"})
     public String perfilEditar(Model model,
                                @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
@@ -517,4 +516,5 @@ public class SuperAdminController {
             return "redirect:/superadmin/perfilContra";
         }
     }
+
 }
