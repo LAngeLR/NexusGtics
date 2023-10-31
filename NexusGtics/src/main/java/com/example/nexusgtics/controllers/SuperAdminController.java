@@ -3,8 +3,14 @@ package com.example.nexusgtics.controllers;
 import com.example.nexusgtics.entity.Archivo;
 import com.example.nexusgtics.entity.Usuario;
 import com.example.nexusgtics.repository.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import jakarta.websocket.SessionException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,6 +45,9 @@ public class SuperAdminController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
     @GetMapping({"/","","superadmin","SuperAdmin"})
     public String paginaPrincipal(Model model){
         model.addAttribute("currentPage", "Inicio");
@@ -48,7 +57,10 @@ public class SuperAdminController {
     /* --------------------- PERFIL ---------------------------- */
 
     @GetMapping({"/perfil","perfilSuperadmin","perfilsuperadmin"})
-    public String perfilSuperadmin(){
+    public String perfilSuperadmin(Model model,
+                                   @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("usuario", u);
         return "Superadmin/perfilSuperadmin";
     }
 
@@ -150,7 +162,8 @@ public class SuperAdminController {
         }
     }
 
-    /*CREAR NUEVO USUARIO*/
+
+    /*CREAR NUEVO USUARIO --> Nuevo Administrador*/
     @PostMapping("/saveUsuario")
     public String saveUsuario(@RequestParam("imagenSubida") MultipartFile file,
                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
@@ -213,6 +226,31 @@ public class SuperAdminController {
             }
         }
     }
+
+
+    /*EDITAR USUARIOS*/
+    @GetMapping({"/editarUsuario","editarusuario"})
+    public String editarUsuario(Model model, @RequestParam("id") String idStr,
+                                @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
+
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/superadmin/listaUsuario";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
+                model.addAttribute("usuario", usuario);
+                return "Superadmin/editarUsuario";
+            } else {
+                return "redirect:/superadmin";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/superadmin/listaUsuario";
+        }
+    }
+
 
     @PostMapping("/updateUsuario")
     public String updateUsuario(@RequestParam("imagenSubida") MultipartFile file,
@@ -288,34 +326,109 @@ public class SuperAdminController {
         }
     }
 
-    /*EDITAR USUARIO*/
-    @GetMapping({"/editarUsuario","editarusuario"})
-    public String editarUsuario(Model model, @RequestParam("id") String idStr,
-                                @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
 
-        try{
-            int id = Integer.parseInt(idStr);
-            if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/superadmin/listaUsuario";
-            }
-            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-            if (optionalUsuario.isPresent()) {
-                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
-                model.addAttribute("usuario", usuario);
-                return "Superadmin/editarUsuario";
+
+    /* PERFIL DEL SUPERADMINISTRADOR */
+    @PostMapping("/savePerfil")
+    public String savePerfil(@RequestParam("imagenSubida") MultipartFile file,
+                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+                              Model model,
+                              RedirectAttributes attr, HttpSession httpSession){
+        
+
+        if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
+            model.addAttribute("msgCargo", "Escoger un cargo");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+
+            if (usuario.getId() == null) {
+                return "Superadmin/perfil";
             } else {
-                return "redirect:/superadmin";
+                return "Superadmin/perfilEditar";
             }
-        } catch (NumberFormatException e) {
-            return "redirect:/superadmin/listaUsuario";
+        }
+        if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
+            model.addAttribute("msgEmpresa", "Escoger una empresa");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (usuario.getId() == null) {
+                return "Superadmin/perfil";
+            } else {
+                return "Superadmin/perfilEditar";
+            }
+        }
+
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+            if (usuario.getId() == null) {
+                return "Superadmin/perfil";
+            } else {
+                return "Superadmin/perfilEditar";
+            }
+        }
+
+        int maxFileSize = 10485760;
+
+        if (file.getSize() > maxFileSize) {
+            System.out.println(file.getSize());
+            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
+            if (usuario.getId() == null) {
+                return "Superadmin/perfil";
+            } else {
+                return "redirect:/superadmin/perfilEditar";
+            }
+        }
+
+        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+            if (usuario.getArchivo() == null) {
+                usuario.setArchivo(new Archivo());
+            }
+            String fileName = file.getOriginalFilename();
+            try{
+                //validación de nombre, apellido y correo
+                Archivo archivo = usuario.getArchivo();
+                archivo.setNombre(fileName);
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+                int idImagen = archivo.getIdArchivos();
+                usuario.getArchivo().setIdArchivos(idImagen);
+                if (usuario.getId() == null) {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                }
+                usuarioRepository.save(usuario);
+                //Usuario u = (Usuario) httpSession.getAttribute("usuario");
+                //HttpSession session = request.getSession(true);
+                //session.setAttribute("nombreUsuario", "nuevoNombre");
+
+                return "redirect:/superadmin/perfil";
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        } else { //hay al menos 1 error
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (usuario.getId() == null) {
+                return "Superadmin/perfil";
+            } else {
+                return "Superadmin/perfilEditar";
+            }
         }
     }
 
+
     @GetMapping({"/perfilEditar"})
-    public String perfilEditar(Model model, @RequestParam("id") String idStr,
-                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
+    public String perfilEditar(Model model,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
+
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
         try{
-            int id = Integer.parseInt(idStr);
+            //int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/superadmin/listaUsuario";
             }
@@ -327,7 +440,7 @@ public class SuperAdminController {
                 model.addAttribute("listaCargo", cargoRepository.findAll());
                 return "Superadmin/perfilEditar";
             } else {
-                return "redirect:/superadmin";
+                return "redirect:/superadmin/perfil";
             }
         } catch (NumberFormatException e) {
             return "redirect:/superadmin/listaUsuario";
@@ -336,10 +449,11 @@ public class SuperAdminController {
     }
 
     @GetMapping({"/perfilContra"})
-    public String perfilContra(Model model, @RequestParam("id") String idStr){
-
+    public String perfilContra(Model model,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
         try{
-            int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/superadmin/listaUsuario";
             }
@@ -348,7 +462,7 @@ public class SuperAdminController {
                 model.addAttribute("idUsuario",id);
                 return "Superadmin/perfilContra";
             } else {
-                return "redirect:/superadmin";
+                return "redirect:/superadmin/perfil";
             }
         } catch (NumberFormatException e) {
             return "redirect:/superadmin/listaUsuario";
@@ -356,19 +470,24 @@ public class SuperAdminController {
     }
 
     @PostMapping({"/actualizarContra"})
-    public String actualizarContra(Model model, @RequestParam("id") int id, @RequestParam("password") String contrasenia,
-                                   @RequestParam("newpassword") String contraseniaNueva, @RequestParam("renewpassword") String contraseniaConfirm, RedirectAttributes redirectAttributes){
-        String idStr=String.valueOf(id);
+    public String actualizarContra(Model model, @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession,
+                                   @RequestParam("password") String contrasenia,
+                                   @RequestParam("newpassword") String contraseniaNueva, @RequestParam("renewpassword") String contraseniaConfirm,
+                                   RedirectAttributes redirectAttributes){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
 
         String contraseniaAlmacenada = usuarioRepository.obtenerContraseña(id);
 
         if (passwordEncoder.matches(contrasenia, contraseniaAlmacenada)) {
             String contraseniaNuevaEncriptada = passwordEncoder.encode(contraseniaNueva);
             usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
+            redirectAttributes.addFlashAttribute("msg1", "La contraseña se ha actualizado exitosamente");
+
             return "redirect:/superadmin/perfilSuperadmin";
         } else {
             redirectAttributes.addFlashAttribute("error","La contraseña actual no es correcta.");
-            return "redirect:/superadmin/perfilContra?id="+idStr;
+            return "redirect:/superadmin/perfilContra";
         }
     }
 }

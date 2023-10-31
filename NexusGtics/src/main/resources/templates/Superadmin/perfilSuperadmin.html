@@ -12,91 +12,96 @@
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
-    <div class="pagetitle">
-        <h1 th:text="|Perfil|"></h1>
-        <nav>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/Superadmin/listaUsuario}" th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
-                <li class="breadcrumb-item active">Perfil</li>
-            </ol>
-        </nav>
-    </div><!-- End Page Title -->
+    <div class="container">
+        <div class="pagetitle">
+            <h1 th:text="|Perfil|"></h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:text="|${session.usuario.cargo.nombreCargo}|"></a></li>
+                    <li class="breadcrumb-item active">Perfil</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
 
-    <section class="section profile">
-        <div class="row">
-            <div class="col-xl-4">
+        <div th:if="${msg != null}" th:text="${msg}" class="alert alert-primary" role="alert"></div>
+        <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-primary" role="alert"></div>
+        <section class="section profile">
+            <div class="row">
+                <div class="col-xl-4">
 
-                <div class="card">
-                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                        <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-                        <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</h2>
-                        <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Superadmin</h3>
-                        <h3 th:text="|${session.usuario.dni}|">ID: 123456789</h3>
+                    <div class="card">
+                        <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                            <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+                            <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</h2>
+                            <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Superadmin</h3>
+                            <h3 th:text="|${session.usuario.dni}|">ID: 123456789</h3>
+                        </div>
                     </div>
+
                 </div>
 
-            </div>
+                <div class="col-xl-8">
 
-            <div class="col-xl-8">
-
-                <div class="card">
-                    <div class="card-body pt-3">
-                        <!-- Bordered Tabs -->
-                        <div class="tab-content pt-2">
-                            <a th:href="@{/superadmin/perfilSuperadmin}" class="btn btn-dark me-2 mt-3">General</a>
-                            <a th:href="@{'/superadmin/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
-                            <a th:href="@{'/superadmin/perfilContra?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
-                        </div>
-
-                        <div class="tab-content pt-2">
-
-                            <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                <h5 class="card-title" style="color: #095444" th:text="|Sobre ti|">Sobre Luis:</h5>
-                                <p class="small fst-italic" th:text="|${session.usuario.descripcion}|"></p>
-
-                                <h5 class="card-title" style="color: #095444">Detalles del Perfil</h5>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">Nombre y apellidos</div>
-                                    <div class="col-lg-9 col-md-8" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">DNI</div>
-                                    <div class="col-lg-9 col-md-8" th:text="|${session.usuario.dni}|">76631684</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Compañía</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${session.usuario.empresa.nombre}">Nexus</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Trabajo</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${session.usuario.cargo.nombreCargo}">Administrador</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">País</div>
-                                    <div class="col-lg-9 col-md-8">Perú</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Correo</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${session.usuario.correo}">k.anderson@gmail.com</div>
-                                </div>
-
+                    <div class="card">
+                        <div class="card-body pt-3">
+                            <!-- Bordered Tabs -->
+                            <div class="tab-content pt-2">
+                                <a th:href="@{/superadmin/perfilSuperadmin}" class="btn btn-dark me-2 mt-3">General</a>
+                                <a th:href="@{/superadmin/perfilEditar}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
+                                <a th:href="@{/superadmin/perfilContra}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
                             </div>
 
-                        </div><!-- End Bordered Tabs -->
+                            <div class="tab-content pt-2">
 
+                                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                                    <h5 class="card-title" style="color: #095444" th:text="|Sobre ti|">Sobre Luis:</h5>
+                                    <div class="row">
+                                        <div class="col-lg-9 col-md-8" th:text="|${usuario.descripcion}|">Debe se dalir algo</div>
+                                    </div>
+
+                                    <h5 class="card-title" style="color: #095444">Detalles del Perfil</h5>
+
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label ">Nombre y apellidos</div>
+                                        <div class="col-lg-9 col-md-8" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">DNI</div>
+                                        <div class="col-lg-9 col-md-8" th:text="|${session.usuario.dni}|">76631684</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Compañía</div>
+                                        <div class="col-lg-9 col-md-8" th:text="${session.usuario.empresa.nombre}">Nexus</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Trabajo</div>
+                                        <div class="col-lg-9 col-md-8" th:text="${session.usuario.cargo.nombreCargo}">Administrador</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">País</div>
+                                        <div class="col-lg-9 col-md-8">Perú</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">Correo</div>
+                                        <div class="col-lg-9 col-md-8" th:text="${session.usuario.correo}">k.anderson@gmail.com</div>
+                                    </div>
+
+                                </div>
+
+                            </div><!-- End Bordered Tabs -->
+
+                        </div>
                     </div>
+
                 </div>
-
             </div>
-        </div>
-    </section>
-
+        </section>
+    </div>
 </main><!-- End #main -->
 
 <!-- ======= Footer ======= -->

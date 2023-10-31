@@ -20,7 +20,7 @@
     <div class="pagetitle">
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Gestión de usuario</a></li>
+          <li class="breadcrumb-item"><a >Gestión de usuario</a></li>
           <li class="breadcrumb-item active">Editar usuario</li>
         </ol>
       </nav>
@@ -36,6 +36,9 @@
             A simple success alert—check it out!
           </div>
           <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}">
+            A simple success alert—check it out!
+          </div>
+          <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
             A simple success alert—check it out!
           </div>
           <form method="POST" th:action="@{/admin/updateUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">

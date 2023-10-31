@@ -12,127 +12,132 @@
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
-  <div class="pagetitle">
-    <h1 th:text="|Perfil|"></h1>
-    <nav>
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/Superadmin/listaUsuario}" th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
-        <li class="breadcrumb-item active">Perfil</li>
-      </ol>
-    </nav>
-  </div><!-- End Page Title -->
+  <div class="container">
+    <div class="pagetitle">
+      <h1 th:text="|Perfil|"></h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
+          <li class="breadcrumb-item active">Perfil</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
 
-  <section class="section profile">
-    <div class="row">
-      <div class="col-xl-4">
+    <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
+    </div>
+    <div class="alert alert-danger" role="alert" th:if="${msgImagen1 != null}" th:text="${msgImagen1}">
+    </div>
 
-        <div class="card">
-          <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-            <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-            <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</h2>
-            <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Superadmin</h3>
-            <h3 th:text="|${session.usuario.dni}|">ID: 123456789</h3>
+    <section class="section profile">
+      <div class="row">
+        <div class="col-xl-4">
+
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+              <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+              <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</h2>
+              <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Superadmin</h3>
+              <h3 th:text="|${session.usuario.dni}|">ID: 123456789</h3>
+            </div>
           </div>
+
         </div>
 
-      </div>
+        <div class="col-xl-8">
 
-      <div class="col-xl-8">
+          <div class="card">
+            <div class="card-body pt-3">
+              <!-- Bordered Tabs -->
 
-        <div class="card">
-          <div class="card-body pt-3">
-            <!-- Bordered Tabs -->
-
-            <div class="tab-content pt-2">
-              <a th:href="@{/superadmin/perfilSuperadmin}" class="btn btn-outline-dark me-2 mt-3">General</a>
-              <a th:href="@{'/superadmin/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
-              <a th:href="@{'/superadmin/perfilContra?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
-
-            </div>
-
-            <div class="tab-content pt-2">
-
-              <div class="tab-pane show active fade profile-edit pt-3" id="profile-edit">
-
-                <form method="POST" th:action="@{/superadmin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data">
-                  <input type="hidden" class="form-control" th:field="*{id}">
-                  <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
-                  <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
-                  <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
-                  <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:field="*{fechaRegistro}">
-                  <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" th:field="*{tecnicoConCuadrilla}">
-                  <input type="hidden" name="cuadrilla" id="cuadrilla" th:field="*{cuadrilla}">
-                  <input type="hidden" name="cargo" id="cargo" th:field="*{cargo}">
-                  <input type="hidden" name="empresa" id="empresa" th:field="*{empresa}">
-                  <input type="hidden" name="dni" id="dni" th:field="*{dni}">
-
-
-
-
-                  <div class="mb-3">
-                    <label for="imagenSubida" class="form-label">Foto de perfil:</label>
-                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                      <img th:src="@{|image/${usuario.archivo.idArchivos}|}" style="max-width: 300px;" alt="">
-                    </div>
-                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
-                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                  </div>
-
-
-                  <div class="mb-3">
-                    <label class="form-label">Nombres:</label>
-                    <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
-                    <div class="invalid-feedback"
-                         th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
-                      Mensaje de error de nombre
-                    </div>
-                  </div>
-
-                  <div class="mb-3">
-                    <label class="form-label">Apellidos:</label>
-                    <input th:field="*{apellido}" type="text" th:class="${#fields.hasErrors('apellido')?'form-control is-invalid':'form-control'}"/>
-                    <div class="invalid-feedback"
-                         th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}">
-                      Mensaje de error de nombre
-                    </div>
-                  </div>
-
-                  <div class="mb-3">
-                    <label class="form-label">Correo:</label>
-                    <input th:field="*{correo}" type="text" th:class="${#fields.hasErrors('correo')?'form-control is-invalid':'form-control'}"/>
-                    <div class="invalid-feedback"
-                         th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
-                      Mensaje de error de correo
-                    </div>
-                  </div>
-
-                  <div class="mb-3">
-                    <label class="form-label">Descripción:</label>
-                    <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
-                    <div class="invalid-feedback"
-                         th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
-                      Mensaje de error de descripcion
-                    </div>
-                  </div>
-
-
-
-                  <div class="text-center">
-                    <button type="submit" class="btn btn-outline-primary float-end">Aplicar cambios</button>
-                  </div>
-                </form><!-- End Profile Edit Form -->
-
+              <div class="tab-content pt-2">
+                <a th:href="@{/superadmin/perfilSuperadmin}" class="btn btn-outline-dark me-2 mt-3">General</a>
+                <a th:href="@{/superadmin/perfilEditar}" class="btn btn-dark me-2 mt-3">Editar perfil</a>
+                <a th:href="@{/superadmin/perfilContra}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
               </div>
 
-            </div><!-- End Bordered Tabs -->
+              <div class="tab-content pt-2">
 
+                <div class="tab-pane show active fade profile-edit pt-3" id="profile-edit">
+
+                  <form method="POST" th:action="@{/superadmin/savePerfil}" th:object="${usuario}" enctype="multipart/form-data">
+                    <input type="hidden" class="form-control" th:field="*{id}">
+                    <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
+                    <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
+                    <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
+                    <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:field="*{fechaRegistro}">
+                    <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" th:field="*{tecnicoConCuadrilla}">
+                    <input type="hidden" name="cuadrilla" id="cuadrilla" th:field="*{cuadrilla}">
+                    <input type="hidden" name="cargo" id="cargo" th:field="*{cargo}">
+                    <input type="hidden" name="empresa" id="empresa" th:field="*{empresa}">
+                    <input type="hidden" name="dni" id="dni" th:field="*{dni}">
+
+
+
+
+                    <div class="mb-3">
+                      <label for="imagenSubida" class="form-label">Foto de perfil:</label>
+                      <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                        <img th:src="@{|image/${usuario.archivo.idArchivos}|}" style="max-width: 300px;" alt="">
+                      </div>
+                      <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                             accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                    </div>
+
+
+                    <div class="mb-3">
+                      <label class="form-label">Nombres:</label>
+                      <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
+                      <div class="invalid-feedback"
+                           th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
+                        Mensaje de error de nombre
+                      </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Apellidos:</label>
+                      <input th:field="*{apellido}" type="text" th:class="${#fields.hasErrors('apellido')?'form-control is-invalid':'form-control'}"/>
+                      <div class="invalid-feedback"
+                           th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}">
+                        Mensaje de error de nombre
+                      </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Correo:</label>
+                      <input th:field="*{correo}" type="text" th:class="${#fields.hasErrors('correo')?'form-control is-invalid':'form-control'}"/>
+                      <div class="invalid-feedback"
+                           th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
+                        Mensaje de error de correo
+                      </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Descripción:</label>
+                      <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
+                      <div class="invalid-feedback"
+                           th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
+                        Mensaje de error de descripcion
+                      </div>
+                    </div>
+
+
+
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-outline-primary float-end">Aplicar cambios</button>
+                    </div>
+                  </form><!-- End Profile Edit Form -->
+
+                </div>
+
+              </div><!-- End Bordered Tabs -->
+
+            </div>
           </div>
+
         </div>
-
       </div>
-    </div>
-  </section>
-
+    </section>
+  </div>
 </main><!-- End #main -->
 
 <!-- ======= Footer ======= -->

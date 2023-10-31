@@ -83,7 +83,9 @@
                 </div>
 
                 <a th:href="@{'/admin/editarUsuario?id=' + ${usuario.id}}" class="btn btn-outline-primary me-2 float-end">Editar</a>
-                <button type="submit" class="btn btn-outline-danger float-start">Desactivar</button>
+                <a th:href="@{${usuario.habilitado == 1 ? '/admin/banearUsuario?id=' + usuario.id : '/admin/activarUsuario?id=' + usuario.id}}"
+                   class="btn btn-outline-danger float-start"
+                   th:text="${usuario.habilitado == 1 ? 'Desactivar' : 'Activar'}">Des/act</a>
               </div>
             </div>
           </form>

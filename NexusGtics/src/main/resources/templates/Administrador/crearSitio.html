@@ -18,7 +18,7 @@
     <div class="pagetitle">
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Gestión de sitios</a></li>
+          <li class="breadcrumb-item"><a>Gestión de sitios</a></li>
           <li class="breadcrumb-item active">Crear sitio</li>
         </ol>
       </nav>
@@ -92,7 +92,7 @@
 
                 <div class="mb-3">
                   <label class="form-label">Latitud:</label>
-                  <input type="number" step="0.0000001" th:field="*{latitud}" th:class="${#fields.hasErrors('latitud')?'form-control is-invalid':'form-control'}"/>
+                  <input type="text" th:field="*{latitud}" th:class="${#fields.hasErrors('latitud')?'form-control is-invalid':'form-control'}"/>
                   <div class="invalid-feedback"
                        th:if="${#fields.hasErrors('latitud')}" th:errors="*{latitud}">
                     Mensaje de error de nombre
@@ -101,7 +101,7 @@
 
                 <div class="mb-3">
                   <label class="form-label">Longitud:</label>
-                  <input type="number" step="0.0000001" th:field="*{longitud}" th:class="${#fields.hasErrors('longitud')?'form-control is-invalid':'form-control'}"/>
+                  <input type="text" th:field="*{longitud}" th:class="${#fields.hasErrors('longitud')?'form-control is-invalid':'form-control'}"/>
                   <div class="invalid-feedback"
                        th:if="${#fields.hasErrors('longitud')}" th:errors="*{longitud}">
                     Mensaje de error de nombre
