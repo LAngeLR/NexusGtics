@@ -425,8 +425,11 @@
                             <p>- En el <b>segundo</b> formulario completa en relación al sitio, ¿en dondé te encuentras?, describe tu alrededor, ¿existe conexión, movilidad?, etc</p>
                             <p>- Finalmente en el <b>tercer</b> formulario, responde las preguntas una vez finalizado todo el trabajo.</p>
                             <p>No olvides que debes de llenar todos los formularios para que el Supervisor cierre el ticket.</p>
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                <button type="button" class="btn" style="background-color:#202a3b; color: white">Atrás</button>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end" th:if="${formulario.ticket.estado==4}">
+                                <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicket?id='+${formulario.ticket.idTickets}}" style="background-color: #202a3b; color:white">Atrás</a>
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end" th:if="${formulario.ticket.estado==5}">
+                                <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicketProgreso?id='+${formulario.ticket.idTickets}}" style="background-color: #202a3b; color:white">Atrás</a>
                             </div>
                         </div>
                 </div>
@@ -439,7 +442,7 @@
                     <img style="width: 65%;height: 65%" src="https://us.123rf.com/450wm/massimosanti/massimosanti1802/massimosanti180200003/95316837-hombre-trabajando-los-t%C3%A9cnicos-est%C3%A1n-reparando-sistemas-de-transmisi%C3%B3n-de-alto-voltaje-en-los.jpg" class="img-fluid" alt="llegadasitio">
                     <br><br>
                     <h5><b>Llegada a sitio</b></h5>
-                    <button class="btn btn-outline-light" type="button">Formulario 1</button>
+                    <a class="btn btn-outline-light" type="button" th:href="@{'/tecnico/formulario1?id='+${formulario.ticket.idTickets}}">Formulario 1</a>
                 </div>
             </div>
             <div class="col-md-4">
@@ -447,7 +450,7 @@
                     <img style="width: 65%;height:65%"  src="https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/15/14620/7281" class="img-fluid" alt="validación">
                     <br> <br>
                     <h5><b>Validación de sitio</b></h5>
-                    <button class="btn btn-outline-secondary" type="button">Formulario 2</button>
+                    <a class="btn btn-outline-secondary" type="button" th:href="@{'/tecnico/formulario2?id='+${formulario.ticket.idTickets}}">Formulario 2</a>
                 </div>
             </div>
             <div class="col-md-4">
@@ -455,7 +458,7 @@
                     <img style="width:65%;height: 65%"  src="https://www.osiptel.gob.pe/media/ixnh1ufj/21613752-50b7-4024-975f-26de7c512368.jpg" class="img-fluid" alt="trabajo">
                     <br><br>
                     <h5><b>Trabajo realizado</b></h5>
-                    <button class="btn btn-outline-light" type="button">Formulario 3</button>
+                    <a class="btn btn-outline-light" type="button" th:href="@{'/tecnico/formulario3?id='+${formulario.ticket.idTickets}}">Formulario 3</a>
                 </div>
             </div>
         </div></center>
