@@ -13,9 +13,7 @@
 
 <main id="main" class="main">
   <div class="container">
-    <div class="alert alert-danger" role="alert" th:if="${error!=null}" th:text="${error}">
-      abc
-    </div>
+
     <div class="pagetitle">
       <h1 th:text="|Perfil|"></h1>
       <nav>
@@ -25,6 +23,11 @@
         </ol>
       </nav>
     </div><!-- End Page Title -->
+
+
+    <div class="alert alert-danger" role="alert" th:if="${error!=null}" th:text="${error}">
+      abc
+    </div>
 
     <section class="section profile">
       <div class="row">

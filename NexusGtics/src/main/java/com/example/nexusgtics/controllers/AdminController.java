@@ -186,6 +186,15 @@ public class AdminController {
             }
         }
 
+        if (file.getSize() > 10 * 1024 * 1024) {
+            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
+            if (usuario.getId() == null) {
+                return "Superadmin/perfil";
+            } else {
+                return "Superadmin/perfilEditar";
+            }
+        }
+
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (usuario.getArchivo() == null) {
                 usuario.setArchivo(new Archivo());

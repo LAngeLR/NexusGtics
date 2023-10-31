@@ -17,11 +17,16 @@
       <h1 th:text="|Perfil|"></h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a th:href="@{/Superadmin/listaUsuario}" th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
+          <li class="breadcrumb-item"><a th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
           <li class="breadcrumb-item active">Perfil</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
+
+    <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
+    </div>
+    <div class="alert alert-danger" role="alert" th:if="${msgImagen1 != null}" th:text="${msgImagen1}">
+    </div>
 
     <section class="section profile">
       <div class="row">
@@ -54,7 +59,7 @@
 
                 <div class="tab-pane show active fade profile-edit pt-3" id="profile-edit">
 
-                  <form method="POST" th:action="@{/superadmin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data">
+                  <form method="POST" th:action="@{/superadmin/savePerfil}" th:object="${usuario}" enctype="multipart/form-data">
                     <input type="hidden" class="form-control" th:field="*{id}">
                     <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
                     <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
