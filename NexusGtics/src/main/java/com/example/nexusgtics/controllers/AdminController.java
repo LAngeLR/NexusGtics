@@ -263,6 +263,14 @@ public class AdminController {
                 throw new RuntimeException(e);
             }
         }
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+            if (usuario.getId() == null) {
+                return "Administrador/crearUsuario";
+            } else {
+                return "Administrador/editarUsuario";
+            }
+        }
 
         if (!bindingResult.hasErrors()) {
             // Si no hay errores, se realiza el flujo normal
@@ -632,6 +640,14 @@ public class AdminController {
                 throw new RuntimeException(e);
             }
         }
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+            if (sitio.getIdSitios() == null) {
+                return "Administrador/crearSitio";
+            } else {
+                return "Administrador/editarSitio";
+            }
+        }
 
         if (!bindingResult.hasErrors()) {
             // Si no hay errores, se realiza el flujo normal
@@ -789,6 +805,14 @@ public class AdminController {
             } catch (IOException e) {
                 System.out.println("Error al procesar el archivo");
                 throw new RuntimeException(e);
+            }
+        }
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+            if (equipo.getIdEquipos() == null) {
+                return "Administrador/crearEquipo";
+            } else {
+                return "Administrador/editarEquipo";
             }
         }
 

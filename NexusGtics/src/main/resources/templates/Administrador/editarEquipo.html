@@ -30,6 +30,9 @@
             <div class="pagetitle">
               <h1 class="card-title">Edición de equipo</h1>
             </div>
+            <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
+              A simple success alert—check it out!
+            </div>
             <form method="POST" th:action="@{/admin/updateEquipo}" th:object="${equipo}" enctype="multipart/form-data" style="margin-bottom: -35px;">
               <div class="row">
                 <div class="col-md-6">
