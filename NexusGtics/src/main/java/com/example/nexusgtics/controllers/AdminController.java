@@ -21,9 +21,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Controller
 @RequestMapping("/admin")
@@ -426,6 +430,11 @@ public class AdminController {
             BindingResult bindingResult,RedirectAttributes attr){
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+            // Obtener la zona horaria GMT-5
+            ZoneId zonaHoraria = ZoneId.of("GMT-5");
+            // Obtener la fecha actual en la zona horaria GMT-5
+            LocalDate fechaAfiliacion = LocalDate.now(zonaHoraria);
+            empresa.setFechaAfiliacion(fechaAfiliacion);
             empresaRepository.save(empresa);
             attr.addFlashAttribute("msg1", "La empresa '" + empresa.getNombre() + "' ha sido creado exitosamente");
 
@@ -582,6 +591,12 @@ public class AdminController {
                 } else {
                     attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido actualizado exitosamente");
                 }
+                //truncar latitud y long
+                BigDecimal longitud1=sitio.getLongitud();
+                BigDecimal latitud1 = sitio.getLatitud();
+                sitio.setLongitud(longitud1.setScale(7, RoundingMode.DOWN));
+                sitio.setLatitud(latitud1.setScale(7, RoundingMode.DOWN));
+
                 sitioRepository.save(sitio);
                 return "redirect:/admin/listaSitio";
             } catch (IOException e) {
@@ -631,6 +646,11 @@ public class AdminController {
                 archivo.setTipo(1);
                 archivo.setArchivo(file.getBytes());
                 archivo.setContentType(file.getContentType());
+
+                BigDecimal longitud1=sitio.getLongitud();
+                BigDecimal latitud1 = sitio.getLatitud();
+                sitio.setLongitud(longitud1.setScale(7, RoundingMode.DOWN));
+                sitio.setLatitud(latitud1.setScale(7, RoundingMode.DOWN));
                 archivoRepository.save(archivo);
 
                 // Asignar el nuevo archivo al equipo
