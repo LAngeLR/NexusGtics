@@ -35,7 +35,7 @@
                 <h5 class="card-title">Usuarios Desactivados</h5>
                 <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
                 <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-primary" role="alert"></div>
-              </div>d
+              </div>
               <!-- Table with stripped rows -->
               <table class="table datatable">
                 <thead>
@@ -67,7 +67,7 @@
 
                           <!-- solo si es "Administrador" -->
                           <li th:if="${usuario.cargo.nombreCargo == 'Administrador'}">
-                            <a th:href="@{'/superadmin/editarUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Editar</a>
+                            <!--<a th:href="@{'/superadmin/editarUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Editar</a>-->
                             <a th:href="@{'/superadmin/verUsuarioA?id=' + ${usuario.id}}" class="dropdown-item me-2">Visualizar</a>
                             <a th:href="@{'/superadmin/activarUsuario?id=' + ${usuario.id}}" class="dropdown-item text-success me-2">Activar</a>
                           </li>
@@ -76,6 +76,10 @@
                             <a th:href="@{'/superadmin/verUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Visualizar</a>
                           </li>
                         </ul>
+
+                        <!-- PERO ESTE MODAL NO FUNCIONA - NO CAPTURA EL ID QUE NECESITAMOS -->
+
+                        <!--
                         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                           <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -92,6 +96,7 @@
                             </div>
                           </div>
                         </div>
+                        -->
 
                       </div>
                     </div>

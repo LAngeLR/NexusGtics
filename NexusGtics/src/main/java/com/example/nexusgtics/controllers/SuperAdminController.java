@@ -6,6 +6,7 @@ import com.example.nexusgtics.repository.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.websocket.SessionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -25,6 +26,9 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/superadmin")
 public class SuperAdminController {
+
+    @Autowired
+    private HttpSession session;
 
     final UsuarioRepository usuarioRepository;
 
@@ -238,17 +242,38 @@ public class SuperAdminController {
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/superadmin/listaUsuario";
             }
+
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
+
                 usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
-                model.addAttribute("usuario", usuario);
-                return "Superadmin/editarUsuario";
+
+                List<Usuario> administradores = usuarioRepository.listaDeAdministradores();
+                boolean encontrado = false;
+                for (Usuario administrador : administradores) {
+                    System.out.println(administrador.getId());
+                    //int idAdministrador = administrador.getId();
+                    if (administrador.getId() == id) {
+                        encontrado = true;
+                        model.addAttribute("usuario", usuario);
+                        break;
+                    }
+                }
+
+                if (encontrado) {
+                    return "Superadmin/editarUsuario";
+                } else {
+                    return "redirect:/superadmin/listaUsuario";
+                }
+
+                //return "Superadmin/editarUsuario";
             } else {
                 return "redirect:/superadmin";
             }
         } catch (NumberFormatException e) {
             return "redirect:/superadmin/listaUsuario";
         }
+
     }
 
 
@@ -334,7 +359,9 @@ public class SuperAdminController {
                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr, HttpSession httpSession){
-        
+
+        // ESTO SE AÑADIO DE BARD
+        session.setAttribute("usuario", usuario);
 
         if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
             model.addAttribute("msgCargo", "Escoger un cargo");
