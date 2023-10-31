@@ -6,6 +6,7 @@ import com.example.nexusgtics.repository.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.websocket.SessionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -25,6 +26,9 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/superadmin")
 public class SuperAdminController {
+
+    @Autowired
+    private HttpSession session;
 
     final UsuarioRepository usuarioRepository;
 
@@ -355,7 +359,9 @@ public class SuperAdminController {
                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr, HttpSession httpSession){
-        
+
+        // ESTO SE AÑADIO DE BARD
+        session.setAttribute("usuario", usuario);
 
         if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
             model.addAttribute("msgCargo", "Escoger un cargo");
