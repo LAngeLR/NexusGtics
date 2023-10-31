@@ -397,7 +397,7 @@ public class TecnicoController {
     //------FORMULARIO1 ----
     @GetMapping({"/formulario1", "formulario1"})
     public String pagformulario1(Model model, @RequestParam("id") String idStr,
-                                @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult) {
+                                @ModelAttribute("formulario1") @Valid Formulario formulario1, BindingResult bindingResult) {
         try{
             int id = Integer.parseInt(idStr);
             if(id <= 0|| !formularioRepository.existsById(id)){
@@ -405,8 +405,8 @@ public class TecnicoController {
             }
             Optional<Formulario> optionalFormulario=formularioRepository.findById(id);
             if(optionalFormulario.isPresent()){
-                formulario = optionalFormulario.get();
-                model.addAttribute("formulario", formulario);
+                formulario1 = optionalFormulario.get();
+                model.addAttribute("formulario", formulario1);
                 return "Tecnico/formulario1";
             }else{
                 return "redirect:/tecnico";
@@ -420,12 +420,12 @@ public class TecnicoController {
     /* Guardar Datos*/
     @PostMapping("/saveFormulario1")
     public String saveFormulario1(@RequestParam("imagenSubida") MultipartFile file,@RequestParam("imagenSubida2") MultipartFile file2,
-                                 @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult,
+                                 @ModelAttribute("formulario1") @Valid Formulario formulario1, BindingResult bindingResult,
                                  Model model, RedirectAttributes attr) {
-        if(formulario.getHrelevantes() == null){
+        if(formulario1.getHrelevantes() == null){
             model.addAttribute("msgFormulario","Por favor, complete el recuadro de texto");
             model.addAttribute("form1",formularioRepository.findAll());
-            if(formulario.getIdFormularios() == null){
+            if(formulario1.getIdFormularios() == null){
                 return "Tecnico/datost_nuevo";
             }else{
                 return "Tecnico/formulario1";
@@ -440,7 +440,7 @@ public class TecnicoController {
                 archivo.setArchivo(file.getBytes());
                 archivo.setContentType(file.getContentType());
                 archivoRepository.save(archivo);
-                formulario.setArchivo(archivo);
+                formulario1.setArchivo(archivo);
             } catch (IOException e) {
                 System.out.println("Error al procesar el archivo");
                 throw new RuntimeException(e);
@@ -454,23 +454,23 @@ public class TecnicoController {
                 archivo.setArchivo(file.getBytes());
                 archivo.setContentType(file.getContentType());
                 archivoRepository.save(archivo);
-                formulario.setArchivo(archivo);
+                formulario1.setArchivo(archivo);
             } catch (IOException e) {
                 System.out.println("Error al procesar el archivo");
                 throw new RuntimeException(e);
             }
         }
         if(!bindingResult.hasErrors()){
-            if (formulario.getArchivo() == null) {
-                formulario.setArchivo(new Archivo());
+            if (formulario1.getArchivo() == null) {
+                formulario1.setArchivo(new Archivo());
             }
             try {
-                if (formulario.getIdFormularios() == null) {
+                if (formulario1.getIdFormularios() == null) {
                     attr.addFlashAttribute("msg", "Datos de formulario 1 - llegada a sitio guardados exitosamente");
                 } else {
                     attr.addFlashAttribute("msg", "Datos de formulario 1 - llegada a sitio guardados exitosamente");
                 }
-                formularioRepository.save(formulario);
+                formularioRepository.save(formulario1);
                 return "redirect:/tecnico/formulario";
             } catch (Exception e) {
                 System.out.println("Error al guardar los datos del formulario");
@@ -478,7 +478,7 @@ public class TecnicoController {
             }
         } else{
             model.addAttribute("formulario", formularioRepository.findAll());
-            if (formulario.getIdFormularios() == null) {
+            if (formulario1.getIdFormularios() == null) {
                 return "Tecnico/datost_nuevo";
             } else {
                 return "Tecnico/formulario1";
@@ -490,7 +490,7 @@ public class TecnicoController {
     //------FORMULARIO2 ----
     @GetMapping({"/formulario2", "formulario2"})
     public String pagformulario2(Model model, @RequestParam("id") String idStr,
-                                @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult) {
+                                @ModelAttribute("formulario") @Valid Formulario formulario2, BindingResult bindingResult) {
         try{
             int id = Integer.parseInt(idStr);
             if(id <= 0|| !formularioRepository.existsById(id)){
@@ -498,8 +498,8 @@ public class TecnicoController {
             }
             Optional<Formulario> optionalFormulario=formularioRepository.findById(id);
             if(optionalFormulario.isPresent()){
-                formulario = optionalFormulario.get();
-                model.addAttribute("formulario", formulario);
+                formulario2 = optionalFormulario.get();
+                model.addAttribute("formulario", formulario2);
                 return "Tecnico/formulario2";
             }else{
                 return "redirect:/tecnico";
@@ -596,7 +596,7 @@ public class TecnicoController {
 
     @GetMapping({"/formulario3", "formulario3"})
     public String pagformulario3(Model model, @RequestParam("id") String idStr,
-                                @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult) {
+                                @ModelAttribute("formulario") @Valid Formulario formulario3, BindingResult bindingResult) {
         try{
             int id = Integer.parseInt(idStr);
             if(id <= 0|| !formularioRepository.existsById(id)){
@@ -604,8 +604,8 @@ public class TecnicoController {
             }
             Optional<Formulario> optionalFormulario=formularioRepository.findById(id);
             if(optionalFormulario.isPresent()){
-                formulario = optionalFormulario.get();
-                model.addAttribute("formulario", formulario);
+                formulario3 = optionalFormulario.get();
+                model.addAttribute("formulario", formulario3);
                 return "Tecnico/formulario3";
             }else{
                 return "redirect:/tecnico";
