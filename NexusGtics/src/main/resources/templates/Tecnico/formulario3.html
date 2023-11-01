@@ -428,37 +428,108 @@
                                 <br>
 
                                 <div class="mb-3">
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option selected>Selecciona Tipo de transporte</option>
-                                        <option value="1">Fibra Optica</option>
-                                        <option value="2">Microondas</option>
-                                        <option value="3">Satélite</option>
+                                    <label class="form-label"> Selector de Tipo de transporte</label>
+                                    <select class="form-select" th:field="*{tipoTransporte}">
+                                        <option value="-1">--Selecciona un tipo--</option>
+                                        <option value="FibraOptica">Fibra Optica</option>
+                                        <option value="Microondas">Microondas</option>
+                                        <option value="Satelite">Satélite</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                                        <label class="form-check-label" for="inlineCheckbox1">FFTH</label>
+                                    <div th:if="${formulario.tecnologiainstaladas == 'FFTH'}">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckCheckedFFTH" checked>
+                                            <label class="form-check-label" for="flexCheckCheckedFFTH">
+                                                FFTH
+                                            </label></div>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                                        <label class="form-check-label" for="inlineCheckbox2">HFC</label>
+                                    <div th:else>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefaultFFTH" >
+                                            <label class="form-check-label" for="flexCheckDefaultFFTH">
+                                                FFTH
+                                            </label></div>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option2">
-                                        <label class="form-check-label" for="inlineCheckbox3">2G</label>
+                                </div>
+                                <div class="mb-3">
+                                    <div th:if="${formulario.tecnologiainstaladas == 'HFC'}">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckCheckedHFC" checked>
+                                            <label class="form-check-label" for="flexCheckCheckedHFC">
+                                                HFC
+                                            </label></div>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option2">
-                                        <label class="form-check-label" for="inlineCheckbox4">3G</label>
+                                    <div th:else>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefaultHFC" >
+                                            <label class="form-check-label" for="flexCheckDefaultHFC">
+                                                HFC
+                                            </label></div>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option2">
-                                        <label class="form-check-label" for="inlineCheckbox5">4G</label>
+                                </div>
+                                <div class="mb-3">
+                                    <div th:if="${formulario.tecnologiainstaladas == '2G'}">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked2G" checked>
+                                            <label class="form-check-label" for="flexCheckChecked2G">
+                                                2G
+                                            </label></div>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox6" value="option2">
-                                        <label class="form-check-label" for="inlineCheckbox6">5G</label>
+                                    <div th:else>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2G" >
+                                            <label class="form-check-label" for="flexCheckDefault2G">
+                                                2G
+                                            </label></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div th:if="${formulario.tecnologiainstaladas =='3G'}">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked3G" checked>
+                                            <label class="form-check-label" for="flexCheckChecked3G">
+                                                3G
+                                            </label></div>
+                                    </div>
+                                    <div th:else>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault3G" >
+                                            <label class="form-check-label" for="flexCheckDefault3G">
+                                                3G
+                                            </label></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div th:if="${formulario.tecnologiainstaladas == '4G'}">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked4G" checked>
+                                            <label class="form-check-label" for="flexCheckChecked4G">
+                                                4G
+                                            </label></div>
+                                    </div>
+                                    <div th:else>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault4G" >
+                                            <label class="form-check-label" for="flexCheckDefault4G">
+                                                4G
+                                            </label></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div th:if="${formulario.tecnologiainstaladas == '5G'}">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked5G" checked>
+                                            <label class="form-check-label" for="flexCheckChecked5G">
+                                                5G
+                                            </label></div>
+                                    </div>
+                                    <div th:else>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault5G" >
+                                            <label class="form-check-label" for="flexCheckDefault5G">
+                                                5G
+                                            </label></div>
                                     </div>
                                 </div>
 
