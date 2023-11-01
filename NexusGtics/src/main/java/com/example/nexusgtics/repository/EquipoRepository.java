@@ -1,7 +1,7 @@
 package com.example.nexusgtics.repository;
 
+import com.example.nexusgtics.dto.CantidadEquiposMarcaDto;
 import com.example.nexusgtics.entity.Equipo;
-import com.example.nexusgtics.entity.Sitio;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -32,5 +32,12 @@ public interface EquipoRepository extends JpaRepository<Equipo, Integer> {
     @Query(value = "select * from equipos where habilitado = 1", nativeQuery = true)
     List<Equipo> listaEquiposHabilitados();
 
+    // ------------------------------ SUPERVISOR --------------------------------------- //
+    @Query(nativeQuery = true,value = "SELECT marca, COUNT(DISTINCT idEquipos) as cantidad\n" +
+            "FROM equipos\n" +
+            "GROUP BY marca\n" +
+            "ORDER BY cantidad DESC\n" +
+            "LIMIT 5;")
+    List<CantidadEquiposMarcaDto> obtenerEquiposMarca();
 
 }
