@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/tecnico")
@@ -102,20 +103,6 @@ public class TecnicoController {
         }
     }
     /* -------------------------- FIN PERFIL -------------------------- */
-
-    /*@GetMapping("/perfiltecnico")
-    public String perfilTecnico(Model model, @RequestParam("id") int id) {
-        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
-        if (optUsuario.isPresent()) {
-            Usuario usuario = optUsuario.get();
-            model.addAttribute("usuario", usuario);
-            return "Tecnico/perfiltecnico";
-        } else {
-            return "redirect:/Tecnico/perfiltecnico";
-        }
-    }*/
-
-    //-----------------------------------------------------------------------
 
     @GetMapping("/comentarios")
     public String pagcomentarios(Model model, @RequestParam("id") int id,
@@ -314,7 +301,6 @@ public class TecnicoController {
                                     RedirectAttributes attr) {
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket1", listaT);
-
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if (optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();
