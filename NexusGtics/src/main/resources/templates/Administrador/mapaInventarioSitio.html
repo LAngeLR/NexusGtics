@@ -95,18 +95,17 @@
               <div id="mi_mapa" ></div>
               <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
               <script>
-                let map = L.map('mi_mapa').setView([-12.059335, -77.030284],15)
+                let map = L.map('mi_mapa').setView([-12.059335, -77.050284],12)
 
                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(map);
-                L.marker([-12.06802,-77.03462]).addTo(map).bindPopup('Mi búsqueda').openPopup();
-                L.marker([-12.06224,-77.03417]).addTo(map).bindPopup('Ubicación real').openPopup();
-                L.marker([-12.06086,-77.03600]).addTo(map).bindPopup('Abierto').openPopup();
-                L.marker([-12.05177,-77.03461]).addTo(map).bindPopup('Inventario 1').openPopup();
-                L.marker([-12.05238,-77.02725]).addTo(map).bindPopup('2').openPopup();
-                L.marker([-12.06176,-77.04292]).addTo(map).bindPopup('3').openPopup();
-                L.marker([-12.06180,-77.02531]).addTo(map).bindPopup('4').openPopup();
+                L.marker([-12.0690694,-77.0786442]).addTo(map).bindPopup('PUCP').openPopup();
+                L.marker([-12.0460063,-77.0303511]).addTo(map).bindPopup('Centro de Lima').openPopup();
+                L.marker([-13.5167110,-71.9788230]).addTo(map).bindPopup('Plaza de Armas Cusco').openPopup();
+                L.marker([-13.5077780,-71.9822220]).addTo(map).bindPopup('Saqsaywaman').openPopup();
+                L.marker([-12.1219000,-77.0297000]).addTo(map).bindPopup('Parque Kennedy').openPopup();
+                L.marker([-12.0772001,-77.0825000]).addTo(map).bindPopup('Plaza San Miguel ').openPopup();
               </script>
               <!-- MAPA -->
 

@@ -503,7 +503,9 @@ public class AdminController {
     }
 
     @GetMapping({"/inventarioSitio", "/inventariositio"})
-    public String inventarioSitio() {
+    public String inventarioSitio(Model model) {
+        List<Sitio> listaSitio = sitioRepository.listaDeSitios();
+        model.addAttribute("listaSitio", listaSitio);
         return "Administrador/mapaInventarioSitio";
     }
 
