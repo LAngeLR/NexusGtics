@@ -164,7 +164,7 @@
                     <div class="col-12">
                         <div class="card recent-sales overflow-auto">
                             <div class="card-body">
-                                <h5 class="card-title">Solicitudes Recientes<span>| CISCO</span></h5>
+                                <h5 class="card-title">Solicitudes Recientes | <span th:text="'Empresa: ' + ${session.usuario.empresa.nombre}"></span></h5>
 
                                 <table class="table table-borderless datatable">
                                     <thead>
@@ -215,7 +215,6 @@
 
                         </div>
                     </div><!-- End Recent Sales -->
-
 
                 </div>
             </div><!-- End Left side columns -->
@@ -284,12 +283,19 @@
                 <!-- Website Traffic -->
                 <div class="card">
                     <div class="card-body pb-0">
-                        <h5 class="card-title">Objetos más usados</h5>
-
-                        <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
-
-                        <script>
+                        <h5 class="card-title">5 Marcas más usadas</h5>
+                        <div id="trafficChart" style="min-height: 500px;" class="echart"></div>
+                        <script th:inline="javascript">
                             document.addEventListener("DOMContentLoaded", () => {
+                                var cantidadEquipos = /*[[${cantidadEquipos}]]*/ ; // Obtener datos desde el modelo
+
+                                var data = cantidadEquipos.map(function(item) {
+                                    return {
+                                        value: item.cantidad,
+                                        name: item.marca
+                                    };
+                                });
+
                                 echarts.init(document.querySelector("#trafficChart")).setOption({
                                     tooltip: {
                                         trigger: 'item'
@@ -317,34 +323,14 @@
                                         labelLine: {
                                             show: false
                                         },
-                                        data: [{
-                                            value: 1048,
-                                            name: 'Router'
-                                        },
-                                            {
-                                                value: 735,
-                                                name: 'Gabinete'
-                                            },
-                                            {
-                                                value: 580,
-                                                name: 'Switch'
-                                            },
-                                            {
-                                                value: 484,
-                                                name: 'Antenas'
-                                            },
-                                            {
-                                                value: 300,
-                                                name: 'Etc'
-                                            }
-                                        ]
+                                        data: data
                                     }]
                                 });
                             });
                         </script>
-
                     </div>
-                </div><!-- End Website Traffic -->
+                </div>
+                <!-- End Website Traffic -->
 
 
             </div><!-- End Right side columns -->

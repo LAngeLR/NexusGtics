@@ -10,7 +10,7 @@ import java.time.Instant;
 @Setter
 @Entity
 @Table(name = "historialtickets")
-public class Historialticket {
+public class HistorialTicket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idhistorialTickets", nullable = false)

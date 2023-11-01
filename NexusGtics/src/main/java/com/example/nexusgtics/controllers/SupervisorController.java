@@ -32,6 +32,8 @@ public class SupervisorController {
     final CargoRepository cargoRepository;
     final EmpresaRepository empresaRepository;
     private final ComentarioRepository comentarioRepository;
+    private final EquipoRepository equipoRepository;
+    private final HistorialTicketRepository historialTicketRepository;
 
 
     public SupervisorController(CuadrillaRepository cuadrillaRepository,
@@ -44,7 +46,9 @@ public class SupervisorController {
                                 CargoRepository cargoRepository,
                                 ArchivoRepository archivoRepository,
                                 SitioCerradoRepository sitioCerradoRepository,
-                                ComentarioRepository comentarioRepository) {
+                                ComentarioRepository comentarioRepository,
+                                EquipoRepository equipoRepository,
+                                HistorialTicketRepository historialTicketRepository) {
         this.cuadrillaRepository = cuadrillaRepository;
         this.usuarioRepository = usuarioRepository;
         this.ticketRepository = ticketRepository;
@@ -56,6 +60,8 @@ public class SupervisorController {
         this.archivoRepository = archivoRepository;
         this.sitioCerradoRepository = sitioCerradoRepository;
         this.comentarioRepository = comentarioRepository;
+        this.equipoRepository = equipoRepository;
+        this.historialTicketRepository = historialTicketRepository;
     }
 
     @GetMapping( {"/",""})
@@ -186,9 +192,12 @@ public class SupervisorController {
     }
 
     @PostMapping("/actualizarCuadrilla")
-    public String actualizarCuadrilla(Ticket ticket, RedirectAttributes redirectAttributes){
-
+    public String actualizarCuadrilla(Ticket ticket, RedirectAttributes redirectAttributes, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idSupervisor = u.getId();
         ticketRepository.actualizarCuadrilla(ticket.getIdTickets(),ticket.getIdCuadrilla().getIdCuadrillas());
+        Date fechaCambioEstado = new Date();
+        historialTicketRepository.crearHistorial(2,fechaCambioEstado,ticket.getIdTickets(),idSupervisor,"Pasando a Tecnico");
         ticketRepository.actualizarEstado(ticket.getIdTickets(),3);
 
         redirectAttributes.addFlashAttribute("abc","Cuadrilla " + ticket.getIdCuadrilla().getIdCuadrillas()+ " asignada");
@@ -196,13 +205,17 @@ public class SupervisorController {
     }
 
     @PostMapping("/actualizarEstado")
-    public String actualizarEstado(@RequestParam("idTickets") int id, @RequestParam("cambioEstado") String cambioEstado, RedirectAttributes redirectAttributes) {
+    public String actualizarEstado(@RequestParam("idTickets") int id, @RequestParam("cambioEstado") String cambioEstado, RedirectAttributes redirectAttributes, HttpSession httpSession) {
 
         int estadoUtilizar;
         redirectAttributes.addAttribute("id",id);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idSupervisor = u.getId();
 
         if (cambioEstado.equals("Cerrado")) {
             estadoUtilizar = 7;
+            Date fechaCambioEstado = new Date();
+            historialTicketRepository.crearHistorial(6,fechaCambioEstado,id,idSupervisor,"Pasando a Analista");
             ticketRepository.actualizarEstado(id,estadoUtilizar);
             return "redirect:/supervisor/listaTickets";
         } else{
@@ -281,6 +294,8 @@ public class SupervisorController {
         Integer idEmpresa = u.getEmpresa().getIdEmpresas();
         List<Ticket> listaTickets = ticketRepository.listaTicketsSinSupervisor(idEmpresa);
         model.addAttribute("listaTickets", listaTickets);
+        model.addAttribute("cantidadEquipos", equipoRepository.obtenerEquiposMarca());
+
 
         return "Supervisor/dashboardSupervisor";
     }
