@@ -43,6 +43,7 @@
                             <form th:action="@{/supervisor/actualizarSupervisor}" method="post"> <!-- Reemplaza por tu ruta de procesamiento del formulario -->
                                 <input th:value="${ticket.idTickets}" name="idTickets" type="hidden"/>
                                 <input th:value="${session.usuario.id}" name="idSupervisorEncargado" type="hidden"/>
+                                <input type="hidden" name="condicion" value="0"/>
                                 <div class="modal-body">
                                     <h3>¿Está seguro de aceptar el ticket?</h3>
                                 </div>
@@ -214,6 +215,7 @@
                                     <option th:each="supervisor : ${listaSupervisores}" th:text="${supervisor.nombre}" th:value="${supervisor.id}"></option>
                                 </select>
                             </div>
+                            <input type="hidden" name="condicion" value="1"/>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel3" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">

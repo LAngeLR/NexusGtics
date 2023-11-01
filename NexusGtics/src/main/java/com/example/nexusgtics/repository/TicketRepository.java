@@ -23,8 +23,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "UPDATE tickets SET idSupervisorEncargado = ?2 WHERE idTickets = ?1")
-    void actualizarSupervisor(int ticketId, int supervisorId);
+    @Query(nativeQuery = true, value = "UPDATE tickets SET idSupervisorEncargado = ?2 , reasignado = ?3 WHERE idTickets = ?1 ")
+    void actualizarSupervisor(int ticketId, int supervisorId, int condicion);
 
     @Transactional
     @Modifying

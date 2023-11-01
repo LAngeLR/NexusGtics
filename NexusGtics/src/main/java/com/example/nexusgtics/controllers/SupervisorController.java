@@ -107,14 +107,18 @@ public class SupervisorController {
 
 
     @GetMapping("/ticketNuevo")
-    public String nuevoTicket(Model model, @RequestParam("id") String idStr){
+    public String nuevoTicket(Model model, @RequestParam("id") String idStr, HttpSession httpSession){
+
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idSupervisor = u.getId();
+
         try{
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !ticketRepository.existsById(id)) {
                 return "redirect:/supervisor/listaTickets";
             }
             Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
-            List<Usuario> listaSupervisor = usuarioRepository.listaDeSupervisores(5);
+            List<Usuario> listaSupervisor = usuarioRepository.listaDeSupervisores(5,idSupervisor);
             List<Cuadrilla> listaCuadrillas = cuadrillaRepository.findAll();
             if (ticketBuscado.isPresent()) {
                 Ticket ticket = ticketBuscado.get();
@@ -174,8 +178,8 @@ public class SupervisorController {
     }
 
     @PostMapping("/actualizarSupervisor")
-    public String actualizarSupervisor(Ticket ticket , RedirectAttributes redirectAttributes){
-        ticketRepository.actualizarSupervisor(ticket.getIdTickets(),ticket.getIdSupervisorEncargado().getId());
+    public String actualizarSupervisor(Ticket ticket , RedirectAttributes redirectAttributes, @RequestParam("condicion") int condicion){
+        ticketRepository.actualizarSupervisor(ticket.getIdTickets(),ticket.getIdSupervisorEncargado().getId(), condicion);
         redirectAttributes.addAttribute("id",ticket.getIdTickets());
         redirectAttributes.addFlashAttribute("mensaje","Supervisor " + ticket.getIdSupervisorEncargado().getNombre()+" asignado");
         return "redirect:/supervisor/ticketNuevo";
@@ -283,7 +287,10 @@ public class SupervisorController {
 
 
     @GetMapping("/crearCuadrilla")
-    public String crearCuadrilla(Model model,  @RequestParam(name = "id", required = false, defaultValue = "-1") int id){
+    public String crearCuadrilla(Model model,  @RequestParam(name = "id", required = false, defaultValue = "-1") int id, HttpSession httpSession){
+
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idSupervisor = u.getId();
 
         if(id == -1){
             model.addAttribute("valor", id);
@@ -294,7 +301,7 @@ public class SupervisorController {
             model.addAttribute("valor", cuadrillaRepository.numeroTecnicosPorCuadrilla(id));
             model.addAttribute("a", id);
         }
-        model.addAttribute("listaTecnicos",usuarioRepository.listaDeSupervisores(6));
+        model.addAttribute("listaTecnicos",usuarioRepository.listaDeSupervisores(6, idSupervisor));
         return "Supervisor/crearCuadrilla";
     }
 
