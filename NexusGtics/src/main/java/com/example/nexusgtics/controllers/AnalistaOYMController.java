@@ -2,11 +2,14 @@ package com.example.nexusgtics.controllers;
 
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +24,8 @@ import java.util.Optional;
 @Controller
 @RequestMapping(value = {"/analistaOYM"})
 public class AnalistaOYMController {
+    @Autowired
+    private HttpSession session;
     final TicketRepository ticketRepository;
     final SitioRepository sitioRepository;
     final UsuarioRepository usuarioRepository;
@@ -28,10 +33,10 @@ public class AnalistaOYMController {
     final EmpresaRepository empresaRepository;
     final ArchivoRepository archivoRepository;
     final SitiosHasEquiposRepository sitiosHasEquiposRepository;
+    final CargoRepository cargoRepository;
+    private final PasswordEncoder passwordEncoder;
 
-
-
-    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1, UsuarioRepository usuarioRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository){
+    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1, UsuarioRepository usuarioRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository, PasswordEncoder passwordEncoder){
         this.sitioRepository = sitioRepository;
         this.ticketRepository = ticketRepository;
         this.equipoRepository = equipoRepository;
@@ -39,6 +44,8 @@ public class AnalistaOYMController {
         this.usuarioRepository = usuarioRepository;
         this.archivoRepository = archivoRepository;
         this.sitiosHasEquiposRepository = sitiosHasEquiposRepository;
+        this.cargoRepository = cargoRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping(value = {"/",""})
@@ -47,37 +54,178 @@ public class AnalistaOYMController {
     }
 
     /* -------------------------- PERFIL -------------------------- */
-    @GetMapping({"/perfil","perfilAdmin","perfiladmin"})
-    public String perfilAdmin(){
-        return "Administrador/perfilAdmin";
+    @GetMapping({"/perfil","perfilSuperadmin","perfilsuperadmin"})
+    public String perfilOYM(Model model,
+                                   @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("usuario", u);
+        return "AnalistaOYM/perfilOYM";
+    }
+
+    /* PERFIL DEL SUPERADMINISTRADOR */
+    @PostMapping("/savePerfil")
+    public String savePerfil(@RequestParam("imagenSubida") MultipartFile file,
+                             @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+                             Model model,
+                             RedirectAttributes attr, HttpSession httpSession){
+
+        // ESTO SE AÑADIO DE BARD
+        //session.setAttribute("usuario", usuario);
+
+        if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
+            model.addAttribute("msgCargo", "Escoger un cargo");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+
+            if (usuario.getId() == null) {
+                return "AnalistaOYM/analistaOYM";
+            } else {
+                return "AnalistaOYM/perfilEditar";
+            }
+        }
+        if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
+            model.addAttribute("msgEmpresa", "Escoger una empresa");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (usuario.getId() == null) {
+                return "AnalistaOYM/analistaOYM";
+            } else {
+                return "AnalistaOYM/perfilEditar";
+            }
+        }
+
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+            if (usuario.getId() == null) {
+                return "AnalistaOYM/analistaOYM";
+            } else {
+                return "AnalistaOYM/perfilEditar";
+            }
+        }
+
+        int maxFileSize = 10485760;
+
+        if (file.getSize() > maxFileSize) {
+            System.out.println(file.getSize());
+            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
+            if (usuario.getId() == null) {
+                return "AnalistaOYM/analistaOYM";
+            } else {
+                return "redirect:/analistaOYM/perfilEditar";
+            }
+        }
+
+        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+            if (usuario.getArchivo() == null) {
+                usuario.setArchivo(new Archivo());
+            }
+            String fileName = file.getOriginalFilename();
+            try{
+                //validación de nombre, apellido y correo
+                Archivo archivo = usuario.getArchivo();
+                archivo.setNombre(fileName);
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+                int idImagen = archivo.getIdArchivos();
+                usuario.getArchivo().setIdArchivos(idImagen);
+                if (usuario.getId() == null) {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                }
+                usuarioRepository.save(usuario);
+                //Usuario u = (Usuario) httpSession.getAttribute("usuario");
+                //HttpSession session = request.getSession(true);
+                //session.setAttribute("nombreUsuario", "nuevoNombre");
+                session.setAttribute("usuario", usuario);
+                return "redirect:/analistaOYM/perfil";
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        } else { //hay al menos 1 error
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (usuario.getId() == null) {
+                return "AnalistaOYM/analistaOYM";
+            } else {
+                return "AnalistaOYM/perfilEditar";
+            }
+        }
     }
 
     @GetMapping({"/perfilEditar"})
-    public String perfilEditar(Model model, @RequestParam("id") String idStr,
-                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
+    public String perfilEditar(Model model,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
+
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
         try{
-            int id = Integer.parseInt(idStr);
+            //int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/admin/listaUsuario";
+                return "redirect:/analistaOYM/analistaOYM";
             }
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
                 usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
                 model.addAttribute("usuario", usuario);
-                return "Administrador/perfilEditar";
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "AnalistaOYM/perfilEditar";
             } else {
-                return "redirect:/admin";
+                return "redirect:/analistaOYM/perfil";
             }
         } catch (NumberFormatException e) {
-            return "redirect:/admin/listaUsuario";
+            return "redirect:/analistaOYM/analistaOYM";
         }
 
     }
 
     @GetMapping({"/perfilContra"})
-    public String perfilContra(){
-        return "Administrador/perfilContra";
+    public String perfilContra(Model model,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
+        try{
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/analistaOYM/analistaOYM";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                model.addAttribute("idUsuario",id);
+                return "analistaOYM/perfilContra";
+            } else {
+                return "redirect:/analistaOYM/perfil";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/analistaOYM/analistaOYM";
+        }
     }
+
+    @PostMapping({"/actualizarContra"})
+    public String actualizarContra(Model model, @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession,
+                                   @RequestParam("password") String contrasenia,
+                                   @RequestParam("newpassword") String contraseniaNueva, @RequestParam("renewpassword") String contraseniaConfirm,
+                                   RedirectAttributes redirectAttributes){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
+
+        String contraseniaAlmacenada = usuarioRepository.obtenerContraseña(id);
+
+        if (passwordEncoder.matches(contrasenia, contraseniaAlmacenada)) {
+            String contraseniaNuevaEncriptada = passwordEncoder.encode(contraseniaNueva);
+            usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
+            redirectAttributes.addFlashAttribute("msg1", "La contraseña se ha actualizado exitosamente");
+
+            return "redirect:/analistaOYM/perfil";
+        } else {
+            redirectAttributes.addFlashAttribute("error","La contraseña actual no es correcta.");
+            return "redirect:/analistaOYM/perfilContra";
+        }
+    }
+
     /* -------------------------- FIN PERFIL -------------------------- */
 
 
@@ -261,10 +409,7 @@ public class AnalistaOYMController {
             return "redirect:/analistaOYM/listaSitio";
         }
     }
-    @GetMapping("/perfil")
-    public String perfilAD(){
-        return "AnalistaOYM/perfilAnalistaOYM";
-    }
+
     @GetMapping("/mapaSitios")
     public String mapaSitios(){
         return "AnalistaOYM/oymMapaSitios";
