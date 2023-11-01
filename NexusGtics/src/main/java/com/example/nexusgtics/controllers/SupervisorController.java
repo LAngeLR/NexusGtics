@@ -28,8 +28,10 @@ public class SupervisorController {
     private final FormularioRepository formularioRepository;
     private final PasswordEncoder passwordEncoder;
     private final ArchivoRepository archivoRepository;
+    private final SitioCerradoRepository sitioCerradoRepository;
     final CargoRepository cargoRepository;
     final EmpresaRepository empresaRepository;
+    private final ComentarioRepository comentarioRepository;
 
 
     public SupervisorController(CuadrillaRepository cuadrillaRepository,
@@ -40,7 +42,9 @@ public class SupervisorController {
                                 PasswordEncoder passwordEncoder,
                                 EmpresaRepository empresaRepository,
                                 CargoRepository cargoRepository,
-                                ArchivoRepository archivoRepository) {
+                                ArchivoRepository archivoRepository,
+                                SitioCerradoRepository sitioCerradoRepository,
+                                ComentarioRepository comentarioRepository) {
         this.cuadrillaRepository = cuadrillaRepository;
         this.usuarioRepository = usuarioRepository;
         this.ticketRepository = ticketRepository;
@@ -50,6 +54,8 @@ public class SupervisorController {
         this.cargoRepository = cargoRepository;
         this.empresaRepository = empresaRepository;
         this.archivoRepository = archivoRepository;
+        this.sitioCerradoRepository = sitioCerradoRepository;
+        this.comentarioRepository = comentarioRepository;
     }
 
     @GetMapping( {"/",""})
@@ -200,11 +206,27 @@ public class SupervisorController {
 
 
     @GetMapping("/comentarios")
-    public String comentarioTicket(Model model, @RequestParam("id") int id){
+    public String comentarioTicket(Model model, @RequestParam("id") String idStr){
 
-        model.addAttribute("id",id);
-        model.addAttribute("estado",ticketRepository.obtenerEstado(id));
-        return "Supervisor/comentariosTickets";
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/supervisor/listaTickets";
+            }
+            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
+            List<Comentario> listaComentarios = comentarioRepository.listarComentarios(id);
+            if (ticketOptional.isPresent()) {
+                Ticket ticket = ticketOptional.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("listaComentarios", listaComentarios);
+                return "Supervisor/comentariosTickets";
+            } else {
+                return "redirect:/supervisor/listaTickets";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/supervisor/listaTickets";
+        }
+
     }
 
     @GetMapping("/formulario")
@@ -214,10 +236,13 @@ public class SupervisorController {
             if (id <= 0 || !ticketRepository.existsById(id)) {
                 return "redirect:/supervisor/ticketCerrado?id="+idStr;
             }
-            List<Formulario> formularioOptional = formularioRepository.formulariosSD(id);
-            if (!formularioOptional.isEmpty()) {
-                Formulario formulario = formularioOptional.get(0);
+            Optional<Formulario> formularioOptional = formularioRepository.findById(id);
+            Optional<SitioCerrado> sitioCerradoOptional = sitioCerradoRepository.findById(id);
+            if (formularioOptional.isPresent() && sitioCerradoOptional.isPresent()) {
+                Formulario formulario = formularioOptional.get();
+                SitioCerrado sitioCerrado = sitioCerradoOptional.get();
                 model.addAttribute("formulario", formulario);
+                model.addAttribute("sitioCerrado", sitioCerrado);
                 return "Supervisor/formulario";
             } else {
                 return "redirect:/supervisor/ticketCerrado?id="+idStr;
@@ -379,6 +404,7 @@ public class SupervisorController {
         if (passwordEncoder.matches(contrasenia, contraseniaAlmacenada)) {
             String contraseniaNuevaEncriptada = passwordEncoder.encode(contraseniaNueva);
             usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
+            redirectAttributes.addFlashAttribute("a","La contraseña se ha actualizado correctamente.");
             return "redirect:/supervisor/perfil";
         } else {
             redirectAttributes.addFlashAttribute("error","La contraseña actual no es correcta.");
@@ -429,5 +455,28 @@ public class SupervisorController {
             return "redirect:/supervisor/perfil";
         }
 
+    }
+
+    @PostMapping("/escribirComentario")
+    public String escribirComentario(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes){
+
+        try{
+            int idTicket = Integer.parseInt(idTicketStr);
+            if (idTicket <= 0 || !ticketRepository.existsById(idTicket)) {
+                return "redirect:/supervisor/listaTickets";
+            }
+            Optional<Ticket> optionalTicket = ticketRepository.findById(idTicket);
+            if (optionalTicket.isPresent()) {
+                Date fechaCreacion = new Date();
+                comentarioRepository.ingresarComentario(id,idTicket,comentario,fechaCreacion);
+                redirectAttributes.addFlashAttribute("error","Comentario Añadido");
+
+                return "redirect:/supervisor/comentarios?id="+idTicketStr;
+            } else {
+                return "redirect:/supervisor/listaTickets";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/supervisor/listaTickets";
+        }
     }
 }
