@@ -112,17 +112,17 @@
                   <label class="form-label" >Selector de Zona</label>
                   <select class="form-select" th:field="*{tipoZona}">
                     <option value="-1">--Seleccione una Zona--</option>
-                    <option value="Urbana">Urbana</option>
-                    <option value="Rural">Rural</option>
+                    <option value="Urbana" th:selected="${tipoZonaSeleccionado == 'Urbana'}">Urbana</option>
+                    <option value="Rural" th:selected="${tipoZonaSeleccionado == 'Rural'}">Rural</option>
                   </select>
                 </div>
 
                 <div class="mb-3">
                   <label class="form-label">Selector de Sitio:</label>
-                  <select th:field="*{tipo}" class="form-control">
+                  <select class="form-select" th:field="*{tipo}">
                     <option value="-1">--Seleccione un Sitio--</option>
-                    <option value="Movil">Móvil</option>
-                    <option value="Fijo">Fijo</option>
+                    <option value="Movil" th:selected="${tipoSeleccionado == 'Movil'}">Móvil</option>
+                    <option value="Fijo" th:selected="${tipoSeleccionado == 'Fijo'}">Fijo</option>
                   </select>
                 </div>
 

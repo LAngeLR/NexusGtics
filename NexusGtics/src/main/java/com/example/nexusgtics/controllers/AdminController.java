@@ -123,7 +123,20 @@ public class AdminController {
 
         model.addAttribute("listaEmpresa", empresaRepository.findAll());
         model.addAttribute("listaCargo", cargoRepository.findAll());
-
+        //para poder mandar "cargoSeleccionado" por defecto como -1
+        Cargo cargoSeleccionado = usuario.getCargo();
+        if (cargoSeleccionado == null) {
+            cargoSeleccionado = new Cargo();
+            cargoSeleccionado.setIdCargos(-1);
+        }
+        model.addAttribute("cargoSeleccionado", cargoSeleccionado);
+        Empresa empresaSeleccionada = usuario.getEmpresa();
+        if (empresaSeleccionada == null) {
+            empresaSeleccionada = new Empresa();
+            empresaSeleccionada.setIdEmpresas(-1);
+            System.out.println(empresaSeleccionada.getIdEmpresas());
+        }
+        model.addAttribute("empresaSeleccionada", empresaSeleccionada);
         return "Administrador/crearUsuario";
     }
 
@@ -156,6 +169,12 @@ public class AdminController {
                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
+        //para "guardar" lo seleccionado y poder mostrarlo cuando haya un error y no tener q ponerlo de nuevo
+        Cargo cargoSeleccionado = usuario.getCargo();
+        Empresa empresaSeleccionada = usuario.getEmpresa();
+        model.addAttribute("cargoSeleccionado", cargoSeleccionado);
+        model.addAttribute("empresaSeleccionada", empresaSeleccionada);
+
         if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
             model.addAttribute("msgCargo", "Escoger un cargo");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
@@ -554,6 +573,11 @@ public class AdminController {
                               Model model,
                               RedirectAttributes attr){
 
+        String tipoSeleccionado = sitio.getTipo();
+        String tipoZonaSeleccionado = sitio.getTipoZona();
+        model.addAttribute("tipoSeleccionado", tipoSeleccionado);
+        model.addAttribute("tipoZonaSeleccionado", tipoZonaSeleccionado);
+
         if (sitio.getTipo() == null || sitio.getTipo().equals("-1")) {
             model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
 
@@ -613,7 +637,6 @@ public class AdminController {
             }
 
         } else { //hay al menos 1 error
-            System.out.println("se mando en sitio, Binding");
             if (sitio.getIdSitios() == null) {
                 return "Administrador/crearSitio";
             } else {
@@ -735,6 +758,14 @@ public class AdminController {
     @GetMapping({"/crearEquipo","/crearequipo"})
     public String crearEquipo(Model model, @ModelAttribute("equipo") Equipo equipo){
         model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+        //para poder mandar "tipoEquipoSeleccionado" por defecto como -1
+        Tipoequipo tipoEquipoSeleccionado = equipo.getTipoequipo();
+        if (tipoEquipoSeleccionado == null) {
+            tipoEquipoSeleccionado = new Tipoequipo();
+            tipoEquipoSeleccionado.setIdTipoEquipo(-1);
+        }
+        model.addAttribute("tipoEquipoSeleccionado",tipoEquipoSeleccionado);
+
         return "Administrador/crearEquipo";
     }
 
@@ -745,6 +776,9 @@ public class AdminController {
                               Model model,
                               RedirectAttributes attr){
 
+        //para "guardar" lo seleccionado y poder mostrarlo cuando haya un error y no tener q ponerlo de nuevo
+        Tipoequipo tipoEquipoSeleccionado = equipo.getTipoequipo();
+        model.addAttribute("tipoEquipoSeleccionado", tipoEquipoSeleccionado);
         if(equipo.getTipoequipo() == null || equipo.getTipoequipo().getIdTipoEquipo() == null){
             model.addAttribute("msgTipoEquipo", "Escoger un tipo de Equipo");
             model.addAttribute("msgImagen", "Escoger un tipo de imagen valido");

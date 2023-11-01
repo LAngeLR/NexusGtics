@@ -45,6 +45,17 @@
               <div class="col-md-6">
 
                 <div class="mb-3">
+                  <label class="form-label">Tipo de Equipo:</label>
+                  <select name="tipoequipo" id="tipoequipo" class="form-control">
+                    <option value="">--Seleccione un tipo de Equipo--</option>
+                    <option th:each="equipo: ${listaTipoEquipos}"
+                            th:text="${equipo.nombreTipo}" th:value="${equipo.idTipoEquipo}"
+                            th:selected="${tipoEquipoSeleccionado.idTipoEquipo == equipo.idTipoEquipo}"
+                    >Sitio de Tipo</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
                   <label class="form-label">Marca:</label>
                   <input th:field="*{marca}" type="text" th:class="${#fields.hasErrors('marca')?'form-control is-invalid':'form-control'}"/>
                   <div class="invalid-feedback"
@@ -80,14 +91,6 @@
                   </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Tipo de Equipo:</label>
-                    <select name="tipoequipo" id="tipoequipo" class="form-control">
-                      <option value="">--Seleccione un tipo de Equipo--</option>
-                      <option th:each="equipo: ${listaTipoEquipos}"
-                              th:text="${equipo.nombreTipo}" th:value="${equipo.idTipoEquipo}">Sitio de Tipo</option>
-                    </select>
-                </div>
               </div>
 
               <br><br>
