@@ -164,7 +164,7 @@
                     <div class="col-12">
                         <div class="card recent-sales overflow-auto">
                             <div class="card-body">
-                                <h5 class="card-title">Tickets Nuevos <span>| CISCO</span></h5>
+                                <h5 class="card-title">Solicitudes Recientes<span>| CISCO</span></h5>
 
                                 <table class="table table-borderless datatable">
                                     <thead>
@@ -172,9 +172,10 @@
                                         <th scope="col">#</th>
                                         <th scope="col">Usuario</th>
                                         <th scope="col">Tipo de Ticket</th>
-                                        <th scope="col">Prioridad</th>
                                         <th scope="col">Fecha Creacion</th>
                                         <th scope="col">Fecha Cierre</th>
+                                        <th scope="col">Prioridad</th>
+                                        <th scope="col">Ver más</th>
 
                                     </tr>
                                     </thead>
@@ -183,6 +184,8 @@
                                         <th th:text="${info.index + 1}"></th>
                                         <td th:text="${ticket.usuarioSolicitante}"></td>
                                         <td th:text="${ticket.idTipoTicket.nombreTipoTicket}"></td>
+                                        <td th:text="${ticket.fechaCreacion}"></td>
+                                        <td th:text="${ticket.fechaCierre}"></td>
                                         <td>
                                             <div th:if="${ticket.prioridad == 'Baja prioridad'}">
                                                 <span class="badge text-bg-info" th:text="${ticket.prioridad}">Baja Prioridad</span>
@@ -197,8 +200,13 @@
                                                 <span class="badge text-bg-warning" th:text="${ticket.prioridad}">Baja Prioridad</span>
                                             </div>
                                         </td>
-                                        <td th:text="${ticket.fechaCreacion}"></td>
-                                        <td th:text="${ticket.fechaCierre}"></td>
+                                        <td th:if="${ticket.estado==2}"><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/ticketNuevo?id=' + ${ticket.idTickets}}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                                            </svg>
+                                        </a></center></td>
+
                                     </tr>
                                     </tbody>
                                 </table>

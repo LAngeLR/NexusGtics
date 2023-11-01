@@ -32,11 +32,5 @@ public interface EquipoRepository extends JpaRepository<Equipo, Integer> {
     @Query(value = "select * from equipos where habilitado = 1", nativeQuery = true)
     List<Equipo> listaEquiposHabilitados();
 
-    @Transactional
-    @Modifying
-    @org.springframework.transaction.annotation.Transactional
-    @Query(value = "update equipos set idSitios = 9 where idEquipos = ?1", nativeQuery = true)
-    void agregarEquipo(int id);
-
 
 }

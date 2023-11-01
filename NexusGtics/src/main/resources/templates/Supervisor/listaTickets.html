@@ -21,9 +21,7 @@
         <div class="pagetitle">
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/supervisor/}">Home</a></li>
-                    <li class="breadcrumb-item active">Tickets</li>
-                    <li class="breadcrumb-item active">Ver Tickets</li>
+                    <li class="breadcrumb-item active">Lista Tickets</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -54,8 +52,8 @@
                                 </thead>
                                 <tbody>
 
-                                    <tr th:each="tickets: ${listaTickets}">
-                                            <td th:text="${tickets.idTickets}"></td>
+                                    <tr th:each="tickets, info: ${listaTickets}">
+                                            <td th:text="${info.index + 1}"></td>
                                             <td th:text="${tickets.usuarioSolicitante}"></td>
 
                                             <div th:if="${tickets.idCuadrilla}==null">

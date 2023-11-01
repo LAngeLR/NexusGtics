@@ -24,8 +24,9 @@
           </ol>
         </nav>
       </div><!-- End Page Title -->
-
-      <section class="section" >
+      <form th:action="@{'/analistaDespliegue/listaEquipo'}" method="get">
+        <input type="hidden" id="id" name="id" th:value="${idSitios}"/>
+        <section class="section"  >
         <div class="row">
           <div class="col-lg-12">
 
@@ -33,7 +34,6 @@
 
               <div class="card-body table-responsive">
                 <div class="container">
-
                   <h5 class="card-title">Equipos en general</h5>
                 </div>
                 <!-- Table with stripped rows -->
@@ -61,7 +61,7 @@
                           </svg>
                         </button>
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" th:href="@{'/analistaDespliegue/verEquipo?id=' + ${sitiosHasEquipo.idEquipos.idEquipos}}">Visualizar</a></li>
+                          <li><a class="dropdown-item" th:href="@{'/analistaDespliegue/verEquipo?idSitios=' + ${idSitios} + '&idEquipos=' + ${sitiosHasEquipo.idEquipos.idEquipos}}">Visualizar</a></li>
                         </ul>
                       </div>
                     </td>
@@ -78,6 +78,7 @@
           </div>
         </div>
       </section>
+      </form>
 
     </div>
   </main><!-- End #main -->
