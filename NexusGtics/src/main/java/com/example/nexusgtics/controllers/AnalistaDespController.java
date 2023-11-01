@@ -102,7 +102,6 @@ public class AnalistaDespController {
             Optional<Sitio> optSitio = sitioRepository.findById(id);
             if(optSitio.isPresent()){
                  sitio = optSitio.get();
-
                 // Obtén la lista de equipos por sitio
                 List<SitiosHasEquipo> listaEquipos = sitiosHasEquiposRepository.listaEquiposPorSitio(id);
                 model.addAttribute("sitio", sitio);
@@ -176,7 +175,6 @@ public class AnalistaDespController {
             model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
 
             if (sitio.getIdSitios() == null) {
-                System.out.println("se mando en sitio, Tipo");
                 return "AnalistaDespliegue/despliegueListaSitio";
             } else {
                 return "AnalistaDespliegue/despliegueEditarSitio";
@@ -207,30 +205,27 @@ public class AnalistaDespController {
                 sitio.getArchivo().setIdArchivos(idImagen);
                 sitioRepository.save(sitio);
                 attr.addFlashAttribute("msg1", "El sitio en '" + sitio.getDistrito() + "' ha sido editado exitosamente");
-
                 return "redirect:/analistaDespliegue/listaSitio";
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
         } else { //hay al menos 1 error
             System.out.println("se mando en sitio, Binding");
             if (sitio.getIdSitios() == null) {
                 System.out.println("se mando en sitio, TipoZona");
                 return "AnalistaDespliegue/despliegueListaSitio";
             } else {
-                return "redirect:/analistaDespliegue/listaSitio";
+                return "AnalistaDespliegue/despliegueEditarSitio";
             }
         }
     }
 
     @PostMapping("/agregarEquipo")
-    public String agregarEquipo(@RequestParam("idEquipos") int idEquipos) {
+    public String agregarEquipo(@RequestParam("idSitios") int idSitios, @RequestParam("idEquipos") int idEquipos) {
         Optional<Equipo> optionalEquipo = equipoRepository.findById(idEquipos);
 
         if (optionalEquipo.isPresent()) {
-            equipoRepository.agregarEquipo(idEquipos);
-
+            sitiosHasEquiposRepository.agregarEquipo(idSitios, idEquipos);
             return "redirect:/analistaDespliegue/listaSitio";
         } else {
             return "redirect:/analistaDespliegue/listaSitio";
@@ -239,19 +234,21 @@ public class AnalistaDespController {
 
 
     @GetMapping("/listaEquipo")
-        public String listaEquipo(Model model, @RequestParam("id") int id){
-        List<SitiosHasEquipo> listaEquipo = sitiosHasEquiposRepository.listaEquiposNoSitio(id);
+        public String listaEquipo(Model model, @RequestParam("idSitios") int idSitios){
+        List<SitiosHasEquipo> listaEquipo = sitiosHasEquiposRepository.listaEquiposNoSitio(idSitios);
         model.addAttribute("listaEquipo",listaEquipo);
+        model.addAttribute("idSitios", idSitios); // Agregar el valor de "id" al modelo
         return "AnalistaDespliegue/despliegueListaEquipos";
     }
     @GetMapping("/verEquipo")
-    public String verEquipo(Model model, @RequestParam("id") String idStr){
+    public String verEquipo(Model model, @RequestParam("idEquipos") String idStr, @RequestParam("idSitios") int idSitios){
+        model.addAttribute("idSitios", idSitios);
         try{
-            int id = Integer.parseInt(idStr);
-            if (id <= 0 || !equipoRepository.existsById(id)) {
+            int idEquipos = Integer.parseInt(idStr);
+            if (idEquipos <= 0 || !equipoRepository.existsById(idEquipos)) {
                 return "redirect:/analistaDespliegue/listaSitio";
             }
-        Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
+        Optional<Equipo> optionalEquipo = equipoRepository.findById(idEquipos);
         if(optionalEquipo.isPresent()){
             Equipo equipo = optionalEquipo.get();
             model.addAttribute("equipo", equipo);
