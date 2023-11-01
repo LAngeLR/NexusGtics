@@ -16,7 +16,7 @@
     <h1 th:text="|Perfil|"></h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/Perfil}" th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
+        <li class="breadcrumb-item"><a th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
         <li class="breadcrumb-item active">Perfil</li>
       </ol>
     </nav>
@@ -43,16 +43,18 @@
           <div class="card-body pt-3">
             <!-- Bordered Tabs -->
             <div class="tab-content pt-2">
-              <a th:href="@{/admin/perfilAdmin}" class="btn btn-dark me-2 mt-3">General</a>
-              <a th:href="@{'/admin/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
-              <a th:href="@{'/admin/perfilContra?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
+              <a th:href="@{/analistaDespliegue/perfil}" class="btn btn-dark me-2 mt-3">General</a>
+              <a th:href="@{/analistaDespliegue/perfilEditar}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
+              <a th:href="@{/analistaDespliegue/perfilContra}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
             </div>
 
             <div class="tab-content pt-2">
 
               <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                <h5 class="card-title" style="color: #095444" th:text="|Sobre ${session.usuario.nombre} ${session.usuario.apellido}|">Sobre Luis:</h5>
-                <p class="small fst-italic" th:text="|${session.usuario.descripcion}|"></p>
+                <h5 class="card-title" style="color: #095444" th:text="|Sobre ti|">Sobre Luis:</h5>
+                <div class="row">
+                  <div class="col-lg-9 col-md-8" th:text="|${usuario.descripcion}|">Debe se dalir algo</div>
+                </div>
 
                 <h5 class="card-title" style="color: #095444">Detalles del Perfil</h5>
 

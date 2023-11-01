@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/tecnico")
@@ -102,20 +103,6 @@ public class TecnicoController {
         }
     }
     /* -------------------------- FIN PERFIL -------------------------- */
-
-    /*@GetMapping("/perfiltecnico")
-    public String perfilTecnico(Model model, @RequestParam("id") int id) {
-        Optional<Usuario> optUsuario = usuarioRepository.findById(id);
-        if (optUsuario.isPresent()) {
-            Usuario usuario = optUsuario.get();
-            model.addAttribute("usuario", usuario);
-            return "Tecnico/perfiltecnico";
-        } else {
-            return "redirect:/Tecnico/perfiltecnico";
-        }
-    }*/
-
-    //-----------------------------------------------------------------------
 
     @GetMapping("/comentarios")
     public String pagcomentarios(Model model, @RequestParam("id") int id,
@@ -314,7 +301,6 @@ public class TecnicoController {
                                     RedirectAttributes attr) {
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket1", listaT);
-
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if (optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();
@@ -398,12 +384,14 @@ public class TecnicoController {
     @GetMapping({"/formulario1", "formulario1"})
     public String pagformulario1(Model model, @RequestParam("id") String idStr,
                                 @ModelAttribute("formulario1") @Valid Formulario formulario1, BindingResult bindingResult) {
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
         try{
             int id = Integer.parseInt(idStr);
             if(id <= 0|| !formularioRepository.existsById(id)){
                 return "redirect:/tecnico/formulario";
             }
-            Optional<Formulario> optionalFormulario=formularioRepository.findById(id);
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
             if(optionalFormulario.isPresent()){
                 formulario1 = optionalFormulario.get();
                 model.addAttribute("formulario", formulario1);
@@ -491,14 +479,19 @@ public class TecnicoController {
     @GetMapping({"/formulario2", "formulario2"})
     public String pagformulario2(Model model, @RequestParam("id") String idStr,
                                 @ModelAttribute("formulario") @Valid Formulario formulario2, BindingResult bindingResult) {
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
         try{
             int id = Integer.parseInt(idStr);
             if(id <= 0|| !formularioRepository.existsById(id)){
                 return "redirect:/tecnico/formulario";
             }
             Optional<Formulario> optionalFormulario=formularioRepository.findById(id);
+            Optional<SitioCerrado> sitioCerradoOptional = sitioCerradoRepository.findById(id);
             if(optionalFormulario.isPresent()){
                 formulario2 = optionalFormulario.get();
+                SitioCerrado sitioCerrado = sitioCerradoOptional.get();
+                model.addAttribute("sitioCerrado", sitioCerrado);
                 model.addAttribute("formulario", formulario2);
                 return "Tecnico/formulario2";
             }else{
@@ -513,7 +506,7 @@ public class TecnicoController {
     /* Guardar Datos*/
     @PostMapping("/saveFormulario2")
     public String saveFormulario2(@RequestParam("imagenSubida") MultipartFile img,@RequestParam("files") List<MultipartFile> files,
-                                 @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult,
+                                 @ModelAttribute("formulario2") @Valid Formulario formulario2, BindingResult bindingResult,
                                  Model model, RedirectAttributes attr) {
         List<Archivo> archivos = new ArrayList<>();
         for (MultipartFile file : files) {
@@ -532,19 +525,19 @@ public class TecnicoController {
                 }
             }
         }
-        if(formulario.getConexion() == null || formulario.getMovilidad()==null || formulario.getNomredantario() == null){
+        if(formulario2.getConexion() == null || formulario2.getMovilidad()==null || formulario2.getNomredantario() == null){
             model.addAttribute("msgFormulario2","Por favor, complete lo pedido por el formulario");
             model.addAttribute("form2",formularioRepository.findAll());
-            if(formulario.getIdFormularios() == null){
+            if(formulario2.getIdFormularios() == null){
                 return "Tecnico/datost_nuevo";
             }else{
                 return "Tecnico/formulario2";
             }
         }
-        if(formulario.getArea() == null || formulario.getDni()==null || formulario.getObservaciones()==null){
+        if(formulario2.getArea() == null || formulario2.getDni()==null || formulario2.getObservaciones()==null){
             model.addAttribute("msgFormulario","Por favor, complete lo pedido por el formulario");
             model.addAttribute("form2",formularioRepository.findAll());
-            if(formulario.getIdFormularios() == null){
+            if(formulario2.getIdFormularios() == null){
                 return "Tecnico/datost_nuevo";
             }else{
                 return "Tecnico/formulario2";
@@ -559,23 +552,23 @@ public class TecnicoController {
                 archivo.setArchivo(img.getBytes());
                 archivo.setContentType(img.getContentType());
                 archivoRepository.save(archivo);
-                formulario.setArchivo(archivo);
+                formulario2.setArchivo(archivo);
             } catch (IOException e) {
                 System.out.println("Error al procesar el archivo");
                 throw new RuntimeException(e);
             }
         }
         if(!bindingResult.hasErrors()){
-            if (formulario.getArchivo() == null) {
-                formulario.setArchivo(new Archivo());
+            if (formulario2.getArchivo() == null) {
+                formulario2.setArchivo(new Archivo());
             }
             try {
-                if (formulario.getIdFormularios() == null) {
+                if (formulario2.getIdFormularios() == null) {
                     attr.addFlashAttribute("msg", "Datos de formulario 2 - validación de sitio guardados exitosamente");
                 } else {
                     attr.addFlashAttribute("msg", "Datos de formulario 2 - validación de sitio guardados exitosamente");
                 }
-                formularioRepository.save(formulario);
+                formularioRepository.save(formulario2);
                 return "redirect:/tecnico/formulario";
             } catch (Exception e) {
                 System.out.println("Error al guardar los datos del formulario");
@@ -583,7 +576,7 @@ public class TecnicoController {
             }
         } else{
             model.addAttribute("formulario", formularioRepository.findAll());
-            if (formulario.getIdFormularios() == null) {
+            if (formulario2.getIdFormularios() == null) {
                 return "Tecnico/datost_nuevo";
             } else {
                 return "Tecnico/formulario2";
@@ -597,6 +590,8 @@ public class TecnicoController {
     @GetMapping({"/formulario3", "formulario3"})
     public String pagformulario3(Model model, @RequestParam("id") String idStr,
                                 @ModelAttribute("formulario") @Valid Formulario formulario3, BindingResult bindingResult) {
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
         try{
             int id = Integer.parseInt(idStr);
             if(id <= 0|| !formularioRepository.existsById(id)){

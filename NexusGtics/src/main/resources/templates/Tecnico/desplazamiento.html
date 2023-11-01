@@ -37,6 +37,15 @@
             min-height: 35rem;
             min-width: 20rem;
         }
+        .card {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            max-width: 100%;
+            border-collapse: collapse;
+        }
     </style>
 </head>
 <body>
@@ -154,137 +163,54 @@
     <section class="section profile">
         <div class="row">
             <div class="col-xl-4">
-                <div class="card">
-                    <div class="card-body">
-                        <br>
-                        <h5>Ingrese los datos pedidos antes de empezar:</h5>
+                <div class="h-100 p-5 rounded-3" style="background-color: #202a3b; color:white;">
+                    <h5><b>Ingrese los datos pedidos antes de empezar:</b></h5><br>
+                    <form method="POST" th:action="@{/tecnico/saveDesplazamiento}" th:object="${ticket}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row g-3 align-items-center">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <div class="col-auto">
-                                            <label for="suId" class="col-form-label">Su DNI:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="col-auto">
-                                            <!--<input type="text"  class="form-control" aria-describedby="Id">-->
-                                            <input type="text" id="suId" class="form-control-plaintext" th:object="${ticket}" th:field="*{idCuadrilla.tecnico.dni}" disabled style="font-size: medium;color: #00489b;">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="col-auto">
-                                            <label for="ticketid" class="col-form-label">Ticket ID:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="col-auto">
-                                            <input type="text" id="ticketid" class="form-control-plaintext" th:object="${ticket}" th:field="*{idTickets}" disabled style="font-size: medium;color: #00489b;">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="col-auto">
-                                            <label for="lugarInicio" class="col-form-label" style="font-size: small">Lugar Inicio:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="col-auto">
-                                            <input type="text" id="lugarInicio" class="form-control" aria-describedby="lugarInicio">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="col-auto">
-                                            <label for="hora" class="col-form-label" style="font-size: small">Hora de comienzo:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="col-auto">
-                                            <input type="text" id="hora" class="form-control" aria-describedby="horastart">
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                            <center><p style="font-size: x-small">Para empezar desplazamiento dar click en "Empezar"</p><button type="button" class="btn btn-success">Empezar</button></center>
+                            <div class="col-auto">
+                                <label for="ticketid" class="col-form-label"><b>Ticket ID:</b></label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="text" id="ticketid" class="form-control-plaintext" th:field="*{idTickets}" disabled style="font-size: medium;color: #ebf6fd;"></div>
+                                        <br>
+                            <div class="col-auto">
+                                <label for="lugarInicio" class="col-form-label" style="font-size: small">Lugar Inicio:</label>
+                            </div>
+
+                            <div class="col-auto">
+                                <input type="text" id="lugarInicio" class="form-control" aria-describedby="lugarInicio" th:field="*{idSitios.nombre}">
+                            </div>
+                                        <br>
+                            <div class="col-auto" th:if="${ticket.estado==3}">
+                                <label for="fechaHora" class="col-form-label" style="font-size: small">Fecha y hora de comienzo:</label></div>
+
+                            <div class="col-auto" th:if="${ticket.estado==3}">
+                                <input id="fechaHora" type="datetime-local" class="form-control" name="fechahora" step="1" min="2023-01-01T00:00" max="2023-12-31T12:00" th:value="${ticket.fechaCreacion}">
+                                <br><br>
+                            </div>
+
+                            <div class="col-auto" th:if="${ticket.estado==4}">
+                                <label for="fechaHora2" class="col-form-label" style="font-size: small">Fecha y hora de comienzo:</label></div>
+
+                            <div class="col-auto" th:if="${ticket.estado==4}">
+                                <input id="fechaHora2" class="form-control" name="fechahora" step="1" th:value="${ticket.fechaCreacion}">
+                                <br><br>
+                            </div>
+
+
+                            <center>
+                                <p style="font-size: x-small">Para empezar desplazamiento dar click en "Empezar"</p>
+                                <a type="button" class="btn btn-outline-success" th:href="@{'/tecnico/verTicketNuevo?id='+${ticket.idTickets}}">Empezar</a>
+                            </center>
                         </div>
-                        <br>
-                        <h5>Ingrese los datos pedidos antes de terminar su turno:</h5>
-                        <div class="row g-3 align-items-center">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <div class="col-auto">
-                                            <label for="suId2" class="col-form-label">Su DNI:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="col-auto">
-                                            <input type="text" id="suId2" class="form-control-plaintext" th:object="${ticket}" th:field="*{idCuadrilla.tecnico.dni}" disabled style="font-size: medium;color: #00489b;">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="col-auto">
-                                            <label for="ticketid2" class="col-form-label">Ticket ID:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="col-auto">
-                                            <input type="text" id="ticketid2" class="form-control-plaintext" th:object="${ticket}" th:field="*{idTickets}" disabled style="font-size: medium;color: #00489b;">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="col-auto">
-                                            <label for="lugarFinal" class="col-form-label" style="font-size: small">Lugar Final:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="col-auto">
-                                            <input type="text" id="lugarFinal" class="form-control" aria-describedby="lugarFinal">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="col-auto">
-                                            <label for="hora2" class="col-form-label" style="font-size: small">Hora término:</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="col-auto">
-                                            <input type="hour" id="hora2" class="form-control" aria-describedby="horastart">
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                            <center> <p style="font-size: x-small">Para completar servicio dar click en "Terminar"</p><button type="button" class="btn btn-danger">Terminar</button></center>
-                        </div>
-                    </div>
+                    </form>
+
                 </div>
-
             </div>
-
             <div class="col-xl-8">
                 <div class="card">
                     <div class="card-body pt-3">
                         <div id="map"></div>
-                        <!--<script>
-                            let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
-                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            }).addTo(map);
-                            L.marker([-12.06802,-77.03462]).addTo(map)
-                                .bindPopup('Ticket aquí')
-                                .openPopup();
-                        </script>-->
                         <!-- MAPA -->
                         <script>
                             var map = L.map('map').setView([-12.06802,-77.03462],18)
@@ -311,21 +237,6 @@
     </section>
 
 </main><!-- End #main -->
-
-
-<!-- MAPA
-    <div id="mi_mapa"></div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-        <script>
-            let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-            L.marker([-12.06802,-77.03462]).addTo(map)
-                .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-                .openPopup();
-        </script>
-MAPA -->
 
 <footer id="footer" class="footer">
     <div class="credits" style="font-size: x-small;color:#5e5d5d">

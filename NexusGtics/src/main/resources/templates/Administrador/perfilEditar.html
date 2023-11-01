@@ -16,11 +16,16 @@
     <h1 th:text="|Perfil|"></h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/admin/listaUsuario}" th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
+        <li class="breadcrumb-item"><a th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
         <li class="breadcrumb-item active">Perfil</li>
       </ol>
     </nav>
   </div><!-- End Page Title -->
+
+  <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
+  </div>
+  <div class="alert alert-danger" role="alert" th:if="${msgImagen1 != null}" th:text="${msgImagen1}">
+  </div>
 
   <section class="section profile">
     <div class="row">
@@ -44,17 +49,16 @@
             <!-- Bordered Tabs -->
 
             <div class="tab-content pt-2">
-              <a th:href="@{/admin/perfilAdmin}" class="btn btn-outline-dark me-2 mt-3">General</a>
-              <a th:href="@{'/admin/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
-              <a th:href="@{'/admin/perfilContra?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
-
+              <a th:href="@{/admin/perfil}" class="btn btn-outline-dark me-2 mt-3">General</a>
+              <a th:href="@{/admin/perfilEditar}" class="btn btn-dark me-2 mt-3">Editar perfil</a>
+              <a th:href="@{/admin/perfilContra}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
             </div>
 
             <div class="tab-content pt-2">
 
               <div class="tab-pane show active fade profile-edit pt-3" id="profile-edit">
 
-                <form method="POST" th:action="@{/admin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data">
+                <form method="POST" th:action="@{/admin/savePerfil}" th:object="${usuario}" enctype="multipart/form-data">
                   <input type="hidden" class="form-control" th:field="*{id}">
                   <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
                   <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
@@ -65,9 +69,6 @@
                   <input type="hidden" name="cargo" id="cargo" th:field="*{cargo}">
                   <input type="hidden" name="empresa" id="empresa" th:field="*{empresa}">
                   <input type="hidden" name="dni" id="dni" th:field="*{dni}">
-
-
-
 
                   <div class="mb-3">
                     <label for="imagenSubida" class="form-label">Foto de perfil:</label>
@@ -111,14 +112,14 @@
                     <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
                     <div class="invalid-feedback"
                          th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
-                      Mensaje de error de correo
+                      Mensaje de error de descripcion
                     </div>
                   </div>
 
 
 
                   <div class="text-center">
-                    <button type="submit" class="btn btn-danger">Guardar cambios</button>
+                    <button type="submit" class="btn btn-outline-primary float-end">Aplicar cambios</button>
                   </div>
                 </form><!-- End Profile Edit Form -->
 

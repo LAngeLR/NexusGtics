@@ -151,7 +151,7 @@
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section profile">
+    <!--<section class="section profile">
         <div class="row">
             <div class="col-xl-4">
                 <div class="card">
@@ -168,7 +168,6 @@
                                     </td>
                                     <td>
                                         <div class="col-auto">
-                                            <!--<input type="text"  class="form-control" aria-describedby="Id">-->
                                             <input type="text" id="suId" class="form-control-plaintext" th:object="${tickets}" th:field="*{idCuadrilla.tecnico.dni}" disabled style="font-size: medium;color: #00489b;">
                                         </div>
                                     </td>
@@ -264,15 +263,81 @@
                 <div class="card">
                     <div class="card-body pt-3">
                         <div id="map"></div>
-                        <!--<script>
-                            let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
+
+                        <script>
+                            var map = L.map('map').setView([-12.06802,-77.03462],18)
                             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             }).addTo(map);
-                            L.marker([-12.06802,-77.03462]).addTo(map)
-                                .bindPopup('Ticket aquí')
-                                .openPopup();
-                        </script>-->
+                            var marker = L.marker([-12.07319, -77.03498].addTo(map));
+                            //click event
+                            map.on('click', function (e){
+                                var endMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+
+                                L.Routing.control({
+                                    waypoints: [
+                                        L.latLng(-12.07319, -77.03498),
+                                        L.latLng(e.latlng.lat, e.latlng.lng) ]
+                                }).addTo(map);
+                            })
+                        </script>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>-->
+    <section class="section profile">
+        <div class="row">
+            <div class="col-xl-4">
+                <div class="h-100 p-5 rounded-3" style="background-color: #202a3b; color:white;">
+                    <h5><b>Ingrese los datos pedidos antes de empezar:</b></h5>
+                    <form method="POST" th:action="@{/tecnico/saveDesplazamiento}" th:object="${tickets}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-auto">
+                                <label for="ticketid" class="col-form-label"><b>Ticket ID:</b></label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="text" id="ticketid" class="form-control-plaintext" th:value="${tickets.idTickets}" disabled style="font-size: medium;color: #ebf6fd;"></div>
+                            <div class="col-auto">
+                                <label for="lugarInicio" class="col-form-label" style="font-size: small; color:#8dbe6c"><b>Lugar Inicio:</b></label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="text" id="lugarInicio" class="form-control" aria-describedby="lugarInicio" th:value="${tickets.idSitios.nombre}" disabled>
+                            </div>
+                            <div class="col-auto">
+                                <label for="fechaHora" class="col-form-label" style="font-size: small; color:#8dbe6c"><b>Fecha y hora de comienzo:</b></label></div>
+                            <div class="col-auto">
+                                <input id="fechaHora" class="form-control" name="fechahora" step="1" th:value="${tickets.fechaCreacion}" disabled>
+                            </div>
+                            <div class="col-auto">
+                                <label for="lugarCierre" class="col-form-label" style="font-size: small">Lugar de cierre:</label>
+                            </div>
+
+                            <div class="col-auto">
+                                <input type="text" id="lugarCierre" class="form-control" aria-describedby="lugarInicio" th:field="*{idsitioCerrado.nombre}">
+                            </div>
+
+                            <div class="col-auto">
+                                <label for="fechaHora2" class="col-form-label" style="font-size: small">Fecha y hora determino:</label></div>
+
+                            <div class="col-auto">
+                                <input id="fechaHora2" type="datetime-local" class="form-control" name="fechahora" step="1" min="2023-01-01T00:00" max="2023-12-31T12:00" th:value="${tickets.fechaCierre}">
+                                <br>
+                            </div>
+                            <center>
+                                <p style="font-size: x-small">Para culminar desplazamiento dar click en "Terminar "</p>
+                                <a type="button" class="btn btn-outline-danger" th:href="@{'/tecnico/verTicketProgreso?id='+${tickets.idTickets}}">Terminar</a>
+                            </center>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="col-xl-8">
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <div id="map"></div>
                         <!-- MAPA -->
                         <script>
                             var map = L.map('map').setView([-12.06802,-77.03462],18)
@@ -299,21 +364,6 @@
     </section>
 
 </main><!-- End #main -->
-
-
-<!-- MAPA
-    <div id="mi_mapa"></div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-        <script>
-            let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-            L.marker([-12.06802,-77.03462]).addTo(map)
-                .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-                .openPopup();
-        </script>
-MAPA -->
 
 <footer id="footer" class="footer">
     <div class="credits" style="font-size: x-small;color:#5e5d5d">

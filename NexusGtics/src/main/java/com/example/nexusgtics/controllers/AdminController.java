@@ -3,6 +3,7 @@ package com.example.nexusgtics.controllers;
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
 import com.sun.net.httpserver.HttpsServer;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
@@ -32,8 +33,8 @@ import java.math.RoundingMode;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
-
+    @Autowired
+    private HttpSession session;
 
     final EmpresaRepository empresaRepository;
     final SitioRepository sitioRepository;
@@ -56,26 +57,27 @@ public class AdminController {
         this.archivoRepository = archivoRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
     List<String> extensionesPermitidas = Arrays.asList("jpg", "jpeg", "png");
 
-    @GetMapping({"/","","admin","administrador"})
-    public String paginaPrincipal(Model model){
+    @GetMapping({"/", "", "admin", "administrador"})
+    public String paginaPrincipal(Model model) {
         model.addAttribute("currentPage", "Inicio");
         return "Administrador/admin";
     }
 
     /* --------------------- PERFIL ---------------------------- */
 
-    @GetMapping({"/perfil","perfilAdmin","perfiladmin"})
-    public String perfilAdmin(){
+    @GetMapping({"/perfil", "perfilAdmin", "perfiladmin"})
+    public String perfilAdmin() {
         return "Administrador/perfilAdmin";
     }
 
 //---------------------------- GESTION DE USUARIOS -------------------------------------------
 
     // Lista de usuarios no admin
-    @GetMapping({"/listaUsuario","listausuario"})
-    public String listaUsuario(Model model){
+    @GetMapping({"/listaUsuario", "listausuario"})
+    public String listaUsuario(Model model) {
         List<Usuario> listaUsuarioNoAdmin = usuarioRepository.listaDeUsuariosNoAdmin();
         model.addAttribute("currentPage", "Lista de Usuarios");
 
@@ -84,7 +86,7 @@ public class AdminController {
     }
 
     @GetMapping({"/listaBaneados"})
-    public String listaBaneado(Model model){
+    public String listaBaneado(Model model) {
         List<Usuario> listaUsuarioBaneado = usuarioRepository.listaDeUsuariosBaneados();
         model.addAttribute("currentPage", "Lista de Baneados");
 
@@ -99,7 +101,7 @@ public class AdminController {
         if (optionalUsuario.isPresent()) {
             Usuario usuario = optionalUsuario.get();
             usuarioRepository.desactivarUsuario(id);
-            attr.addFlashAttribute("msg1", "El usuario '" + usuario.getNombre() + " " +usuario.getApellido() + "' se sido desactivado exitosamente");
+            attr.addFlashAttribute("msg1", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se sido desactivado exitosamente");
 
         }
         return "redirect:/admin/listaUsuario";
@@ -112,14 +114,14 @@ public class AdminController {
         if (optionalUsuario.isPresent()) {
             Usuario usuario = optionalUsuario.get();
             usuarioRepository.activarUsuario(id);
-            attr.addFlashAttribute("msg1", "El usuario '" + usuario.getNombre() + " " +usuario.getApellido() + "' se sido activado exitosamente");
+            attr.addFlashAttribute("msg1", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se sido activado exitosamente");
         }
         return "redirect:/admin/listaBaneados";
     }
 
-    @GetMapping({"/crearUsuario","crearusuario"})
+    @GetMapping({"/crearUsuario", "crearusuario"})
     public String crearUsuario(Model model,
-                               @ModelAttribute("usuario") Usuario usuario){
+                               @ModelAttribute("usuario") Usuario usuario) {
 
         model.addAttribute("listaEmpresa", empresaRepository.findAll());
         model.addAttribute("listaCargo", cargoRepository.findAll());
@@ -140,16 +142,16 @@ public class AdminController {
         return "Administrador/crearUsuario";
     }
 
-    @GetMapping({"/verUsuario","verusuario"})
-    public String verUsuario(Model model, @RequestParam("id") String idStr){
+    @GetMapping({"/verUsuario", "verusuario"})
+    public String verUsuario(Model model, @RequestParam("id") String idStr) {
 
-        try{
+        try {
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/admin/listaUsuario";
             }
             Optional<Usuario> optUsuario = usuarioRepository.findById(id);
-            if(optUsuario.isPresent()){
+            if (optUsuario.isPresent()) {
                 Usuario usuario1 = optUsuario.get();
                 model.addAttribute("usuario", usuario1);
                 return "Administrador/vistaUsuario";
@@ -174,8 +176,7 @@ public class AdminController {
         Empresa empresaSeleccionada = usuario.getEmpresa();
         model.addAttribute("cargoSeleccionado", cargoSeleccionado);
         model.addAttribute("empresaSeleccionada", empresaSeleccionada);
-
-        if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
+        if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
             model.addAttribute("msgCargo", "Escoger un cargo");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
@@ -186,7 +187,7 @@ public class AdminController {
                 return "Administrador/editarUsuario";
             }
         }
-        if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
+        if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
             model.addAttribute("msgEmpresa", "Escoger una empresa");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
@@ -219,7 +220,7 @@ public class AdminController {
                 usuario.setArchivo(new Archivo());
             }
             String fileName = file.getOriginalFilename();
-            try{
+            try {
                 //validación de nombre, apellido y correo
                 Archivo archivo = usuario.getArchivo();
                 archivo.setNombre(fileName);
@@ -255,8 +256,8 @@ public class AdminController {
     public String updateUsuario(@RequestParam("imagenSubida") MultipartFile file,
                                 @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                                 Model model,
-                                RedirectAttributes attr){
-        if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
+                                RedirectAttributes attr) {
+        if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
             model.addAttribute("msgCargo", "Escoger un cargo");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
@@ -267,7 +268,7 @@ public class AdminController {
                 return "Administrador/editarUsuario";
             }
         }
-        if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
+        if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
             model.addAttribute("msgEmpresa", "Escoger una empresa");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
@@ -334,11 +335,11 @@ public class AdminController {
     }
 
     /*EDITAR USUARIO*/
-    @GetMapping({"/editarUsuario","editarusuario"})
+    @GetMapping({"/editarUsuario", "editarusuario"})
     public String editarUsuario(Model model, @RequestParam("id") String idStr,
-                                @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
+                                @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult) {
 
-        try{
+        try {
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/admin/listaUsuario";
@@ -358,84 +359,25 @@ public class AdminController {
         }
     }
 
-    @GetMapping({"/perfilEditar"})
-    public String perfilEditar(Model model, @RequestParam("id") String idStr,
-                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
-        try{
-            int id = Integer.parseInt(idStr);
-            if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/admin/listaUsuario";
-            }
-            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-            if (optionalUsuario.isPresent()) {
-                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
-                model.addAttribute("usuario", usuario);
-                model.addAttribute("listaEmpresa", empresaRepository.findAll());
-                model.addAttribute("listaCargo", cargoRepository.findAll());
-                return "Administrador/perfilEditar";
-            } else {
-                return "redirect:/admin";
-            }
-        } catch (NumberFormatException e) {
-            return "redirect:/admin/listaUsuario";
-        }
 
-    }
-
-    @GetMapping({"/perfilContra"})
-    public String perfilContra(Model model, @RequestParam("id") String idStr){
-
-        try{
-            int id = Integer.parseInt(idStr);
-            if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/admin/listaUsuario";
-            }
-            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-            if (optionalUsuario.isPresent()) {
-                model.addAttribute("idUsuario",id);
-                return "Administrador/perfilContra";
-            } else {
-                return "redirect:/admin";
-            }
-        } catch (NumberFormatException e) {
-            return "redirect:/admin/listaUsuario";
-        }
-    }
-
-    @PostMapping({"/actualizarContra"})
-    public String actualizarContra(Model model, @RequestParam("id") int id, @RequestParam("password") String contrasenia,
-                                   @RequestParam("newpassword") String contraseniaNueva, @RequestParam("renewpassword") String contraseniaConfirm, RedirectAttributes redirectAttributes){
-        String idStr=String.valueOf(id);
-
-        String contraseniaAlmacenada = usuarioRepository.obtenerContraseña(id);
-
-        if (passwordEncoder.matches(contrasenia, contraseniaAlmacenada)) {
-            String contraseniaNuevaEncriptada = passwordEncoder.encode(contraseniaNueva);
-            usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
-            return "redirect:/admin/perfilAdmin";
-        } else {
-            redirectAttributes.addFlashAttribute("error","La contraseña actual no es correcta.");
-            return "redirect:/admin/perfilContra?id="+idStr;
-        }
-    }
-//------------------------------ GESTION DE EMPRESAS -----------------------------------------
-    @GetMapping({"/listaEmpresa","/listaempresa"})
-    public String listaEmpresa(Model model){
+    //------------------------------ GESTION DE EMPRESAS -----------------------------------------
+    @GetMapping({"/listaEmpresa", "/listaempresa"})
+    public String listaEmpresa(Model model) {
         List<Empresa> listaEmpresa = empresaRepository.findAll();
-        model.addAttribute("listaEmpresa",listaEmpresa);
+        model.addAttribute("listaEmpresa", listaEmpresa);
         return "Administrador/listaEmpresa";
     }
 
-    @GetMapping({"/crearEmpresa","/crearempresa"})
-    public String crearEmpresa(@ModelAttribute("empresa") Empresa empresa){
+    @GetMapping({"/crearEmpresa", "/crearempresa"})
+    public String crearEmpresa(@ModelAttribute("empresa") Empresa empresa) {
         return "Administrador/crearEmpresa";
     }
 
     @GetMapping("/verEmpresa")
     public String verEmpresa(Model model,
-                             @RequestParam("id") String idStr){
+                             @RequestParam("id") String idStr) {
 
-        try{
+        try {
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !empresaRepository.existsById(id)) {
                 return "redirect:/admin/listaEmpresa";
@@ -455,7 +397,7 @@ public class AdminController {
 
     @PostMapping("/guardarEmpresa")
     public String guardarEmpresa(@ModelAttribute("empresa") @Valid Empresa empresa,
-            BindingResult bindingResult,RedirectAttributes attr){
+                                 BindingResult bindingResult, RedirectAttributes attr) {
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             // Obtener la zona horaria GMT-5
@@ -474,10 +416,10 @@ public class AdminController {
 
     /*PARA VISUALIZAR FOTOS*/
     @GetMapping("/image/{id}")
-    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") int id){
+    public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") int id) {
         Optional<Archivo> opt = archivoRepository.findById(id);
 
-        if(opt.isPresent()){
+        if (opt.isPresent()) {
             Archivo u = opt.get();
 
             byte[] imagenComoBytes = u.getArchivo();
@@ -491,40 +433,40 @@ public class AdminController {
                     httpHeaders,
                     HttpStatus.OK);
         } else {
-            return  null;
+            return null;
         }
     }
 
 
 //------------------------------ GESTION DE SITIOS -----------------------------------------
 
-    @GetMapping({"/listaSitio","/listasitio"})
-    public String listaSitio(Model model){
+    @GetMapping({"/listaSitio", "/listasitio"})
+    public String listaSitio(Model model) {
         List<Sitio> listaSitio = sitioRepository.listaDeSitios();
         model.addAttribute("listaSitio", listaSitio);
         return "Administrador/listaSitio";
     }
 
-    @GetMapping({"/crearSitio","/crearsitio"})
+    @GetMapping({"/crearSitio", "/crearsitio"})
     public String crearSitio(Model model,
-                                @ModelAttribute("sitio") Sitio sitio){
+                             @ModelAttribute("sitio") Sitio sitio) {
         return "Administrador/crearSitio";
     }
 
-    @GetMapping({"/verSitio","/versitio"})
-    public String verSitio(Model model, @RequestParam("id") String idStr){
+    @GetMapping({"/verSitio", "/versitio"})
+    public String verSitio(Model model, @RequestParam("id") String idStr) {
 
-        try{
+        try {
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !sitioRepository.existsById(id)) {
                 return "redirect:/admin/listaSitio";
             }
             Optional<Sitio> optionalSitio = sitioRepository.findById(id);
-            if (optionalSitio.isPresent()){
+            if (optionalSitio.isPresent()) {
                 Sitio sitio = optionalSitio.get();
                 model.addAttribute("sitio", sitio);
                 return "Administrador/vistaSitio";
-            }else {
+            } else {
                 return "redirect:/admin/listaSitio";
             }
         } catch (NumberFormatException e) {
@@ -535,19 +477,19 @@ public class AdminController {
     /*EDITAR Sitio*/
     @GetMapping({"/editarSitio"})
     public String editarSitio(Model model, @RequestParam("id") String idStr,
-                              @ModelAttribute("sitio") @Valid Sitio sitio, BindingResult bindingResult){
+                              @ModelAttribute("sitio") @Valid Sitio sitio, BindingResult bindingResult) {
 
-        try{
+        try {
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !sitioRepository.existsById(id)) {
                 return "redirect:/admin/listaSitio";
             }
             Optional<Sitio> optionalSitio = sitioRepository.findById(id);
-            if (optionalSitio.isPresent()){
+            if (optionalSitio.isPresent()) {
                 sitio = optionalSitio.get();
                 model.addAttribute("sitio", sitio);
                 return "Administrador/editarSitio";
-            }else {
+            } else {
                 return "redirect:/admin/listaSitio";
             }
         } catch (NumberFormatException e) {
@@ -555,13 +497,13 @@ public class AdminController {
         }
     }
 
-    @GetMapping({"/ubicarSitio","/ubicarsitio"})
-    public String ubicarSitio(){
+    @GetMapping({"/ubicarSitio", "/ubicarsitio"})
+    public String ubicarSitio() {
         return "Administrador/ubicacionSitio";
     }
 
-    @GetMapping({"/inventarioSitio","/inventariositio"})
-    public String inventarioSitio(){
+    @GetMapping({"/inventarioSitio", "/inventariositio"})
+    public String inventarioSitio() {
         return "Administrador/mapaInventarioSitio";
     }
 
@@ -569,9 +511,9 @@ public class AdminController {
     @PostMapping("/saveSitio")
     public String saveSitio(@RequestParam("imagenSubida") MultipartFile file,
                             @ModelAttribute("sitio") @Valid Sitio sitio,
-                              BindingResult bindingResult,
-                              Model model,
-                              RedirectAttributes attr){
+                            BindingResult bindingResult,
+                            Model model,
+                            RedirectAttributes attr) {
 
         String tipoSeleccionado = sitio.getTipo();
         String tipoZonaSeleccionado = sitio.getTipoZona();
@@ -609,7 +551,7 @@ public class AdminController {
                 sitio.setArchivo(new Archivo());
             }
             String fileName = file.getOriginalFilename();
-            try{
+            try {
                 Archivo archivo = sitio.getArchivo();
                 archivo.setNombre(fileName);
                 archivo.setTipo(1);
@@ -625,7 +567,7 @@ public class AdminController {
                     attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido actualizado exitosamente");
                 }
                 //truncar latitud y long
-                BigDecimal longitud1=sitio.getLongitud();
+                BigDecimal longitud1 = sitio.getLongitud();
                 BigDecimal latitud1 = sitio.getLatitud();
                 sitio.setLongitud(longitud1.setScale(7, RoundingMode.DOWN));
                 sitio.setLatitud(latitud1.setScale(7, RoundingMode.DOWN));
@@ -644,12 +586,13 @@ public class AdminController {
             }
         }
     }
+
     @PostMapping("/updateSitio")
     public String updateSitio(@RequestParam("imagenSubida") MultipartFile file,
                               @ModelAttribute("sitio") @Valid Sitio sitio,
                               BindingResult bindingResult,
                               Model model,
-                              RedirectAttributes attr){
+                              RedirectAttributes attr) {
 
         if (sitio.getTipo() == null || sitio.getTipo().equals("-1")) {
             model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
@@ -679,7 +622,7 @@ public class AdminController {
                 archivo.setArchivo(file.getBytes());
                 archivo.setContentType(file.getContentType());
 
-                BigDecimal longitud1=sitio.getLongitud();
+                BigDecimal longitud1 = sitio.getLongitud();
                 BigDecimal latitud1 = sitio.getLatitud();
                 sitio.setLongitud(longitud1.setScale(7, RoundingMode.DOWN));
                 sitio.setLatitud(latitud1.setScale(7, RoundingMode.DOWN));
@@ -748,8 +691,8 @@ public class AdminController {
 //-----------------------------------------------------------------------
 
     // GESTION DE EQUIPOS
-    @GetMapping({"/listaEquipo","/listaequipo"})
-    public String listaEquipo(Model model){
+    @GetMapping({"/listaEquipo", "/listaequipo"})
+    public String listaEquipo(Model model) {
         List<Equipo> listaEquipo = equipoRepository.listaEquiposHabilitados();
         model.addAttribute("listaEquipo", listaEquipo);
         return "Administrador/listaEquipo";
@@ -773,16 +716,18 @@ public class AdminController {
     @PostMapping("/saveEquipo")
     public String saveEquipo(@RequestParam("imagenSubida") MultipartFile file,
                              @ModelAttribute("equipo") @Valid Equipo equipo, BindingResult bindingResult,
-                              Model model,
-                              RedirectAttributes attr){
+                             Model model,
+                             RedirectAttributes attr) {
+
 
         //para "guardar" lo seleccionado y poder mostrarlo cuando haya un error y no tener q ponerlo de nuevo
         Tipoequipo tipoEquipoSeleccionado = equipo.getTipoequipo();
         model.addAttribute("tipoEquipoSeleccionado", tipoEquipoSeleccionado);
         if(equipo.getTipoequipo() == null || equipo.getTipoequipo().getIdTipoEquipo() == null){
+
             model.addAttribute("msgTipoEquipo", "Escoger un tipo de Equipo");
             model.addAttribute("msgImagen", "Escoger un tipo de imagen valido");
-            model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+            model.addAttribute("listaTipoEquipos", tipoEquipoRepository.findAll());
 
             if (equipo.getIdEquipos() == null) {
                 return "Administrador/crearEquipo";
@@ -805,7 +750,7 @@ public class AdminController {
             }
 
             String fileName = file.getOriginalFilename();
-            try{
+            try {
                 Archivo archivo = equipo.getArchivo();
                 archivo.setNombre(fileName);
                 archivo.setTipo(1);
@@ -827,7 +772,7 @@ public class AdminController {
             }
 
         } else { //hay al menos 1 error
-            model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+            model.addAttribute("listaTipoEquipos", tipoEquipoRepository.findAll());
             if (equipo.getIdEquipos() == null) {
                 return "Administrador/crearEquipo";
             } else {
@@ -835,15 +780,16 @@ public class AdminController {
             }
         }
     }
+
     @PostMapping("/updateEquipo")
     public String updateEquipo(@RequestParam("imagenSubida") MultipartFile file,
-                             @ModelAttribute("equipo") @Valid Equipo equipo, BindingResult bindingResult,
-                             Model model,
-                             RedirectAttributes attr){
+                               @ModelAttribute("equipo") @Valid Equipo equipo, BindingResult bindingResult,
+                               Model model,
+                               RedirectAttributes attr) {
 
-        if(equipo.getTipoequipo() == null || equipo.getTipoequipo().getIdTipoEquipo() == null){
+        if (equipo.getTipoequipo() == null || equipo.getTipoequipo().getIdTipoEquipo() == null) {
             model.addAttribute("msgTipoEquipo", "Escoger un tipo de Equipo");
-            model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+            model.addAttribute("listaTipoEquipos", tipoEquipoRepository.findAll());
 
             if (equipo.getIdEquipos() == null) {
                 return "Administrador/crearEquipo";
@@ -900,7 +846,7 @@ public class AdminController {
             }
         } else {
             // Hay al menos 1 error
-            model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+            model.addAttribute("listaTipoEquipos", tipoEquipoRepository.findAll());
             if (equipo.getIdEquipos() == null) {
                 return "Administrador/crearEquipo";
             } else {
@@ -909,15 +855,15 @@ public class AdminController {
         }
     }
 
-    @GetMapping({"/verEquipo","/verequipo"})
-    public String verEquipo(Model model, @RequestParam("id") String idStr){
-        try{
+    @GetMapping({"/verEquipo", "/verequipo"})
+    public String verEquipo(Model model, @RequestParam("id") String idStr) {
+        try {
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !equipoRepository.existsById(id)) {
                 return "redirect:/admin/listaEquipo";
             }
             Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
-            if(optionalEquipo.isPresent()){
+            if (optionalEquipo.isPresent()) {
                 Equipo equipo = optionalEquipo.get();
                 model.addAttribute("equipo", equipo);
                 return "Administrador/vistaEquipo";
@@ -930,20 +876,20 @@ public class AdminController {
     }
 
 
-    @GetMapping({"/editarEquipo","/editarequipo"})
-    public String editarEquipo(Model model, @RequestParam("id") String idStr, @ModelAttribute("equipo") Equipo equipo){
-        try{
+    @GetMapping({"/editarEquipo", "/editarequipo"})
+    public String editarEquipo(Model model, @RequestParam("id") String idStr, @ModelAttribute("equipo") Equipo equipo) {
+        try {
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !equipoRepository.existsById(id)) {
                 return "redirect:/admin/listaEquipo";
             }
             Optional<Equipo> optionalEquipo = equipoRepository.findById(id);
-            if(optionalEquipo.isPresent()){
+            if (optionalEquipo.isPresent()) {
                 equipo = optionalEquipo.get();
                 model.addAttribute("equipo", equipo);
-                model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+                model.addAttribute("listaTipoEquipos", tipoEquipoRepository.findAll());
                 return "Administrador/editarEquipo";
-            }else {
+            } else {
                 return "redirect:/admin/listaEquipo";
             }
         } catch (NumberFormatException e) {
@@ -963,22 +909,189 @@ public class AdminController {
         return "redirect:/admin/listaEquipo";
     }
 
+    // ------------------------------------- Acabo equipos -----------------------------
+
+    /* PERFIL DEL ADMINISTRADOR */
+    @PostMapping("/savePerfil")
+    public String savePerfil(@RequestParam("imagenSubida") MultipartFile file,
+                             @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+                             Model model,
+                             RedirectAttributes attr, HttpSession httpSession) {
+
+        // ESTO SE AÑADIO DE BARD
+        //session.setAttribute("usuario", usuario);
+
+        if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
+            model.addAttribute("msgCargo", "Escoger un cargo");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+
+            if (usuario.getId() == null) {
+                return "Administrador/perfil";
+            } else {
+                return "Administrador/perfilEditar";
+            }
+        }
+        if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
+            model.addAttribute("msgEmpresa", "Escoger una empresa");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (usuario.getId() == null) {
+                return "Administrador/perfil";
+            } else {
+                return "Administrador/perfilEditar";
+            }
+        }
+
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+            if (usuario.getId() == null) {
+                return "Administrador/perfil";
+            } else {
+                return "Administrador/perfilEditar";
+            }
+        }
+
+        int maxFileSize = 10485760;
+
+        if (file.getSize() > maxFileSize) {
+            System.out.println(file.getSize());
+            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
+            if (usuario.getId() == null) {
+                return "Administrador/perfil";
+            } else {
+                return "redirect:/admin/perfilEditar";
+            }
+        }
+
+        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+            if (usuario.getArchivo() == null) {
+                usuario.setArchivo(new Archivo());
+            }
+            String fileName = file.getOriginalFilename();
+            try {
+                //validación de nombre, apellido y correo
+                Archivo archivo = usuario.getArchivo();
+                archivo.setNombre(fileName);
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+                int idImagen = archivo.getIdArchivos();
+                usuario.getArchivo().setIdArchivos(idImagen);
+                if (usuario.getId() == null) {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                }
+                usuarioRepository.save(usuario);
+                //Usuario u = (Usuario) httpSession.getAttribute("usuario");
+                //HttpSession session = request.getSession(true);
+                //session.setAttribute("nombreUsuario", "nuevoNombre");
+                session.setAttribute("usuario", usuario);
+                return "redirect:/admin/perfil";
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        } else { //hay al menos 1 error
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (usuario.getId() == null) {
+                return "Administrador/perfil";
+            } else {
+                return "Administrador/perfilEditar";
+            }
+        }
+    }
+
+    @GetMapping({"/perfilEditar"})
+    public String perfilEditar(Model model,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession) {
+
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
+        try {
+            //int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/admin/listaUsuario";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
+                model.addAttribute("usuario", usuario);
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Administrador/perfilEditar";
+            } else {
+                return "redirect:/admin/perfil";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaUsuario";
+        }
+
+    }
+
+    @GetMapping({"/perfilContra"})
+    public String perfilContra(Model model,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession) {
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
+        try {
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/admin/listaUsuario";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                model.addAttribute("idUsuario", id);
+                return "Administrador/perfilContra";
+            } else {
+                return "redirect:/admin/perfil";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaUsuario";
+        }
+    }
+
+    @PostMapping({"/actualizarContra"})
+    public String actualizarContra(Model model, @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession,
+                                   @RequestParam("password") String contrasenia,
+                                   @RequestParam("newpassword") String contraseniaNueva, @RequestParam("renewpassword") String contraseniaConfirm,
+                                   RedirectAttributes redirectAttributes) {
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
+
+        String contraseniaAlmacenada = usuarioRepository.obtenerContraseña(id);
+
+        if (passwordEncoder.matches(contrasenia, contraseniaAlmacenada)) {
+            String contraseniaNuevaEncriptada = passwordEncoder.encode(contraseniaNueva);
+            usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
+            redirectAttributes.addFlashAttribute("msg1", "La contraseña se ha actualizado exitosamente");
+
+            return "redirect:/admin/perfil";
+        } else {
+            redirectAttributes.addFlashAttribute("error", "La contraseña actual no es correcta.");
+            return "redirect:/admin/perfilContra";
+        }
+    }
+
+    // ------------------------------------- Acabo Perfil del administrador -----------------------------
 
 
     // Direcciona al form CAMPOS DINAMICOS
-    @GetMapping({"/crearCampo","/crearcampo"})
+    @GetMapping({"/crearCampo", "/crearcampo"})
     public String crearCampo(Model model,
-                             @ModelAttribute("equipo") Equipo equipo){
-        model.addAttribute("listaSitios",sitioRepository.findAll());
-        model.addAttribute("listaTipoEquipos",tipoEquipoRepository.findAll());
+                             @ModelAttribute("equipo") Equipo equipo) {
+        model.addAttribute("listaSitios", sitioRepository.findAll());
+        model.addAttribute("listaTipoEquipos", tipoEquipoRepository.findAll());
         return "Administrador/campoDinamico";
     }
 
     // CREAR NUEVO CAMPO DINAMICO (POST)
-    @GetMapping({"/saveCampo","/savecampo"})
-    public String saveCampo( @ModelAttribute("sitio") Sitio sitio,
-                             @RequestParam("campo") String campo,
-                             @RequestParam("valor") String valor){
+    @GetMapping({"/saveCampo", "/savecampo"})
+    public String saveCampo(@ModelAttribute("sitio") Sitio sitio,
+                            @RequestParam("campo") String campo,
+                            @RequestParam("valor") String valor) {
         CampoDinamico nuevoCampo = new CampoDinamico();
         nuevoCampo.setNombre(campo);
         nuevoCampo.setValor(valor);

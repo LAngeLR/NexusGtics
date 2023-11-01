@@ -140,13 +140,13 @@
 <main id="main" class="main">
     <div class="container">
         <div class="pagetitle">
-            <h1>Formulario</h1>
+            <h1>Formulario 1</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a th:href="@{/tecnico/}">Home</a></li>
                     <li class="breadcrumb-item active">Tickets Asignados</li>
                     <li class="breadcrumb-item active">Datos del ticket</li>
-                    <li class="breadcrumb-item active">Formulario</li>
+                    <li class="breadcrumb-item active">Formulario 1</li>
                 </ol>
             </nav>
         </div>
@@ -399,6 +399,7 @@
                     <form method="POST" th:action="@{/tecnico/saveFormulario1}" th:object="${formulario1}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row">
                             <div class="col-md-6">
+                                <input type="hidden" class="form-control" th:field="*{idFormularios}">
                                 <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
                                 <div class="mb-3">
                                     <label class="form-label">Hechos relevantes en la llegada al sitio:</label>
@@ -419,10 +420,9 @@
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="imagenSubida" class="form-label">Cargar nueva foto de perfil:</label>
+                                    <label for="imagenSubida" class="form-label">Cargar foto :</label>
                                     <input class="form-control" type="file" name="imagenSubida" id="imagenSubida" accept="image/*" onchange="previewImage(event, '#imgPreview')">
                                 </div>
-                                <button type="submit" class="btn btn-outline-primary float-end">Aplicar cambios</button>
 
                             </div>
                             <div class="col-md-6">
@@ -434,7 +434,7 @@
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="imagenSubida2" class="form-label">Cargar nueva foto de perfil:</label>
+                                    <label for="imagenSubida2" class="form-label">Cargar fotos del sitio:</label>
                                     <input class="form-control" type="file" name="imagenSubida2" id="imagenSubida2" accept="image/*" onchange="previewImage(event, '#imgPreview2')">
                                 </div>
                                 <button type="submit" class="btn btn-outline-primary float-end">Guardar</button>
@@ -447,7 +447,7 @@
             </div>
         </section>
         <br>
-        <a th:href="@{/tecnico/formulario}" class="btn btn-outline-danger">Regresar</a>
+        <a th:href="@{'/tecnico/formulario?id='+${formulario.ticket.idTickets}}" class="btn btn-outline-danger">Regresar</a>
     </div>
 </main>
 <!-- ======= Footer ======= -->
