@@ -181,17 +181,26 @@
                                 <input type="text" id="lugarInicio" class="form-control" aria-describedby="lugarInicio" th:field="*{idSitios.nombre}">
                             </div>
                                         <br>
-                            <div class="col-auto">
-                                <label class="col-form-label" style="font-size: small">Fecha y hora de comienzo:</label></div>
+                            <div class="col-auto" th:if="${ticket.estado==3}">
+                                <label for="fechaHora" class="col-form-label" style="font-size: small">Fecha y hora de comienzo:</label></div>
 
-                            <div class="col-auto">
-                                <input type="datetime-local" class="form-control" name="fechahora" step="1" min="2023-01-01T00:00" max="2023-12-31T12:00" th:value="${ticket.fechaCreacion}">
+                            <div class="col-auto" th:if="${ticket.estado==3}">
+                                <input id="fechaHora" type="datetime-local" class="form-control" name="fechahora" step="1" min="2023-01-01T00:00" max="2023-12-31T12:00" th:value="${ticket.fechaCreacion}">
                                 <br><br>
                             </div>
 
+                            <div class="col-auto" th:if="${ticket.estado==4}">
+                                <label for="fechaHora2" class="col-form-label" style="font-size: small">Fecha y hora de comienzo:</label></div>
+
+                            <div class="col-auto" th:if="${ticket.estado==4}">
+                                <input id="fechaHora2" class="form-control" name="fechahora" step="1" th:value="${ticket.fechaCreacion}">
+                                <br><br>
+                            </div>
+
+
                             <center>
                                 <p style="font-size: x-small">Para empezar desplazamiento dar click en "Empezar"</p>
-                                <button type="button" class="btn btn-outline-success">Empezar</button>
+                                <a type="button" class="btn btn-outline-success" th:href="@{'/tecnico/verTicketNuevo?id='+${ticket.idTickets}}">Empezar</a>
                             </center>
                         </div>
                     </form>
@@ -228,21 +237,6 @@
     </section>
 
 </main><!-- End #main -->
-
-
-<!-- MAPA
-    <div id="mi_mapa"></div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-        <script>
-            let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-            L.marker([-12.06802,-77.03462]).addTo(map)
-                .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-                .openPopup();
-        </script>
-MAPA -->
 
 <footer id="footer" class="footer">
     <div class="credits" style="font-size: x-small;color:#5e5d5d">
