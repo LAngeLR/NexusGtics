@@ -2,12 +2,9 @@ package com.example.nexusgtics.controllers;
 
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
-import com.sun.net.httpserver.HttpsServer;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
-import org.springframework.data.repository.query.parser.Part;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,7 +24,6 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Controller
@@ -41,18 +37,19 @@ public class AdminController {
     final EquipoRepository equipoRepository;
     final TipoEquipoRepository tipoEquipoRepository;
     final UsuarioRepository usuarioRepository;
-
+    final SitiosHasEquiposRepository sitiosHasEquiposRepository;
     final CargoRepository cargoRepository;
     private final ArchivoRepository archivoRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository, UsuarioRepository usuarioRepository, CargoRepository cargoRepository,
+    public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository, UsuarioRepository usuarioRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository,
                            ArchivoRepository archivoRepository, PasswordEncoder passwordEncoder) {
         this.empresaRepository = empresaRepository;
         this.sitioRepository = sitioRepository;
         this.equipoRepository = equipoRepository;
         this.tipoEquipoRepository = tipoEquipoRepository;
         this.usuarioRepository = usuarioRepository;
+        this.sitiosHasEquiposRepository = sitiosHasEquiposRepository;
         this.cargoRepository = cargoRepository;
         this.archivoRepository = archivoRepository;
         this.passwordEncoder = passwordEncoder;
@@ -464,7 +461,10 @@ public class AdminController {
             Optional<Sitio> optionalSitio = sitioRepository.findById(id);
             if (optionalSitio.isPresent()) {
                 Sitio sitio = optionalSitio.get();
+                // Obtén la lista de equipos por sitio
+                List<SitiosHasEquipo> listaEquipos = sitiosHasEquiposRepository.listaEquiposPorSitio(id);
                 model.addAttribute("sitio", sitio);
+                model.addAttribute("listaEquipos", listaEquipos);
                 return "Administrador/vistaSitio";
             } else {
                 return "redirect:/admin/listaSitio";
@@ -503,7 +503,9 @@ public class AdminController {
     }
 
     @GetMapping({"/inventarioSitio", "/inventariositio"})
-    public String inventarioSitio() {
+    public String inventarioSitio(Model model) {
+        List<Sitio> listaSitio = sitioRepository.listaDeSitios();
+        model.addAttribute("listaSitio", listaSitio);
         return "Administrador/mapaInventarioSitio";
     }
 
