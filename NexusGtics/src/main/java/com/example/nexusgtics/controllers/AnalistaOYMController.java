@@ -371,11 +371,11 @@ public class AnalistaOYMController {
     }
 
     @PostMapping("/agregarEquipo")
-    public String agregarEquipo(@RequestParam("idEquipos") int idEquipos) {
+    public String agregarEquipo(@RequestParam("idSitios") int idSitios, @RequestParam("idEquipos") int idEquipos) {
         Optional<Equipo> optionalEquipo = equipoRepository.findById(idEquipos);
 
         if (optionalEquipo.isPresent()) {
-            equipoRepository.agregarEquipo(idEquipos);
+            sitiosHasEquiposRepository.agregarEquipo(idSitios, idEquipos);
 
             return "redirect:/analistaOYM/listaSitio";
         } else {
@@ -391,7 +391,7 @@ public class AnalistaOYMController {
     }
 
     @GetMapping("/verEquipo")
-    public String verEquipo(Model model, @RequestParam("id") String idStr){
+    public String verEquipo(Model model, @RequestParam("idEquipos") String idStr){
         try{
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !equipoRepository.existsById(id)) {

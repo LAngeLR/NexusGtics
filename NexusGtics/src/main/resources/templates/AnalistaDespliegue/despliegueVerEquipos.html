@@ -33,7 +33,9 @@
                     <div class="pagetitle">
                         <h1 class="card-title">Vista de equipo</h1>
                     </div>
-                    <form method="POST" th:action="@{/analistaDespliegue/agregarEquipo}" th:object="${equipo}">
+                    <form method="POST" th:action="@{/analistaDespliegue/agregarEquipo}"  th:object="${equipo}">
+                        <input type="hidden" th:value="${equipo.idEquipos}" />
+                        <input type="hidden" name="idSitios" th:value="${idSitios}" />
                         <div class="row">
                             <div class="col-md-6">
                                 <input type="hidden"  name="equipo" id="equipo" class="form-control" th:field="*{idEquipos}">
