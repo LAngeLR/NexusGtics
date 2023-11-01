@@ -35,11 +35,6 @@
             width: 30%;
             font-size: 0.8rem
         }
-        .imagen-recortada {
-            width: 200px; /* Ancho deseado de la imagen recortada */
-            height: 200px; /* Altura deseada de la imagen recortada */
-            overflow: hidden; /* Oculta cualquier contenido que se extienda más allá del tamaño del div */
-        }
     </style>
 </head>
 
@@ -110,7 +105,7 @@
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
                         <h6>Kevin Anderson</h6>
-                        <span th:text="${cargo}">Admin</span>
+                        <span th:text="${cargo}">Tecnico</span>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
@@ -145,18 +140,18 @@
 <main id="main" class="main">
     <div class="container">
         <div class="pagetitle">
-            <h1>Formulario</h1>
+            <h1>Formulario 2</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a th:href="@{/tecnico/}">Home</a></li>
                     <li class="breadcrumb-item active">Tickets Asignados</li>
                     <li class="breadcrumb-item active">Datos del ticket</li>
-                    <li class="breadcrumb-item active">Formulario</li>
+                    <li class="breadcrumb-item active">Formulario 2</li>
                 </ol>
             </nav>
         </div>
 
-        <section class="section">
+        <!--<section class="section">
             <div class="row">
                 <div class="col-lg-8">
                     <div class="card">
@@ -390,7 +385,139 @@
 
                 </div>
             </div>
+        </section>-->
+        <section class="section dashboard">
+            <div class="row">
+                <div class="rounded p-5" style="background-color: #FFFFFF;">
+                    <div class="pagetitle">
+                        <h1 class="card-title">Formulario 2</h1>
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msgFormulario2 != null}" th:text="${msgFormulario2}">
+                        A simple success alert—check it out!
+                    </div>
+                    <form method="POST" th:action="@{/tecnico/saveFormulario2}" th:object="${formulario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Nombres del arrendatario:</label>
+                                    <input th:field="*{nomredantario}" type="text" th:class="${#fields.hasErrors('nomredantario')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('nomredantario')}" th:errors="*{nomredantario}">
+                                        Mensaje de error de nomredantario
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">DNI:</label>
+                                    <input th:field="*{dni}" type="number" th:class="${#fields.hasErrors('dni')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">
+                                        Mensaje de error de dni
+                                    </div>
+                                </div>
+
+                                <div class="form-check form-switch" th:if="${formulario.conexion==0}">
+                                    <label class="form-label">¿Conexión de energia?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="conexion"><br>
+                                    <label class="form-check-label" for="conexion" style="font-size: xx-small">No hay conexión</label>
+                                </div>
+                                <div class="form-check form-switch" th:if="${formulario.conexion==1}">
+                                    <label class="form-label">¿Conexión de energia?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="conexion1" checked=""><br>
+                                    <label class="form-check-label" for="conexion1" style="font-size: xx-small">Sí hay conexión</label>
+                                </div>
+                                <br>
+                                <div class="form-check form-switch" th:if="${formulario.movilidad==0}">
+                                    <label class="form-label">¿La movilidad llega al sitio?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"><br>
+                                    <label class="form-check-label" for="flexSwitchCheckDefault" style="font-size: xx-small">No llega movilidad</label>
+                                </div>
+                                <div class="form-check form-switch" th:if="${formulario.movilidad==1}">
+                                    <label class="form-label">¿La movilidad llega al sitio?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked=""><br>
+                                    <label class="form-check-label" for="flexSwitchCheckChecked" style="font-size: xx-small">Sí llega movilidad</label>
+                                </div>
+
+                                <br>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Área del sitio:</label>
+                                    <input th:field="*{area}" type="number" th:class="${#fields.hasErrors('area')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('area')}" th:errors="*{area}">
+                                        Mensaje de error de area
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Observaciones:</label>
+                                    <input th:field="*{observaciones}" type="text" th:class="${#fields.hasErrors('observaciones')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('observaciones')}" th:errors="*{observaciones}">
+                                        Mensaje de error de observaciones
+                                    </div>
+                                </div>
+
+                            </div>
+                            <br><br>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                                    <div id="map"></div>
+                                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                                    <script>
+                                        var latitud = [[${sitioCerrado.latitud}]];
+                                        var longitud = [[${sitioCerrado.longitud}]];
+                                        let map = L.map('map').setView([latitud,longitud],18)
+                                        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        }).addTo(map);
+                                        L.marker([latitud,longitud]).addTo(map).bindPopup('Lugar').openPopup();
+                                    </script>
+
+                                    <script>
+                                        function centrarMapaEnCoordenadasIniciales() {
+                                            map.setView([latitud, longitud], 18);
+                                        }
+                                        var botonCentrar = L.control({ position: 'bottomright' });
+
+                                        botonCentrar.onAdd = function (map) {
+                                            var container = L.DomUtil.create('div', 'boton-centrar');
+                                            var button = L.DomUtil.create('button', 'btn btn-primary', container);
+                                            button.type = 'button';
+                                            var icono = L.DomUtil.create('i', 'bx bx-collapse', button);
+                                            L.DomEvent.on(button, 'click', centrarMapaEnCoordenadasIniciales);
+                                            return container;
+                                        };
+                                        botonCentrar.addTo(map);
+                                    </script>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Fotos del sitio:</label>
+                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                        <img th:src="@{|image/${formulario.archivo.idArchivos}|}" style="max-width: 300px;" alt="Fotos del sitio">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="files" class="form-label">Cargar fotos del sitio:</label>
+                                    <input class="form-control" type="file" name="files" id="files" accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                                </div>
+
+
+                                <button type="submit" class="btn btn-outline-primary float-end">Guardar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br><br>
+
+
+            </div>
         </section>
+        <br>
+        <a th:href="@{'/tecnico/formulario?id='+${formulario.ticket.idTickets}}" class="btn btn-outline-danger">Regresar</a>
     </div>
 </main>
 <!-- ======= Footer ======= -->

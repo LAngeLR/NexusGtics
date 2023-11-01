@@ -13,12 +13,12 @@
         </li><!-- End Tables Nav -->
 
         <li class="nav-item">
-            <a th:class="${currentPage == 'crearAdmin' or currentPage == 'listaUsuario' or currentPage == 'listaBaneados' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+            <a th:class="${currentPage == 'crearAdministrador' or currentPage == 'listaUsuario' or currentPage == 'listaBaneados' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-people"></i><span>Gestión de usuarios</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="charts-nav" th:classappend="${currentPage == 'crearAdmin' or currentPage == 'listaUsuario' or currentPage == 'listaBaneados' ? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">
+            <ul id="charts-nav" th:classappend="${currentPage == 'crearAdministrador' or currentPage == 'listaUsuario' or currentPage == 'listaBaneados' ? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:classappend="${currentPage == 'crearAdmin' ? 'active' : ''}" th:href="@{/superadmin/crearusuario}">
+                    <a th:classappend="${currentPage == 'crearAdministrador' ? 'active' : ''}" th:href="@{/superadmin/crearusuario}">
                         <i class="bi bi-circle"></i><span>Crear Administrador</span>
                     </a>
                 </li>

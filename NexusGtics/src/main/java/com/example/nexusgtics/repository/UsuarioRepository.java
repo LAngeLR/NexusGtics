@@ -47,6 +47,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Transactional
     @Query(value ="update nexus.usuarios set contrasenia = ?1 where idUsuarios = ?2", nativeQuery = true )
     void actualizarContraA(String cont,int id);
+
+    @Query(value ="select * from nexus.usuarios where idCargos IN (2) and habilitado = 1", nativeQuery = true )
+    List<Usuario> listaDeAdministradores();
+
+
     // ------------------------------ ANALISTA OYM --------------------------------------- //
 
 

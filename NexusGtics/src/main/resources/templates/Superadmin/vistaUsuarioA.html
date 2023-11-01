@@ -82,18 +82,34 @@
                   <img th:src="@{|image/${usuario.archivo.idArchivos}|}" style="max-width: 300px;" alt="">
                 </div>
 
-                <a th:href="@{'/superadmin/editarUsuario?id=' + ${usuario.id}}" class="btn btn-outline-primary me-2 float-end">Editar</a>
+<!--                <li th:unless="${usuario.habilitado == 1}">-->
+<!--                  <a th:href="@{'/superadmin/editarUsuario?id=' + ${usuario.id}}" class="btn btn-outline-primary me-2 float-end">Editar</a>-->
+<!--                </li>-->
+
+                <li th:if="${usuario.habilitado}" style="list-style-type: none;">
+                  <a th:href="@{'/superadmin/editarUsuario?id=' + ${usuario.id}}" class="btn btn-outline-primary me-2 float-end">
+                    <span th:if="${usuario.habilitado}">Editar</span>
+                  </a>
+                </li>
+
               </div>
             </div>
           </form>
         </div>
         <br><br>
-
-
       </div>
     </section>
     <br>
-    <a th:href="@{/superadmin/listaUsuario}" class="btn btn-outline-danger">Regresar</a>
+
+
+    <li th:if="${usuario.habilitado.equals(true)}" style="list-style-type: none;">
+      <a th:href="@{/superadmin/listaUsuario}" class="btn btn-outline-danger">Regresar</a>
+    </li>
+
+    <li th:if="${usuario.habilitado.equals(false)}" style="list-style-type: none;">
+      <a th:href="@{/superadmin/listaBaneados}" class="btn btn-outline-danger">Regresar</a>
+    </li>
+
   </div>
 </main><!-- End #main -->
 

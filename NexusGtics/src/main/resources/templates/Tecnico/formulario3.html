@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Trabajo realizado-form</title>
+    <title>Validación de sitio-Form</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -29,18 +29,6 @@
     <!-- Template Main CSS File -->
     <link th:href="@{/assets/css/style.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <style>
-        #map{ height: 38vh; width:40hw; }
-        select {
-            width: 30%;
-            font-size: 0.8rem
-        }
-        .imagen-recortada {
-            width: 200px; /* Ancho deseado de la imagen recortada */
-            height: 200px; /* Altura deseada de la imagen recortada */
-            overflow: hidden; /* Oculta cualquier contenido que se extienda más allá del tamaño del div */
-        }
-    </style>
 </head>
 
 <body>
@@ -110,7 +98,7 @@
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
                         <h6>Kevin Anderson</h6>
-                        <span th:text="${cargo}">Admin</span>
+                        <span th:text="${cargo}">Tecnico</span>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
@@ -145,7 +133,7 @@
 <main id="main" class="main">
     <div class="container">
         <div class="pagetitle">
-            <h1>Formulario</h1>
+            <h1>Formulario 3</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a th:href="@{/tecnico/}">Home</a></li>
@@ -156,7 +144,7 @@
             </nav>
         </div>
 
-        <section class="section">
+        <!--<section class="section">
             <div class="row">
                 <div class="col-lg-8">
                     <div class="card">
@@ -390,7 +378,125 @@
 
                 </div>
             </div>
+        </section>-->
+        <section class="section dashboard">
+            <div class="row">
+                <div class="rounded p-5" style="background-color: #FFFFFF;">
+                    <div class="pagetitle">
+                        <h1 class="card-title">Formulario 3</h1>
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msgFormulario3 != null}" th:text="${msgFormulario3}">
+                        A simple success alert—check it out!
+                    </div>
+                    <form method="POST" th:action="@{/tecnico/saveFormulario3}" th:object="${formulario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="form-check form-switch" th:if="${formulario.construccion==0}">
+                                    <label class="form-label">¿Se realizó construcción de infraestructura?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="conexion"><br>
+                                    <label class="form-check-label" for="conexion" style="font-size: xx-small">No se realizó construcción de infraestructuras</label>
+                                </div>
+                                <div class="form-check form-switch" th:if="${formulario.construccion==1}">
+                                    <label class="form-label">¿Se realizó construcción de infraestructura?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="conexion1" checked=""><br>
+                                    <label class="form-check-label" for="conexion1" style="font-size: xx-small">Sí se realizó construcción de infraestructuras</label>
+                                </div>
+                                <br>
+                                <div class="form-check form-switch" th:if="${formulario.instalacion==0}">
+                                    <label class="form-label">¿Se realizó instalaciones eléctricas?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"><br>
+                                    <label class="form-check-label" for="flexSwitchCheckDefault" style="font-size: xx-small">No hay instalación eléctricas</label>
+                                </div>
+                                <div class="form-check form-switch" th:if="${formulario.instalacion==1}">
+                                    <label class="form-label">¿Se realizó instalaciones eléctricas?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked=""><br>
+                                    <label class="form-check-label" for="flexSwitchCheckChecked" style="font-size: xx-small">Sí hay instalación eléctricas</label>
+                                </div>
+
+                                <br>
+                                <div class="form-check form-switch" th:if="${formulario.despliegue==0}">
+                                    <label class="form-label">¿Se realizó despliegue de equipos?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="despliegueEquiposNo"><br>
+                                    <label class="form-check-label" for="despliegueEquiposNo" style="font-size: xx-small">No hay despliegue de equipos</label>
+                                </div>
+                                <div class="form-check form-switch" th:if="${formulario.despliegue==1}">
+                                    <label class="form-label">¿Se realizó despliegue de equipos?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="despliegueEquiposSi" checked=""><br>
+                                    <label class="form-check-label" for="despliegueEquiposSi" style="font-size: xx-small">Sí hay despliegue de equipos</label>
+                                </div>
+                                <br>
+
+                                <div class="mb-3">
+                                    <select class="form-select" aria-label="Default select example">
+                                        <option selected>Selecciona Tipo de transporte</option>
+                                        <option value="1">Fibra Optica</option>
+                                        <option value="2">Microondas</option>
+                                        <option value="3">Satélite</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                                        <label class="form-check-label" for="inlineCheckbox1">FFTH</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                                        <label class="form-check-label" for="inlineCheckbox2">HFC</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option2">
+                                        <label class="form-check-label" for="inlineCheckbox3">2G</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option2">
+                                        <label class="form-check-label" for="inlineCheckbox4">3G</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option2">
+                                        <label class="form-check-label" for="inlineCheckbox5">4G</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox6" value="option2">
+                                        <label class="form-check-label" for="inlineCheckbox6">5G</label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Descripción de los trabajos realizados:</label>
+                                    <input th:field="*{trabarealizados}" type="text" th:class="${#fields.hasErrors('trabarealizados')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('trabarealizados')}" th:errors="*{trabarealizados}">
+                                        Mensaje de error de trabajos realizados
+                                    </div>
+                                </div>
+
+                            </div>
+                            <br><br>
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Fotos de instalación:</label>
+                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                        <img th:src="@{|image/${formulario.archivo.idArchivos}|}" style="max-width: 300px;" alt="Fotos del sitio">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="files" class="form-label">Cargar fotos de la instalación:</label>
+                                    <input class="form-control" type="file" name="files" id="files" accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                                </div>
+                                <button type="submit" class="btn btn-outline-primary float-end">Guardar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br><br>
+
+
+            </div>
         </section>
+        <br>
+        <a th:href="@{'/tecnico/formulario?id='+${formulario.ticket.idTickets}}" class="btn btn-outline-danger">Regresar</a>
     </div>
 </main>
 <!-- ======= Footer ======= -->

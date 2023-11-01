@@ -20,11 +20,15 @@
     <h1 th:text="|Perfil|"></h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/Admin/listaUsuario}" th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
+        <li class="breadcrumb-item"><a th:text="|Perfil ${session.usuario.cargo.nombreCargo}|"></a></li>
         <li class="breadcrumb-item active">Perfil</li>
       </ol>
     </nav>
   </div><!-- End Page Title -->
+
+  <div class="alert alert-danger" role="alert" th:if="${error!=null}" th:text="${error}">
+    abc
+  </div>
 
   <section class="section profile">
     <div class="row">
@@ -48,9 +52,9 @@
             <!-- Bordered Tabs -->
 
             <div class="tab-content pt-2">
-              <a th:href="@{/admin/perfilAdmin}" class="btn btn-outline-dark me-2 mt-3">General</a>
-              <a th:href="@{'/admin/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
-              <a th:href="@{'/admin/perfilContra?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
+              <a th:href="@{/admin/perfil}" class="btn btn-outline-dark me-2 mt-3">General</a>
+              <a th:href="@{/admin/perfilEditar}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
+              <a th:href="@{/admin/perfilContra}" class="btn btn-dark me-2 mt-3 ">Cambiar contraseña</a>
             </div>
 
             <div class="tab-content pt-2">
