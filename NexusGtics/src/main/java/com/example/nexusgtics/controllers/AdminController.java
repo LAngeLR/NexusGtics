@@ -884,7 +884,7 @@ public class AdminController {
                              RedirectAttributes attr, HttpSession httpSession) {
 
         // ESTO SE AÑADIO DE BARD
-        session.setAttribute("usuario", usuario);
+        //session.setAttribute("usuario", usuario);
 
         if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
             model.addAttribute("msgCargo", "Escoger un cargo");
@@ -953,7 +953,7 @@ public class AdminController {
                 //Usuario u = (Usuario) httpSession.getAttribute("usuario");
                 //HttpSession session = request.getSession(true);
                 //session.setAttribute("nombreUsuario", "nuevoNombre");
-
+                session.setAttribute("usuario", usuario);
                 return "redirect:/admin/perfil";
             } catch (IOException e) {
                 throw new RuntimeException(e);
