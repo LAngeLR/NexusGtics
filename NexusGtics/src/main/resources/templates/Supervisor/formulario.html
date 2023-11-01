@@ -10,7 +10,7 @@
 <aside th:replace="Fragmentos/menuSupervisor :: menu('formulario')">
 </aside><!-- End Sidebar-->
 
-<main id="main" class="main">
+<main id="main" class="main" th:object="${formulario}">
     <style>
         .card {
             border: 2px solid #85acb1; /* Establece un borde sólido */
@@ -32,15 +32,17 @@
             <h1>Formulario</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/supervisor/}">Home</a></li>
-                    <li class="breadcrumb-item active">Lista Tickets</li>
-                    <li class="breadcrumb-item active">Detalles Ticket</li>
+                    <li class="breadcrumb-item"><a th:href="@{/supervisor/listaTickets}">Lista Tickets</a></li>
+                    <li class="breadcrumb-item" th:if="${formulario.ticket.estado==2}"><a th:href="@{'/supervisor/ticketNuevo?id=' + ${formulario.ticket.idTickets}}">Detalles Ticket</a></li>
+                    <li class="breadcrumb-item" th:if="${formulario.ticket.estado==3 || formulario.ticket.estado==4 || formulario.ticket.estado==5 }"><a th:href="@{'/supervisor/ticketProceso?id=' + ${formulario.ticket.idTickets}}">Detalles Ticket</a></li>
+                    <li class="breadcrumb-item" th:if="${formulario.ticket.estado==7 || formulario.ticket.estado==6}"><a th:href="@{'/supervisor/ticketCerrado?id=' + ${formulario.ticket.idTickets}}">Detalles Ticket</a></li>
                     <li class="breadcrumb-item active">Formulario</li>
+
                 </ol>
             </nav>
         </div><!-- End Page Title -->
 
-        <section class="section profile" th:object="${formulario}">
+        <section class="section profile">
 
             <div class="card mb-3 tabla-con-sombra">
                 <div class="card-body table-responsive">
@@ -226,11 +228,11 @@
                                 <img src="https://www.redusers.com/noticias/wp-content/uploads/2014/08/icampo.fw_-650x450.png" class="d-block w-100" alt="...">
                             </div>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel1" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                        <button class="carousel-control-next" type="button" data-bs-target="#carousel1" data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                         </button>

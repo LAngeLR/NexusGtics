@@ -13,8 +13,8 @@ import java.util.List;
 public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     // ------------------------------ SUPERVISOR --------------------------------------- //
-    @Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE estado != ?1")
-    List<Ticket> listaTicketsModificado(int valor1);
+    @Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE estado != ?1 and idSupervisorEncargado = ?2")
+    List<Ticket> listaTicketsModificado(int valor1, int idSupervisor);
 
     @Transactional
     @Modifying
@@ -37,8 +37,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM tickets where estado=7 and idCuadrilla = ?1")
     List<Ticket> listaTicketsCerradosPorCuadrilla (int id);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM tickets where idEmpresaAsignada = ?1 and estado=2")
-    List<Ticket> listaDash (int idEmpresaAsignada);
+    @Query(nativeQuery = true, value = "SELECT * FROM tickets where idEmpresaAsignada = ?1 and estado=2 and idSupervisorEncargado IS NULL")
+    List<Ticket> listaTicketsSinSupervisor (int idEmpresaAsignada);
 
     //------------------------ Tecnico --------------------//
 

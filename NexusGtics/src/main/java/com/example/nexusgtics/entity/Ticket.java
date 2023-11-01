@@ -69,4 +69,7 @@ public class Ticket {
 
     @Column(name = "prioridad", length = 45)
     private String prioridad;
+
+    @Column(name = "reasignado")
+    private Integer reasignado;
 }

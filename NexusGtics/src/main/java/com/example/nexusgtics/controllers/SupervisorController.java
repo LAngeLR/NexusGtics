@@ -64,9 +64,11 @@ public class SupervisorController {
     }
 
     @GetMapping("/listaTickets")
-    public String Tickets(Model model){
+    public String Tickets(Model model, HttpSession httpSession){
 
-        List<Ticket> listaTickets = ticketRepository.listaTicketsModificado( 1);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idSupervisor = u.getId();
+        List<Ticket> listaTickets = ticketRepository.listaTicketsModificado( 1, idSupervisor);
 
         model.addAttribute("listaTickets",listaTickets);
 
@@ -236,13 +238,14 @@ public class SupervisorController {
             if (id <= 0 || !ticketRepository.existsById(id)) {
                 return "redirect:/supervisor/ticketCerrado?id="+idStr;
             }
+            /*Analizar Sitio cerrado y su funcion para mostrar form*/
             Optional<Formulario> formularioOptional = formularioRepository.findById(id);
-            Optional<SitioCerrado> sitioCerradoOptional = sitioCerradoRepository.findById(id);
-            if (formularioOptional.isPresent() && sitioCerradoOptional.isPresent()) {
+            /*Optional<SitioCerrado> sitioCerradoOptional = sitioCerradoRepository.findById(id);*/
+            if (formularioOptional.isPresent() /*&& sitioCerradoOptional.isPresent()*/) {
                 Formulario formulario = formularioOptional.get();
-                SitioCerrado sitioCerrado = sitioCerradoOptional.get();
+                /*SitioCerrado sitioCerrado = sitioCerradoOptional.get();*/
                 model.addAttribute("formulario", formulario);
-                model.addAttribute("sitioCerrado", sitioCerrado);
+                /*model.addAttribute("sitioCerrado", sitioCerrado);*/
                 return "Supervisor/formulario";
             } else {
                 return "redirect:/supervisor/ticketCerrado?id="+idStr;
@@ -269,9 +272,10 @@ public class SupervisorController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
-
-        List<Ticket> listaTickets = ticketRepository.listaDash(2);
+    public String dashboard(Model model, HttpSession httpSession) {
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idEmpresa = u.getEmpresa().getIdEmpresas();
+        List<Ticket> listaTickets = ticketRepository.listaTicketsSinSupervisor(idEmpresa);
         model.addAttribute("listaTickets", listaTickets);
 
         return "Supervisor/dashboardSupervisor";
