@@ -78,6 +78,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Empresa</label>
                                     <select class="form-select" name="idEmpresaAsignada" id="idEmpresaAsignada">
+                                        <option value="-1">--Seleccione una empresa--</option>
                                         <option th:each="empresa: ${listaEmpresa}"
                                                 th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
                                         th:selected="${ticket.idEmpresaAsignada == empresa.idEmpresas}">Open this select menu</option>
@@ -88,6 +89,7 @@
                                     <label class="form-label">Sitio de despliegue:</label>
                                     <div class="col-12">
                                         <select name="idSitios" id="idSitios" class="form-select">
+                                            <option value="-1">--Seleccione el sitio--</option>
                                             <option th:each="sitio: ${listaSitios}"
                                                     th:text="${sitio.distrito}" th:value="${sitio.idSitios}"
                                             th:selected="${ticket.idSitios == sitio.idSitios}">Sitio de Tipo</option>
