@@ -43,6 +43,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(value ="select contrasenia from nexus.usuarios where idUsuarios=?1", nativeQuery = true )
     String obtenerContraseña(int id);
 
+    @Query(value = "SELECT correo FROM nexus.usuarios", nativeQuery = true)
+    List<String> listaCorreos();
+
     @Modifying
     @Transactional
     @Query(value ="update nexus.usuarios set contrasenia = ?1 where idUsuarios = ?2", nativeQuery = true )

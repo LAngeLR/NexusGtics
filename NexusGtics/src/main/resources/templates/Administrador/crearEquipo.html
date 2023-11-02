@@ -50,7 +50,7 @@
                     <option value="">--Seleccione un tipo de Equipo--</option>
                     <option th:each="equipo: ${listaTipoEquipos}"
                             th:text="${equipo.nombreTipo}" th:value="${equipo.idTipoEquipo}"
-                            th:selected="${tipoEquipoSeleccionado.idTipoEquipo == equipo.idTipoEquipo}"
+                            th:selected="${tipoEquipoSeleccionado != null && tipoEquipoSeleccionado.idTipoEquipo == equipo.idTipoEquipo}"
                     >Sitio de Tipo</option>
                   </select>
                 </div>

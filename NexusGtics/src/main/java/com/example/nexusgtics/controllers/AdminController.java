@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,8 +55,6 @@ public class AdminController {
         this.archivoRepository = archivoRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
-    List<String> extensionesPermitidas = Arrays.asList("jpg", "jpeg", "png");
 
     @GetMapping({"/", "", "admin", "administrador"})
     public String paginaPrincipal(Model model) {
@@ -116,29 +115,6 @@ public class AdminController {
         return "redirect:/admin/listaBaneados";
     }
 
-    @GetMapping({"/crearUsuario", "crearusuario"})
-    public String crearUsuario(Model model,
-                               @ModelAttribute("usuario") Usuario usuario) {
-
-        model.addAttribute("listaEmpresa", empresaRepository.findAll());
-        model.addAttribute("listaCargo", cargoRepository.findAll());
-        //para poder mandar "cargoSeleccionado" por defecto como -1
-        Cargo cargoSeleccionado = usuario.getCargo();
-        if (cargoSeleccionado == null) {
-            cargoSeleccionado = new Cargo();
-            cargoSeleccionado.setIdCargos(-1);
-        }
-        model.addAttribute("cargoSeleccionado", cargoSeleccionado);
-        Empresa empresaSeleccionada = usuario.getEmpresa();
-        if (empresaSeleccionada == null) {
-            empresaSeleccionada = new Empresa();
-            empresaSeleccionada.setIdEmpresas(-1);
-            System.out.println(empresaSeleccionada.getIdEmpresas());
-        }
-        model.addAttribute("empresaSeleccionada", empresaSeleccionada);
-        return "Administrador/crearUsuario";
-    }
-
     @GetMapping({"/verUsuario", "verusuario"})
     public String verUsuario(Model model, @RequestParam("id") String idStr) {
 
@@ -161,13 +137,48 @@ public class AdminController {
             return "Administrador/crearUsuario";
         }
     }
+    @GetMapping({"/crearUsuario", "crearusuario"})
+    public String crearUsuario(Model model,
+                               @ModelAttribute("usuario") Usuario usuario) {
 
+        model.addAttribute("listaEmpresa", empresaRepository.findAll());
+        model.addAttribute("listaCargo", cargoRepository.findAll());
+        //para poder mandar "cargoSeleccionado" por defecto como -1
+        Cargo cargoSeleccionado = usuario.getCargo();
+        if (cargoSeleccionado == null) {
+            cargoSeleccionado = new Cargo();
+            cargoSeleccionado.setIdCargos(-1);
+        }
+        model.addAttribute("cargoSeleccionado", cargoSeleccionado);
+        //para poder mandar "empresaSeleccionada" por defecto como -1
+        Empresa empresaSeleccionada = usuario.getEmpresa();
+        if (empresaSeleccionada == null) {
+            empresaSeleccionada = new Empresa();
+            empresaSeleccionada.setIdEmpresas(-1);
+        }
+        model.addAttribute("empresaSeleccionada", empresaSeleccionada);
+        return "Administrador/crearUsuario";
+    }
     /*CREAR NUEVO USUARIO*/
     @PostMapping("/saveUsuario")
     public String saveUsuario(@RequestParam("imagenSubida") MultipartFile file,
                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
+       //si usuario es nuevo poner contrasnia a'123'
+        if (usuario.getId()==null){
+            usuario.setContrasenia(new BCryptPasswordEncoder().encode("123"));
+        }
+        List<String> correos = usuarioRepository.listaCorreos();
+        for (String correo : correos) {
+            if (correo.equals(usuario.getCorreo())) {
+                model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Administrador/crearUsuario";
+            }
+        }
+
         //para "guardar" lo seleccionado y poder mostrarlo cuando haya un error y no tener q ponerlo de nuevo
         Cargo cargoSeleccionado = usuario.getCargo();
         Empresa empresaSeleccionada = usuario.getEmpresa();
@@ -254,6 +265,16 @@ public class AdminController {
                                 @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                                 Model model,
                                 RedirectAttributes attr) {
+        List<String> correos = usuarioRepository.listaCorreos();
+        for (String correo : correos) {
+            if (correo.equals(usuario.getCorreo())) {
+                model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Administrador/crearUsuario";
+            }
+        }
+
         if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
             model.addAttribute("msgCargo", "Escoger un cargo");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
