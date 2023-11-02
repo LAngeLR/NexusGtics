@@ -1,45 +1,34 @@
 package com.example.nexusgtics.controllers;
 
-
-
-/* controlador no reconoce google
-
-
-
-import java.io.File;&¿
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
-
+import ch.qos.logback.core.model.Model;
+import com.example.nexusgtics.entity.Archivo;
+import com.example.nexusgtics.entity.Usuario;
+import com.example.nexusgtics.repository.ArchivoRepository;
 import com.google.cloud.ReadChannel;
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.Storage;
-import com.google.common.io.ByteStreams;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
+import com.google.cloud.storage.*;
+import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.OutputStream;
-
-import org.springframework.core.io.WritableResource;
-
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
-
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.Optional;
 
 @RestController
 public class GcsController {
+
+    private final ArchivoRepository archivoRepository;
+
+    public GcsController(ArchivoRepository archivoRepository) {
+        this.archivoRepository = archivoRepository;
+    }
 
     public static byte[] downloadObject
             (String projectId, String bucketName, String blobName) throws IOException {
@@ -47,7 +36,7 @@ public class GcsController {
         BlobId blobId = BlobId.of(bucketName, blobName);
 
         try (ReadChannel reader = storage.reader(blobId)) {
-            ByteBuffer bytes = ByteBuffer.allocate(64 * 1024);
+            ByteBuffer bytes = ByteBuffer.allocate(64 * 64 * 1024);
             while (reader.read(bytes) > 0) {
                 bytes.flip();
                 bytes.clear();
@@ -58,25 +47,53 @@ public class GcsController {
 
     }
 
-    @GetMapping("/file")
-    public ResponseEntity<byte[]> displayItemImage() throws IOException {
-        byte[] image = downloadObject("plenary-magpie-386203", "spring-bucket-jchavezs", "image.jpeg");
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        return new ResponseEntity<>(image, headers, HttpStatus.OK);
+    public static void uploadObject
+            (Archivo archivo) {
+        try {
+            Storage storage = StorageOptions.newBuilder().setProjectId("labgcp-401300").build().getService();
+            Bucket bucket = storage.get("proyecto-gtics", Storage.BucketGetOption.fields());
+//            RandomString id = new RandomString(6, ThreadLocalRandom.current());
+            Blob blob = bucket.create(archivo.getNombre(), archivo.getArchivo());
+
+            if (blob != null) {
+                System.out.println("Se guardo exitosamente");
+//                LOGGER.debug("File successfully uploaded to GCS");
+//                return new FileDto(blob.getName(), blob.getMediaLink());
+            }
+        } catch (Exception e) {
+//            LOGGER.error("An error occurred while uploading data. Exception: ", e);
+            throw new RuntimeException("An error occurred while storing data to GCS");
+        }
     }
 
-    @GetMapping("/imagenEvento")
-    public ResponseEntity<byte[]> displayItemImage(@RequestParam("id") int id) throws IOException {
-//        byte[] image = downloadObject("plenary-magpie-386203", "spring-bucket-jchavezs", "image.jpeg");
-        String blobName = "fotosEventos/foto-evento-" + id +".jpeg";
-        byte[] image = downloadObject("plenary-magpie-386203", "spring-bucket-jchavezs", blobName);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        return new ResponseEntity<>(image, headers, HttpStatus.OK);
+
+
+    @GetMapping("/file/{id}")
+    public ResponseEntity<byte[]> displayItemImage(@PathVariable("id") String idStr) throws IOException {
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !archivoRepository.existsById(id)) {
+                HttpHeaders httpHeaders = new HttpHeaders();
+                return new ResponseEntity<>(null, httpHeaders, HttpStatus.NOT_FOUND);
+            }else {
+                Optional<Archivo> optArchivo = archivoRepository.findById(id);
+                if(optArchivo.isPresent()){
+                    Archivo archivo1 = optArchivo.get();
+                    byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", archivo1.getNombre());
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(MediaType.parseMediaType(archivo1.getContentType()));
+                    return new ResponseEntity<>(image, headers, HttpStatus.OK);
+                } else {
+                    HttpHeaders httpHeaders = new HttpHeaders();
+                    return new ResponseEntity<>(null, httpHeaders, HttpStatus.NOT_FOUND);
+                }
+
+            }
+        }catch (NumberFormatException e){
+            HttpHeaders httpHeaders = new HttpHeaders();
+            return new ResponseEntity<>(null, httpHeaders, HttpStatus.NOT_FOUND);
+        }
+
     }
+
 }
-
-
-
- */

@@ -94,6 +94,8 @@ public class Formulario {
     @Column(name = "trabarealizados", nullable = false, length = 45)
     private String trabarealizados;
 
+    /* Analizar estas dos*/
+
     @Size(max = 45)
     @NotNull
     @Column(name = "tipoTransporte", nullable = false, length = 45)

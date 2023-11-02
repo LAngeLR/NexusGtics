@@ -265,30 +265,8 @@ public class SupervisorController {
     @GetMapping("/listaCuadrillas")
     public String Cuadrillas(Model model){
 
-        List<Cuadrilla> listaCuadrilla = cuadrillaRepository.findAll();
-
-        Map<Integer, Integer> trabajosFinalizadosPorCuadrilla = new HashMap<>();
-        Map<Integer, Integer> numeroTecnicosPorCuadrilla = new HashMap<>();
-
-
-        for (Cuadrilla cuadrilla : listaCuadrilla) {
-            int trabajosFinalizados;
-            Integer trabajosFinalizadosResult = cuadrillaRepository.contarTrabajosFinalizados(cuadrilla.getIdCuadrillas());
-
-            trabajosFinalizados = (trabajosFinalizadosResult != null) ? trabajosFinalizadosResult : 0;
-
-            trabajosFinalizadosPorCuadrilla.put(cuadrilla.getIdCuadrillas(), trabajosFinalizados);
-        }
-
-        for (Cuadrilla cuadrilla1 : listaCuadrilla) {
-
-            int tecnicosCuadrilla = cuadrillaRepository.numeroTecnicosPorCuadrilla(cuadrilla1.getIdCuadrillas());
-
-            numeroTecnicosPorCuadrilla.put(cuadrilla1.getIdCuadrillas(), tecnicosCuadrilla);
-        }
-        model.addAttribute("listaCuadrilla", listaCuadrilla);
-        model.addAttribute("trabajosFinalizadosPorCuadrilla", trabajosFinalizadosPorCuadrilla);
-        model.addAttribute("numeroTecnicosPorCuadrilla", numeroTecnicosPorCuadrilla);
+        model.addAttribute("listaCuadrillaCompleta", cuadrillaRepository.cuadrillaCompleta());
+        model.addAttribute("listaCuadrillaImcompleta", cuadrillaRepository.cuadrillaImCompleta());
         return "Supervisor/listaCuadrillas";
     }
 
@@ -468,9 +446,11 @@ public class SupervisorController {
     public String dashboard(Model model, HttpSession httpSession) {
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idEmpresa = u.getEmpresa().getIdEmpresas();
+        Integer idSup = u.getId();
         List<Ticket> listaTickets = ticketRepository.listaTicketsSinSupervisor(idEmpresa);
         model.addAttribute("listaTickets", listaTickets);
         model.addAttribute("cantidadEquipos", equipoRepository.obtenerEquiposMarca());
+        model.addAttribute("culminados", ticketRepository.infoDash(idSup,7));
 
 
         return "Supervisor/dashboardSupervisor";

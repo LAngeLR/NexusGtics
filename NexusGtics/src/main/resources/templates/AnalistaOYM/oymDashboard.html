@@ -110,8 +110,10 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body">
-                                            <h5 class="card-title">Felicidades Analista Anderson</h5>
-                                            <p class="card-text"> ¡Creaste 43 tickets esta última semana!</p>
+                                            <h5 class="card-title" th:text="'Felicidades Analista ' + ${session.usuario.nombre}"></h5>
+                                            <p class="card-text">
+                                                <span th:each="a : ${culminados}" th:text="'¡Creaste ' + ${a.creados} + ' tickets de los cuales ' + ${a.culminados} + ' terminaste!'"></span>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -192,7 +194,7 @@
                     <div class="col-12">
                         <div class="card recent-sales overflow-auto">
                             <div class="card-body">
-                                <h5 class="card-title">Tickets creados</h5>
+                                <h5 class="card-title">Tickets Recien Creados</h5>
 
                                 <table class="table table-borderless datatable">
                                     <thead>
@@ -201,14 +203,14 @@
                                         <th>Empresa</th>
                                         <th>Sitio</th>
                                         <th>Prioridad</th>
-                                        <th>Estado</th>
+                                        <th>Creacion</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="ticket, info: ${listaTicket}">
+                                    <tr th:each="ticket, info: ${ticketsRecienCreados}">
                                         <th th:text="${info.index + 1}" scope="row"></th>
                                         <td th:text="${ticket.idEmpresaAsignada.nombre}"></td>
-                                        <td th:text="${ticket.idSitios.provincia}"></td>
+                                        <td th:text="${ticket.idSitios.nombre + '(' + ticket.idSitios.provincia + ')'}"></td>
                                         <td>
                                             <div th:if="${ticket.prioridad == 'Baja prioridad'}">
                                                 <span class="badge text-bg-info" th:text="${ticket.prioridad}">Baja Prioridad</span>
@@ -223,20 +225,7 @@
                                                 <span class="badge text-bg-warning" th:text="${ticket.prioridad}">Baja Prioridad</span>
                                             </div>
                                         </td>
-                                        <td th:if="${ticket.estado==3}">
-                                            <span class="badge rounded-pill" style="background-color: #009d71">Nuevo</span>
-                                        </td>
-                                        <td th:if="${ticket.estado==4}">
-                                            <span class="badge rounded-pill" style="background-color: #006f83">En camino</span>
-                                        </td>
-                                        <td th:if="${ticket.estado==5}">
-                                            <span class="badge rounded-pill" style="background-color: #f5cc01">Progreso</span>
-                                        </td>
-                                        <td th:if="${ticket.estado==6}">
-                                            <span class="badge rounded-pill" style="background-color: #ea8579">Cerrado</span>
-                                        </td>
-
-
+                                        <td th:text="${ticket.fechaCreacion}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -289,12 +278,19 @@
                 <!-- Website Traffic -->
                 <div class="card">
                     <div class="card-body pb-0">
-                        <h5 class="card-title">Objetos más usados</h5>
-
-                        <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
-
-                        <script>
+                        <h5 class="card-title">Marcas más usadas</h5>
+                        <div id="trafficChart" style="min-height: 500px;" class="echart"></div>
+                        <script th:inline="javascript">
                             document.addEventListener("DOMContentLoaded", () => {
+                                var cantidadEquipos = /*[[${cantidadEquipos}]]*/ ; // Obtener datos desde el modelo
+
+                                var data = cantidadEquipos.map(function(item) {
+                                    return {
+                                        value: item.cantidad,
+                                        name: item.marca
+                                    };
+                                });
+
                                 echarts.init(document.querySelector("#trafficChart")).setOption({
                                     tooltip: {
                                         trigger: 'item'
@@ -322,32 +318,11 @@
                                         labelLine: {
                                             show: false
                                         },
-                                        data: [{
-                                            value: 1048,
-                                            name: 'Router'
-                                        },
-                                            {
-                                                value: 735,
-                                                name: 'Gabinete'
-                                            },
-                                            {
-                                                value: 580,
-                                                name: 'Switch'
-                                            },
-                                            {
-                                                value: 484,
-                                                name: 'Antenas'
-                                            },
-                                            {
-                                                value: 300,
-                                                name: 'Etc'
-                                            }
-                                        ]
+                                        data: data
                                     }]
                                 });
                             });
                         </script>
-
                     </div>
                 </div><!-- End Website Traffic -->
 

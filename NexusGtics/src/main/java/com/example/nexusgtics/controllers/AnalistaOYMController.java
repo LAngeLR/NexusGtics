@@ -18,8 +18,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Controller
 @RequestMapping(value = {"/analistaOYM"})
@@ -35,8 +39,10 @@ public class AnalistaOYMController {
     final SitiosHasEquiposRepository sitiosHasEquiposRepository;
     final CargoRepository cargoRepository;
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private SitioCerradoRepository sitioCerradoRepository;
 
-    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1, UsuarioRepository usuarioRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository, PasswordEncoder passwordEncoder){
+    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1, UsuarioRepository usuarioRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository, PasswordEncoder passwordEncoder, SitioCerradoRepository  sitioCerradoRepository){
         this.sitioRepository = sitioRepository;
         this.ticketRepository = ticketRepository;
         this.equipoRepository = equipoRepository;
@@ -46,6 +52,7 @@ public class AnalistaOYMController {
         this.sitiosHasEquiposRepository = sitiosHasEquiposRepository;
         this.cargoRepository = cargoRepository;
         this.passwordEncoder = passwordEncoder;
+        this.sitioCerradoRepository = sitioCerradoRepository;
     }
 
     @GetMapping(value = {"/",""})
@@ -430,7 +437,7 @@ public class AnalistaOYMController {
     /* DIRECCIONAR A FORMULARIO*/
     @GetMapping("/crearTicket")
     public String crearTicket(Model model) {
-        model.addAttribute("listaEmpresa", empresaRepository.findAll());
+        model.addAttribute("listaEmpresa", empresaRepository.noNexus());
         model.addAttribute("listaSitios", sitioRepository.findAll());
 
         return "AnalistaOYM/oymCrearTicket";
@@ -441,7 +448,10 @@ public class AnalistaOYMController {
     public String saveTicket(RedirectAttributes attr,
                               @ModelAttribute("ticket") @Valid Ticket ticket,
                               BindingResult bindingResult,
-                             Model model){
+                             Model model, HttpSession httpSession){
+
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+
         if(ticket.getIdEmpresaAsignada() == null || ticket.getIdEmpresaAsignada().equals("-1")){
             model.addAttribute("msgEmpresa", "Escoger una empresa");
             if(ticket.getIdTickets()==null){
@@ -470,6 +480,16 @@ public class AnalistaOYMController {
         }
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+
+            Random random = new Random();
+            int numeroRandom = random.nextInt(7) + 1;
+
+            LocalDate fechaCreacion = LocalDate.now();
+            ticket.setFechaCreacion(fechaCreacion);
+            ticket.setIdUsuarioCreador(u);
+            ticket.setIdsitioCerrado(numeroRandom);
+            ticket.setReasignado(0);
+
             ticketRepository.save(ticket);
             attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente");
 
@@ -516,7 +536,14 @@ public class AnalistaOYMController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(){
+    public String dashboard(Model model, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idAnalista = u.getId();
+
+        model.addAttribute("ticketsRecienCreados", ticketRepository.recienCreados(idAnalista));
+        model.addAttribute("cantidadEquipos", equipoRepository.obtenerEquiposMarca());
+        model.addAttribute("culminados", ticketRepository.creadosCulminados(idAnalista,7));
+
         return "AnalistaOYM/oymDashboard";
     }
 
