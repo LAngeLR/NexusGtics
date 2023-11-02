@@ -682,7 +682,7 @@ public class AnalistaOYMController {
                 comentarioRepository.ingresarComentario(id,idTicket,comentario,fechaCreacion);
                 redirectAttributes.addFlashAttribute("error","Comentario Añadido");
 
-                return "redirect:/AnalistaOYM/oymComentarios?id="+idTicketStr;
+                return "redirect:/analistaOYM/comentarios?id="+idTicketStr;
             } else {
                 return "redirect:/analistaOYM/ticket";
             }
