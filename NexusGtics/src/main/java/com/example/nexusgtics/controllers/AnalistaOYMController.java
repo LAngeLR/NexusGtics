@@ -487,9 +487,7 @@ public class AnalistaOYMController {
             LocalDate fechaCreacion = LocalDate.now();
             ticket.setFechaCreacion(fechaCreacion);
             ticket.setIdUsuarioCreador(u);
-            Optional<SitioCerrado> sitioCerrado = sitioCerradoRepository.findById(numeroRandom);
-            SitioCerrado sitioCerrado1 = sitioCerrado.get();
-            ticket.setIdsitioCerrado(sitioCerrado1);
+            ticket.setIdsitioCerrado(numeroRandom);
             ticket.setReasignado(0);
 
             ticketRepository.save(ticket);

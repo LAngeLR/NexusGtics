@@ -174,8 +174,14 @@ public class SuperAdminController {
                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
+//        if (usuario.getId()==null){
+//            usuario.setContrasenia(new BCryptPasswordEncoder().encode("123"));
+//        }
         if (usuario.getId()==null){
-            usuario.setContrasenia(new BCryptPasswordEncoder().encode("123"));
+            String mail = usuario.getCorreo();
+            String[] partes = mail.split("@");
+            String password = partes[0];
+            usuario.setContrasenia(new BCryptPasswordEncoder().encode(password));
         }
         List<String> correos = usuarioRepository.listaCorreos();
         for (String correo : correos) {
@@ -296,6 +302,16 @@ public class SuperAdminController {
                                 @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                                 Model model,
                                 RedirectAttributes attr){
+        List<String> correos = usuarioRepository.listaCorreos();
+        for (String correo : correos) {
+            if (correo.equals(usuario.getCorreo())) {
+                model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Superadmin/editarUsuario";
+            }
+        }
+
         if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
             model.addAttribute("msgCargo", "Escoger un cargo");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
