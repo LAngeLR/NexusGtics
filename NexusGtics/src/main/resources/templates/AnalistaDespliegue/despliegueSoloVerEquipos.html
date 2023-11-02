@@ -33,9 +33,9 @@
                     <div class="pagetitle">
                         <h1 class="card-title">Vista de equipo</h1>
                     </div>
-                    <form method="POST" th:action="@{/analistaDespliegue/agregarEquipo}"  th:object="${equipo}">
+                    <form method="POST" th:object="${equipo}">
                         <input type="hidden" th:value="${equipo.idEquipos}" />
-                        <input type="hidden" name="idSitios" th:value="${idSitios}"/>
+                        <input type="hidden" name="idSitios" th:value="${idSitios}" />
                         <div class="row">
                             <div class="col-md-6">
                                 <input type="hidden"  name="equipo" id="equipo" class="form-control" th:field="*{idEquipos}">
@@ -80,8 +80,7 @@
                             <div>
                                 <br>
                                 <input type="hidden" name="idEquipos" th:value="${equipo.idEquipos}" />
-                                <button  type="submit" class="btn btn-outline-primary " >Agregar</button>
-                                <button  th:href="@{/analistaDespliegue/listaEquipo}" class="btn btn-outline-danger " >Regresar</button>
+                                <button  th:href="@{'/analistaDespliegue/verSitio?id='+ ${idSitios}}" class="btn btn-outline-danger " >Regresar</button>
 
                             </div>
                         </div>

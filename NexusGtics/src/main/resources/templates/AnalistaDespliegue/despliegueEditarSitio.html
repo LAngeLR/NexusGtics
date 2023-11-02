@@ -64,11 +64,20 @@
             <div class="pagetitle">
               <h1 class="card-title">Editar de sitio</h1>
             </div>
-            <form method="POST" th:action="@{/analistaDespliegue/saveSitio}" enctype="multipart/form-data" th:object="${sitio}" >
+            <form method="POST" th:action="@{/analistaDespliegue/actualizarSitio}" enctype="multipart/form-data" th:object="${sitio}" >
               <div class="row">
                 <div class="col-md-6">
                   <input type="hidden" class="form-control" th:field="*{idSitios}">
                   <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
+                  <div class="mb-3">
+                    <label class="form-label">Nombre del Sitio:</label>
+                    <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">
+                      Mensaje de error de nombre
+                    </div>
+                  </div>
+
                   <div class="mb-3">
                     <label class="form-label">Departamento:</label>
                     <input th:field="*{departamento}" type="text" th:class="${#fields.hasErrors('departamento')?'form-control is-invalid':'form-control'}"/>
@@ -77,6 +86,7 @@
                       Mensaje de error de nombre
                     </div>
                   </div>
+
 
                   <div class="mb-3">
                     <label class="form-label">Provincia:</label>
@@ -123,6 +133,11 @@
                     </div>
                   </div>
 
+
+
+                </div>
+                <br><br>
+                <div class="col-md-6">
                   <div class="mb-3">
                     <label class="form-label" >Tipo de Zona</label>
                     <select class="form-select" th:field="*{tipoZona}">
@@ -131,17 +146,13 @@
                     </select>
                   </div>
 
-
                   <div class="mb-3">
                     <label class="form-label">Tipo de Sitio:</label>
-                    <select th:field="*{tipo}" class="form-control">
+                    <select class="form-select" th:field="*{tipo}">
                       <option value="Movil" >Móvil</option>
                       <option value="Fijo">Fijo</option>
                     </select>
                   </div>
-                </div>
-                <br><br>
-                <div class="col-md-6">
                   <div class="mb-3">
                     <label for="imagenSubida" class="form-label">Foto de Sitio:</label>
                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
@@ -174,40 +185,6 @@
                   </div>
                 </div>
               </div>
-              <br>
-              <div>
-                <h3 class="card-title">Equipos desplegados en Sitio</h3>
-                <table class="table">
-                  <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Tipo de equipo</th>
-                    <th scope="col">Marca </th>
-                    <th scope="col">Modelo</th>
-                    <th scope="col">Acciones</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr th:each="sitiosHasEquipo, info : ${listaEquipos}">
-                    <td th:text = "${info.index + 1}" >  </td>
-                    <td th:text="${sitiosHasEquipo.idEquipos.tipoequipo.nombreTipo}"></td>
-                    <td th:text="${sitiosHasEquipo.idEquipos.marca}">Marca</td>
-                    <td th:text="${sitiosHasEquipo.idEquipos.modelo}">Modelo</td>
-                    <td><a type="button" class="btn btn-outline-dark" th:href="@{'/analistaDespliegue/verEquipo?id=' + ${sitiosHasEquipo.idEquipos.idEquipos}}">Ver</a></td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-              <button type="button" class="btn btn-outline-success">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"></path>
-                  <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"></path>
-                </svg>
-                Descargar csv
-              </button>
-              <a type="submit" class="btn btn-outline-success" th:href="@{'/analistaDespliegue/listaEquipo?idSitios=' + ${sitio.idSitios}}">Ver todos los equipos</a>
-              <br>
-              <br>
               <div>
                 <a  th:href="@{'/analistaDespliegue/listaSitio'}" class="btn btn-outline-danger " >Cancelar</a>
                 <button  type="submit" class="btn btn-outline-primary " >Aceptar</button>

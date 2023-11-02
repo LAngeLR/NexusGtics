@@ -34,7 +34,8 @@
 
               <div class="card-body table-responsive">
                 <div class="container">
-                  <h5 class="card-title">Equipos en general</h5>
+                  <a th:href="@{'/analistaDespliegue/listaEquiposNoPerteneciente?idSitios=' + ${idSitios}}" type="submit" class="btn btn-outline-success me-0 mt-3 float-end" >Ver todos los equipos no agregados</a>
+                  <h5 class="card-title">Equipos que pertenecen al sitio </h5>
                 </div>
                 <!-- Table with stripped rows -->
                 <table class="table datatable">
@@ -61,7 +62,7 @@
                           </svg>
                         </button>
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" th:href="@{'/analistaDespliegue/verEquipo?idSitios=' + ${idSitios} + '&idEquipos=' + ${sitiosHasEquipo.idEquipos.idEquipos}}">Visualizar</a></li>
+                          <li><a class="dropdown-item" th:href="@{'/analistaDespliegue/soloVerEquipo?idSitios=' + ${idSitios} + '&idEquipos=' + ${sitiosHasEquipo.idEquipos.idEquipos}}">Visualizar</a></li>
                         </ul>
                       </div>
                     </td>
@@ -69,9 +70,6 @@
                   </tbody>
                 </table>
                 <!-- End Table with stripped rows -->
-                <div>
-                  <a  th:href="@{'/analistaDespliegue/listaSitio'}" class="btn btn-outline-danger " >Cancelar</a>
-                </div>
               </div>
             </div>
 
