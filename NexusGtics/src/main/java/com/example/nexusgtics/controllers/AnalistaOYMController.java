@@ -535,13 +535,22 @@ public class AnalistaOYMController {
 
 
     @GetMapping("/verTicket")
-    public String verticket(Model model, @RequestParam("id") int id){
-        Optional<Ticket> optionalTicket = ticketRepository.findById(id);
-        if(optionalTicket.isPresent()){
-            Ticket ticket = optionalTicket.get();
-            model.addAttribute("ticket", ticket);
-            return "AnalistaOYM/oymVistaTicket";
-        }else{
+    public String verticket(Model model, @RequestParam("id") String idStr){
+
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/analistaOYM/ticket";
+            }
+            Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
+            if (ticketBuscado.isPresent()) {
+                Ticket ticket = ticketBuscado.get();
+                model.addAttribute("ticket", ticket);
+                return "AnalistaOYM/oymVistaTicket";
+            } else {
+                return "redirect:/analistaOYM/ticket";
+            }
+        } catch (NumberFormatException e) {
             return "redirect:/analistaOYM/ticket";
         }
     }
@@ -561,7 +570,7 @@ public class AnalistaOYMController {
 
 
     @GetMapping("/comentarios")
-    public String comentarioTicket(Model model, @RequestParam("id") String idStr){
+    public String comentarioTickets(Model model, @RequestParam("id") String idStr){
 
         try {
             int id = Integer.parseInt(idStr);
@@ -585,7 +594,7 @@ public class AnalistaOYMController {
     }
 
     @PostMapping("/escribirComentario")
-    public String escribirComentario(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes){
+    public String escribirComentarios(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes){
 
         try{
             int idTicket = Integer.parseInt(idTicketStr);
@@ -598,7 +607,7 @@ public class AnalistaOYMController {
                 comentarioRepository.ingresarComentario(id,idTicket,comentario,fechaCreacion);
                 redirectAttributes.addFlashAttribute("error","Comentario Añadido");
 
-                return "redirect:/AnalistaOYM/oymComentarios?id="+idTicketStr;
+                return "redirect:/analistaOYM/comentarios?id="+idTicketStr;
             } else {
                 return "redirect:/analistaOYM/ticket";
             }
