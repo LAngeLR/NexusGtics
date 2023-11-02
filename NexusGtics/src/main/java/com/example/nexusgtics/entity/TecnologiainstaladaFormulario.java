@@ -13,12 +13,12 @@ public class TecnologiainstaladaFormulario {
     private TecnologiainstaladaFormularioId id;
 
     @MapsId("idTecnologiaInstalada")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "idTecnologiaInstalada", nullable = false)
     private Tecnologiainstalada idTecnologiaInstalada;
 
     @MapsId("idFormularios")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "idFormularios", nullable = false)
     private Formulario idFormularios;
 

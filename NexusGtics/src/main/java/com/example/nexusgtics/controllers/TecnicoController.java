@@ -320,12 +320,12 @@ public class TecnicoController {
     @GetMapping("/desplazamientoProgreso")
     public String desplazamientoProgreso(Model model, @RequestParam("id") int id,
                                          RedirectAttributes attr) {
-        List<Ticket> listaT = ticketRepository.findAll();
-        model.addAttribute("listaTicketP", listaT);
+        List<Ticket> lista = ticketRepository.listarEstado();
+        model.addAttribute("ticketList", lista);
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if (optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();
-            model.addAttribute("tickets", ticket);
+            model.addAttribute("ticket", ticket);
             model.addAttribute("listaTicket", ticketRepository.findAll());
             return "Tecnico/desplazamientoProgreso";
         } else {
@@ -345,9 +345,12 @@ public class TecnicoController {
         model.addAttribute("sitioListC", sitio);
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(id);
-        if (optionalTicket.isPresent() && optionalSitioCerrado.isPresent()) {
+        Optional<Sitio> optionalSitio = sitioRepository.findById(id);
+        if (optionalTicket.isPresent() && optionalSitioCerrado.isPresent() && optionalSitio.isPresent()) {
             Ticket ticket = optionalTicket.get();
             SitioCerrado sitioCerrado = optionalSitioCerrado.get();
+            Sitio sitio1 = optionalSitio.get();
+            model.addAttribute("sitio",sitio1);
             model.addAttribute("sitioCerrado", sitioCerrado);
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaTicket", ticketRepository.findAll());
@@ -685,8 +688,8 @@ public class TecnicoController {
     public String pagmapa(Model model) {
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
-        List<Sitio> sitioList = sitioRepository.findAll();
-        model.addAttribute("sitioList", sitioList);
+        List<SitioCerrado> sitioCerradoList = sitioCerradoRepository.findAll();
+        model.addAttribute("sitioCerradoList", sitioCerradoList);
         return "Tecnico/mapa";
     }
 

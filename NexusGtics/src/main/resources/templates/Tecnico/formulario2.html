@@ -495,16 +495,13 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Fotos del sitio:</label>
+                                    <label for="imagenSubida" class="form-label">Foto de perfil:</label>
                                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img th:src="@{|image/${formulario.archivo.idArchivos}|}" style="max-width: 300px;" alt="Fotos del sitio">
+                                        <img id="imgPreview" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
                                     </div>
+                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
                                 </div>
-                                <div class="mb-3">
-                                    <label for="files" class="form-label">Cargar fotos del sitio:</label>
-                                    <input class="form-control" type="file" name="files" id="files" accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                                </div>
-
 
                                 <button type="submit" class="btn btn-outline-primary float-end">Guardar</button>
                             </div>

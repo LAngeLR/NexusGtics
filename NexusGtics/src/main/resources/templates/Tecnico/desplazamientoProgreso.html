@@ -292,23 +292,23 @@
             <div class="col-xl-4">
                 <div class="h-100 p-5 rounded-3" style="background-color: #202a3b; color:white;">
                     <h5><b>Ingrese los datos pedidos antes de empezar:</b></h5>
-                    <form method="POST" th:action="@{/tecnico/saveDesplazamiento}" th:object="${tickets}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+                    <form method="POST" th:action="@{/tecnico/saveDesplazamiento}" th:object="${ticket}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row g-3 align-items-center">
                             <div class="col-auto">
                                 <label for="ticketid" class="col-form-label"><b>Ticket ID:</b></label>
                             </div>
                             <div class="col-auto">
-                                <input type="text" id="ticketid" class="form-control-plaintext" th:value="${tickets.idTickets}" disabled style="font-size: medium;color: #ebf6fd;"></div>
+                                <input type="text" id="ticketid" class="form-control-plaintext" th:value="${ticket.idTickets}" disabled style="font-size: medium;color: #ebf6fd;"></div>
                             <div class="col-auto">
                                 <label for="lugarInicio" class="col-form-label" style="font-size: small; color:#8dbe6c"><b>Lugar Inicio:</b></label>
                             </div>
                             <div class="col-auto">
-                                <input type="text" id="lugarInicio" class="form-control" aria-describedby="lugarInicio" th:value="${tickets.idSitios.nombre}" disabled>
+                                <input type="text" id="lugarInicio" class="form-control" aria-describedby="lugarInicio" th:value="${ticket.idSitios.nombre}" disabled>
                             </div>
                             <div class="col-auto">
                                 <label for="fechaHora" class="col-form-label" style="font-size: small; color:#8dbe6c"><b>Fecha y hora de comienzo:</b></label></div>
                             <div class="col-auto">
-                                <input id="fechaHora" class="form-control" name="fechahora" step="1" th:value="${tickets.fechaCreacion}" disabled>
+                                <input id="fechaHora" class="form-control" name="fechahora" step="1" th:value="${ticket.fechaCreacion}" disabled>
                             </div>
                             <div class="col-auto">
                                 <label for="lugarCierre" class="col-form-label" style="font-size: small">Lugar de cierre:</label>
@@ -322,12 +322,12 @@
                                 <label for="fechaHora2" class="col-form-label" style="font-size: small">Fecha y hora determino:</label></div>
 
                             <div class="col-auto">
-                                <input id="fechaHora2" type="datetime-local" class="form-control" name="fechahora" step="1" min="2023-01-01T00:00" max="2023-12-31T12:00" th:value="${tickets.fechaCierre}">
+                                <input id="fechaHora2" type="datetime-local" class="form-control" name="fechahora" step="1" min="2023-01-01T00:00" max="2023-12-31T12:00" th:value="${ticket.fechaCierre}">
                                 <br>
                             </div>
                             <center>
                                 <p style="font-size: x-small">Para culminar desplazamiento dar click en "Terminar "</p>
-                                <a type="button" class="btn btn-outline-danger" th:href="@{'/tecnico/verTicketProgreso?id='+${tickets.idTickets}}">Terminar</a>
+                                <a type="button" class="btn btn-outline-danger" th:href="@{'/tecnico/verTicketProgreso?id='+${ticket.idTickets}}">Terminar</a>
                             </center>
                         </div>
                     </form>
@@ -340,21 +340,15 @@
                         <div id="map"></div>
                         <!-- MAPA -->
                         <script>
-                            var map = L.map('map').setView([-12.06802,-77.03462],18)
+                            var map = L.map('map').setView([-12.2681124, -74.8087287], 7);
+
                             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             }).addTo(map);
-                            var marker = L.marker([-12.07319, -77.03498].addTo(map));
-                            //click event
-                            map.on('click', function (e){
-                                var endMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
 
-                                L.Routing.control({
-                                    waypoints: [
-                                        L.latLng(-12.07319, -77.03498),
-                                        L.latLng(e.latlng.lat, e.latlng.lng) ]
-                                }).addTo(map);
-                            })
+                            L.marker([-12.2681124, -74.8087287]).addTo(map)
+                                .bindPopup('Sitio Inicial')
+                                .openPopup();
                         </script>
                     </div>
                 </div>

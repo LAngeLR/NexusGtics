@@ -204,21 +204,31 @@
                         <div id="map"></div>
                         <!-- MAPA -->
                         <script>
-                            var map = L.map('map').setView([-12.06802,-77.03462],18)
+                            var latitud = [[${sitio.latitud}]];
+                            var longitud = [[${sitio.longitud}]];
+                            var latitud1 = [[${sitioCerrado.latitud}]];
+                            var longitud1 = [[${sitioCerrado.longitud}]];
+                            var map = L.map('map').setView([latitud, longitud], 7);
+
                             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             }).addTo(map);
-                            var marker = L.marker([-12.07319, -77.03498].addTo(map));
-                            //click event
-                            map.on('click', function (e){
-                                var endMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+                            var greenIcon = new L.Icon({
+                                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                                iconSize: [25, 41],
+                                iconAnchor: [12, 41],
+                                popupAnchor: [1, -34],
+                                shadowSize: [41, 41]
+                            });
+                            L.marker([latitud, longitud], {icon: greenIcon}).addTo(map)
+                                .bindPopup('Sitio Inicial')
+                                .openPopup();
 
-                                L.Routing.control({
-                                    waypoints: [
-                                        L.latLng(-12.07319, -77.03498),
-                                        L.latLng(e.latlng.lat, e.latlng.lng) ]
-                                }).addTo(map);
-                            })
+                            L.marker([latitud1, longitud1]).addTo(map)
+                                .bindPopup('Sitio Final')
+                                .openPopup();
+
                         </script>
                     </div>
                 </div>

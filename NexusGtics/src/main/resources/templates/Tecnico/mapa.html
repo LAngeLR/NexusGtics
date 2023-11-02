@@ -29,7 +29,7 @@
     <link th:href="@{/assets/css/style.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <style>
-        #map { height: 98vh; width: 100hw; }
+        #map { height: 50vh; width: 100hw; }
         select {
             width: 30%;
             font-size: 0.8rem
@@ -88,18 +88,6 @@
                             </div>
                         </a>
                     </li>
-                    <!--Otra forma probando
-                    <li><i class="fas fa-bell" ></i></li>
-                    <li th:each="notificacion, iterStat : ${listaTicket}" th:if="${iterStat.index} &lt; 3 and ${notificacion.estado} == 2">
-                        <a th:href="@{'/tecnico/verTicket?id='+${notificacion.idTickets}}">
-                        <div>
-                            <h6 th:text="${notificacion.usuarioSolicitante}"></h6>
-                            <p style="font-size: xx-small" th:text="${notificacion.fechaCreacion}"></p>
-                            <p th:text="${'ID del Ticket: '+notificacion.idTickets}"></p>
-                            <p th:text="${notificacion.descripcion}" style="font-size: xx-small"></p>
-                            <p><span class="badge text-bg-primary">Nuevo</span></p>
-                        </div></a>
-                    </li>-->
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -133,10 +121,6 @@
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <!--a class="dropdown-item d-flex align-items-center" th:href="@{/closeSession}">
-                            <i class="bi bi-box-arrow-right"></i>
-                            <span>Cerrar sesión</span>
-                        </a-->
                         <form th:action="@{/logout}" method="post">
                             <button type="submit" class="dropdown-item d-flex align-items-center">
                                 <i class="bi bi-box-arrow-right"></i>
@@ -198,41 +182,38 @@
                 <div class="col-xl-12">
                     <div class="card" >
                         <div class="card-body pt-3">
-                            <!--<div id="mi_mapa" ></div>
-                            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                            <script>
-                                let map = L.map('mi_mapa').setView([-12.06802,-77.03462],14)
-                                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                }).addTo(map);
-                                L.marker([-12.06802,-77.03462]).addTo(map).bindPopup('Mi búsqueda').openPopup();
-                                L.marker([-12.06224,-77.03417]).addTo(map).bindPopup('Ubicación real').openPopup();
-                                L.marker([-12.06086,-77.03600]).addTo(map).bindPopup('Abierto').openPopup();
-                                L.marker([-12.05177,-77.03461]).addTo(map).bindPopup('Abierto').openPopup();
-                                L.marker([-12.05238,-77.02725]).addTo(map).bindPopup('Abierto').openPopup();
-                                L.marker([-12.06176,-77.04292]).addTo(map).bindPopup('Abierto').openPopup();
-                                L.marker([-12.06180,-77.02531]).addTo(map).bindPopup('Abierto').openPopup();
-                            </script> -->
-                            <!----------------------------------------------------------------->
                             <div id="select-location">
                                 <select name="location" id="location">
                                     <option value="-1">Selecciona uno...</option>
-                                    <option th:each="sitio :${sitioList}"
+                                    <option th:each="sitio :${sitioCerradoList}"
                                             th:value="${sitio.latitud + ',' + sitio.longitud}" th:text="${sitio.distrito}">Empire State Building</option>
                                     <!--<option value="40.689167, -74.044444">Estatua de la Libertad</option>
                                     <option value="51.507,0.1275">Londres</option>-->
                                 </select>
                             </div>
+                            <br>
                             <div id="map">
                             </div>
                             <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
                             <script>
-                                let map = L.map('map').fitWorld();
+                                let map = L.map('map').setView([-12.0690694, -77.0786442], 18);
 
                                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                     attribution:
                                         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                 }).addTo(map);
+
+                                var yellowIcon = new L.Icon({
+                                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+                                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                                    iconSize: [25, 41],
+                                    iconAnchor: [12, 41],
+                                    popupAnchor: [1, -34],
+                                    shadowSize: [41, 41]
+                                });
+
+
+                                L.marker([-12.0690694, -77.0786442], {icon: yellowIcon}).addTo(map);
 
                                 document.getElementById('select-location').addEventListener('change', function(e){
                                     let coords = e.target.value.split(",");
@@ -240,6 +221,7 @@
                                     map.flyTo(coords, 18);
                                 });
                             </script>
+                            <!-- MAPA -->
                         </div>
                     </div>
                 </div>
@@ -250,20 +232,6 @@
 
 </main><!-- End #main -->
 
-
-<!-- MAPA
-    <div id="mi_mapa"></div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-        <script>
-            let map = L.map('mi_mapa').setView([-12.06802,-77.03462],18)
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-            L.marker([-12.06802,-77.03462]).addTo(map)
-                .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-                .openPopup();
-        </script>
-MAPA -->
 
 <footer id="footer" class="footer">
     <div class="credits" style="font-size: x-small;color:#5e5d5d">

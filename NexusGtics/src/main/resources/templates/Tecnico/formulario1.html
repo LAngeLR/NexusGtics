@@ -414,29 +414,26 @@
                             <div class="col-md-6">
 
                                 <div class="mb-3">
-                                    <label class="form-label">Foto relevantes en la llegada al sitio:</label>
+                                    <label for="imagenSubida" class="form-label">Foto de perfil1:</label>
                                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img th:src="@{|image/${formulario1.archivo.idArchivos}|}" style="max-width: 300px;" alt="Foto de perfil actual">
+                                        <img id="imgPreview1" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
                                     </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="imagenSubida" class="form-label">Cargar foto :</label>
-                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida" accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                                    <input class="form-control" type="file" name="imagenSubida1" id="imagenSubida1"
+                                           accept="image/*" onchange="previewImage(event, '#imgPreview1')">
                                 </div>
 
                             </div>
                             <div class="col-md-6">
 
                                 <div class="mb-3">
-                                    <label class="form-label">Fotos del sitio:</label>
+                                    <label for="imagenSubida" class="form-label">Foto de perfil:</label>
                                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img th:src="@{|image/${formulario1.archivo.idArchivos}|}" style="max-width: 300px;" alt="Fotos del sitio">
+                                        <img id="imgPreview" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
                                     </div>
+                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
                                 </div>
-                                <div class="mb-3">
-                                    <label for="imagenSubida2" class="form-label">Cargar fotos del sitio:</label>
-                                    <input class="form-control" type="file" name="imagenSubida2" id="imagenSubida2" accept="image/*" onchange="previewImage(event, '#imgPreview2')">
-                                </div>
+
                                 <button type="submit" class="btn btn-outline-primary float-end">Guardar</button>
 
                             </div>
