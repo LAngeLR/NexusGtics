@@ -161,41 +161,24 @@
             <div class="col-xl-5">
                 <div class="row">
                     <div class="col-lg-12">
-                            <div class="info-box card">
+                            <div class="info-box card" th:each="comentarios: ${listComentarios}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-quote" viewBox="0 0 16 16">
                                     <path d="M12 12a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1h-1.388c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 9 7.558V11a1 1 0 0 0 1 1h2Zm-6 0a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1H4.612c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 3 7.558V11a1 1 0 0 0 1 1h2Z"/>
                                 </svg>
                                 <p th:text="${ticket.idCuadrilla.tecnico.nombre} + ' ' +  ${ticket.idCuadrilla.tecnico.apellido}" style="font-weight: bold;color: #00489b;font-size: large"></p>
-                                <p th:text="${ticket.descripcion}"> </p>
-                                <p th:text="${ticket.fechaCreacion}" style="text-align: right; color: rgba(0,0,0,0.51)"></p>
+                                <p th:text="${comentarios.ticket.descripcion}"> </p>
+                                <p th:text="${comentarios.comentario}"></p>
+                                <div class="col-lg-12 text-end">
+                                    <p th:utext="${#dates.format(comentarios.fechaPublicacion, 'yyyy-MM-dd HH:mm:ss')}" style="color: rgba(0,0,0,0.51)"></p>
+                                </div>
                             </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="info-box card">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-quote" viewBox="0 0 16 16">
-                                <path d="M12 12a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1h-1.388c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 9 7.558V11a1 1 0 0 0 1 1h2Zm-6 0a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1H4.612c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 3 7.558V11a1 1 0 0 0 1 1h2Z"/>
-                            </svg>
-                            <p th:text="${ticket.idCuadrilla.tecnico.nombre} + ' ' +  ${ticket.idCuadrilla.tecnico.apellido}" style="font-weight: bold;color: #00489b;font-size: large"></p>
-                            <p th:text="${ticket.descripcion}"> </p>
-                            <p th:text="${ticket.fechaCreacion}" style="text-align: right; color: rgba(0,0,0,0.51)"></p>
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="info-box card">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-quote" viewBox="0 0 16 16">
-                                <path d="M12 12a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1h-1.388c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 9 7.558V11a1 1 0 0 0 1 1h2Zm-6 0a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1H4.612c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 3 7.558V11a1 1 0 0 0 1 1h2Z"/>
-                            </svg>
-                            <p th:text="${ticket.idCuadrilla.tecnico.nombre} + ' ' +  ${ticket.idCuadrilla.tecnico.apellido}" style="font-weight: bold;color: #00489b;font-size: large"></p>
-                            <p th:text="${ticket.descripcion}"> </p>
-                            <p th:text="${ticket.fechaCreacion}" style="text-align: right; color: rgba(0,0,0,0.51)"></p>
-                        </div>
                     </div>
                 </div>
 
             </div>
             <div class="col-xl-7">
                 <div class="container p-4" style="background-color: white;">
-                    <form method="POST"  enctype="multipart/form-data" th:object="${ticket}" th:action="@{/tecnico/save}">
+                    <!--<form th:action="@{/tecnico/subircomentarios}" method="POST">
                         <div class="row gy-4">
                             <div class="col-md-2">
                                 <center>
@@ -205,14 +188,31 @@
                                 </center>
                             </div>
                             <div class="col-md-10">
-                                <label style="width:100%;">
                                     <textarea class="form-control" name="comentario" rows="2" placeholder="Deja tu comentario aquí..." required></textarea>
-                                </label>
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="btn btn-danger" style="background-color: #d01616; padding: 10px 35px;">Agregar</button>
+                            </div>
+                        </div>
+                    </form>-->
+                    <form th:action="@{/tecnico/subircomentarios}" method="POST">
+                        <div class="row gy-4">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-lg-5 col-md-4 label "><b>Servicio:</b></div>
+                                    <div class="col-lg-7 col-md-8">Mantenimiento de Gabinete</div>
+                                </div>
                             </div>
 
-                        </div> <br>
-                        <div class="col-md-12 text-center">
-                            <button type="submit" class="btn btn-danger">Agregar</button>
+                            <div class="col-md-12">
+                                <input th:value="${session.usuario.id}" name="id" type="hidden"/>
+                                <input th:value="${ticket.idTickets}" name="idTicket" type="hidden"/>
+                                <textarea class="form-control" id="comentario" name="comentario" rows="6" placeholder="Deja tu comentario aquí..." required></textarea>
+                            </div>
+
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="btn btn-danger" style="background-color: #d01616; padding: 10px 35px;">Agregar</button>
+                            </div>
                         </div>
                     </form>
                 </div>
