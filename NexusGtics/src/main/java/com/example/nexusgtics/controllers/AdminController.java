@@ -116,29 +116,6 @@ public class AdminController {
         return "redirect:/admin/listaBaneados";
     }
 
-    @GetMapping({"/crearUsuario", "crearusuario"})
-    public String crearUsuario(Model model,
-                               @ModelAttribute("usuario") Usuario usuario) {
-
-        model.addAttribute("listaEmpresa", empresaRepository.findAll());
-        model.addAttribute("listaCargo", cargoRepository.findAll());
-        //para poder mandar "cargoSeleccionado" por defecto como -1
-        Cargo cargoSeleccionado = usuario.getCargo();
-        if (cargoSeleccionado == null) {
-            cargoSeleccionado = new Cargo();
-            cargoSeleccionado.setIdCargos(-1);
-        }
-        model.addAttribute("cargoSeleccionado", cargoSeleccionado);
-        Empresa empresaSeleccionada = usuario.getEmpresa();
-        if (empresaSeleccionada == null) {
-            empresaSeleccionada = new Empresa();
-            empresaSeleccionada.setIdEmpresas(-1);
-            System.out.println(empresaSeleccionada.getIdEmpresas());
-        }
-        model.addAttribute("empresaSeleccionada", empresaSeleccionada);
-        return "Administrador/crearUsuario";
-    }
-
     @GetMapping({"/verUsuario", "verusuario"})
     public String verUsuario(Model model, @RequestParam("id") String idStr) {
 
@@ -161,7 +138,28 @@ public class AdminController {
             return "Administrador/crearUsuario";
         }
     }
+    @GetMapping({"/crearUsuario", "crearusuario"})
+    public String crearUsuario(Model model,
+                               @ModelAttribute("usuario") Usuario usuario) {
 
+        model.addAttribute("listaEmpresa", empresaRepository.findAll());
+        model.addAttribute("listaCargo", cargoRepository.findAll());
+        //para poder mandar "cargoSeleccionado" por defecto como -1
+        Cargo cargoSeleccionado = usuario.getCargo();
+        if (cargoSeleccionado == null) {
+            cargoSeleccionado = new Cargo();
+            cargoSeleccionado.setIdCargos(-1);
+        }
+        model.addAttribute("cargoSeleccionado", cargoSeleccionado);
+        //para poder mandar "empresaSeleccionada" por defecto como -1
+        Empresa empresaSeleccionada = usuario.getEmpresa();
+        if (empresaSeleccionada == null) {
+            empresaSeleccionada = new Empresa();
+            empresaSeleccionada.setIdEmpresas(-1);
+        }
+        model.addAttribute("empresaSeleccionada", empresaSeleccionada);
+        return "Administrador/crearUsuario";
+    }
     /*CREAR NUEVO USUARIO*/
     @PostMapping("/saveUsuario")
     public String saveUsuario(@RequestParam("imagenSubida") MultipartFile file,
