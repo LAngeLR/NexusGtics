@@ -16,11 +16,15 @@
         <h1 th:text="|Perfil|"></h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/supervisor/}">Home</a></li>
+                <li class="breadcrumb-item"><a th:text="|${session.usuario.cargo.nombreCargo}|">Home</a></li>
                 <li class="breadcrumb-item active">Perfil</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
+
+    <div th:if="${msg != null}" th:text="${msg}" class="alert alert-primary" role="alert"></div>
+    <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-primary" role="alert"></div>
+
 
     <section class="section profile">
         <div class="row">
@@ -30,7 +34,7 @@
                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                         <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
                         <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</h2>
-                        <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Administrador</h3>
+                        <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Superadmin</h3>
                         <h3 th:text="|${session.usuario.dni}|">ID: 123456789</h3>
                     </div>
                 </div>
@@ -44,15 +48,17 @@
                         <!-- Bordered Tabs -->
                         <div class="tab-content pt-2">
                             <a th:href="@{/supervisor/perfil}" class="btn btn-dark me-2 mt-3">General</a>
-                            <a th:href="@{'/supervisor/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
-                            <a th:href="@{'/supervisor/perfilContra?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
+                            <a th:href="@{/supervisor/perfilEditar}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
+                            <a th:href="@{/supervisor/perfilContra}" class="btn btn-outline-dark me-2 mt-3 ">Cambiar contraseña</a>
                         </div>
 
                         <div class="tab-content pt-2">
 
                             <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                <h5 class="card-title" style="color: #095444" th:text="|Sobre ${session.usuario.nombre} ${session.usuario.apellido}|">Sobre Luis:</h5>
-                                <p class="small fst-italic" th:text="|${session.usuario.descripcion}|"></p>
+                                <h5 class="card-title" style="color: #095444" th:text="|Sobre ti|">Sobre Luis:</h5>
+                                <div class="row">
+                                    <div class="col-lg-9 col-md-8" th:text="|${usuario.descripcion}|">Debe se dalir algo</div>
+                                </div>
 
                                 <h5 class="card-title" style="color: #095444">Detalles del Perfil</h5>
 

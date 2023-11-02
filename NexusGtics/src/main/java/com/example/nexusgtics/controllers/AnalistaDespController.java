@@ -147,7 +147,7 @@ public class AnalistaDespController {
                 //HttpSession session = request.getSession(true);
                 //session.setAttribute("nombreUsuario", "nuevoNombre");
                 session.setAttribute("usuario", usuario);
-                return "redirect:/AnalistaDespliegue/perfil";
+                return "redirect:/analistaDespliegue/perfil";
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -180,7 +180,7 @@ public class AnalistaDespController {
                 model.addAttribute("usuario", usuario);
                 model.addAttribute("listaEmpresa", empresaRepository.findAll());
                 model.addAttribute("listaCargo", cargoRepository.findAll());
-                return "AnalistaDespliegue/analistaDespliegue";
+                return "AnalistaDespliegue/perfilEditar";
             } else {
                 return "redirect:/analistaDespliegue/perfil";
             }
