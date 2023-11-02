@@ -56,8 +56,6 @@ public class AdminController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    List<String> extensionesPermitidas = Arrays.asList("jpg", "jpeg", "png");
-
     @GetMapping({"/", "", "admin", "administrador"})
     public String paginaPrincipal(Model model) {
         model.addAttribute("currentPage", "Inicio");

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 import org.springframework.stereotype.Controller;
@@ -173,6 +174,19 @@ public class SuperAdminController {
                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
+        if (usuario.getId()==null){
+            usuario.setContrasenia(new BCryptPasswordEncoder().encode("123"));
+        }
+        List<String> correos = usuarioRepository.listaCorreos();
+        for (String correo : correos) {
+            if (correo.equals(usuario.getCorreo())) {
+                model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Superadmin/crearUsuario";
+            }
+        }
+
         if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
             model.addAttribute("msgCargo", "Escoger un cargo");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
