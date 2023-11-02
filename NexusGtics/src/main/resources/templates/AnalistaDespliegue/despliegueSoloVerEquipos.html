@@ -33,7 +33,7 @@
                     <div class="pagetitle">
                         <h1 class="card-title">Vista de equipo</h1>
                     </div>
-                    <form method="POST" th:object="${equipo}">
+                    <form th:object="${equipo}">
                         <input type="hidden" th:value="${equipo.idEquipos}" />
                         <input type="hidden" name="idSitios" th:value="${idSitios}" />
                         <div class="row">
@@ -74,24 +74,15 @@
                                     <br>
                                     <img th:src="@{|image/${equipo.archivo.idArchivos}|}" style="max-width: 600px;" alt="">
                                 </div>
-
-                            </div>
-
-                            <div>
-                                <br>
-                                <input type="hidden" name="idEquipos" th:value="${equipo.idEquipos}" />
-                                <button  th:href="@{'/analistaDespliegue/verSitio?id='+ ${idSitios}}" class="btn btn-outline-danger " >Regresar</button>
-
                             </div>
                         </div>
                     </form>
                 </div>
-                <br><br>
-
-
             </div>
         </section>
       </div>
+      <br>
+      <a th:href="@{'/analistaDespliegue/listaEquiposPerteneciente?id='+ ${idSitios}}" class="btn btn-outline-danger">Regresar</a>
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->

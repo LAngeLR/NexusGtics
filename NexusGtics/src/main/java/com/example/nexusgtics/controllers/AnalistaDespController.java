@@ -502,7 +502,10 @@ public class AnalistaDespController {
     }
 
     @GetMapping("/mapaSitios")
-    public String mapaSitios(){
+    public String mapaSitios(Model model){
+        List<Sitio> sitioList = sitioRepository.findAll();
+        model.addAttribute("sitioList", sitioList);
+
         return "AnalistaDespliegue/despliegueMapaSitios";
     }
     @GetMapping("/mapaTickets")

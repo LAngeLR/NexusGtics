@@ -81,7 +81,7 @@
                                 <br>
                                 <input type="hidden" name="idEquipos" th:value="${equipo.idEquipos}" />
                                 <button  type="submit" class="btn btn-outline-primary " >Agregar</button>
-                                <button  th:href="@{/analistaDespliegue/listaEquipo}" class="btn btn-outline-danger " >Regresar</button>
+                                <a th:href="@{'/analistaDespliegue/listaEquiposNoPerteneciente?idSitios='+ ${idSitios}}" class="btn btn-outline-danger">Regresar</a>
 
                             </div>
                         </div>
