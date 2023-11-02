@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.math.RoundingMode;
@@ -40,11 +39,12 @@ public class AdminController {
     final UsuarioRepository usuarioRepository;
     final SitiosHasEquiposRepository sitiosHasEquiposRepository;
     final CargoRepository cargoRepository;
+    private final TicketRepository ticketRepository;
     private final ArchivoRepository archivoRepository;
     private final PasswordEncoder passwordEncoder;
 
     public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository, UsuarioRepository usuarioRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository,
-                           ArchivoRepository archivoRepository, PasswordEncoder passwordEncoder) {
+                           TicketRepository ticketRepository, ArchivoRepository archivoRepository, PasswordEncoder passwordEncoder) {
         this.empresaRepository = empresaRepository;
         this.sitioRepository = sitioRepository;
         this.equipoRepository = equipoRepository;
@@ -52,6 +52,7 @@ public class AdminController {
         this.usuarioRepository = usuarioRepository;
         this.sitiosHasEquiposRepository = sitiosHasEquiposRepository;
         this.cargoRepository = cargoRepository;
+        this.ticketRepository = ticketRepository;
         this.archivoRepository = archivoRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -166,9 +167,17 @@ public class AdminController {
                               Model model,
                               RedirectAttributes attr){
        //si usuario es nuevo poner contrasnia a'123'
+//        if (usuario.getId()==null){
+//            usuario.setContrasenia(new BCryptPasswordEncoder().encode("123"));
+//        }
+
         if (usuario.getId()==null){
-            usuario.setContrasenia(new BCryptPasswordEncoder().encode("123"));
+            String mail = usuario.getCorreo();
+            String[] partes = mail.split("@");
+            String password = partes[0];
+            usuario.setContrasenia(new BCryptPasswordEncoder().encode(password));
         }
+
         List<String> correos = usuarioRepository.listaCorreos();
         for (String correo : correos) {
             if (correo.equals(usuario.getCorreo())) {
@@ -525,8 +534,10 @@ public class AdminController {
 
     @GetMapping({"/inventarioSitio", "/inventariositio"})
     public String inventarioSitio(Model model) {
-        List<Sitio> listaSitio = sitioRepository.listaDeSitios();
-        model.addAttribute("listaSitio", listaSitio);
+        List<Ticket> listaT= ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+        List<Sitio> sitioList = sitioRepository.findAll();
+        model.addAttribute("sitioList", sitioList);
         return "Administrador/mapaInventarioSitio";
     }
 

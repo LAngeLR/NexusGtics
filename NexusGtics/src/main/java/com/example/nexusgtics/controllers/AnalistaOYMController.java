@@ -470,6 +470,7 @@ public class AnalistaOYMController {
         }
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+            ticket.setReasignado(0);
             ticketRepository.save(ticket);
             attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente");
 

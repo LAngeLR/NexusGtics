@@ -60,9 +60,8 @@ public class Ticket {
     @JoinColumn(name = "idSitios", nullable = false)
     private Sitio idSitios;
 
-    @ManyToOne
-    @JoinColumn(name = "idsitioCerrado", nullable = false)
-    private SitioCerrado idsitioCerrado;
+    @Column(name = "idsitioCerrado")
+    private Integer idsitioCerrado;
 
     @ManyToOne
     @JoinColumn(name = "idTipoTicket", nullable = false)

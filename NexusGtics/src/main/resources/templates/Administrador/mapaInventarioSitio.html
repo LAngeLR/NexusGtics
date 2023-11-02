@@ -41,7 +41,13 @@
 <body>
 <!-- ======= Header ======= -->
 <header th:replace="Fragmentos/header :: header('admin')"><!-- End Header --></header>
-
+<style>
+  #map { height: 50vh; width: 100hw; }
+  select {
+    width: 30%;
+    font-size: 0.8rem
+  }
+</style>
 
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuAdmin :: menu('mapaInventario')">
@@ -60,30 +66,34 @@
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section dashboard">
-      <div class="container">
+    <section class="section profile">
+      <div class="row">
         <div class="col-xl-12">
-          <div class="card" style="height: 7rem">
+          <div class="card">
             <center>
               <div class="card-body">
-                <h5 class="card-title">Leyenda</h5>
+                <h5 class="card-title">Distribucion</h5>
+
                 <table>
                   <tr>
-                    <td><p style="color: red"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                    </svg> <b style="color:black;" class="fw-light">Ubicación real</b></p></td>
-                    <td>
-                      <p style="color: #F0E108"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                      </svg><b style="color:black;" class="fw-light"> Tickets abiertos</b></p>
+                    <td style="padding-right: 20px;">
+                      <p style="color: red">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                          <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                        </svg> <b style="color:black;" class="fw-light">Tickets Por Abrir</b>
+                      </p>
                     </td>
-                    <td>
-                      <p style="color: rebeccapurple"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                      </svg><b style="color:black;" class="fw-light"> Lugar buscado</b></p>
+                    <td style="padding-left: 20px;">
+                      <p style="color: #F0E108">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                          <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                        </svg>
+                        <b style="color: black;" class="fw-light">Tickets Abiertos</b>
+                      </p>
                     </td>
                   </tr>
                 </table>
+
               </div>
             </center>
           </div>
@@ -92,29 +102,40 @@
         <div class="col-xl-12">
           <div class="card">
             <div class="card-body pt-3">
-              <div id="mi_mapa" ></div>
+              <div id="select-location">
+                <select name="location" id="location">
+                  <option value="-1">Selecciona uno...</option>
+                  <option th:each="sitio :${sitioList}"
+                          th:value="${sitio.latitud + ',' + sitio.longitud}" th:text="${sitio.nombre}">Empire State Building</option>
+                  <!--<option value="40.689167, -74.044444">Estatua de la Libertad</option>
+                  <option value="51.507,0.1275">Londres</option>-->
+                </select>
+              </div>
+              <br>
+              <div id="map">
+              </div>
               <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
               <script>
-                let map = L.map('mi_mapa').setView([-12.059335, -77.050284],12)
+                let map = L.map('map').setView([-12.0690694, -77.0786442], 18);
 
-                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                  attribution:
+                          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(map);
-                L.marker([-12.0690694,-77.0786442]).addTo(map).bindPopup('PUCP').openPopup();
-                L.marker([-12.0460063,-77.0303511]).addTo(map).bindPopup('Centro de Lima').openPopup();
-                L.marker([-13.5167110,-71.9788230]).addTo(map).bindPopup('Plaza de Armas Cusco').openPopup();
-                L.marker([-13.5077780,-71.9822220]).addTo(map).bindPopup('Saqsaywaman').openPopup();
-                L.marker([-12.1219000,-77.0297000]).addTo(map).bindPopup('Parque Kennedy').openPopup();
-                L.marker([-12.0772001,-77.0825000]).addTo(map).bindPopup('Plaza San Miguel ').openPopup();
+
+                let defaultCoords = [-12.0690694, -77.0786442];
+                L.marker(defaultCoords).addTo(map);
+
+                document.getElementById('select-location').addEventListener('change', function(e){
+                  let coords = e.target.value.split(",");
+                  L.marker(coords).addTo(map)
+                  map.flyTo(coords, 18);
+                });
               </script>
               <!-- MAPA -->
-
             </div>
           </div>
-
         </div>
-
-
       </div>
     </section>
     <br>
