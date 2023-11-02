@@ -286,7 +286,7 @@ public class AnalistaOYMController {
                 List<SitiosHasEquipo> listaEquipos = sitiosHasEquiposRepository.listaEquiposPorSitio(id);
                 model.addAttribute("sitio", sitio);
                 model.addAttribute("listaEquipos", listaEquipos);
-                return "AnalistaOYM/oymEditarSitio";
+                return "AnalistaOYM/oymVistaSitio";
             }else {
                 return "redirect:/analistaOYM/listaSitio";
             }
@@ -438,7 +438,7 @@ public class AnalistaOYMController {
 
         if (optionalEquipo.isPresent()) {
             sitiosHasEquiposRepository.agregarEquipo(idSitios, idEquipos);
-            return "redirect:/analistaOYM/listaSitio";
+            return "redirect:/analistaOYM/listaEquiposNoPerteneciente?idSitios=" + idSitios;
         } else {
             return "redirect:/analistaOYM/listaSitio";
         }

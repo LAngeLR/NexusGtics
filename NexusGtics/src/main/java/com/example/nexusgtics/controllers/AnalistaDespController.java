@@ -439,7 +439,7 @@ public class AnalistaDespController {
 
         if (optionalEquipo.isPresent()) {
             sitiosHasEquiposRepository.agregarEquipo(idSitios, idEquipos);
-            return "redirect:/analistaDespliegue/listaSitio";
+            return "redirect:/analistaDespliegue/listaEquiposNoPerteneciente?idSitios=" + idSitios;
         } else {
             return "redirect:/analistaDespliegue/listaSitio";
         }
