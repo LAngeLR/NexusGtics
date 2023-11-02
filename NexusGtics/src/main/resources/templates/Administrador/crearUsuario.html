@@ -34,6 +34,9 @@
             <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}">
               A simple success alert—check it out!
             </div>
+            <div class="alert alert-danger" role="alert" th:if="${msgEmail != null}" th:text="${msgEmail}">
+              A simple success alert—check it out!
+            </div>
             <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
               A simple success alert—check it out!
             </div>
@@ -80,7 +83,7 @@
                     </div>
                   </div>
 
-                  <input type="hidden" name="contrasenia" id="contrasenia" th:value="${codigoAleatorio}">
+                  <!--input type="hidden" name="contrasenia" id="contrasenia" th:value="${codigoAleatorio}"-->
 
                   <input type="hidden" name="habilitado" id="habilitado" value="1">
 
