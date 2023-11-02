@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 import org.springframework.stereotype.Controller;
@@ -173,6 +174,19 @@ public class SuperAdminController {
                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
+        if (usuario.getId()==null){
+            usuario.setContrasenia(new BCryptPasswordEncoder().encode("123"));
+        }
+        List<String> correos = usuarioRepository.listaCorreos();
+        for (String correo : correos) {
+            if (correo.equals(usuario.getCorreo())) {
+                model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Superadmin/crearUsuario";
+            }
+        }
+
         if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
             model.addAttribute("msgCargo", "Escoger un cargo");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
@@ -369,7 +383,7 @@ public class SuperAdminController {
             model.addAttribute("listaCargo", cargoRepository.findAll());
 
             if (usuario.getId() == null) {
-                return "Superadmin/perfil";
+                return "Superadmin/superadmin";
             } else {
                 return "Superadmin/perfilEditar";
             }
@@ -379,7 +393,7 @@ public class SuperAdminController {
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
             if (usuario.getId() == null) {
-                return "Superadmin/perfil";
+                return "Superadmin/superadmin";
             } else {
                 return "Superadmin/perfilEditar";
             }
@@ -388,7 +402,7 @@ public class SuperAdminController {
         if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
             if (usuario.getId() == null) {
-                return "Superadmin/perfil";
+                return "Superadmin/superadmin";
             } else {
                 return "Superadmin/perfilEditar";
             }
@@ -400,7 +414,7 @@ public class SuperAdminController {
             System.out.println(file.getSize());
             model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
             if (usuario.getId() == null) {
-                return "Superadmin/perfil";
+                return "Superadmin/superadmin";
             } else {
                 return "redirect:/superadmin/perfilEditar";
             }

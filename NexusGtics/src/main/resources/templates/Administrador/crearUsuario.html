@@ -34,6 +34,9 @@
             <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}">
               A simple success alert—check it out!
             </div>
+            <div class="alert alert-danger" role="alert" th:if="${msgEmail != null}" th:text="${msgEmail}">
+              A simple success alert—check it out!
+            </div>
             <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
               A simple success alert—check it out!
             </div>
@@ -80,7 +83,7 @@
                     </div>
                   </div>
 
-                  <input type="hidden" name="contrasenia" id="contrasenia" th:value="${codigoAleatorio}">
+                  <!--input type="hidden" name="contrasenia" id="contrasenia" th:value="${codigoAleatorio}"-->
 
                   <input type="hidden" name="habilitado" id="habilitado" value="1">
 
@@ -94,7 +97,7 @@
                       <option th:each="cargo: ${listaCargo}"
                               th:unless="${cargo.nombreCargo == 'Super administrador' || cargo.nombreCargo == 'Administrador'}"
                               th:text="${cargo.nombreCargo}" th:value="${cargo.idCargos}"
-                              th:selected="${cargoSeleccionado.idCargos == cargo.idCargos}"
+                              th:selected="${cargoSeleccionado != null && cargoSeleccionado.idCargos == cargo.idCargos}"
                       >Open this select menu</option>
                     </select>
                   </div>
@@ -105,7 +108,7 @@
                       <option value="">--Seleccione una empresa--</option>
                       <option th:each="empresa: ${listaEmpresa}"
                               th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
-                              th:selected="${empresaSeleccionada.idEmpresas == empresa.idEmpresas}"
+                              th:selected="${empresaSeleccionada != null && empresaSeleccionada.idEmpresas == empresa.idEmpresas}"
                       >Open this select menu</option>
                     </select>
                   </div>

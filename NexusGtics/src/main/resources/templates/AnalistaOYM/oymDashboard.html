@@ -205,40 +205,38 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2457</a></th>
-                                        <td>Empresa 1</td>
-                                        <td>Sitio 1</td>
-                                        <td><span class="badge bg-primary">Baja Prioridad</span></td>
-                                        <td><span class="badge bg-success">Progreso</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2147</a></th>
-                                        <td>Empresa 2</td>
-                                        <td>Sitio 2</td>
-                                        <td><span class="badge bg-success">No critico</span></td>
-                                        <td><span class="badge bg-primary">Nuevo</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2049</a></th>
-                                        <td>Empresa 3</td>
-                                        <td>Sitio 3</td>
-                                        <td><span class="badge bg-danger">Urgente</span></td>
-                                        <td><span class="badge bg-danger">Cerrado</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2644</a></th>
-                                        <td>Empresa 4</td>
-                                        <td>Sitio 4 </td>
-                                        <td><span class="badge bg-danger">Urgente</span></td>
-                                        <td><span class="badge bg-success">Progreso</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row"><a href="#">#2644</a></th>
-                                        <td>Empresa 5</td>
-                                        <td>Sitio 5</td>
-                                        <td><span class="badge bg-warning">Hacer</span></td>
-                                        <td><span class="badge bg-danger">Cerrado</span></td>
+                                    <tr th:each="ticket, info: ${listaTicket}">
+                                        <th th:text="${info.index + 1}" scope="row"></th>
+                                        <td th:text="${ticket.idEmpresaAsignada.nombre}"></td>
+                                        <td th:text="${ticket.idSitios.provincia}"></td>
+                                        <td>
+                                            <div th:if="${ticket.prioridad == 'Baja prioridad'}">
+                                                <span class="badge text-bg-info" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                            </div>
+                                            <div th:if="${ticket.prioridad == 'No critico'}">
+                                                <span class="badge text-bg-success" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                            </div>
+                                            <div th:if="${ticket.prioridad == 'Urgente'}">
+                                                <span class="badge text-bg-danger" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                            </div>
+                                            <div th:if="${ticket.prioridad == 'Hacer'}">
+                                                <span class="badge text-bg-warning" th:text="${ticket.prioridad}">Baja Prioridad</span>
+                                            </div>
+                                        </td>
+                                        <td th:if="${ticket.estado==3}">
+                                            <span class="badge rounded-pill" style="background-color: #009d71">Nuevo</span>
+                                        </td>
+                                        <td th:if="${ticket.estado==4}">
+                                            <span class="badge rounded-pill" style="background-color: #006f83">En camino</span>
+                                        </td>
+                                        <td th:if="${ticket.estado==5}">
+                                            <span class="badge rounded-pill" style="background-color: #f5cc01">Progreso</span>
+                                        </td>
+                                        <td th:if="${ticket.estado==6}">
+                                            <span class="badge rounded-pill" style="background-color: #ea8579">Cerrado</span>
+                                        </td>
+
+
                                     </tr>
                                     </tbody>
                                 </table>

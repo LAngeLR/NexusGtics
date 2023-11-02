@@ -25,7 +25,7 @@
     <h1 th:text="|Perfil|"></h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/supervisor/}">Home</a></li>
+        <li class="breadcrumb-item"><a th:text="|Perfil ${session.usuario.cargo.nombreCargo}|">Home</a></li>
         <li class="breadcrumb-item active">Perfil</li>
       </ol>
     </nav>
@@ -54,8 +54,8 @@
 
             <div class="tab-content pt-2">
               <a th:href="@{/supervisor/perfil}" class="btn btn-outline-dark me-2 mt-3">General</a>
-              <a th:href="@{'/supervisor/perfilEditar?id='+${session.usuario.id}}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
-              <a th:href="@{'/supervisor/perfilContra?id=' +${session.usuario.id}}" class="btn btn-dark me-2 mt-3 ">Cambiar contraseña</a>
+              <a th:href="@{/supervisor/perfilEditar}" class="btn btn-outline-dark me-2 mt-3">Editar perfil</a>
+              <a th:href="@{/supervisor/perfilContra}" class="btn btn-dark me-2 mt-3 ">Cambiar contraseña</a>
             </div>
 
             <div class="tab-content pt-2">
@@ -90,6 +90,8 @@
                   <div class="text-center">
                     <button type="submit" class="btn" style="background-color: #2BC8A9">Cambiar contraseña</button>
                   </div>
+
+
                 </form><!-- End Change Password Form -->
 
                 <script>
@@ -104,8 +106,9 @@
                     return true;
                   }
                 </script>
-
               </div>
+
+
 
             </div><!-- End Bordered Tabs -->
 

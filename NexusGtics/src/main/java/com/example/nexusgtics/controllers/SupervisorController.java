@@ -4,6 +4,7 @@ import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,8 @@ import java.util.*;
 @Controller
 @RequestMapping("/supervisor")
 public class SupervisorController {
-
+    @Autowired
+    private HttpSession session;
     private final CuadrillaRepository cuadrillaRepository;
     private final UsuarioRepository usuarioRepository;
     private final TicketRepository ticketRepository;
@@ -64,8 +66,187 @@ public class SupervisorController {
         this.historialTicketRepository = historialTicketRepository;
     }
 
-    @GetMapping( {"/",""})
-    public String paginaPrincipal(){
+
+
+    /* -------------------------- PERFIL -------------------------- */
+    @GetMapping({"/perfil"})
+    public String perfilSupervisor(Model model,
+                            @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("usuario", u);
+        return "Supervisor/perfilSupervisor";
+    }
+
+    /* PERFIL DEL SUPERVISOR */
+    @PostMapping("/savePerfil")
+    public String savePerfil(@RequestParam("imagenSubida") MultipartFile file,
+                             @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+                             Model model,
+                             RedirectAttributes attr, HttpSession httpSession){
+
+        // ESTO SE AÑADIO DE BARD
+        //session.setAttribute("usuario", usuario);
+
+        if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
+            model.addAttribute("msgCargo", "Escoger un cargo");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+
+            if (usuario.getId() == null) {
+                return "Supervisor/menuSupervisor";
+            } else {
+                return "Supervisor/perfilEditar";
+            }
+        }
+        if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
+            model.addAttribute("msgEmpresa", "Escoger una empresa");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (usuario.getId() == null) {
+                return "Supervisor/menuSupervisor";
+            } else {
+                return "Supervisor/perfilEditar";
+            }
+        }
+
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+            if (usuario.getId() == null) {
+                return "Supervisor/menuSupervisor";
+            } else {
+                return "Supervisor/perfilEditar";
+            }
+        }
+
+        int maxFileSize = 10485760;
+
+        if (file.getSize() > maxFileSize) {
+            System.out.println(file.getSize());
+            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
+            if (usuario.getId() == null) {
+                return "Supervisor/menuSupervisor";
+            } else {
+                return "redirect:/supervisor/perfilEditar";
+            }
+        }
+
+        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+            if (usuario.getArchivo() == null) {
+                usuario.setArchivo(new Archivo());
+            }
+            String fileName = file.getOriginalFilename();
+            try{
+                //validación de nombre, apellido y correo
+                Archivo archivo = usuario.getArchivo();
+                archivo.setNombre(fileName);
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+                int idImagen = archivo.getIdArchivos();
+                usuario.getArchivo().setIdArchivos(idImagen);
+                if (usuario.getId() == null) {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                }
+                usuarioRepository.save(usuario);
+                //Usuario u = (Usuario) httpSession.getAttribute("usuario");
+                //HttpSession session = request.getSession(true);
+                //session.setAttribute("nombreUsuario", "nuevoNombre");
+                session.setAttribute("usuario", usuario);
+                return "redirect:/supervisor/perfil";
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        } else { //hay al menos 1 error
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (usuario.getId() == null) {
+                return "Supervisor/menuSupervisor";
+            } else {
+                return "Supervisor/perfilEditar";
+            }
+        }
+    }
+
+    @GetMapping({"/perfilEditar"})
+    public String perfilEditar(Model model,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
+
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
+        try{
+            //int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/supervisor/supervisor";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
+                model.addAttribute("usuario", usuario);
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Supervisor/perfilEditar";
+            } else {
+                return "redirect:/supervisor/perfil";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/supervisor/supervisor";
+        }
+
+    }
+
+    @GetMapping({"/perfilContra"})
+    public String perfilContra(Model model,
+                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
+        try{
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/supervisor/supervisor";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                model.addAttribute("idUsuario",id);
+                return "Supervisor/perfilContra";
+            } else {
+                return "redirect:/supervisor/perfil";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/supervisor/supervisor";
+        }
+    }
+
+    @PostMapping({"/actualizarContra"})
+    public String actualizarContra(Model model, @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession,
+                                   @RequestParam("password") String contrasenia,
+                                   @RequestParam("newpassword") String contraseniaNueva, @RequestParam("renewpassword") String contraseniaConfirm,
+                                   RedirectAttributes redirectAttributes){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
+
+        String contraseniaAlmacenada = usuarioRepository.obtenerContraseña(id);
+
+        if (passwordEncoder.matches(contrasenia, contraseniaAlmacenada)) {
+            String contraseniaNuevaEncriptada = passwordEncoder.encode(contraseniaNueva);
+            usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
+            redirectAttributes.addFlashAttribute("msg1", "La contraseña se ha actualizado exitosamente");
+
+            return "redirect:/supervisor/perfil";
+        } else {
+            redirectAttributes.addFlashAttribute("error","La contraseña actual no es correcta.");
+            return "redirect:/supervisor/perfilContra";
+        }
+    }
+
+    /* -------------------------- FIN PERFIL -------------------------- */
+
+
+    @GetMapping( {"/","","supervisor"})
+    public String paginaPrincipal(Model model){
+        model.addAttribute("currentPage", "Inicio");
         return "Supervisor/menuSupervisor";
     }
 
@@ -250,11 +431,6 @@ public class SupervisorController {
         }
     }
 
-    @GetMapping("/perfil")
-    public String perfilSupervisor(){
-        return "Supervisor/perfilSupervisor";
-    }
-
     @GetMapping("/mapaTickets")
     public String mapaTickets(Model model){
 
@@ -398,68 +574,6 @@ public class SupervisorController {
         }
     }
 
-    @PostMapping("/actualizarContra")
-    public String actualizarContra(Model model, @RequestParam("id") int id, @RequestParam("password") String contrasenia, @RequestParam("newpassword") String contraseniaNueva, @RequestParam("renewpassword") String contraseniaConfirm, RedirectAttributes redirectAttributes){
-
-        String idStr=String.valueOf(id);
-
-        String contraseniaAlmacenada = usuarioRepository.obtenerContraseña(id);
-
-        if (passwordEncoder.matches(contrasenia, contraseniaAlmacenada)) {
-            String contraseniaNuevaEncriptada = passwordEncoder.encode(contraseniaNueva);
-            usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
-            redirectAttributes.addFlashAttribute("a","La contraseña se ha actualizado correctamente.");
-            return "redirect:/supervisor/perfil";
-        } else {
-            redirectAttributes.addFlashAttribute("error","La contraseña actual no es correcta.");
-            return "redirect:/supervisor/perfilContra?id="+idStr;
-        }
-    }
-
-    @GetMapping("/perfilContra")
-
-    public String perfilContra(Model model, @RequestParam("id") String idStr){
-
-        try{
-            int id = Integer.parseInt(idStr);
-            if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/supervisor/perfil";
-            }
-            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-            if (optionalUsuario.isPresent()) {
-                model.addAttribute("idUsuario",id);
-                return "Supervisor/perfilContra";
-            } else {
-                return "redirect:/perfil";
-            }
-        } catch (NumberFormatException e) {
-            return "redirect:/supervisor/perfil";
-        }
-    }
-
-    @GetMapping({"/perfilEditar"})
-    public String perfilEditar(Model model, @RequestParam("id") String idStr,
-                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult){
-        try{
-            int id = Integer.parseInt(idStr);
-            if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/supervisor/perfil";
-            }
-            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
-            if (optionalUsuario.isPresent()) {
-                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
-                model.addAttribute("usuario", usuario);
-                model.addAttribute("listaEmpresa", empresaRepository.findAll());
-                model.addAttribute("listaCargo", cargoRepository.findAll());
-                return "Supervisor/perfilEditar";
-            } else {
-                return "redirect:/supervisor/perfil";
-            }
-        } catch (NumberFormatException e) {
-            return "redirect:/supervisor/perfil";
-        }
-
-    }
 
     @PostMapping("/escribirComentario")
     public String escribirComentario(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes){
