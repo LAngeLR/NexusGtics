@@ -280,12 +280,16 @@ public class AdminController {
                                 Model model,
                                 RedirectAttributes attr) {
         List<String> correos = usuarioRepository.listaCorreos();
-        for (String correo : correos) {
-            if (correo.equals(usuario.getCorreo())) {
-                model.addAttribute("msgEmail", "El correo electrónico ya existe");
-                model.addAttribute("listaEmpresa", empresaRepository.findAll());
-                model.addAttribute("listaCargo", cargoRepository.findAll());
-                return "Administrador/crearUsuario";
+        String correoActual = usuario.getCorreo();
+
+        if (!correoActual.equals(usuario.getCorreo())) {
+            for (String correo : correos) {
+                if (correo.equals(usuario.getCorreo())) {
+                    model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                    model.addAttribute("listaCargo", cargoRepository.findAll());
+                    return "Administrador/crearUsuario";
+                }
             }
         }
 

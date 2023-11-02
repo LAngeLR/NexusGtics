@@ -35,8 +35,8 @@
                 <div class="container">
 
                   <a th:href="@{/admin/crearEquipo}" class="btn btn-outline-primary me-2 mt-3 float-end">Nuevo equipo</a>
-                  <a th:href="@{/admin/crearUsuario}" class="btn btn-outline-success me-2 mt-3 float-end" data-bs-toggle="modal" data-bs-target="#nuevo">Añadir nuevo campo</a>
-                  <a th:href="@{/admin/crearUsuario}" class="btn btn-outline-primary me-2 mt-3 float-end" data-bs-toggle="modal" data-bs-target="#eliminar">Eliminar campo</a>
+                  <!--a th:href="@{/admin/crearUsuario}" class="btn btn-outline-success me-2 mt-3 float-end" data-bs-toggle="modal" data-bs-target="#nuevo">Añadir nuevo campo</a>
+                  <a th:href="@{/admin/crearUsuario}" class="btn btn-outline-primary me-2 mt-3 float-end" data-bs-toggle="modal" data-bs-target="#eliminar">Eliminar campo</a-->
 
                   <!-- MODAL DE AÑADIR NUEVO CAMPO-->
                   <div class="modal fade" id="nuevo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -121,7 +121,7 @@
                           </button>
                           <ul class="dropdown-menu">
                             <li><a class="dropdown-item btn btn-outline-primary me-2" th:href="@{'/admin/editarEquipo?id=' + ${equipo.idEquipos}}">Editar</a></li>
-                            <li><a class="dropdown-item text-danger me-2" th:href="@{'/admin/deshabilitarEquipo?id=' + ${equipo.idEquipos}}">Eliminar</a></li>
+                            <!li><a class="dropdown-item text-danger me-2" th:href="@{'/admin/deshabilitarEquipo?id=' + ${equipo.idEquipos}}">Eliminar</a></li>
                             <li><a class="dropdown-item btn btn-outline-dark me-2" th:href="@{'/admin/verEquipo?id=' + ${equipo.idEquipos}}" >Visualizar</a></li>
                           </ul>
                         </div>
