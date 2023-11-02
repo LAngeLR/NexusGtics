@@ -20,26 +20,30 @@
                     <li class="breadcrumb-item"><a th:href="@{/supervisor/}">Home</a></li>
                     <li class="breadcrumb-item active">Cuadrillas</li>
                 </ol>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="toggleTableSwitch">
+                    <label class="form-check-label" for="toggleTableSwitch"></label>
+                </div>
             </nav>
         </div><!-- End Page Title -->
+        <br>
 
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
 
-                    <div class="card">
-
+                    <div class="card" id="table1Container">
                         <div class="card-body table-responsive">
                             <div class="container">
 
                                 <a th:href="@{/supervisor/crearCuadrilla}" class="btn btn-outline-primary me-2 mt-3 float-end">Nueva Cuadrilla</a>
-                                <h5 class="card-title">Lista de Cuadrillas</h5>
+                                <h5 class="card-title">Lista de Cuadrillas Disponibles</h5>
                             </div>
                             <!-- Table with stripped rows -->
                             <table class="table datatable-borderless datatable">
                                 <thead>
                                 <tr>
-                                    <th scope="col">Nro. de Cuadrilla</th>
+                                    <th scope="col">#</th>
                                     <th scope="col">Tecnico Lider</th>
                                     <th scope="col">Nro. de Trabajos</th>
                                     <th scope="col">Ultimo Trabajo</th>
@@ -49,25 +53,19 @@
                                 </thead>
                                 <tbody>
 
-                                    <tr th:each="cuadrilla: ${listaCuadrilla}">
-                                        <td th:text="${cuadrilla.idCuadrillas}"></td>
-                                        <td th:text="${cuadrilla.tecnico.nombre}+ ' ' + ${cuadrilla.tecnico.apellido}"></td>
-                                        <td th:text="${trabajosFinalizadosPorCuadrilla[cuadrilla.idCuadrillas]}"></td>
-                                        <td> 5</td>
-                                        <td> 1</td>
-                                        <td th:if="${numeroTecnicosPorCuadrilla[cuadrilla.idCuadrillas] == 5}"><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/detallesCuadrilla?id=' + ${cuadrilla.idCuadrillas}}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-                                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
-                                            </svg>
-                                        </a></center></td>
-                                        <td th:if="${numeroTecnicosPorCuadrilla[cuadrilla.idCuadrillas] < 5}"><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/crearCuadrilla?id=' + ${cuadrilla.idCuadrillas}}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-                                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
-                                            </svg>
-                                        </a></center></td>
-                                    </tr>
+                                <tr th:each="cuadrilla, info: ${listaCuadrillaCompleta}">
+                                    <td th:text="${info.index + 1}"></td>
+                                    <td th:text="${cuadrilla.lider}"></td>
+                                    <td th:text="${cuadrilla.trabajos > 0 ? cuadrilla.trabajos : '0'}"></td>
+                                    <td th:text="${cuadrilla.ultimo != null ? #dates.format(cuadrilla.ultimo, 'yyyy-MM-dd HH:mm:ss') : 'Trabajos no asignados'}"></td>
+                                    <td th:text="${cuadrilla.year}"></td>
+                                    <td><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/detallesCuadrilla?id=' + ${cuadrilla.idCuadrilla}}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                                        </svg>
+                                    </a></center></td>
+                                </tr>
                                 </tbody>
                             </table>
                             <!-- End Table with stripped rows -->
@@ -75,9 +73,65 @@
                         </div>
                     </div>
 
+                    <div class="card" id="table2Container" style="display: none;">
+                        <div class="card-body table-responsive">
+                            <div class="container">
+                                <h5 class="card-title">Lista de Cuadrillas Imcompletas</h5>
+                            </div>
+                            <!-- Table with stripped rows -->
+                            <table class="table datatable-borderless datatable">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Tecnico Lider</th>
+                                    <th scope="col">Cantidad Tecnicos</th>
+                                    <th scope="col">fecha Creacion</th>
+                                    <th scope="col">Años laborando</th>
+                                    <th scope="col">Ver más</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr th:each="cuadrillat, info: ${listaCuadrillaImcompleta}">
+                                    <td th:text="${info.index + 1}"></td>
+                                    <td th:text="${cuadrillat.lider}"></td>
+                                    <td th:text="${cuadrillat.cantidad > 0 ? cuadrillat.cantidad : '0'}"></td>
+                                    <td th:text="${cuadrillat.fecha != null ? #dates.format(cuadrillat.fecha, 'yyyy-MM-dd HH:mm:ss') : 'No completado'}"></td>
+                                    <td th:text="${cuadrillat.year}"></td>
+                                    <td><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/crearCuadrilla?id=' + ${cuadrillat.idCuadrilla}}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                                        </svg>
+                                    </a></center></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!-- End Table with stripped rows -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const toggleTableSwitch = document.getElementById("toggleTableSwitch");
+                const table1Container = document.getElementById("table1Container");
+                const table2Container = document.getElementById("table2Container");
+
+                toggleTableSwitch.addEventListener("change", function() {
+                    if (toggleTableSwitch.checked) {
+                        table1Container.classList.add("d-none");
+                        table2Container.classList.remove("d-none");
+                        table2Container.classList.add("d-block");
+                    } else {
+                        table1Container.classList.remove("d-none");
+                        table2Container.classList.remove("d-block");
+                        table2Container.classList.add("d-none");
+                    }
+                });
+            });
+        </script>
 
     </div>
 </main>
