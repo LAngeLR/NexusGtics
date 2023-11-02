@@ -45,8 +45,11 @@ public class AdminController {
     private final ArchivoRepository archivoRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository, UsuarioRepository usuarioRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository,
-                           TicketRepository ticketRepository, ArchivoRepository archivoRepository, PasswordEncoder passwordEncoder) {
+    public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository,
+                           EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository,
+                           UsuarioRepository usuarioRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository,
+                           CargoRepository cargoRepository, PasswordEncoder passwordEncoder,
+                           TicketRepository ticketRepository, ArchivoRepository archivoRepository) {
         this.empresaRepository = empresaRepository;
         this.sitioRepository = sitioRepository;
         this.equipoRepository = equipoRepository;

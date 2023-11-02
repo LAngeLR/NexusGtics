@@ -3,6 +3,8 @@ import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,10 +64,14 @@ public class TecnicoController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping(value = {"/", "","tecnico"})
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+    @GetMapping({"/", "","tecnico"})
     public String paginaPrincipal(Model model) {
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
+        model.addAttribute("currentPage", "Inicio");
         return "Tecnico/tecnico";
     }
 
@@ -502,7 +508,7 @@ public class TecnicoController {
 
 
     /*Formulario*/
-    @GetMapping({"/formulario", "formulario"})
+    @GetMapping({"/formulario","formulario"})
     public String pagformulario(Model model, @RequestParam("id") String idStr,
                                 @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult) {
         List<Ticket> listaT = ticketRepository.findAll();
