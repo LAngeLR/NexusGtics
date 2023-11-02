@@ -9,142 +9,182 @@
 <!-- ======= Header ======= -->
 <header th:replace="Fragmentos/header :: header('analistaDespliegue')"><!-- End Header --></header><!-- End Header -->
 
-  <!-- ======= Sidebar ======= -->
+<!-- ======= Sidebar ======= -->
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuDespliegue :: menu('perfilAnalista')">
 </aside><!-- End Sidebar-->
 
-  <main id="main" class="main">
-    <div class="container">
+<main id="main" class="main">
+  <div class="container">
 
-      <div class="pagetitle">
-        <nav>
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Sitios</a></li>
-            <li class="breadcrumb-item active">Lista de sitios</li>
-          </ol>
-        </nav>
-      </div><!-- End Page Title -->
+    <div class="pagetitle">
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Sitios</a></li>
+          <li class="breadcrumb-item active">Lista de sitios</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
 
-      <section class="section">
-        <div class="row">
-          <div class="col-lg-12">
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
 
-            <div class="card">
+          <div class="card">
 
-              <div class="card-body table-responsive">
-                <div class="container">
-                  <!-- MODAL -->
-                  <div class="modal fade" id="prueba" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="staticBackdropLabel">Añadir nuevo campo</h1>
+            <div class="card-body table-responsive">
+              <div class="container">
+                <!-- MODAL -->
+                <div class="modal fade" id="prueba" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Añadir nuevo campo</h1>
+                      </div>
+                      <div class="modal-body">
+                        <div class="mb-3">
+                          <label for="descripcion">Nombre del campo:</label>
+                          <input type="text" class="form-control" name="descripcion" id="descripcion">
                         </div>
-                        <div class="modal-body">
-                          <div class="mb-3">
-                            <label for="descripcion">Nombre del campo:</label>
-                            <input type="text" class="form-control" name="descripcion" id="descripcion">
+                        <div class="input-group mb-3">
+                          <label for="consola">Formato del campo:</label>
+                          <div class="col-12">
+                            <select name="consola" id="consola" class="form-control">
+                              <option value="Cargo1">Boolean</option>
+                              <option value="Cargo2">String</option>
+                              <option value="Cargo3">Int</option>
+                              <option value="Cargo4">Double</option>
+                            </select>
                           </div>
-                          <div class="input-group mb-3">
-                            <label for="consola">Formato del campo:</label>
-                            <div class="col-12">
-                              <select name="consola" id="consola" class="form-control">
-                                <option value="Cargo1">Boolean</option>
-                                <option value="Cargo2">String</option>
-                                <option value="Cargo3">Int</option>
-                                <option value="Cargo4">Double</option>
-                              </select>
-                            </div>
-                          </div>
                         </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cerrar</button>
-                          <button type="button" class="btn btn-outline-primary">Añadir</button>
-                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-outline-primary">Añadir</button>
                       </div>
                     </div>
                   </div>
-
-                  <h5 class="card-title">Lista de sitios</h5>
-
-                  <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
-                  <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success" role="alert"></div>
-
                 </div>
-                <!-- Table with stripped rows -->
-                <table class="table datatable">
-                  <thead>
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Departamento</th>
-                    <th scope="col">Provincia</th>
-                    <th scope="col">Distrito</th>
-                    <th scope="col">Longitud y Latitud</th>
-                    <th scope="col">Tipo de zona</th>
-                    <th scope="col">Tipo de sitio</th>
-                    <th scope="col">Archivo en csv</th>
-                    <th scope="col">Acciones</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr th:each="sitio, info : ${listaSitio}">
-                    <td th:text = "${info.index + 1}"></td>
-                    <td th:text="${sitio.departamento}"></td>
-                    <td th:text="${sitio.provincia}"></td>
-                    <td th:text="${sitio.distrito}"></td>
-                    <td th:text="${sitio.longitud + ', ' + sitio.latitud}"></td>
-                    <td th:text="${sitio.tipoZona }"></td>
-                    <td th:text="${sitio.tipo}"></td>
-                    <td><a class="download-link" href="ruta-al-archivo/1.csv" download>1.csv</a></td>
-                    <td>
-                      <div class="dropdown">
-                        <button class="btn btn-light dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                            <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-                          </svg>
-                        </button>
-                        <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" th:href="@{'/analistaDespliegue/editarSitio?id=' + ${sitio.idSitios}}">Editar</a></li>
-                          <li><a class="dropdown-item" th:href="@{'/analistaDespliegue/verSitio?id='+ ${sitio.idSitios}}">Visualizar</a></li>
-                        </ul>
-                      </div>
-                    </td>
-                  </tr>
-                  </tbody>
 
-                </table>
-                <!-- End Table with stripped rows -->
+                <h5 class="card-title">Lista de sitios</h5>
+
+                <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
+                <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success" role="alert"></div>
 
               </div>
+              <!-- Table with stripped rows -->
+              <table class="table" id="tablaSitios">
+                <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Departamento</th>
+                  <th scope="col">Provincia</th>
+                  <th scope="col">Distrito</th>
+                  <th scope="col">Longitud y Latitud</th>
+                  <th scope="col">Tipo de zona</th>
+                  <th scope="col">Tipo de sitio</th>
+                  <th scope="col">Archivo en csv</th>
+                  <th scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="sitio, info : ${listaSitio}">
+                  <td th:text = "${info.index + 1}"></td>
+                  <td th:text="${sitio.departamento}"></td>
+                  <td th:text="${sitio.provincia}"></td>
+                  <td th:text="${sitio.distrito}"></td>
+                  <td th:text="${sitio.longitud + ', ' + sitio.latitud}"></td>
+                  <td th:text="${sitio.tipoZona }"></td>
+                  <td th:text="${sitio.tipo}"></td>
+                  <td><a class="download-link" href="ruta-al-archivo/1.csv" download>1.csv</a></td>
+                  <td>
+                    <div class="dropdown">
+                      <button class="btn btn-light dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                          <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                        </svg>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{'/analistaDespliegue/editarSitio?id=' + ${sitio.idSitios}}">Editar</a></li>
+                        <li><a class="dropdown-item" th:href="@{'/analistaDespliegue/verSitio?id='+ ${sitio.idSitios}}">Visualizar</a></li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+
+              </table>
+              <!-- End Table with stripped rows -->
+
             </div>
-
           </div>
+
         </div>
-      </section>
+      </div>
+    </section>
 
-    </div>
-  </main><!-- End #main -->
+  </div>
+</main><!-- End #main -->
 
-  <!-- ======= Footer ======= -->
-  <footer th:replace="Fragmentos/footer :: footer"></footer>
-  <!-- End Footer -->>
+<!-- ======= Footer ======= -->
+<footer th:replace="Fragmentos/footer :: footer"></footer>
+<!-- End Footer -->>
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Vendor JS Files -->
-  <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
-  <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-  <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
-  <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
-  <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
-  <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
-  <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
-  <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 
-  <!-- Template Main JS File -->
-  <script th:src="@{/assets/js/main.js}"></script>
-
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/js/popper.min.js}"></script>
+<script th:src="@{/assets/vendor/datatables/datatables/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/assets/vendor/datatables/datatables-bs4/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/assets/vendor/datatables/datatables.net-responsive/dataTables.responsive.js}"></script>
+<script th:src="@{/assets/vendor/datatables/datatables.net-responsive-bs4/responsive.bootstrap4.js}"></script>
+<script th:src="@{/assets/vendor/datatables/datatables-buttons/dataTables.buttons.min.js}"></script>
+<script th:src="@{/assets/vendor/datatables/datatables-buttons/buttons.bootstrap4.min.js}"></script>
+<script th:src="@{/assets/vendor/datatables/datatables-buttons/buttons.flash.min.js}"></script>
+<script th:src="@{/assets/vendor/datatables/datatables-buttons/jszip.min.js}"></script>
+<script th:src="@{/assets/vendor/datatables/datatables-buttons/buttons.html5.min.js}"></script>
+<script>
+  $(document).ready(function () {
+    $('#tablaSitios').DataTable({
+      dom: "<'d-flex justify-content-end pb-4'B>\n" +
+              "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>\n" +
+              "<'table-responsive'tr>\n" +
+              "<'row align-items-center'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 d-flex justify-content-end'p>>",
+      language: {
+        processing: "Procesando...",
+        lengthMenu: "Mostrar  MENU  sitios",
+        zeroRecords: "No se encontraron sitios",
+        emptyTable: "No hay sitios",
+        info: "Mostrando sitios del START al END <br>Total TOTAL sitios",
+        infoEmpty: "Mostrando sitios del 0 al 0 <br>Total 0 sitios",
+        infoFiltered: "(filtrado de un total de MAX sitios)",
+        loadingRecords: "Cargando...",
+        search: "Buscar:",
+        paginate: {
+          previous: '<i class="fa fa-lg fa-angle-left mr-2"></i>Anterior',
+          next: 'Siguiente<i class="fa fa-lg fa-angle-right ml-2"></i>'
+        }
+      },
+      autoWidth: false,
+      buttons: [
+        {extend: 'csv', className: 'btn btn-falcon-default', text: '<span class="fa fa-file-csv mr-1"></span>CSV'},
+        {extend: 'excel', className: 'btn btn-falcon-success', text: '<span class="fa fa-file-excel mr-1"></span>Excel'}
+      ]
+    });
+  });
+</script>
 </body>
 
 </html>
