@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import java.time.LocalDate;
+
 @Controller
 @RequestMapping("/superadmin")
 public class SuperAdminController {
@@ -118,6 +120,9 @@ public class SuperAdminController {
     @GetMapping({"/crearUsuario","crearusuario"})
     public String crearUsuario(Model model,
                                @ModelAttribute("usuario") Usuario usuario){
+
+        LocalDate fechaActual = LocalDate.now();
+        model.addAttribute("fechaActual", fechaActual);
 
         model.addAttribute("listaEmpresa", empresaRepository.findAll());
         model.addAttribute("listaCargo", cargoRepository.findAll());
