@@ -35,7 +35,8 @@ public class TecnicoController {
 
     final CargoRepository cargoRepository;
     private final FormularioRepository formularioRepository;
-    private final TecnologiainstaladaRepository tecnologiainstaladaRepository;
+    private final TecInstaladaRepository tecInstaladaRepository;
+    private final TecnologiainstaladaFormularioRepository tecnologiainstaladaRepository;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -44,8 +45,8 @@ public class TecnicoController {
                              TipoticketRepository tipoticketRepository, SitioRepository sitioRepository, ComentarioRepository comentarioRepository,
                              CuadrillaRepository cuadrillaRepository, ArchivoRepository archivoRepository,
                              FormularioRepository formularioRepository,
-                             EquipoRepository equipoRepository, SitioCerradoRepository sitioCerradoRepository,
-                             EmpresaRepository empresaRepository, CargoRepository cargoRepository, TecnologiainstaladaRepository tecnologiainstaladaRepository, PasswordEncoder passwordEncoder) {
+                             EquipoRepository equipoRepository, SitioCerradoRepository sitioCerradoRepository,TecInstaladaRepository tecInstaladaRepository ,
+                             EmpresaRepository empresaRepository, CargoRepository cargoRepository, TecnologiainstaladaFormularioRepository tecnologiainstaladaRepository, PasswordEncoder passwordEncoder) {
         this.ticketRepository = ticketRepository;
         this.usuarioRepository = usuarioRepository;
         this.tipoticketRepository = tipoticketRepository;
@@ -57,6 +58,7 @@ public class TecnicoController {
         this.empresaRepository = empresaRepository;
         this.cargoRepository = cargoRepository;
         this.tecnologiainstaladaRepository = tecnologiainstaladaRepository;
+        this.tecInstaladaRepository = tecInstaladaRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -743,7 +745,11 @@ public class TecnicoController {
             Optional<Formulario> optionalFormulario=formularioRepository.findById(id);
             if(optionalFormulario.isPresent()){
                 formulario3 = optionalFormulario.get();
+                List<TecnologiainstaladaFormulario> list = tecnologiainstaladaRepository.agruparTecnologia(formulario3.getIdFormularios());
+                List<Tecnologiainstalada> listInst = tecInstaladaRepository.findAll();
                 model.addAttribute("formulario", formulario3);
+                model.addAttribute("tecFormList", list);
+                model.addAttribute("tecInsList", listInst);
                 return "Tecnico/formulario3";
             }else{
                 return "redirect:/tecnico";

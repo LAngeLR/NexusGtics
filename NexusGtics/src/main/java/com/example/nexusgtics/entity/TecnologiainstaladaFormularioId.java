@@ -14,7 +14,6 @@ import java.util.Objects;
 @Setter
 @Embeddable
 public class TecnologiainstaladaFormularioId implements Serializable {
-    private static final long serialVersionUID = 8102180204087328867L;
     @NotNull
     @Column(name = "idTecnologiaInstalada", nullable = false)
     private Integer idTecnologiaInstalada;
@@ -22,19 +21,5 @@ public class TecnologiainstaladaFormularioId implements Serializable {
     @NotNull
     @Column(name = "idFormularios", nullable = false)
     private Integer idFormularios;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        TecnologiainstaladaFormularioId entity = (TecnologiainstaladaFormularioId) o;
-        return Objects.equals(this.idFormularios, entity.idFormularios) &&
-                Objects.equals(this.idTecnologiaInstalada, entity.idTecnologiaInstalada);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idFormularios, idTecnologiaInstalada);
-    }
 
 }

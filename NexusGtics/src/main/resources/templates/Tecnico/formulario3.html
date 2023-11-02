@@ -436,23 +436,23 @@
                                         <option value="Satelite">Satélite</option>
                                     </select>
                                 </div>
-                                <div class="mb-3">
-                                    <div th:if="${formulario.tecnologiainstaladas == 'FFTH'}">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckCheckedFFTH" checked>
-                                            <label class="form-check-label" for="flexCheckCheckedFFTH">
-                                                FFTH
-                                            </label></div>
-                                    </div>
-                                    <div th:else>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefaultFFTH" >
-                                            <label class="form-check-label" for="flexCheckDefaultFFTH">
-                                                FFTH
-                                            </label></div>
-                                    </div>
+                                <h6>Tecnología instalada</h6>
+                                <div class="mb-3" th:each="tecIns:${tecInsList}">
+
+                                            <div th:if="${tecIns.checkTecInstalada(tecFormList)}">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value=""  th:id="${tecIns.getId()+'checkbox'}" checked>
+                                                    <label class="form-check-label" th:text="${tecIns.getNombre()}">
+                                                    </label></div>
+                                            </div>
+                                            <div th:unless="${tecIns.checkTecInstalada(tecFormList)}">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value=""  th:id="${tecIns.getId()+'checkbox'}">
+                                                    <label class="form-check-label" th:text="${tecIns.getNombre()}">
+                                                    </label></div>
+                                            </div>
                                 </div>
-                                <div class="mb-3">
+                                <!--<div class="mb-3">
                                     <div th:if="${formulario.tecnologiainstaladas == 'HFC'}">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="" id="flexCheckCheckedHFC" checked>
@@ -531,7 +531,7 @@
                                                 5G
                                             </label></div>
                                     </div>
-                                </div>
+                                </div>-->
 
                                 <div class="mb-3">
                                     <label class="form-label">Descripción de los trabajos realizados:</label>
