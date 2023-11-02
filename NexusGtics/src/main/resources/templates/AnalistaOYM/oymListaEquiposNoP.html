@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head th:include="Fragmentos/head :: head('Analista de Despliegue')"></head>
+<head th:include="Fragmentos/head :: head('Analista de Mantenimiento')"></head>
 
 
 <body>
 
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('analistaDespliegue')"><!-- End Header --></header><!-- End Header -->
+<header th:replace="Fragmentos/header :: header('analistaOYM')"><!-- End Header --></header><!-- End Header -->
 
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuDespliegue :: menu('listaEquipo')">
+<aside th:replace="Fragmentos/menuAnalistaOYM :: menu('listaEquipo')">
 </aside><!-- End Sidebar-->
   <main id="main" class="main">
     <div class="container">
@@ -18,13 +18,13 @@
       <div class="pagetitle">
         <nav>
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/listaSitio}">Lista de Sitios</a></li>
-            <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/editarSitio}">Editar Sitio</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/analistaOYM/listaSitio}">Lista de Sitios</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/analistaOYM/editarSitio}">Editar Sitio</a></li>
             <li class="breadcrumb-item active">Lista de equipos no agregados</li>
           </ol>
         </nav>
       </div><!-- End Page Title -->
-      <form th:action="@{'/analistaDespliegue/listaEquipo'}" method="get">
+      <form th:action="@{'/analistaOYM/listaEquipo'}" method="get">
         <input type="hidden" id="id" name="id" th:value="${idSitios}"/>
         <section class="section"  >
         <div class="row">
@@ -61,7 +61,7 @@
                           </svg>
                         </button>
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" th:href="@{'/analistaDespliegue/verEquipo?idSitios=' + ${idSitios} + '&idEquipos=' + ${sitiosHasEquipo.idEquipos.idEquipos}}">Visualizar</a></li>
+                          <li><a class="dropdown-item" th:href="@{'/analistaOYM/verEquipo?idSitios=' + ${idSitios} + '&idEquipos=' + ${sitiosHasEquipo.idEquipos.idEquipos}}">Visualizar</a></li>
                         </ul>
                       </div>
                     </td>
@@ -70,7 +70,7 @@
                 </table>
                 <!-- End Table with stripped rows -->
                 <div>
-                  <a th:href="@{'/analistaDespliegue/listaEquiposPerteneciente?id='+ ${idSitios}}" class="btn btn-outline-danger">Regresar</a>
+                  <a th:href="@{'/analistaOYM/listaEquiposPerteneciente?id='+ ${idSitios}}" class="btn btn-outline-danger">Regresar</a>
                 </div>
               </div>
             </div>
