@@ -19,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +34,7 @@ public class AnalistaOYMController {
     final UsuarioRepository usuarioRepository;
     final EquipoRepository equipoRepository;
     final EmpresaRepository empresaRepository;
+    private final ComentarioRepository comentarioRepository;
     final ArchivoRepository archivoRepository;
     final SitiosHasEquiposRepository sitiosHasEquiposRepository;
     final CargoRepository cargoRepository;
@@ -42,12 +42,13 @@ public class AnalistaOYMController {
     @Autowired
     private SitioCerradoRepository sitioCerradoRepository;
 
-    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1, UsuarioRepository usuarioRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository, PasswordEncoder passwordEncoder, SitioCerradoRepository  sitioCerradoRepository){
+    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1, UsuarioRepository usuarioRepository, ComentarioRepository comentarioRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository, PasswordEncoder passwordEncoder, SitioCerradoRepository  sitioCerradoRepository){
         this.sitioRepository = sitioRepository;
         this.ticketRepository = ticketRepository;
         this.equipoRepository = equipoRepository;
         this.empresaRepository = empresaRepository;
         this.usuarioRepository = usuarioRepository;
+        this.comentarioRepository = comentarioRepository;
         this.archivoRepository = archivoRepository;
         this.sitiosHasEquiposRepository = sitiosHasEquiposRepository;
         this.cargoRepository = cargoRepository;
@@ -421,8 +422,15 @@ public class AnalistaOYMController {
     public String mapaSitios(){
         return "AnalistaOYM/oymMapaSitios";
     }
+
     @GetMapping("/mapaTickets")
-    public String mapaTickets(){
+    public String mapaTickets(Model model){
+
+        List<Ticket> listaT= ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+        List<Sitio> sitioList = sitioRepository.findAll();
+        model.addAttribute("sitioList", sitioList);
+
         return "AnalistaOYM/oymMapaTickets";
     }
 
@@ -548,9 +556,52 @@ public class AnalistaOYMController {
     }
 
 
+
     @GetMapping("/comentarios")
-    public String comentarios(){
-        return "AnalistaOYM/oymComentarios";
+    public String comentarioTicket(Model model, @RequestParam("id") String idStr){
+
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/analistaOYM/ticket";
+            }
+            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
+            List<Comentario> listaComentarios = comentarioRepository.listarComentarios(id);
+            if (ticketOptional.isPresent()) {
+                Ticket ticket = ticketOptional.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("listaComentarios", listaComentarios);
+                return "AnalistaOYM/oymComentarios";
+            } else {
+                return "redirect:/analistaOYM/ticket";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/analistaOYM/ticket";
+        }
+
+    }
+
+    @PostMapping("/escribirComentario")
+    public String escribirComentario(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes){
+
+        try{
+            int idTicket = Integer.parseInt(idTicketStr);
+            if (idTicket <= 0 || !ticketRepository.existsById(idTicket)) {
+                return "redirect:/analistaOYM/ticket";
+            }
+            Optional<Ticket> optionalTicket = ticketRepository.findById(idTicket);
+            if (optionalTicket.isPresent()) {
+                Date fechaCreacion = new Date();
+                comentarioRepository.ingresarComentario(id,idTicket,comentario,fechaCreacion);
+                redirectAttributes.addFlashAttribute("error","Comentario Añadido");
+
+                return "redirect:/AnalistaOYM/oymComentarios?id="+idTicketStr;
+            } else {
+                return "redirect:/analistaOYM/ticket";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/analistaOYM/ticket";
+        }
     }
 
 
