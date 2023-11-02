@@ -278,7 +278,8 @@ public class TecnicoController {
         //'listar'
         List<Ticket> lista = ticketRepository.listarEstado();
         model.addAttribute("ticketList", lista);
-        List<Ticket> listaT = ticketRepository.listarEstado();
+        Integer idCuadrilla = 2;
+        List<Ticket> listaT = ticketRepository.listaTicketModificado(1,idCuadrilla);
         model.addAttribute("listaTicket", listaT);
         return "Tecnico/ticket_asignado";
     }

@@ -42,6 +42,9 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     //------------------------ Tecnico --------------------//
 
+    @Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE idCuadrilla=1 AND idEmpresaAsignada=2")
+    List<Ticket> listaTicketModificado(int valor1, int idCuadrilla);
+
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "insert into ticket (estado) values (?1)")

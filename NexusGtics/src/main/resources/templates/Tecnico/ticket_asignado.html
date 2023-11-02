@@ -174,7 +174,7 @@
                             </tr>
                             </thead>
                             <tbody> <!-- th:text="${ticket.fechaCreacion}" -->
-                                <tr th:each=" ticket, info : ${ticketList}">
+                                <tr th:each=" ticket, info : ${listaTicket}">
                                     <th th:text="${info.index + 1}" scope="row"></th>
                                     <td th:text="${ticket.usuarioSolicitante}"></td>
                                     <td th:text="${ticket.fechaCreacion}"></td>
