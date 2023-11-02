@@ -82,7 +82,13 @@
                                     <div class="col-md-8">
                                         <div class="card-body">
                                             <h5 class="card-title" th:text="'Felicidades Sup. ' + ${session.usuario.nombre}"></h5>
-                                            <p class="card-text"> Luis, te has autoasignado 72% de los tickets asignados a tu empresa</p>
+                                            <p class="card-text">
+                                                <span th:each="a : ${culminados}" th:text="'¡Aceptaste ' + ${a.aceptados} + ' tickets de los cuales ' + ${a.culminados} + ' terminaste!'"></span>
+                                                <br>
+                                                <br>
+                                                <span th:each="a : ${culminados}" th:text="'¡Reasignaste ' + ${a.reasignados} + ' tickets de los cuales ' + ${a.terminados} + ' se han terminado!'"></span>
+                                            </p>
+
                                             <p class="card-text"><small class="text-body-secondary"><a th:href="@{/supervisor/listaTickets}" class="btn btn-light">Tickets</a></small></p>
                                         </div>
                                     </div>
@@ -283,7 +289,7 @@
                 <!-- Website Traffic -->
                 <div class="card">
                     <div class="card-body pb-0">
-                        <h5 class="card-title">5 Marcas más usadas</h5>
+                        <h5 class="card-title">Marcas más usadas</h5>
                         <div id="trafficChart" style="min-height: 500px;" class="echart"></div>
                         <script th:inline="javascript">
                             document.addEventListener("DOMContentLoaded", () => {

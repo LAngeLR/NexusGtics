@@ -446,9 +446,11 @@ public class SupervisorController {
     public String dashboard(Model model, HttpSession httpSession) {
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idEmpresa = u.getEmpresa().getIdEmpresas();
+        Integer idSup = u.getId();
         List<Ticket> listaTickets = ticketRepository.listaTicketsSinSupervisor(idEmpresa);
         model.addAttribute("listaTickets", listaTickets);
         model.addAttribute("cantidadEquipos", equipoRepository.obtenerEquiposMarca());
+        model.addAttribute("culminados", ticketRepository.infoDash(idSup,7));
 
 
         return "Supervisor/dashboardSupervisor";

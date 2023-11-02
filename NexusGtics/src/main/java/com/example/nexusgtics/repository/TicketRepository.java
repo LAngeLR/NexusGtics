@@ -1,5 +1,7 @@
 package com.example.nexusgtics.repository;
 
+import com.example.nexusgtics.dto.TicketsCreadosCulminadosDto;
+import com.example.nexusgtics.dto.TicketsDashSupDto;
 import com.example.nexusgtics.entity.Formulario;
 import com.example.nexusgtics.entity.Ticket;
 import com.example.nexusgtics.entity.Usuario;
@@ -40,6 +42,13 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM tickets where idEmpresaAsignada = ?1 and estado=2 and idSupervisorEncargado IS NULL")
     List<Ticket> listaTicketsSinSupervisor (int idEmpresaAsignada);
 
+    @Query(value ="SELECT \n" +
+            "    (SELECT COUNT(*) FROM tickets WHERE idSupervisorEncargado = ?1 AND reasignado=0) AS aceptados,\n" +
+            "    (SELECT COUNT(*) FROM tickets WHERE idSupervisorEncargado = ?1 AND estado = ?2 AND reasignado=0) AS culminados,\n" +
+            "    (SELECT COUNT(*) FROM tickets WHERE idSupervisorEncargado != ?1 AND reasignado=1) AS reasignados,\n" +
+            "    (SELECT COUNT(*) FROM tickets WHERE idSupervisorEncargado != ?1 AND reasignado=1 AND estado = ?2) AS terminados;", nativeQuery = true )
+    List<TicketsDashSupDto> infoDash(int id, int estado);
+
     //------------------------ Tecnico --------------------//
 
     @Transactional
@@ -49,5 +58,16 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     @Query(value ="select * from nexus.tickets where estado not IN (1,2,7);", nativeQuery = true )
     List<Ticket> listarEstado();
+
+    //------------------------ Analista m --------------------//
+
+    @Query(value ="select * from tickets where estado=2 and idUsuarioCreador=?1 and idSupervisorEncargado IS NULL;", nativeQuery = true )
+    List<Ticket> recienCreados(int id);
+
+    @Query(value ="SELECT \n" +
+            "\t(SELECT COUNT(*) FROM tickets WHERE idUsuarioCreador = ?1) AS creados,\n" +
+            "    (SELECT COUNT(*) FROM tickets WHERE idUsuarioCreador = ?1 AND estado = ?2) AS culminados;", nativeQuery = true )
+    List<TicketsCreadosCulminadosDto> creadosCulminados(int id, int estado);
+
 
 }
