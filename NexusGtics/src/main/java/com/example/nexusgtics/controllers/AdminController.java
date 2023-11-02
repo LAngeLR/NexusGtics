@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -166,6 +167,20 @@ public class AdminController {
                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
+       //si usuario es nuevo poner contrasnia a'123'
+        if (usuario.getId()==null){
+            usuario.setContrasenia(new BCryptPasswordEncoder().encode("123"));
+        }
+        List<String> correos = usuarioRepository.listaCorreos();
+        for (String correo : correos) {
+            if (correo.equals(usuario.getCorreo())) {
+                model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Administrador/crearUsuario";
+            }
+        }
+
         //para "guardar" lo seleccionado y poder mostrarlo cuando haya un error y no tener q ponerlo de nuevo
         Cargo cargoSeleccionado = usuario.getCargo();
         Empresa empresaSeleccionada = usuario.getEmpresa();
@@ -252,6 +267,16 @@ public class AdminController {
                                 @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                                 Model model,
                                 RedirectAttributes attr) {
+        List<String> correos = usuarioRepository.listaCorreos();
+        for (String correo : correos) {
+            if (correo.equals(usuario.getCorreo())) {
+                model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Administrador/crearUsuario";
+            }
+        }
+
         if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
             model.addAttribute("msgCargo", "Escoger un cargo");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
