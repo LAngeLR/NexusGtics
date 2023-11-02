@@ -369,7 +369,7 @@ public class SuperAdminController {
             model.addAttribute("listaCargo", cargoRepository.findAll());
 
             if (usuario.getId() == null) {
-                return "Superadmin/perfil";
+                return "Superadmin/superadmin";
             } else {
                 return "Superadmin/perfilEditar";
             }
@@ -379,7 +379,7 @@ public class SuperAdminController {
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
             if (usuario.getId() == null) {
-                return "Superadmin/perfil";
+                return "Superadmin/superadmin";
             } else {
                 return "Superadmin/perfilEditar";
             }
@@ -388,7 +388,7 @@ public class SuperAdminController {
         if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
             if (usuario.getId() == null) {
-                return "Superadmin/perfil";
+                return "Superadmin/superadmin";
             } else {
                 return "Superadmin/perfilEditar";
             }
@@ -400,7 +400,7 @@ public class SuperAdminController {
             System.out.println(file.getSize());
             model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
             if (usuario.getId() == null) {
-                return "Superadmin/perfil";
+                return "Superadmin/superadmin";
             } else {
                 return "redirect:/superadmin/perfilEditar";
             }

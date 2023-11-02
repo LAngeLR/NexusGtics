@@ -195,7 +195,7 @@ public class AnalistaOYMController {
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
                 model.addAttribute("idUsuario",id);
-                return "analistaOYM/perfilContra";
+                return "AnalistaOYM/perfilContra";
             } else {
                 return "redirect:/analistaOYM/perfil";
             }
