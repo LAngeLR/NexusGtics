@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -90,5 +92,16 @@ public class Formulario {
     @NotNull
     @Column(name = "trabarealizados", nullable = false, length = 45)
     private String trabarealizados;
+
+    @Size(max = 45)
+    @NotNull
+    @Column(name = "tipoTransporte", nullable = false, length = 45)
+    private String tipoTransporte;
+
+    @ManyToMany
+    @JoinTable(name = "tecnologiainstalada_formularios",
+            joinColumns = @JoinColumn(name = "idFormularios"),
+            inverseJoinColumns = @JoinColumn(name = "idTecnologiaInstalada"))
+    private Set<Tecnologiainstalada> tecnologiainstaladas = new LinkedHashSet<>();
 
 }

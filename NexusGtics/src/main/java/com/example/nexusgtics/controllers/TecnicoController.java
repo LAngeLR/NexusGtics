@@ -30,13 +30,15 @@ public class TecnicoController {
     final ComentarioRepository comentarioRepository;
     final ArchivoRepository archivoRepository;
     private final FormularioRepository formularioRepository;
+    private final TecnologiainstaladaRepository tecnologiainstaladaRepository;
 
     public TecnicoController(TicketRepository ticketRepository,
                              UsuarioRepository usuarioRepository,
                              TipoticketRepository tipoticketRepository, SitioRepository sitioRepository, ComentarioRepository comentarioRepository,
                              CuadrillaRepository cuadrillaRepository, ArchivoRepository archivoRepository,
                              FormularioRepository formularioRepository,
-                             EquipoRepository equipoRepository, SitioCerradoRepository sitioCerradoRepository) {
+                             EquipoRepository equipoRepository, SitioCerradoRepository sitioCerradoRepository,
+                             TecnologiainstaladaRepository tecnologiainstaladaRepository) {
         this.ticketRepository = ticketRepository;
         this.usuarioRepository = usuarioRepository;
         this.tipoticketRepository = tipoticketRepository;
@@ -46,6 +48,7 @@ public class TecnicoController {
         this.formularioRepository = formularioRepository;
 
         this.sitioCerradoRepository = sitioCerradoRepository;
+        this.tecnologiainstaladaRepository = tecnologiainstaladaRepository;
     }
 
     @GetMapping(value = {"/", ""})
