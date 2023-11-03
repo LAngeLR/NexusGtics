@@ -45,8 +45,11 @@ public class AdminController {
     private final ArchivoRepository archivoRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository, EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository, UsuarioRepository usuarioRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository,
-                           TicketRepository ticketRepository, ArchivoRepository archivoRepository, PasswordEncoder passwordEncoder) {
+    public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository,
+                           EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository,
+                           UsuarioRepository usuarioRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository,
+                           CargoRepository cargoRepository, PasswordEncoder passwordEncoder,
+                           TicketRepository ticketRepository, ArchivoRepository archivoRepository) {
         this.empresaRepository = empresaRepository;
         this.sitioRepository = sitioRepository;
         this.equipoRepository = equipoRepository;
@@ -60,8 +63,10 @@ public class AdminController {
     }
 
     @GetMapping({"/", "", "admin", "administrador"})
-    public String paginaPrincipal(Model model) {
+    public String paginaPrincipal(Model model, HttpSession httpSession) {
         model.addAttribute("currentPage", "Inicio");
+        Usuario user = (Usuario) session.getAttribute("usuario");
+        System.out.println("User: "+ user.getNombre());
         return "Administrador/admin";
     }
 
@@ -277,12 +282,16 @@ public class AdminController {
                                 Model model,
                                 RedirectAttributes attr) {
         List<String> correos = usuarioRepository.listaCorreos();
-        for (String correo : correos) {
-            if (correo.equals(usuario.getCorreo())) {
-                model.addAttribute("msgEmail", "El correo electrónico ya existe");
-                model.addAttribute("listaEmpresa", empresaRepository.findAll());
-                model.addAttribute("listaCargo", cargoRepository.findAll());
-                return "Administrador/crearUsuario";
+        String correoActual = usuario.getCorreo();
+
+        if (!correoActual.equals(usuario.getCorreo())) {
+            for (String correo : correos) {
+                if (correo.equals(usuario.getCorreo())) {
+                    model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                    model.addAttribute("listaCargo", cargoRepository.findAll());
+                    return "Administrador/crearUsuario";
+                }
             }
         }
 
@@ -988,7 +997,6 @@ public class AdminController {
             }
         }
 
-        // AÑADIO JUELIO
         String fileName1 = file.getOriginalFilename();
 
         if (fileName1.contains("..") && !file.isEmpty()) {

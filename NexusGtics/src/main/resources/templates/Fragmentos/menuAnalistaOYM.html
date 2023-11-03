@@ -56,24 +56,6 @@
                 </li>
             </ul>
         </li>
-        <li class="nav-item">
-            <a th:class="${currentPage == 'mapaTicket' or currentPage == 'mapaSitio' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#map-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-map"></i>
-                <span>Mapas</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="map-nav" th:classappend="${currentPage == 'mapaSitio' or currentPage == 'mapaTicket' ? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">
-                <li>
-                    <a th:classappend="${currentPage == 'mapaSitio' ? 'active' : ''}" th:href="@{/analistaOYM/mapaSitios}">
-                        <i class="bi bi-circle"></i><span>Mapa de sitios</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:classappend="${currentPage == 'mapaTicket' ? 'active' : ''}" th:href="@{/analistaOYM/mapaTickets}">
-                        <i class="bi bi-circle"></i><span>Mapa de tickets</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
 
     </ul>
 

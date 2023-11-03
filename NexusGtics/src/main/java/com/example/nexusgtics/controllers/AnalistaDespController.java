@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -271,7 +273,7 @@ public class AnalistaDespController {
     }
 
     @GetMapping("/verSitio")
-    public String verSitio(Model model, @RequestParam("id") String idStr){
+    public String verSitio(Model model, @RequestParam("id") String idStr,@ModelAttribute("sitio") @Valid Sitio sitio, BindingResult bindingResult){
         try{
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !sitioRepository.existsById(id)) {
@@ -279,8 +281,10 @@ public class AnalistaDespController {
             }
             Optional<Sitio> optSitio = sitioRepository.findById(id);
             if(optSitio.isPresent()){
-                Sitio sitio = optSitio.get();
+                sitio = optSitio.get();
+                List<SitiosHasEquipo> listaEquipos = sitiosHasEquiposRepository.listaEquiposPorSitio(id);
                 model.addAttribute("sitio", sitio);
+                model.addAttribute("listaEquipos", listaEquipos);
                 return "AnalistaDespliegue/despliegueVistaSitio";
             }else {
                 return "redirect:/analistaDespliegue/listaSitio";
@@ -293,28 +297,76 @@ public class AnalistaDespController {
 
 
 
-    @PostMapping("/guardarSitio")
-    public String guardarSitio(@RequestParam("imagenSubida") MultipartFile file,
-                               Sitio sitio,
-                               Model model,
-                               RedirectAttributes attr){
-        if (sitio.getArchivo() == null) {
-            sitio.setArchivo(new Archivo());
+    @PostMapping("/actualizarSitio")
+    public String actualizarSitio(@RequestParam("imagenSubida") MultipartFile file,
+                              @ModelAttribute("sitio") @Valid Sitio sitio,
+                              BindingResult bindingResult,
+                              Model model,
+                              RedirectAttributes attr) {
+
+        if (sitio.getTipo() == null || sitio.getTipo().equals("-1")) {
+            model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
+
+                return "AnalistaDespliegue/despliegueEditarSitio";
+
         }
-        String fileName = file.getOriginalFilename();
-        try{
-            Archivo archivo = sitio.getArchivo();
-            archivo.setNombre(fileName);
-            archivo.setTipo(1);
-            archivo.setArchivo(file.getBytes());
-            archivo.setContentType(file.getContentType());
-            archivoRepository.save(archivo);
-            int idImagen = archivo.getIdArchivos();
-            sitio.getArchivo().setIdArchivos(idImagen);
-            sitioRepository.save(sitio);
-            return "redirect:/analistaDespliegue/listaSitio";
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (sitio.getTipoZona() == null || sitio.getTipoZona().equals("-1")) {
+            model.addAttribute("msgZona", "Escoger un tipo de zona");
+
+                return "AnalistaDespliegue/despliegueEditarSitio";
+        }
+
+        // Verificar si se cargó un nuevo archivo
+        if (!file.isEmpty()) {
+            try {
+                // Procesar el archivo
+                Archivo archivo = new Archivo();
+                archivo.setNombre(file.getOriginalFilename());
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+
+                BigDecimal longitud1 = sitio.getLongitud();
+                BigDecimal latitud1 = sitio.getLatitud();
+                sitio.setLongitud(longitud1.setScale(7, RoundingMode.DOWN));
+                sitio.setLatitud(latitud1.setScale(7, RoundingMode.DOWN));
+                archivoRepository.save(archivo);
+
+                // Asignar el nuevo archivo al equipo
+                sitio.setArchivo(archivo);
+            } catch (IOException e) {
+                System.out.println("Error al procesar el archivo");
+                throw new RuntimeException(e);
+            }
+        }
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+
+                return "AnalistaDespliegue/despliegueEditarSitio";
+        }
+
+        if (!bindingResult.hasErrors()) {
+            // Si no hay errores, se realiza el flujo normal
+            if (sitio.getArchivo() == null) {
+                sitio.setArchivo(new Archivo());
+            }
+
+            try {
+                if (sitio.getIdSitios() == null) {
+                    attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido actualizado exitosamente");
+                }
+                sitioRepository.save(sitio);
+                return "redirect:/analistaDespliegue/listaSitio";
+            } catch (Exception e) {
+                System.out.println("Error al guardar el equipo");
+                throw new RuntimeException(e);
+            }
+        } else { //hay al menos 1 error
+            System.out.println("se mando en sitio, Binding");
+
+                return "AnalistaDespliegue/despliegueEditarSitio";
         }
     }
 
@@ -323,32 +375,33 @@ public class AnalistaDespController {
                             @ModelAttribute("sitio") @Valid Sitio sitio,
                             BindingResult bindingResult,
                             Model model,
-                            RedirectAttributes attr){
+                            RedirectAttributes attr) {
+
+        String tipoSeleccionado = sitio.getTipo();
+        String tipoZonaSeleccionado = sitio.getTipoZona();
+        model.addAttribute("tipoSeleccionado", tipoSeleccionado);
+        model.addAttribute("tipoZonaSeleccionado", tipoZonaSeleccionado);
 
         if (sitio.getTipo() == null || sitio.getTipo().equals("-1")) {
             model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
 
-            if (sitio.getIdSitios() == null) {
-                return "AnalistaDespliegue/despliegueListaSitio";
-            } else {
                 return "AnalistaDespliegue/despliegueEditarSitio";
-            }
         }
         if (sitio.getTipoZona() == null || sitio.getTipoZona().equals("-1")) {
             model.addAttribute("msgZona", "Escoger un tipo de zona");
-            if (sitio.getIdSitios() == null) {
-                System.out.println("se mando en sitio, TipoZona");
-                return "AnalistaDespliegue/despliegueListaSitio";
-            } else {
-                return "AnalistaDespliegue/despliegueEditarSitio";
-            }
+            return "AnalistaDespliegue/despliegueEditarSitio";
         }
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+            return "AnalistaDespliegue/despliegueEditarSitio";
+        }
+
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (sitio.getArchivo() == null) {
                 sitio.setArchivo(new Archivo());
             }
             String fileName = file.getOriginalFilename();
-            try{
+            try {
                 Archivo archivo = sitio.getArchivo();
                 archivo.setNombre(fileName);
                 archivo.setTipo(1);
@@ -357,20 +410,26 @@ public class AnalistaDespController {
                 archivoRepository.save(archivo);
                 int idImagen = archivo.getIdArchivos();
                 sitio.getArchivo().setIdArchivos(idImagen);
+
+                if (sitio.getIdSitios() == null) {
+                    attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido creado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido actualizado exitosamente");
+                }
+                //truncar latitud y long
+                BigDecimal longitud1 = sitio.getLongitud();
+                BigDecimal latitud1 = sitio.getLatitud();
+                sitio.setLongitud(longitud1.setScale(7, RoundingMode.DOWN));
+                sitio.setLatitud(latitud1.setScale(7, RoundingMode.DOWN));
+
                 sitioRepository.save(sitio);
-                attr.addFlashAttribute("msg1", "El sitio en '" + sitio.getDistrito() + "' ha sido editado exitosamente");
                 return "redirect:/analistaDespliegue/listaSitio";
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
         } else { //hay al menos 1 error
-            System.out.println("se mando en sitio, Binding");
-            if (sitio.getIdSitios() == null) {
-                System.out.println("se mando en sitio, TipoZona");
-                return "AnalistaDespliegue/despliegueListaSitio";
-            } else {
-                return "AnalistaDespliegue/despliegueEditarSitio";
-            }
+            return "AnalistaDespliegue/despliegueEditarSitio";
         }
     }
 
@@ -380,19 +439,26 @@ public class AnalistaDespController {
 
         if (optionalEquipo.isPresent()) {
             sitiosHasEquiposRepository.agregarEquipo(idSitios, idEquipos);
-            return "redirect:/analistaDespliegue/listaSitio";
+            return "redirect:/analistaDespliegue/listaEquiposNoPerteneciente?idSitios=" + idSitios;
         } else {
             return "redirect:/analistaDespliegue/listaSitio";
         }
     }
 
 
-    @GetMapping("/listaEquipo")
-        public String listaEquipo(Model model, @RequestParam("idSitios") int idSitios){
+    @GetMapping("/listaEquiposNoPerteneciente")
+        public String listaEquipoNoP(Model model, @RequestParam("idSitios") int idSitios){
         List<SitiosHasEquipo> listaEquipo = sitiosHasEquiposRepository.listaEquiposNoSitio(idSitios);
         model.addAttribute("listaEquipo",listaEquipo);
         model.addAttribute("idSitios", idSitios); // Agregar el valor de "id" al modelo
-        return "AnalistaDespliegue/despliegueListaEquipos";
+        return "AnalistaDespliegue/despliegueListaEquiposNoP";
+    }
+    @GetMapping("/listaEquiposPerteneciente")
+    public String listaEquipoP(Model model, @RequestParam("id") int id){
+        List<SitiosHasEquipo> listaEquipos = sitiosHasEquiposRepository.listaEquiposPorSitio(id);
+        model.addAttribute("listaEquipo",listaEquipos);
+        model.addAttribute("idSitios", id); // Agregar el valor de "id" al modelo
+        return "AnalistaDespliegue/despliegueListaEquiposP";
     }
     @GetMapping("/verEquipo")
     public String verEquipo(Model model, @RequestParam("idEquipos") String idStr, @RequestParam("idSitios") int idSitios){
@@ -414,9 +480,32 @@ public class AnalistaDespController {
             return "redirect:/analistaDespliegue/listaSitio";
         }
     }
+    @GetMapping({"/soloVerEquipo", "/soloverequipo"})
+    public String soloVerEquipo(Model model, @RequestParam("idEquipos") String idStr, @RequestParam("idSitios") int idSitios){
+        model.addAttribute("idSitios", idSitios);
+        try {
+            int idEquipos = Integer.parseInt(idStr);
+            if (idEquipos <= 0 || !equipoRepository.existsById(idEquipos)) {
+                return "redirect:/analistaDespliegue/listaEquipo";
+            }
+            Optional<Equipo> optionalEquipo = equipoRepository.findById(idEquipos);
+            if (optionalEquipo.isPresent()) {
+                Equipo equipo = optionalEquipo.get();
+                model.addAttribute("equipo", equipo);
+                return "AnalistaDespliegue/despliegueSoloVerEquipos";
+            } else {
+                return "redirect:/analistaDespliegue/listaEquipo";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/analistaDespliegue/listaEquipo";
+        }
+    }
 
     @GetMapping("/mapaSitios")
-    public String mapaSitios(){
+    public String mapaSitios(Model model){
+        List<Sitio> sitioList = sitioRepository.findAll();
+        model.addAttribute("sitioList", sitioList);
+
         return "AnalistaDespliegue/despliegueMapaSitios";
     }
     @GetMapping("/mapaTickets")

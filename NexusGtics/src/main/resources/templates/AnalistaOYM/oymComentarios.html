@@ -1,43 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-    <title>Nexus</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
-
-    <!-- Favicons -->
-    <link th:href="@{/assets/img/favicon.png}" rel="icon">
-    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
-
-    <!-- Google Fonts -->
-    <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
-    <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
-
-    <!-- Vendor CSS Files -->
-    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
-    <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
-
-    <!-- Template Main CSS File -->
-    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
-
-
-    <!-- =======================================================
-    * Template Name: NiceAdmin
-    * Updated: Aug 30 2023 with Bootstrap v5.3.1
-    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-    * Author: BootstrapMade.com
-    * License: https://bootstrapmade.com/license/
-    ======================================================== -->
-</head>
+<head th:include="Fragmentos/head :: head('Comentarios')"></head>
 
 <body>
 <!-- ======= Header ======= -->
@@ -46,14 +10,32 @@
 <aside th:replace="Fragmentos/menuAnalistaOYM :: menu('comentarios')">
 </aside><!-- End Sidebar-->
 
-<main id="main" class="main">
+<main id="main" class="main" th:object="${ticket}">
+    <style>
+        .card {
+            border-radius: 30px; /* Ajusta el valor según el nivel de redondeo deseado */
+            padding: 20px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Establece la sombra */
+        }
+        .imagen-circular {
+            width: 60px; /* Ajusta el ancho según tu preferencia */
+            height: 60px; /* Ajusta la altura según tu preferencia */
+            border-radius: 50%; /* Hace que la imagen sea circular */
+            overflow: hidden; /* Oculta cualquier parte de la imagen que se extienda más allá del círculo */
+        }
+    </style>
+
+    <div class="alert alert-success" role="alert" th:if="${error!=null}" th:text="${error}">
+        abc
+    </div>
+
+
     <div class="pagetitle">
-        <h1>Comentarios del Ticket</h1>
+        <h1>Comentarios</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/analistaOYM/}">Home</a></li>
-                <li class="breadcrumb-item active">Tickets Asignados</li>
-                <li class="breadcrumb-item active">Datos del ticket</li>
+                <li class="breadcrumb-item"><a th:href="@{/analistaOYM/tickets}">Lista Tickets</a></li>
+                <li class="breadcrumb-item" >Detalles Ticket</li>
                 <li class="breadcrumb-item active">Comentarios</li>
             </ol>
         </nav>
@@ -61,50 +43,81 @@
 
     <section class="section contact">
         <div class="row gy-4">
-            <div class="col-xl-6">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="info-box card">
-                            <input class="form-control-plaintext" th:object="${ticket}" th:field="*{idCuadrilla.tecnico.apellido}" disabled style="font-size: large;color: #00489b;"></input>
-                            <input class="form-control-plaintext"  th:object="${ticket}" th:field="*{idCuadrilla.tecnico.nombre}" disabled style="font-size: medium;color: #00489b;"></input>
 
-                        </div>
+            <div class="col-xl-7">
+
+                <div class="card">
+                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                        <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+                        <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">German Cisneros</h2>
+                        <h3 th:text="${session.usuario.cargo.nombreCargo}">Supervisor</h3>
+                        <h3 th:text="${session.usuario.dni}">ID: 113253983</h3>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="info-box card">
-                            <h3>Luis Medina Salazar</h3>
-                            <p>Llegando al lugar - comentar
-                                Llegando al lugar - comentar
-                                Llegando al lugar - comentar
-                            </p>
-                            <p class="text-sm-end">April 05, 2023 10:50 am</p>
+                </div>
+                <div class="card p-4">
+
+                    <form th:action="@{/analistaOYM/escribirComentario}" method="POST">
+                        <div class="row gy-4">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-lg-5 col-md-4 label "><b>Empresa:</b></div>
+                                    <div class="col-lg-7 col-md-8" th:text="${session.usuario.empresa.nombre}">Cisco</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-lg-5 col-md-4 label "><b>Servicio:</b></div>
+                                    <div class="col-lg-7 col-md-8">Mantenimiento de Gabinete</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <input th:value="${session.usuario.id}" name="id" type="hidden"/>
+                                <input th:value="${ticket.idTickets}" name="idTicket" type="hidden"/>
+                                <textarea class="form-control" id="comentario" name="comentario" rows="6" placeholder="Deja tu comentario aquí..." required></textarea>
+                            </div>
+
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="btn btn-danger" style="background-color: #d01616; padding: 10px 35px;">Agregar</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="info-box card">
-                            <h3>Luis Medina Salazar</h3>
-                            <p>Llegando al lugar - comentar
-                                Llegando al lugar - comentar
-                                Llegando al lugar - comentar
-                            </p>
-                            <p class="text-sm-end">April 05, 2023 10:50 am</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="info-box card">
-                            <h3>Luis Medina Salazar</h3>
-                            <p>Llegando al lugar - comentar
-                                Llegando al lugar - comentar
-                                Llegando al lugar - comentar
-                            </p>
-                            <p class="text-sm-end">April 05, 2023 10:50 am</p>
-                        </div>
-                    </div>
+                    </form>
                 </div>
 
             </div>
 
+            <div class="col-xl-5">
+                <div class="row">
+                    <div class="col-lg-12">
 
+                        <div class="info-box card" th:each="comentarios: ${listaComentarios}">
+                            <div class="row align-items-center">
+                                <div class="col-lg-1">
+                                    <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle" style="max-width: 50px; max-height: 50px;">
+                                </div>
+                                <div class="col-lg-5" style="margin-left: 20px;"> <!-- Ajusta el margen izquierdo según tus necesidades -->
+                                    <h3 th:text="${comentarios.comentarista.nombre} + ' ' + ${comentarios.comentarista.apellido}" style="font-weight: bold; color: #00489b; font-size: large"></h3>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <br>
+                                    <p th:text="${comentarios.ticket.descripcion}" style="color: rgba(0,0,0,0.51)"></p>
+                                    <br>
+                                    <p th:text="${comentarios.comentario}" style="font-size: 20px; color: black;"></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 text-end">
+                                    <p th:utext="${#dates.format(comentarios.fechaPublicacion, 'yyyy-MM-dd HH:mm:ss')}" style="color: rgba(0,0,0,0.51)"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
 

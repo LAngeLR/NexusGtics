@@ -70,6 +70,11 @@
               <div class="col-md-6">
 
                 <div class="mb-3">
+                  <label class="form-label">Nombre:</label>
+                  <input type="text" class="form-control" th:field="*{nombre}" disabled>
+                </div>
+
+                <div class="mb-3">
                   <label class="form-label">Departamento:</label>
                   <input type="text" class="form-control" th:field="*{departamento}" disabled>
                 </div>
@@ -99,6 +104,10 @@
                   <input type="number" class="form-control" th:field="*{longitud}" disabled>
                 </div>
 
+              </div>
+              <br><br>
+              <div class="col-md-6">
+
                 <div class="mb-3">
                   <label class="form-label">Tipo de Zona</label>
                   <input type="text" class="form-control" th:field="*{tipoZona}" disabled>
@@ -109,19 +118,15 @@
                   <input type="text" class="form-control" th:field="*{tipo}" disabled>
                 </div>
 
-              </div>
-              <br><br>
-              <div class="col-md-6">
-
                 <div class="mb-3">
-                  <label>Foto de sitio:</label>
-                  <br>
-                  <div class="d-flex justify-content-center align-items-center rounded-5">
-                    <img class="rounded-2" th:src="@{|image/${sitio.archivo.idArchivos}|}" style="max-height: 250px" alt="">
+                  <label for="imagenSubida" class="form-label">Foto de Sitio:</label>
+                  <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                    <img id="imgPreview" th:src="@{|image/${sitio.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
                   </div>
-                  <br>
-                  <br>
-                  <label for="descuento">Ubicación del sitio:</label>
+                </div>
+                <div class="mb-3">
+
+                  <label >Ubicación del sitio:</label>
                   <div class="d-flex justify-content-center align-items-center">
                     <div class="card-body pt-3">
                       <div id="mi_mapa" ></div>
@@ -140,12 +145,32 @@
 
                     </div>
                   </div>
-
                 </div>
-
-                <a th:href="@{'/analistaDespliegue/editarSitio?id=' + ${sitio.idSitios}}" class="btn btn-outline-primary me-2 float-end">Editar</a>
-
-              </div>
+            </div>
+            <br>
+            <div>
+              <h3 class="card-title">Equipos desplegados en Sitio</h3>
+              <table class="table">
+                <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Tipo de equipo</th>
+                  <th scope="col">Marca </th>
+                  <th scope="col">Modelo</th>
+                  <th scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="sitiosHasEquipo, info : ${listaEquipos}">
+                  <td th:text = "${info.index + 1}" >  </td>
+                  <td th:text="${sitiosHasEquipo.idEquipos.tipoequipo.nombreTipo}"></td>
+                  <td th:text="${sitiosHasEquipo.idEquipos.marca}">Marca</td>
+                  <td th:text="${sitiosHasEquipo.idEquipos.modelo}">Modelo</td>
+                  <td><a type="button" class="btn btn-outline-dark" th:href="@{'/analistaDespliegue/soloVerEquipo?idSitios=' + ${sitiosHasEquipo.idSitios.idSitios} + '&idEquipos=' + ${sitiosHasEquipo.idEquipos.idEquipos}}">Ver</a></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
             </div>
           </form>
         </div>

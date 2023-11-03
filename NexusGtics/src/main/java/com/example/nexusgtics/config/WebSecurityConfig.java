@@ -1,8 +1,10 @@
 package com.example.nexusgtics.config;
 
+import com.example.nexusgtics.entity.Usuario;
+import com.example.nexusgtics.repository.TicketRepository;
 import com.example.nexusgtics.repository.UsuarioRepository;
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,19 +15,21 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 
 import javax.sql.DataSource;
 
 @Configuration
 public class WebSecurityConfig {
+
     final UsuarioRepository usuarioRepository;
+    final TicketRepository ticketRepository;
     final DataSource dataSource;
 
-    public WebSecurityConfig(DataSource dataSource, UsuarioRepository usuarioRepository) {
+    public WebSecurityConfig(DataSource dataSource, UsuarioRepository usuarioRepository, TicketRepository ticketRepository) {
         this.dataSource = dataSource;
         this.usuarioRepository = usuarioRepository;
+        this.ticketRepository = ticketRepository;
     }
 
     @Bean
@@ -47,7 +51,11 @@ public class WebSecurityConfig {
                             (DefaultSavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
 
                     HttpSession session = request.getSession();
-                    session.setAttribute("usuario", usuarioRepository.findByCorreo(authentication.getName()));
+                    Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+                    System.out.println("usuario wsc: " + usuario.getNombre());
+                    //usuario.getCuadrilla().setTecnico(null);
+                    usuario.setCuadrilla(null);
+                    session.setAttribute("usuario",usuario);
 
                     if(defaultSavedRequest != null){
                         String targetURl = defaultSavedRequest.getRequestURL();
@@ -66,9 +74,13 @@ public class WebSecurityConfig {
                             case "Analista de Planificacion o Ingenieria" ->
                                     response.sendRedirect(request.getContextPath()+"/analistaDespliegue");
                             case "Supervisor de Campo" -> response.sendRedirect(request.getContextPath()+"/supervisor");
-                            case "Tecnico" -> response.sendRedirect(request.getContextPath()+"/tecnico");
+                            case "Tecnico" -> {
+                                //session.setAttribute("listaTicketSession", ticketRepository.findAll());
+                                response.sendRedirect(request.getContextPath()+"/tecnico");
+                            }
                             default -> response.sendRedirect(request.getContextPath()+"/login");
                         }
+                        System.out.println(rol);
                     }
                 }
                 );
@@ -85,6 +97,7 @@ public class WebSecurityConfig {
                 .logoutSuccessUrl("/closeSession")
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true);
+                System.out.println("Cerro sesion");
         return http.build();
     }
     @Bean

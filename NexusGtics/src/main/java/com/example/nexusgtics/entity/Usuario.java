@@ -66,7 +66,6 @@ public class Usuario implements Serializable {
 
     @Column(name = "dni")
     @Pattern(regexp = "^[0-9]{8}$", message = "El DNI debe ser un número de 8 dígitos")
-    @Size(min = 8, max = 8, message = "El DNI debe tener exactamente 8 dígitos")
     private String dni;
 
     @Column(name = "descripcion", length = 130)

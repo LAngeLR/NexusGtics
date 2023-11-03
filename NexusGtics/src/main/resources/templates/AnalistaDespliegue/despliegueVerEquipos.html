@@ -35,7 +35,7 @@
                     </div>
                     <form method="POST" th:action="@{/analistaDespliegue/agregarEquipo}"  th:object="${equipo}">
                         <input type="hidden" th:value="${equipo.idEquipos}" />
-                        <input type="hidden" name="idSitios" th:value="${idSitios}" />
+                        <input type="hidden" name="idSitios" th:value="${idSitios}"/>
                         <div class="row">
                             <div class="col-md-6">
                                 <input type="hidden"  name="equipo" id="equipo" class="form-control" th:field="*{idEquipos}">
@@ -81,7 +81,7 @@
                                 <br>
                                 <input type="hidden" name="idEquipos" th:value="${equipo.idEquipos}" />
                                 <button  type="submit" class="btn btn-outline-primary " >Agregar</button>
-                                <button  th:href="@{/analistaDespliegue/listaEquipo}" class="btn btn-outline-danger " >Regresar</button>
+                                <a th:href="@{'/analistaDespliegue/listaEquiposNoPerteneciente?idSitios='+ ${idSitios}}" class="btn btn-outline-danger">Regresar</a>
 
                             </div>
                         </div>

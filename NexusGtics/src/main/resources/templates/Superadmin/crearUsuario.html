@@ -88,12 +88,12 @@
                                 <input type="hidden" name="empresa" id="empresa" value="1">
 
                                 <div class="mb-3">
-                                    <p class="form-label">Cargo:</p>
+                                    <p class="form-label">Cargo (no modificable):</p>
                                     <p class="form-control">Administrador</p>
                                 </div>
 
                                 <div class="mb-3">
-                                    <p class="form-label">Empresa:</p>
+                                    <p class="form-label">Empresa (no modificable):</p>
                                     <p class="form-control">Nexus</p>
                                 </div>
 
@@ -166,12 +166,13 @@
 </script>
 
 <!-- Para FECHA -->
+<!-- Para FECHA -->
 <script>
     // Obtener el campo de fecha por su ID
     var fechaRegistro2Input = document.getElementById("fechaRegistro");
 
     // Obtener la fecha actual en el formato deseado ('yyyy-MM-dd')
-    var fechaActual = new Date(Date.now(), -5*60*60*1000).toISOString().split("T")[0];
+    var fechaActual = new Date().toISOString().split("T")[0];
 
     // Establecer la fecha actual como valor del campo
     fechaRegistro2Input.value = fechaActual;
