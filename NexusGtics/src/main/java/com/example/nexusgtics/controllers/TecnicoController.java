@@ -1,10 +1,10 @@
 package com.example.nexusgtics.controllers;
+
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +12,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import jakarta.validation.Valid;
-import java.util.ArrayList;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,14 +64,18 @@ public class TecnicoController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 
     @GetMapping({"/", "","tecnico"})
-    public String paginaPrincipal(Model model) {
+    public String paginaPrincipal(Model model, HttpSession httpSession) {
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
         model.addAttribute("currentPage", "Inicio");
+        Usuario user = (Usuario) httpSession.getAttribute("usuario");
+        //Usuario user2 = (Usuario) session.getAttribute("usuario");
+        System.out.println("User: "+ user.getNombre());
+        //System.out.println("User2: "+ user2.getNombre());
         return "Tecnico/tecnico";
     }
 

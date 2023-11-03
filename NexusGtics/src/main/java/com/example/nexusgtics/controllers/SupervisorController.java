@@ -82,12 +82,12 @@ public class SupervisorController {
     public String savePerfil(@RequestParam("imagenSubida") MultipartFile file,
                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                              Model model,
-                             RedirectAttributes attr, HttpSession httpSession){
+                             RedirectAttributes attr, HttpSession httpSession) {
 
         // ESTO SE AÑADIO DE BARD
         //session.setAttribute("usuario", usuario);
 
-        if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
+        if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
             model.addAttribute("msgCargo", "Escoger un cargo");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
@@ -98,7 +98,7 @@ public class SupervisorController {
                 return "Supervisor/perfilEditar";
             }
         }
-        if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
+        if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
             model.addAttribute("msgEmpresa", "Escoger una empresa");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
@@ -109,7 +109,7 @@ public class SupervisorController {
             }
         }
 
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
             if (usuario.getId() == null) {
                 return "Supervisor/menuSupervisor";
@@ -118,9 +118,21 @@ public class SupervisorController {
             }
         }
 
+        String fileName1 = file.getOriginalFilename();
+
+        if (fileName1.contains("..") && !file.isEmpty()) {
+            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
+            if (usuario.getId() == null) {
+                return "Supervisor/menuSupervisor";
+            } else {
+                return "Supervisor/perfilEditar";
+            }
+        }
+
+
         int maxFileSize = 10485760;
 
-        if (file.getSize() > maxFileSize) {
+        if (file.getSize() > maxFileSize && !file.isEmpty()) {
             System.out.println(file.getSize());
             model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
             if (usuario.getId() == null) {

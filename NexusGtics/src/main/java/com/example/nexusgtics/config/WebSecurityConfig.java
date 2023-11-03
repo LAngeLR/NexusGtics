@@ -1,5 +1,6 @@
 package com.example.nexusgtics.config;
 
+import com.example.nexusgtics.entity.Usuario;
 import com.example.nexusgtics.repository.TicketRepository;
 import com.example.nexusgtics.repository.UsuarioRepository;
 import jakarta.servlet.http.HttpSession;
@@ -50,7 +51,11 @@ public class WebSecurityConfig {
                             (DefaultSavedRequest) request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
 
                     HttpSession session = request.getSession();
-                    session.setAttribute("usuario", usuarioRepository.findByCorreo(authentication.getName()));
+                    Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
+                    System.out.println("usuario wsc: " + usuario.getNombre());
+                    //usuario.getCuadrilla().setTecnico(null);
+                    usuario.setCuadrilla(null);
+                    session.setAttribute("usuario",usuario);
 
                     if(defaultSavedRequest != null){
                         String targetURl = defaultSavedRequest.getRequestURL();
@@ -70,8 +75,8 @@ public class WebSecurityConfig {
                                     response.sendRedirect(request.getContextPath()+"/analistaDespliegue");
                             case "Supervisor de Campo" -> response.sendRedirect(request.getContextPath()+"/supervisor");
                             case "Tecnico" -> {
-                                session.setAttribute("listaTicketSession", ticketRepository.findAll());
-                                response.sendRedirect(request.getContextPath() + "/tecnico");
+                                //session.setAttribute("listaTicketSession", ticketRepository.findAll());
+                                response.sendRedirect(request.getContextPath()+"/tecnico");
                             }
                             default -> response.sendRedirect(request.getContextPath()+"/login");
                         }

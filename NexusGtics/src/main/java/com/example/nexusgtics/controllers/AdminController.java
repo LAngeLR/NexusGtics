@@ -63,8 +63,10 @@ public class AdminController {
     }
 
     @GetMapping({"/", "", "admin", "administrador"})
-    public String paginaPrincipal(Model model) {
+    public String paginaPrincipal(Model model, HttpSession httpSession) {
         model.addAttribute("currentPage", "Inicio");
+        Usuario user = (Usuario) session.getAttribute("usuario");
+        System.out.println("User: "+ user.getNombre());
         return "Administrador/admin";
     }
 
@@ -995,7 +997,6 @@ public class AdminController {
             }
         }
 
-        // AÑADIO JUELIO
         String fileName1 = file.getOriginalFilename();
 
         if (fileName1.contains("..") && !file.isEmpty()) {
