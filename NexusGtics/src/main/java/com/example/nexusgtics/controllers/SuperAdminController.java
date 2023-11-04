@@ -190,6 +190,7 @@ public class SuperAdminController {
             String password = partes[0];
             usuario.setContrasenia(new BCryptPasswordEncoder().encode(password));
         }
+
         List<String> correos = usuarioRepository.listaCorreos();
         for (String correo : correos) {
             if (correo.equals(usuario.getCorreo())) {
