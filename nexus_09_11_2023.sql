@@ -1,0 +1,1 @@
+SELECT * FROM nexus.tickets where estado = 1 or estado = 2;
