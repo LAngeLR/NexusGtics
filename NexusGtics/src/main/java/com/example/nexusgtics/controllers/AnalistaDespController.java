@@ -434,15 +434,19 @@ public class AnalistaDespController {
     }
 
     @PostMapping("/agregarEquipo")
-    public String agregarEquipo(@RequestParam("idSitios") int idSitios, @RequestParam("idEquipos") int idEquipos) {
+    public String agregarEquipo(@RequestParam("idSitios") int idSitios, @RequestParam("idEquipos") int idEquipos, RedirectAttributes redirectAttributes) {
         Optional<Equipo> optionalEquipo = equipoRepository.findById(idEquipos);
 
         if (optionalEquipo.isPresent()) {
             sitiosHasEquiposRepository.agregarEquipo(idSitios, idEquipos);
-            return "redirect:/analistaDespliegue/listaEquiposNoPerteneciente?idSitios=" + idSitios;
+            // Agrega un mensaje de éxito como flash attribute
+            redirectAttributes.addFlashAttribute("mensaje", "Equipo agregado con éxito.");
         } else {
-            return "redirect:/analistaDespliegue/listaSitio";
+            // Agrega un mensaje de error como flash attribute
+            redirectAttributes.addFlashAttribute("mensaje", "Error: Equipo no encontrado.");
         }
+
+        return "redirect:/analistaDespliegue/listaEquiposNoPerteneciente?idSitios=" + idSitios;
     }
 
 

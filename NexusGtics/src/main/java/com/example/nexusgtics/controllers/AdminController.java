@@ -168,7 +168,7 @@ public class AdminController {
         return "Administrador/crearUsuario";
     }
     /*CREAR NUEVO USUARIO*/
-    @PostMapping("/saveUsuario")
+    @PostMapping("/Usuario")
     public String saveUsuario(@RequestParam("imagenSubida") MultipartFile file,
                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,

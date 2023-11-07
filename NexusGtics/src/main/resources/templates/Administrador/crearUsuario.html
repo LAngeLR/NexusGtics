@@ -126,7 +126,9 @@
                   <div class="mb-3">
                     <label for="imagenSubida" class="form-label">Foto de Perfil:</label>
                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                      <img id="imgPreview" th:src="@{/assets/img/fotoSitio.png}" class="card-img-top" style="max-height: 250px" alt="">
+<!--                      <img id="imgPreview" th:src="@{/file/nuevo}" class="card-img-top" style="max-height: 250px" alt="">-->
+                      <img id="imgPreview" th:src="@{/default}" class="card-img-top border-5" style="max-height: 250px" alt="">
+
                     </div>
                     <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
                            accept="image/*" onchange="previewImage(event, '#imgPreview')">
@@ -189,6 +191,7 @@
   fechaRegistro2Input.value = fechaActual;
 </script>
 
+<!-- Para previsualizar Imagen -->
 <script>
   function previewImage(event, imageId) {
     const input = event.target;

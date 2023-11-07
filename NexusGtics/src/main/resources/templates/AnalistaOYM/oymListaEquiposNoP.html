@@ -36,6 +36,7 @@
                 <div class="container">
                   <h5 class="card-title">Equipos disponibles</h5>
                 </div>
+                <div th:if="${mensaje != null}" th:text="${mensaje}" class="alert alert-success" role="alert"></div>
                 <!-- Table with stripped rows -->
                 <table class="table datatable">
                   <thead>
