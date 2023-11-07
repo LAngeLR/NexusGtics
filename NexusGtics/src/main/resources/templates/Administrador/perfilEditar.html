@@ -36,7 +36,7 @@
         <div class="card">
           <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
             <img th:src="@{|/file/${session.usuario.archivo.getIdArchivos()}|}" alt="Profile" class="rounded-circle"
-                 onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/1200px-Imagen_no_disponible.svg.png'">
+                 onerror="this.onerror=null; this.src='https://static.thenounproject.com/png/5034901-200.png'">
 
             <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</h2>
             <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Administrador</h3>
