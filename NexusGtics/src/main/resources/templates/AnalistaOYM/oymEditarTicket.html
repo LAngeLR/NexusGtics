@@ -122,7 +122,7 @@
 
                                 <div class="mb-3">
                                     <label for="prioridad" class="form-label">Selector de Prioridad</label>
-                                    <select class="form-select" name="prioridad" id="prioridad">
+                                    <select th:field="*{prioridad}" type="text" th:class="${#fields.hasErrors('prioridad')?'form-control is-invalid':'form-control'}" class="form-select" name="prioridad" id="prioridad">
                                         <option value="Baja prioridad">Baja prioridad</option>
                                         <option value="Hacer">Hacer</option>
                                         <option value="No critico">No critico</option>

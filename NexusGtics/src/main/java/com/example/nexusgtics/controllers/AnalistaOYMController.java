@@ -433,15 +433,17 @@ public class AnalistaOYMController {
     }
 
     @PostMapping("/agregarEquipo")
-    public String agregarEquipo(@RequestParam("idSitios") int idSitios, @RequestParam("idEquipos") int idEquipos) {
+    public String agregarEquipo(@RequestParam("idSitios") int idSitios, @RequestParam("idEquipos") int idEquipos, RedirectAttributes redirectAttributes) {
         Optional<Equipo> optionalEquipo = equipoRepository.findById(idEquipos);
 
         if (optionalEquipo.isPresent()) {
             sitiosHasEquiposRepository.agregarEquipo(idSitios, idEquipos);
-            return "redirect:/analistaOYM/listaEquiposNoPerteneciente?idSitios=" + idSitios;
+            redirectAttributes.addFlashAttribute("mensaje", "Equipo agregado con éxito.");
         } else {
-            return "redirect:/analistaOYM/listaSitio";
+            redirectAttributes.addFlashAttribute("mensaje", "Error: Equipo no encontrado.");
         }
+
+        return "redirect:/analistaOYM/listaEquiposNoPerteneciente?idSitios=" + idSitios;
     }
 
     @GetMapping("/listaEquiposNoPerteneciente")
