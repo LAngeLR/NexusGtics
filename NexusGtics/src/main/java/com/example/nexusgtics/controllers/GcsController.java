@@ -55,7 +55,7 @@ public class GcsController {
             Storage storage = StorageOptions.newBuilder().setProjectId("labgcp-401300").build().getService();
             Bucket bucket = storage.get("proyecto-gtics", Storage.BucketGetOption.fields());
 //            RandomString id = new RandomString(6, ThreadLocalRandom.current());
-            Blob blob = bucket.create(archivo.getNombre(), archivo.getArchivo());
+            Blob blob = bucket.create(archivo.getNombre(), archivo.getArchivo(),archivo.getContentType());
 
             if (blob != null) {
                 System.out.println("Se guardo exitosamente");

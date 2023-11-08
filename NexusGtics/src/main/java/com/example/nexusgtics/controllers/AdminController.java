@@ -963,8 +963,6 @@ public class AdminController {
                              Model model,
                              RedirectAttributes attr, HttpSession httpSession) {
 
-        // ESTO SE AÑADIO DE BARD
-        //session.setAttribute("usuario", usuario);
 
         if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
             model.addAttribute("msgCargo", "Escoger un cargo");
@@ -987,7 +985,7 @@ public class AdminController {
                 return "Administrador/perfilEditar";
             }
         }
-
+        /*Validación de imagen*/
         if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
             if (usuario.getId() == null) {
@@ -998,7 +996,7 @@ public class AdminController {
         }
 
         String fileName1 = file.getOriginalFilename();
-
+        /*Validación para evitar 2 puntos*/
         if (fileName1.contains("..") && !file.isEmpty()) {
             model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
             if (usuario.getId() == null) {
@@ -1008,8 +1006,8 @@ public class AdminController {
             }
         }
 
+        /*Validación para archivos grande (NO FUNCIONA :C)*/
         int maxFileSize = 10485760;
-
         if (file.getSize() > maxFileSize && !file.isEmpty()) {
             System.out.println(file.getSize());
             model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
@@ -1026,6 +1024,7 @@ public class AdminController {
             }
 
             try {
+                /*Si file contiene algo --> Guardarlo*/
                 if(!file.isEmpty()){
                     // Obtenemos el nombre del archivo
                     String fileName = file.getOriginalFilename();
@@ -1044,7 +1043,6 @@ public class AdminController {
                     archivo1.setNombre(nombreArchivo);
                     archivoRepository.save(archivo1);
                     uploadObject(archivo1);
-
                 }
 
                 if (usuario.getId() == null) {
@@ -1053,9 +1051,7 @@ public class AdminController {
                     attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
                 }
                 usuarioRepository.save(usuario);
-                //Usuario u = (Usuario) httpSession.getAttribute("usuario");
-                //HttpSession session = request.getSession(true);
-                //session.setAttribute("nombreUsuario", "nuevoNombre");
+
                 session.setAttribute("usuario", usuario);
                 return "redirect:/admin/perfil";
             } catch (IOException e) {
