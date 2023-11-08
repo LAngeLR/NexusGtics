@@ -34,6 +34,23 @@
             width: 30%;
             font-size: 0.8rem
         }
+        .legend {
+            padding: 10px;
+            font-size: 14px;
+            line-height: 18px;
+            color: #555;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .legend i {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
 
     </style>
 </head>
@@ -97,9 +114,36 @@
                                     shadowSize: [41, 41]
                                 });
 
-
                                 L.marker([-12.0690694, -77.0786442], {icon: yellowIcon}).addTo(map);
+                                //INICIO DE LEYENDAAAA
+                                var zoneLegend = {
+                                    "Ticket Nuevo": {
+                                        icon: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                                        color: 'green'
+                                    },
+                                    "Ticket Cerrado": {
+                                        icon: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                                        color: 'red'
+                                    },
+                                    "Ticket Progreso": {
+                                        icon: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+                                        color: 'yellow'
+                                    }
 
+                                };
+
+                                var legend = L.control({ position: 'bottomright' });
+
+                                legend.onAdd = function (map) {
+                                    var div = L.DomUtil.create('div', 'legend');
+                                    for (var zone in zoneLegend) {
+                                        div.innerHTML += '<i style="background:' + zoneLegend[zone].color + '"></i> ' + zone + '<br>';
+                                    }
+                                    return div;
+                                };
+
+                                legend.addTo(map);
+                                //FINN DE LEYENDAAAA
                                 document.getElementById('select-location').addEventListener('change', function(e){
                                     let coords = e.target.value.split(",");
                                     L.marker(coords).addTo(map)
