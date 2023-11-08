@@ -69,7 +69,7 @@
                           <li th:if="${usuario.cargo.nombreCargo == 'Administrador'}">
                             <!--<a th:href="@{'/superadmin/editarUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Editar</a>-->
                             <a th:href="@{'/superadmin/verUsuarioA?id=' + ${usuario.id}}" class="dropdown-item me-2">Visualizar</a>
-                            <a th:href="@{'/superadmin/activarUsuario?id=' + ${usuario.id}}" class="dropdown-item text-success me-2">Activar</a>
+                            <a onclick="return confirm('¿Estás seguro de activar a este administrador?')" th:href="@{'/superadmin/activarUsuario?id=' + ${usuario.id}}" class="dropdown-item text-success me-2">Activar</a>
                           </li>
                           <!-- solo si NO es "Administrador" -->
                           <li th:unless="${usuario.cargo.nombreCargo == 'Administrador'}">

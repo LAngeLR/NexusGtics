@@ -149,6 +149,8 @@
                 </div>
 
                 <a th:href="@{'/admin/editarSitio?id=' + ${sitio.idSitios}}" class="btn btn-outline-primary me-2 float-end">Editar</a>
+                <a onclick="return confirm('¿Estás seguro de eliminar este sitio?')"
+                   th:href="@{'/admin/eliminarSitio?id=' + ${sitio.idSitios}}" class="btn btn-outline-danger float-start">Eliminar</a>
 
               </div>
             </div>
