@@ -40,7 +40,7 @@
 
 <body>
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/headerDos :: header('tecnico')"></header>
+<header th:replace="Fragmentos/headerDos :: header('tecnico',${listaTicket})"></header>
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuTecnico :: menu('formulario1')"></aside><!-- End Sidebar-->
 <main id="main" class="main">
