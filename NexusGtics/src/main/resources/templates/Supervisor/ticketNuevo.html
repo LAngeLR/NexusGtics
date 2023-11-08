@@ -89,36 +89,36 @@
                                 <br>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Prioridad:</div>
-                                    <div class="col-lg-9 col-md-8" style="color: #D01515" th:if="${ticket.prioridad eq 'Urgente'}"><b th:text="${ticket.prioridad}"></b></div>
-                                    <div class="col-lg-9 col-md-8" style="color: #3498DB" th:if="${ticket.prioridad eq 'Baja prioridad'}"><b th:text="${ticket.prioridad}"></b></div>
-                                    <div class="col-lg-9 col-md-8" style="color: #FFC300" th:if="${ticket.prioridad eq 'Hacer'}"><b th:text="${ticket.prioridad}"></b></div>
-                                    <div class="col-lg-9 col-md-8" style="color: #4CAF50" th:if="${ticket.prioridad eq 'No critico'}"><b th:text="${ticket.prioridad}"></b></div>
+                                    <div class="col-lg-4 col-md-5 label">Prioridad:</div>
+                                    <div class="col-lg-8 col-md-7" style="color: #D01515" th:if="${ticket.prioridad eq 'Urgente'}"><b th:text="${ticket.prioridad}"></b></div>
+                                    <div class="col-lg-8 col-md-7" style="color: #3498DB" th:if="${ticket.prioridad eq 'Baja prioridad'}"><b th:text="${ticket.prioridad}"></b></div>
+                                    <div class="col-lg-8 col-md-7" style="color: #FFC300" th:if="${ticket.prioridad eq 'Hacer'}"><b th:text="${ticket.prioridad}"></b></div>
+                                    <div class="col-lg-8 col-md-7" style="color: #4CAF50" th:if="${ticket.prioridad eq 'No critico'}"><b th:text="${ticket.prioridad}"></b></div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Nombre de Usuario:</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${ticket.usuarioSolicitante}"></div>
+                                    <div class="col-lg-4 col-md-5 label">Nombre de Usuario:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${ticket.usuarioSolicitante}"></div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Fecha de apertura</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${ticket.fechaCreacion}"></div>
+                                    <div class="col-lg-4 col-md-5 label">Fecha de apertura</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${ticket.fechaCreacion}"></div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Fecha de vencimiento:</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${ticket.fechaCierre}"></div>
+                                    <div class="col-lg-4 col-md-5 label">Fecha de vencimiento:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${ticket.fechaCierre}"></div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Servicio Relacionado:</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${ticket.idTipoTicket.nombreTipoTicket}"></div>
+                                    <div class="col-lg-4 col-md-5 label">Servicio Relacionado:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${ticket.idTipoTicket.nombreTipoTicket}"></div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Estado:</div>
-                                    <div class="col-lg-9 col-md-8"><span class="badge text-bg-primary">Nuevo</span></div>
+                                    <div class="col-lg-4 col-md-5 label">Estado:</div>
+                                    <div class="col-lg-8 col-md-7"><span class="badge text-bg-primary">Nuevo</span></div>
                                 </div>
 
                                 <br>
@@ -243,7 +243,7 @@
                 </div>
             </div>
 
-            <div class="card" th:if="${ticket.idSupervisorEncargado != null && ticket.idCuadrilla==null}">
+            <div class="card" th:if="${ticket.idSupervisorEncargado!=null && ticket.idSupervisorEncargado.id == session.usuario.id && ticket.idCuadrilla==null}">
                 <div class="card-body pt-3">
                     <h5 class="card-title" style="color: #095444">Seleccionar Cuadrilla</h5>
                     <div class="search-bar">

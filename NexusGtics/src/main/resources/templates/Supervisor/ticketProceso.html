@@ -43,47 +43,47 @@
                                 <br>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Prioridad:</div>
-                                    <div class="col-lg-9 col-md-8" style="color: #D01515" th:if="${tickets.prioridad eq 'Urgente'}"><b th:text="${tickets.prioridad}"></b></div>
-                                    <div class="col-lg-9 col-md-8" style="color: #3498DB" th:if="${tickets.prioridad eq 'Baja prioridad'}"><b th:text="${tickets.prioridad}"></b></div>
-                                    <div class="col-lg-9 col-md-8" style="color: #FFC300" th:if="${tickets.prioridad eq 'Hacer'}"><b th:text="${tickets.prioridad}"></b></div>
-                                    <div class="col-lg-9 col-md-8" style="color: #4CAF50" th:if="${tickets.prioridad eq 'No critico'}"><b th:text="${tickets.prioridad}"></b></div>
+                                    <div class="col-lg-4 col-md-5 label">Prioridad:</div>
+                                    <div class="col-lg-8 col-md-7" style="color: #D01515" th:if="${tickets.prioridad eq 'Urgente'}"><b th:text="${tickets.prioridad}"></b></div>
+                                    <div class="col-lg-8 col-md-7" style="color: #3498DB" th:if="${tickets.prioridad eq 'Baja prioridad'}"><b th:text="${tickets.prioridad}"></b></div>
+                                    <div class="col-lg-8 col-md-7" style="color: #FFC300" th:if="${tickets.prioridad eq 'Hacer'}"><b th:text="${tickets.prioridad}"></b></div>
+                                    <div class="col-lg-8 col-md-7" style="color: #4CAF50" th:if="${tickets.prioridad eq 'No critico'}"><b th:text="${tickets.prioridad}"></b></div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Nombre de Usuario:</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${tickets.usuarioSolicitante}"></div>
+                                    <div class="col-lg-4 col-md-5 label">Nombre de Usuario:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${tickets.usuarioSolicitante}"></div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Fecha de apertura:</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${tickets.fechaCreacion}"></div>
+                                    <div class="col-lg-4 col-md-5 label">Fecha de apertura:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${tickets.fechaCreacion}"></div>
                                 </div>
 
                                 <div class="row">
 
-                                    <div class="col-lg-3 col-md-4 label">Fecha de vencimiento:</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${tickets.fechaCierre}"></div>
+                                    <div class="col-lg-4 col-md-5 label">Fecha de vencimiento:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${tickets.fechaCierre}"></div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-3 label">Servicio Relacionado:</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${tickets.idTipoTicket.nombreTipoTicket}"></div>
+                                    <div class="col-lg-4 col-md-5 label">Servicio Relacionado:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${tickets.idTipoTicket.nombreTipoTicket}"></div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-3 label">Cuadrilla Asignada:</div>
-                                    <div class="col-lg-9 col-md-8" th:text="'Cuadrilla ' + ${tickets.idCuadrilla.idCuadrillas}"></div>
+                                    <div class="col-lg-4 col-md-5 label">Cuadrilla Asignada:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="'Cuadrilla ' + ${tickets.idCuadrilla.idCuadrillas}"></div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-3 label">Tecnico Lider</div>
-                                    <div class="col-lg-9 col-md-8" th:text="'Tec. ' + ${tickets.idCuadrilla.tecnico.nombre} + ${tickets.idCuadrilla.tecnico.apellido}"></div>
+                                    <div class="col-lg-4 col-md-5 label">Tecnico Lider</div>
+                                    <div class="col-lg-8 col-md-7" th:text="'Tec. ' + ${tickets.idCuadrilla.tecnico.nombre} + ${tickets.idCuadrilla.tecnico.apellido}"></div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Estado:</div>
-                                    <div class="col-lg-9 col-md-8"><span class="badge text-bg-success">Progreso</span></div>
+                                    <div class="col-lg-4 col-md-5 label">Estado:</div>
+                                    <div class="col-lg-8 col-md-7"><span class="badge text-bg-success">Progreso</span></div>
                                 </div>
 
                             </div>
