@@ -306,7 +306,8 @@ public class TecnicoController {
     //YA ESTA CRUD LISTAR
     @GetMapping("/ticketasignado")
     public String Tickets(Model model, HttpSession httpSession){
-
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idTecnico = u.getId();
         List<Ticket> listaTickets = ticketRepository.listaTickets( 1, idTecnico);
