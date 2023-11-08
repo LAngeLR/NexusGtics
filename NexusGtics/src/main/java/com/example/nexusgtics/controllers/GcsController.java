@@ -55,7 +55,7 @@ public class GcsController {
             Storage storage = StorageOptions.newBuilder().setProjectId("labgcp-401300").build().getService();
             Bucket bucket = storage.get("proyecto-gtics", Storage.BucketGetOption.fields());
 //            RandomString id = new RandomString(6, ThreadLocalRandom.current());
-            Blob blob = bucket.create(archivo.getNombre(), archivo.getArchivo());
+            Blob blob = bucket.create(archivo.getNombre(), archivo.getArchivo(),archivo.getContentType());
 
             if (blob != null) {
                 System.out.println("Se guardo exitosamente");
@@ -127,6 +127,23 @@ public class GcsController {
     public ResponseEntity<byte[]> DefaultImageUser() throws IOException {
         try{
             byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "userDefault.png");
+            HttpHeaders headers = new HttpHeaders();
+            //headers.setContentType(MediaType.IMAGE_JPEG);
+            headers.setContentType(MediaType.parseMediaType(MediaType.IMAGE_JPEG_VALUE));
+            return new ResponseEntity<>(image, headers, HttpStatus.OK);
+
+        }catch (NumberFormatException e){
+            HttpHeaders httpHeaders = new HttpHeaders();
+            return new ResponseEntity<>(null, httpHeaders, HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+
+    @GetMapping("/siteDefault")
+    public ResponseEntity<byte[]> DefaultImageSite() throws IOException {
+        try{
+            byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "siteDefault.png");
             HttpHeaders headers = new HttpHeaders();
             //headers.setContentType(MediaType.IMAGE_JPEG);
             headers.setContentType(MediaType.parseMediaType(MediaType.IMAGE_JPEG_VALUE));

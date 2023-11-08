@@ -37,6 +37,9 @@
                     <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}">
                         A simple success alert—check it out!
                     </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
+                        A simple success alert—check it out!
+                    </div>
                     <form method="POST" th:action="@{/superadmin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row">
                             <div class="col-md-6">
@@ -112,7 +115,7 @@
                                 <div class="mb-3">
                                     <label for="imagenSubida" class="form-label">Foto de Perfil:</label>
                                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img id="imgPreview" th:src="@{/userDefault}" class="card-img-top" style="max-height: 250px" alt="">
+                                        <img id="imgPreview" th:src="@{/userDefault}" class="card-img-top rounded-circle" style="max-height: 250px">
                                     </div>
                                     <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
                                            accept="image/*" onchange="previewImage(event, '#imgPreview')">

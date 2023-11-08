@@ -184,22 +184,31 @@ public class SuperAdminController {
 //        if (usuario.getId()==null){
 //            usuario.setContrasenia(new BCryptPasswordEncoder().encode("123"));
 //        }
+        /*Creo que es para Hashear la contraseña*/
         if (usuario.getId()==null){
             String mail = usuario.getCorreo();
             String[] partes = mail.split("@");
             String password = partes[0];
             usuario.setContrasenia(new BCryptPasswordEncoder().encode(password));
         }
-
-        List<String> correos = usuarioRepository.listaCorreos();
-        for (String correo : correos) {
-            if (correo.equals(usuario.getCorreo())) {
-                model.addAttribute("msgEmail", "El correo electrónico ya existe");
-                model.addAttribute("listaEmpresa", empresaRepository.findAll());
-                model.addAttribute("listaCargo", cargoRepository.findAll());
-                return "Superadmin/crearUsuario";
-            }
-        }
+        /*Validacion de correo: Por ahora no esta fino*/
+//        List<String> correos = usuarioRepository.listaCorreos();
+//        for (String correo : correos) {
+//            if (correo.equals(usuario.getCorreo())) {
+//                if (usuario.getId() == null){
+//                    model.addAttribute("msgEmail", "El correo electrónico ya existe");
+//                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
+//                    model.addAttribute("listaCargo", cargoRepository.findAll());
+//                    return "Superadmin/crearUsuario";
+//                } else {
+//                    model.addAttribute("msgEmail", "El correo electrónico ya existe");
+//                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
+//                    model.addAttribute("listaCargo", cargoRepository.findAll());
+//                    return "Superadmin/editarUsuario";
+//                }
+//
+//            }
+//        }
 
         if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
             model.addAttribute("msgCargo", "Escoger un cargo");
@@ -222,21 +231,67 @@ public class SuperAdminController {
                 return "Superadmin/editarUsuario";
             }
         }
+
+        /*Validación de imagen*/
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+            if (usuario.getId() == null) {
+                return "Superadmin/crearUsuario";
+            } else {
+                return "Superadmin/editarUsuario";
+            }
+        }
+
+        String fileName1 = file.getOriginalFilename();
+        /*Validación para evitar 2 puntos*/
+        if (fileName1.contains("..") && !file.isEmpty()) {
+            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
+            if (usuario.getId() == null) {
+                return "Superadmin/crearUsuario";
+            } else {
+                return "Superadmin/editarUsuario";
+            }
+        }
+
+        /*Validación para archivos grande (NO FUNCIONA :C)*/
+        int maxFileSize = 10485760;
+        if (file.getSize() > maxFileSize && !file.isEmpty()) {
+            System.out.println(file.getSize());
+            model.addAttribute("msgImagen", "El archivo subido excede el tamaño máximo permitido (10MB).");
+            if (usuario.getId() == null) {
+                return "Superadmin/perfil";
+            } else {
+                return "redirect:/superadmin/editarUsuario";
+            }
+        }
+
+
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (usuario.getArchivo() == null) {
                 usuario.setArchivo(new Archivo());
             }
-            String fileName = file.getOriginalFilename();
+
             try{
-                //validación de nombre, apellido y correo
-                Archivo archivo = usuario.getArchivo();
-                archivo.setNombre(fileName);
-                archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-                archivoRepository.save(archivo);
-                int idImagen = archivo.getIdArchivos();
-                usuario.getArchivo().setIdArchivos(idImagen);
+                /*Si file contiene algo --> Guardarlo*/
+                if(!file.isEmpty()){
+                    // Obtenemos el nombre del archivo
+                    String fileName = file.getOriginalFilename();
+                    String extension = "";
+                    int i = fileName.lastIndexOf('.');
+                    if (i > 0) {
+                        extension = fileName.substring(i+1);
+                    }
+                    Archivo archivo = usuario.getArchivo();
+                    archivo.setNombre(fileName);
+                    archivo.setTipo(1);
+                    archivo.setArchivo(file.getBytes());
+                    archivo.setContentType(file.getContentType());
+                    Archivo archivo1 = archivoRepository.save(archivo);
+                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
+                    archivo1.setNombre(nombreArchivo);
+                    archivoRepository.save(archivo1);
+                    uploadObject(archivo1);
+                }
                 if (usuario.getId() == null) {
                     attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
                 } else {
@@ -244,6 +299,7 @@ public class SuperAdminController {
                 }
                 usuarioRepository.save(usuario);
                 return "redirect:/superadmin/listaUsuario";
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -422,6 +478,9 @@ public class SuperAdminController {
                 return "Superadmin/perfilEditar";
             }
         }
+
+
+
 
         if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
