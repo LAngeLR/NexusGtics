@@ -33,4 +33,8 @@ public class HistorialTicket {
     @Column(name = "descripcion", length = 250)
     private String descripcion;
 
+    @ManyToOne
+    @JoinColumn(name = "idUsuariosReasignados")
+    private Usuario usuarioReasignado;
+
 }

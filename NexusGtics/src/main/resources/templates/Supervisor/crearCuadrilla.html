@@ -89,7 +89,7 @@
                                 <label>Tecnicos Seleccionados:</label>
                                 <select class="form-select" name="tecnicosSeleccionados" id="tecnicosSeleccionados" multiple></select>
                                 <br>
-                                <button type="button" id="agregarTecnicos" class="btn btn-outline-primary">Agregar</button>
+                                <button type="button" id="agregarTecnicos" class="btn btn-outline-primary" th:data-valor="${valor}">Agregar</button>
                                 <button type="button" id="quitarTecnicos" class="btn btn-outline-danger">Quitar</button>
                             </div>
                         </div>
@@ -105,9 +105,20 @@
                             const quitarTecnicosButton = document.getElementById("quitarTecnicos");
 
                             agregarTecnicosButton.addEventListener("click", function () {
+                                const valor = parseInt(agregarTecnicosButton.getAttribute("data-valor"));
+                                const seleccionados = tecnicosSeleccionados.options.length;
+
+                                if (seleccionados >= 5) {
+                                    alert("No puedes seleccionar más de 5 técnicos.");
+                                    return;
+                                }
 
                                 const selectedOptions = Array.from(tecnicosLibres.selectedOptions);
 
+                                if (seleccionados + selectedOptions.length > 5 - valor) {
+                                    alert(`Solo puedes agregar ${5 - valor - seleccionados} técnicos adicionales.`);
+                                    return;
+                                }
 
                                 selectedOptions.forEach(function (option) {
                                     tecnicosSeleccionados.appendChild(option);
@@ -115,7 +126,6 @@
                             });
 
                             quitarTecnicosButton.addEventListener("click", function () {
-
                                 const selectedOptions = Array.from(tecnicosSeleccionados.selectedOptions);
 
                                 selectedOptions.forEach(function (option) {
@@ -124,6 +134,7 @@
                                 });
                             });
                         });
+
                     </script>
                 </div>
                 <br><br>

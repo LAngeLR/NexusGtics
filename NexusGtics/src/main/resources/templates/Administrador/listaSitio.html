@@ -74,26 +74,10 @@
                           </button>
                           <ul class="dropdown-menu">
                             <li><a th:href="@{'/admin/editarSitio?id=' + ${sitio.idSitios}}" class="dropdown-item me-2">Editar</a></li>
-                            <li><a th:href="@{'/admin/eliminarSitio?id=' + ${sitio.idSitios}}" class="dropdown-item me-2 text-danger">Eliminar</a></li>
+                            <li><a onclick="return confirm('¿Estás seguro de eliminar este sitio?')"
+                                   th:href="@{'/admin/eliminarSitio?id=' + ${sitio.idSitios}}" class="dropdown-item me-2 text-danger">Eliminar</a></li>
                             <li><a th:href="@{'/admin/verSitio?id=' + ${sitio.idSitios}}" class="dropdown-item me-2">Visualizar</a></li>
                           </ul>
-                        </div>
-                      </div>
-                      <!-- MODAL -->
-                      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                            </div>
-                            <div class="modal-body">
-                              <h3>¿Está seguro de eliminar el sitio?</h3>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                              <button type="button" class="btn btn-outline-primary">Confirmar</button>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </td>

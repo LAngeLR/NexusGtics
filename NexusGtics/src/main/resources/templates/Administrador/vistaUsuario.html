@@ -83,7 +83,7 @@
                 </div>
 
                 <a th:href="@{'/admin/editarUsuario?id=' + ${usuario.id}}" class="btn btn-outline-primary me-2 float-end">Editar</a>
-                <a th:href="@{${usuario.habilitado ? '/admin/banearUsuario?id=' + usuario.id : '/admin/activarUsuario?id=' + usuario.id}}"
+                <a onclick="return confirm('¿Estás seguro?')" th:href="@{${usuario.habilitado ? '/admin/banearUsuario?id=' + usuario.id : '/admin/activarUsuario?id=' + usuario.id}}"
                    class="btn btn-outline-danger float-start"
                    th:text="${usuario.habilitado ? 'Desactivar' : 'Activar'}">Des/act</a>
               </div>

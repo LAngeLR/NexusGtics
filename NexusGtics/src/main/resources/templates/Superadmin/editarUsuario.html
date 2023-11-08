@@ -38,11 +38,18 @@
                     <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}">
                         A simple success alert—check it out!
                     </div>
-                    <form method="POST" th:action="@{/superadmin/updateUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+                    <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
+                        A simple success alert—check it out!
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msgEmail != null}" th:text="${msgEmail}">
+                        A simple success alert—check it out!
+                    </div>
+                    <form method="POST" th:action="@{/superadmin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row">
                             <div class="col-md-6">
                                 <input type="hidden" class="form-control" th:field="*{id}">
                                 <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
+                                <input type="hidden" class="form-control" th:field="*{correo}">
 
                                 <div class="mb-3">
                                     <label class="form-label">Nombres:</label>
@@ -62,14 +69,14 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Correo:</label>
-                                    <input th:field="*{correo}" type="text" th:class="${#fields.hasErrors('correo')?'form-control is-invalid':'form-control'}"/>
-                                    <div class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">
-                                        Mensaje de error de correo
-                                    </div>
-                                </div>
+<!--                                <div class="mb-3">-->
+<!--                                    <label class="form-label">Correo:</label>-->
+<!--                                    <input th:field="*{correo}" type="text" th:class="${#fields.hasErrors('correo')?'form-control is-invalid':'form-control'}"/>-->
+<!--                                    <div class="invalid-feedback"-->
+<!--                                         th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">-->
+<!--                                        Mensaje de error de correo-->
+<!--                                    </div>-->
+<!--                                </div>-->
 
                                 <div class="mb-3">
                                     <label class="form-label">DNI:</label>
@@ -94,7 +101,7 @@
 
                                 <div class="mb-3">
                                     <p class="form-label">Cargo (no modificable):</p>
-                                    <p class="form-control">Superadmin</p>
+                                    <p class="form-control">Administrador</p>
                                 </div>
 
                                 <div class="mb-3">
@@ -110,14 +117,17 @@
                                 <div class="mb-3">
                                     <label class="form-label">Foto de perfil actual:</label>
                                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img th:src="@{|image/${usuario.archivo.idArchivos}|}" style="max-width: 300px;" alt="Foto de perfil actual">
+                                        <img id="imgPreview" th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile" class="rounded-circle"
+                                             onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
+
                                     </div>
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="imagenSubida" class="form-label">Cargar nueva foto de perfil:</label>
-                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida" accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
                                 </div>
-
 
                                 <button type="submit" class="btn btn-outline-primary float-end">Aplicar cambios</button>
                             </div>
@@ -125,8 +135,6 @@
                     </form>
                 </div>
                 <br><br>
-
-
             </div>
         </section>
         <br>
@@ -152,6 +160,20 @@
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
 <script th:src="@{/assets/js/foto.js}"></script>
+<script>
+    function previewImage(event, imageId) {
+        const input = event.target;
+        const image = document.querySelector(imageId);
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                image.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
 
 </body>
 

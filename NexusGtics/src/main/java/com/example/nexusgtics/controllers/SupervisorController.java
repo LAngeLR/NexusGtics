@@ -355,11 +355,29 @@ public class SupervisorController {
     }
 
     @PostMapping("/actualizarSupervisor")
-    public String actualizarSupervisor(Ticket ticket , RedirectAttributes redirectAttributes, @RequestParam("condicion") int condicion){
+    public String actualizarSupervisor(Ticket ticket , RedirectAttributes redirectAttributes, @RequestParam("condicion") int condicion,HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idSupervisor = u.getId();
+        Date fechaCambioEstado = new Date();
         ticketRepository.actualizarSupervisor(ticket.getIdTickets(),ticket.getIdSupervisorEncargado().getId(), condicion);
         redirectAttributes.addAttribute("id",ticket.getIdTickets());
+        if(ticket.getIdSupervisorEncargado().getId() != null &&
+                ticket.getIdSupervisorEncargado().getId().intValue() != idSupervisor.intValue()){
+            historialTicketRepository.crearHistorialReasignado(1,fechaCambioEstado,ticket.getIdTickets(),idSupervisor,"Supervisor Asignado",ticket.getIdSupervisorEncargado().getId());
+        }
+        else{
+            historialTicketRepository.crearHistorial(1,fechaCambioEstado,ticket.getIdTickets(),idSupervisor,"Supervisor Asignado");
+        }
+        ticketRepository.actualizarEstado(ticket.getIdTickets(),2);
         redirectAttributes.addFlashAttribute("mensaje","Supervisor " + ticket.getIdSupervisorEncargado().getNombre()+" asignado");
-        return "redirect:/supervisor/ticketNuevo";
+
+        if(ticket.getIdSupervisorEncargado().getId() != null &&
+                ticket.getIdSupervisorEncargado().getId().intValue() != idSupervisor.intValue()){
+            return "redirect:/supervisor/dashboard";
+        }
+        else{
+            return "redirect:/supervisor/ticketNuevo";
+        }
     }
 
     @PostMapping("/actualizarCuadrilla")

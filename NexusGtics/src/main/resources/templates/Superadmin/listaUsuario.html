@@ -70,34 +70,15 @@
                                                     <li th:if="${usuario.cargo.nombreCargo == 'Administrador'}">
                                                         <a th:href="@{'/superadmin/editarUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Editar</a>
                                                         <a th:href="@{'/superadmin/verUsuarioA?id=' + ${usuario.id}}" class="dropdown-item me-2">Visualizar</a>
-                                                        <a th:href="@{'/superadmin/banearUsuario?id=' + ${usuario.id}}" class="dropdown-item text-danger me-2" id="popover-button" data-bs-container="body"  data-bs-placement="left" data-bs-content="Left popover">Desactivar</a>
+                                                        <a onclick="return confirm('¿Estás seguro de desactivar a este administrador?')"
+                                                           th:href="@{'/superadmin/banearUsuario?id=' + ${usuario.id}}" class="dropdown-item text-danger me-2" id="popover-button"
+                                                           data-bs-container="body"  data-bs-placement="left" data-bs-content="Left popover">Desactivar</a>
                                                     </li>
                                                     <!-- solo si NO es "Administrador" -->
                                                     <li th:unless="${usuario.cargo.nombreCargo == 'Administrador'}">
                                                         <a th:href="@{'/superadmin/verUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Visualizar</a>
                                                     </li>
                                                 </ul>
-
-                                                <!-- MODAL NO FUNCIONA -->
-                                                <!--
-                                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <h3>¿Está seguro que desea banear al usuario?</h3>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                                                                <a th:href="@{'/superadmin/banearUsuario?id=' + ${usuario.id}}" class="btn btn-outline-primary">Confirmar</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                -->
-
                                             </div>
                                         </div>
                                         <!-- MODAL -->

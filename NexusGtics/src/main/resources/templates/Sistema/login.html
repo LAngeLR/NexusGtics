@@ -73,11 +73,37 @@
                     <div class="col-12">
                       <label for="yourUsername" class="form-label" style="color: white">Usuario</label>
                       <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend">@</span>
+                        <span class="input-group-text" id="inputGroupPrepend" style="user-select: none;">@</span>
                         <input type="text" name="yourUsername" class="form-control" id="yourUsername" required>
                         <div class="invalid-feedback">Por favor, ingresa un usuario</div>
                       </div>
                     </div>
+
+                    <script>
+                      var atSymbol = document.getElementById('inputGroupPrepend');
+
+                      atSymbol.addEventListener('mouseover', function() {
+                        atSymbol.style.backgroundColor = '#2BC8A9';
+                      });
+
+                      atSymbol.addEventListener('mouseout', function() {
+                        atSymbol.style.backgroundColor = 'white';
+                      });
+
+                      atSymbol.addEventListener('mousedown', function() {
+                        atSymbol.style.transform = 'translateY(2px)';
+                      });
+
+                      atSymbol.addEventListener('mouseup', function() {
+                        atSymbol.style.transform = 'translateY(0)';
+                      });
+
+                      atSymbol.addEventListener('click', function() {
+                        var usernameInput = document.getElementById('yourUsername');
+                        usernameInput.value += '@gmail.com';
+                      });
+
+                    </script>
 
                     <div class="col-12">
                       <label for="yourPassword" class="form-label" style="color: white">Contraseña</label>

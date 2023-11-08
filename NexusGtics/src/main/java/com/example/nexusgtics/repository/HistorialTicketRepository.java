@@ -16,4 +16,9 @@ public interface HistorialTicketRepository extends JpaRepository<HistorialTicket
     @Query(nativeQuery = true, value = "insert into historialtickets (estado, fechaCambioEstado, idTickets, idUsuarios, descripcion) values (?1, ?2, ?3, ?4, ?5)")
     void crearHistorial(int estado, Date fechaCambio, int idTicket, int idUser, String des);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "insert into historialtickets (estado, fechaCambioEstado, idTickets, idUsuarios, descripcion, idUsuariosReasignados) values (?1, ?2, ?3, ?4, ?5, ?6)")
+    void crearHistorialReasignado(int estado, Date fechaCambio, int idTicket, int idUser, String des, int idReasignado);
+
 }
