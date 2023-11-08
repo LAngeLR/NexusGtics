@@ -79,6 +79,12 @@ public class TecnicoController {
         return "Tecnico/tecnico";
     }
 
+    public String mandarFragmento(Model model){
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+        return "Fragmentos/headerDos";
+    }
+
 
     /* -------------------------- PERFIL -------------------------- */
     @GetMapping({"/perfil"})
@@ -86,6 +92,8 @@ public class TecnicoController {
                                    @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         model.addAttribute("usuario", u);
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
         return "Tecnico/perfilTecnico";
     }
 
@@ -95,7 +103,8 @@ public class TecnicoController {
                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                              Model model,
                              RedirectAttributes attr, HttpSession httpSession){
-
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
         // ESTO SE AÑADIO DE BARD
         //session.setAttribute("usuario", usuario);
 
@@ -186,6 +195,8 @@ public class TecnicoController {
     @GetMapping({"/perfilEditar"})
     public String perfilEditar(Model model,
                                @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
 
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         int id = u.getId();
@@ -213,6 +224,9 @@ public class TecnicoController {
     @GetMapping({"/perfilContra"})
     public String perfilContra(Model model,
                                @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         int id = u.getId();
         try{
@@ -236,6 +250,9 @@ public class TecnicoController {
                                    @RequestParam("password") String contrasenia,
                                    @RequestParam("newpassword") String contraseniaNueva, @RequestParam("renewpassword") String contraseniaConfirm,
                                    RedirectAttributes redirectAttributes){
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         int id = u.getId();
 
@@ -261,6 +278,7 @@ public class TecnicoController {
                                  RedirectAttributes attr) {
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
+
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if (optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();
@@ -275,10 +293,13 @@ public class TecnicoController {
     //-----------------------------------------------------------------------
     @GetMapping("/dashboard")
     public String pagdashboard(Model model) {
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+
         List<Ticket> lista = ticketRepository.listarEstado();
         model.addAttribute("ticketList", lista);
-        List<Ticket> listaT = ticketRepository.listarEstado();
-        model.addAttribute("listaTicket", listaT);
+        //List<Ticket> listaT = ticketRepository.listarEstado();
+        //model.addAttribute("listaTicket", listaT);
         return "Tecnico/dashboard";
     }
 

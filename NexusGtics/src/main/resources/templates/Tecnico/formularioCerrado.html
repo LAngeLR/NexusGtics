@@ -49,7 +49,7 @@
 
 <body>
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/headerDos :: header('tecnico')"></header>
+<header th:replace="Fragmentos/headerDos :: header('tecnico',${listaTicket})"></header>
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuTecnico :: menu('formularioCreado')"></aside><!-- End Sidebar-->
 
