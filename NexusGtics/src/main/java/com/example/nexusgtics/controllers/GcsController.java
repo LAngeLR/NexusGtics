@@ -140,4 +140,21 @@ public class GcsController {
     }
 
 
+    @GetMapping("/siteDefault")
+    public ResponseEntity<byte[]> DefaultImageSite() throws IOException {
+        try{
+            byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "siteDefault.png");
+            HttpHeaders headers = new HttpHeaders();
+            //headers.setContentType(MediaType.IMAGE_JPEG);
+            headers.setContentType(MediaType.parseMediaType(MediaType.IMAGE_JPEG_VALUE));
+            return new ResponseEntity<>(image, headers, HttpStatus.OK);
+
+        }catch (NumberFormatException e){
+            HttpHeaders httpHeaders = new HttpHeaders();
+            return new ResponseEntity<>(null, httpHeaders, HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+
 }

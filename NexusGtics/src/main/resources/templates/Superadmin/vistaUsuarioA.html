@@ -14,7 +14,6 @@
 <main id="main" class="main">
   <div class="container">
 
-
     <div class="pagetitle">
       <nav>
         <ol class="breadcrumb">
@@ -92,8 +91,6 @@
                     <span th:if="${usuario.habilitado}">Editar</span>
                   </a>
                 </li>
-
-              </div>
             </div>
           </form>
         </div>
@@ -101,7 +98,6 @@
       </div>
     </section>
     <br>
-
 
     <li th:if="${usuario.habilitado.equals(true)}" style="list-style-type: none;">
       <a th:href="@{/superadmin/listaUsuario}" class="btn btn-outline-danger">Regresar</a>
