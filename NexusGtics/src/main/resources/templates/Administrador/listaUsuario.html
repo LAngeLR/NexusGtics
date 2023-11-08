@@ -68,28 +68,12 @@
                           <ul class="dropdown-menu">
                             <li th:unless="${usuario.cargo.nombreCargo == 'Administrador'}">
                             <li><a th:href="@{'/admin/editarUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Editar</a></li>
-                              <a th:href="@{'/admin/banearUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2 text-danger"
+                              <a onclick="return confirm('¿Estás seguro de desactivar a este usuario?')" th:href="@{'/admin/banearUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2 text-danger"
                                  id="popover-button" data-bs-container="body" data-bs-placement="left" data-bs-content="Left popover">Desactivar</a>
                             </li>
                             <li><a th:href="@{'/admin/verUsuario?id=' + ${usuario.id}}" class="dropdown-item me-2">Visualizar</a></li>
 
                           </ul>
-                          <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h1 class="modal-title fs-5" id="staticBackdropLabel">Adventencia</h1>
-                                </div>
-                                <div class="modal-body">
-                                  <h3>¿Está seguro de banear al usuario?</h3>
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                                  <a th:href="@{'/admin/banearUsuario?id=' + ${usuario.id}}" class="btn btn-outline-primary">Confirmar</a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
 
                         </div>
                       </div>
