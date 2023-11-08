@@ -305,13 +305,14 @@ public class TecnicoController {
 
     //YA ESTA CRUD LISTAR
     @GetMapping("/ticketasignado")
-    public String pagtickasignado(Model model) {
-        //'listar'
-        List<Ticket> lista = ticketRepository.listarEstado();
-        model.addAttribute("ticketList", lista);
-        Integer idCuadrilla = 2;
-        List<Ticket> listaT = ticketRepository.listaTicketModificado(1,idCuadrilla);
-        model.addAttribute("listaTicket", listaT);
+    public String Tickets(Model model, HttpSession httpSession){
+
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idTecnico = u.getId();
+        List<Ticket> listaTickets = ticketRepository.listaTickets( 1, idTecnico);
+
+        model.addAttribute("listaTickets",listaTickets);
+
         return "Tecnico/ticket_asignado";
     }
 
