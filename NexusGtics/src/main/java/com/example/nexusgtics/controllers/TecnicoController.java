@@ -97,7 +97,7 @@ public class TecnicoController {
         return "Tecnico/perfilTecnico";
     }
 
-    /* PERFIL DEL SUPERVISOR */
+    /* PERFIL DEL Tecnico */
     @PostMapping("/savePerfil")
     public String savePerfil(@RequestParam("imagenSubida") MultipartFile file,
                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
@@ -114,7 +114,7 @@ public class TecnicoController {
             model.addAttribute("listaCargo", cargoRepository.findAll());
 
             if (usuario.getId() == null) {
-                return "Tecnico/menuSupervisor";
+                return "Tecnico/tecnico";
             } else {
                 return "Tecnico/perfilEditar";
             }
@@ -124,18 +124,18 @@ public class TecnicoController {
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
             if (usuario.getId() == null) {
-                return "Supervisor/menuSupervisor";
+                return "Tecnico/tecnico";
             } else {
-                return "Supervisor/perfilEditar";
+                return "Tecnico/perfilEditar";
             }
         }
 
         if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
             if (usuario.getId() == null) {
-                return "Supervisor/menuSupervisor";
+                return "Tecnico/tecnico";
             } else {
-                return "Supervisor/perfilEditar";
+                return "Tecnico/perfilEditar";
             }
         }
 
@@ -145,9 +145,9 @@ public class TecnicoController {
             System.out.println(file.getSize());
             model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
             if (usuario.getId() == null) {
-                return "Supervisor/menuSupervisor";
+                return "Tecnico/tecnico";
             } else {
-                return "redirect:/supervisor/perfilEditar";
+                return "redirect:/Tecnico/perfilEditar";
             }
         }
 
@@ -176,7 +176,7 @@ public class TecnicoController {
                 //HttpSession session = request.getSession(true);
                 //session.setAttribute("nombreUsuario", "nuevoNombre");
                 session.setAttribute("usuario", usuario);
-                return "redirect:/supervisor/perfil";
+                return "redirect:/Tecnico/perfil";
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -185,9 +185,9 @@ public class TecnicoController {
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
             if (usuario.getId() == null) {
-                return "Supervisor/menuSupervisor";
+                return "Tecnico/tecnico";
             } else {
-                return "Supervisor/perfilEditar";
+                return "Tecnico/perfilEditar";
             }
         }
     }
@@ -203,7 +203,7 @@ public class TecnicoController {
         try{
             //int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/supervisor/supervisor";
+                return "redirect:/tecnico/perfil";
             }
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
@@ -211,12 +211,12 @@ public class TecnicoController {
                 model.addAttribute("usuario", usuario);
                 model.addAttribute("listaEmpresa", empresaRepository.findAll());
                 model.addAttribute("listaCargo", cargoRepository.findAll());
-                return "Supervisor/perfilEditar";
+                return "Tecnico/perfilEditar";
             } else {
-                return "redirect:/supervisor/perfil";
+                return "redirect:/tecnico/perfil";
             }
         } catch (NumberFormatException e) {
-            return "redirect:/supervisor/supervisor";
+            return "redirect:/tecnico/perfil";
         }
 
     }
@@ -231,17 +231,17 @@ public class TecnicoController {
         int id = u.getId();
         try{
             if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/supervisor/supervisor";
+                return "redirect:/tecnico/perfil";
             }
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
                 model.addAttribute("idUsuario",id);
-                return "Supervisor/perfilContra";
+                return "Tecnico/perfilContra";
             } else {
-                return "redirect:/supervisor/perfil";
+                return "redirect:/tecnico/perfil";
             }
         } catch (NumberFormatException e) {
-            return "redirect:/supervisor/supervisor";
+            return "redirect:/tecnico/tecnico";
         }
     }
 
@@ -263,10 +263,10 @@ public class TecnicoController {
             usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
             redirectAttributes.addFlashAttribute("msg1", "La contraseña se ha actualizado exitosamente");
 
-            return "redirect:/supervisor/perfil";
+            return "redirect:/tecnico/perfil";
         } else {
             redirectAttributes.addFlashAttribute("error","La contraseña actual no es correcta.");
-            return "redirect:/supervisor/perfilContra";
+            return "redirect:/tecnico/perfilContra";
         }
     }
 
