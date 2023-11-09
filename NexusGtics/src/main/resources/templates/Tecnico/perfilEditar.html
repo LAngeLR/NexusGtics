@@ -25,13 +25,14 @@
   <section class="section profile">
     <div class="row">
       <div class="col-xl-4">
-
         <div class="card">
-          <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-            <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-            <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</h2>
-            <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Técnico</h3>
-            <h3 th:text="|${session.usuario.dni}|">ID: 123456789</h3>
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+              <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+              <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|"></h2>
+              <h3 th:text="|${session.usuario.cargo.nombreCargo}|"></h3>
+              <h3 th:text="|${session.usuario.dni}|">ID: 123456789</h3>
+            </div>
           </div>
         </div>
 
@@ -53,7 +54,7 @@
 
               <div class="tab-pane show active fade profile-edit pt-3" id="profile-edit">
 
-                <form method="POST" th:action="@{/tecnico/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data">
+                <form method="POST" th:action="@{/tecnico/savePerfil}" th:object="${usuario}" enctype="multipart/form-data">
                   <input type="hidden" class="form-control" th:field="*{id}">
                   <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
                   <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
@@ -66,15 +67,19 @@
                   <input type="hidden" name="dni" id="dni" th:field="*{dni}">
 
                   <div class="mb-3">
-                    <div class="mb-3">
-                      <label class="form-label">Foto de perfil:</label>
-                      <div class="mx-auto" style="width: 200px; max-height: 250px">
-                        <img th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile" class="card-img-top rounded-circle"
-                             onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
-                      </div>
+                    <label class="form-label">Foto de perfil actual:</label>
+                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                      <img id="imgPreview" th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile" class="rounded-circle"
+                           onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
+
                     </div>
                   </div>
 
+                  <div class="mb-3">
+                    <label for="imagenSubida" class="form-label">Cargar nueva foto de perfil:</label>
+                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                  </div>
 
                   <div class="mb-3">
                     <label class="form-label">Nombres:</label>
@@ -151,9 +156,18 @@
 <script th:src="@{/assets/js/main.js}"></script>
 <script th:src="@{/assets/js/foto.js}"></script>
 <script>
-  document.getElementById('uploadButton').addEventListener('click', function () {
-    document.getElementById('fileInput').click();
-  });
+  function previewImage(event, imageId) {
+    const input = event.target;
+    const image = document.querySelector(imageId);
+
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        image.src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
 </script>
 </body>
 

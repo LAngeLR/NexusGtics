@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.nexusgtics.controllers.GcsController.uploadObject;
+
 @Controller
 @RequestMapping("/tecnico")
 public class TecnicoController {
@@ -130,53 +132,73 @@ public class TecnicoController {
             }
         }
 
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
             if (usuario.getId() == null) {
-                return "Tecnico/tecnico";
+                return "Tecnico/perfilTecnico";
             } else {
                 return "Tecnico/perfilEditar";
             }
         }
 
-        int maxFileSize = 10485760;
-
-        if (file.getSize() > maxFileSize) {
-            System.out.println(file.getSize());
-            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
+        String fileName1 = file.getOriginalFilename();
+        /*Validación para evitar 2 puntos*/
+        if (fileName1.contains("..") && !file.isEmpty()) {
+            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
             if (usuario.getId() == null) {
-                return "Tecnico/tecnico";
+                return "Tecnico/perfilTecnico";
             } else {
-                return "redirect:/Tecnico/perfilEditar";
+                return "Tecnico/perfilEditar";
             }
         }
+
+        /*Validación para archivos grande (NO FUNCIONA :C)*/
+        int maxFileSize = 10485760;
+        if (file.getSize() > maxFileSize && !file.isEmpty()) {
+            System.out.println(file.getSize());
+            model.addAttribute("msgImagen", "El archivo subido excede el tamaño máximo permitido (10MB).");
+            if (usuario.getId() == null) {
+                return "Tecnico/perfilTecnico";
+            } else {
+                return "redirect:/tecnico/perfilEditar";
+            }
+        }
+
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (usuario.getArchivo() == null) {
                 usuario.setArchivo(new Archivo());
             }
-            String fileName = file.getOriginalFilename();
+
             try{
-                //validación de nombre, apellido y correo
-                Archivo archivo = usuario.getArchivo();
-                archivo.setNombre(fileName);
-                archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-                archivoRepository.save(archivo);
-                int idImagen = archivo.getIdArchivos();
-                usuario.getArchivo().setIdArchivos(idImagen);
+                /*Si file contiene algo --> Guardarlo*/
+                if(!file.isEmpty()){
+                    // Obtenemos el nombre del archivo
+                    String fileName = file.getOriginalFilename();
+                    String extension = "";
+                    int i = fileName.lastIndexOf('.');
+                    if (i > 0) {
+                        extension = fileName.substring(i+1);
+                    }
+                    Archivo archivo = usuario.getArchivo();
+                    archivo.setNombre(fileName);
+                    archivo.setTipo(1);
+                    archivo.setArchivo(file.getBytes());
+                    archivo.setContentType(file.getContentType());
+                    Archivo archivo1 = archivoRepository.save(archivo);
+                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
+                    archivo1.setNombre(nombreArchivo);
+                    archivoRepository.save(archivo1);
+                    uploadObject(archivo1);
+                }
                 if (usuario.getId() == null) {
                     attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
                 } else {
                     attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
                 }
                 usuarioRepository.save(usuario);
-                //Usuario u = (Usuario) httpSession.getAttribute("usuario");
-                //HttpSession session = request.getSession(true);
-                //session.setAttribute("nombreUsuario", "nuevoNombre");
-                session.setAttribute("usuario", usuario);
-                return "redirect:/Tecnico/perfil";
+                return "redirect:/tecnico/ticketasignado";
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -185,7 +207,7 @@ public class TecnicoController {
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
             if (usuario.getId() == null) {
-                return "Tecnico/tecnico";
+                return "Tecnico/ticket_asignado";
             } else {
                 return "Tecnico/perfilEditar";
             }
