@@ -82,10 +82,11 @@
                             <div id="select-location">
                                 <select name="location" id="location">
                                     <option value="-1">Selecciona uno...</option>
-                                    <option th:each="sitio :${sitioCerradoList}"
-                                            th:value="${sitio.latitud + ',' + sitio.longitud}" th:text="${sitio.distrito}">Empire State Building</option>
-                                    <!--<option value="40.689167, -74.044444">Estatua de la Libertad</option>
-                                    <option value="51.507,0.1275">Londres</option>-->
+                                    <!--<option th:each="sitio :${sitioCerradoList}"
+                                            th:value="${sitio.latitud + ',' + sitio.longitud}" th:text="${sitio.distrito}">Empire State Building</option>-->
+                                    <option th:each="ticket :${listaMp}"
+                                            th:value="${ticket.idSitios.latitud + ',' + ticket.idSitios.longitud}" th:text="${ticket.prioridad}">Empire State Building</option>
+
                                 </select>
                             </div>
                             <br>
@@ -105,16 +106,7 @@
                                     attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                                     ext: 'png'
                                 }).addTo(map);
-                                var yellowIcon = new L.Icon({
-                                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
-                                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                                    iconSize: [25, 41],
-                                    iconAnchor: [12, 41],
-                                    popupAnchor: [1, -34],
-                                    shadowSize: [41, 41]
-                                });
 
-                                L.marker([-12.0690694, -77.0786442], {icon: yellowIcon}).addTo(map);
                                 //INICIO DE LEYENDAAAA
                                 var zoneLegend = {
                                     "Ticket Nuevo": {
@@ -143,7 +135,52 @@
                                 };
 
                                 legend.addTo(map);
+
                                 //FINN DE LEYENDAAAA
+
+                                document.getElementById('select-location').addEventListener('change', function (e) {
+                                    let coords = e.target.value.split(",");
+                                    let estado = getEstado();
+
+                                    if (estado === 6) {
+                                        L.marker(coords, { icon: redIcon }).addTo(map);
+                                    } else if (estado === 5 && estado === 4) {
+                                        L.marker(coords, { icon: greenIcon }).addTo(map);
+                                    } else if (estado === 3 ) {
+                                        L.marker(coords, { icon: yellowIcon }).addTo(map);
+                                    }
+
+                                    map.flyTo(coords, 17);
+                                });
+
+                                var redIcon = new L.Icon({
+                                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                                    iconSize: [25, 41],
+                                    iconAnchor: [12, 41],
+                                    popupAnchor: [1, -34],
+                                    shadowSize: [41, 41]
+                                });
+
+                                var greenIcon = new L.Icon({
+                                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                                    iconSize: [25, 41],
+                                    iconAnchor: [12, 41],
+                                    popupAnchor: [1, -34],
+                                    shadowSize: [41, 41]
+                                });
+                                var yellowIcon = new L.Icon({
+                                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
+                                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                                    iconSize: [25, 41],
+                                    iconAnchor: [12, 41],
+                                    popupAnchor: [1, -34],
+                                    shadowSize: [41, 41]
+                                });
+
+                                L.marker([-12.0690694, -77.0786442], {icon: yellowIcon}).addTo(map);
+
                                 document.getElementById('select-location').addEventListener('change', function(e){
                                     let coords = e.target.value.split(",");
                                     L.marker(coords).addTo(map)

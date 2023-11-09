@@ -864,6 +864,8 @@ public class TecnicoController {
     public String pagmapa(Model model) {
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
+        List<Ticket> listaMp = ticketRepository.listarmapa();
+        model.addAttribute("listaMp",listaMp);
         List<SitioCerrado> sitioCerradoList = sitioCerradoRepository.findAll();
         model.addAttribute("sitioCerradoList", sitioCerradoList);
         return "Tecnico/mapa";
