@@ -85,7 +85,10 @@
                                     <!--<option th:each="sitio :${sitioCerradoList}"
                                             th:value="${sitio.latitud + ',' + sitio.longitud}" th:text="${sitio.distrito}">Empire State Building</option>-->
                                     <option th:each="ticket :${listaMp}"
-                                            th:value="${ticket.idSitios.latitud + ',' + ticket.idSitios.longitud}" th:text="${ticket.prioridad}">Empire State Building</option>
+                                            th:text="${ticket.estado == 3 ? 'Nuevo' : (ticket.estado == 4 or ticket.estado == 5) ? 'Progreso' : (ticket.estado == 6) ? 'Cerrado' : 'Otro'}"
+                                            th:value="${ticket.idSitios.latitud + ',' + ticket.idSitios.longitud}">
+                                        Empire State Building
+                                    </option>
 
                                 </select>
                             </div>
