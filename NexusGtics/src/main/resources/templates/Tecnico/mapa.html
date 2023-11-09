@@ -99,6 +99,7 @@
                             <script>
                                 let map = L.map('map').setView([-12.0690694, -77.0786442], 17);
 
+                                //mapa general
                                 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                                     attribution:
                                         'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
@@ -109,7 +110,7 @@
                                     attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                                     ext: 'png'
                                 }).addTo(map);
-
+                                //mapa general - fin
                                 //INICIO DE LEYENDAAAA
                                 var zoneLegend = {
                                     "Ticket Nuevo": {
@@ -141,21 +142,6 @@
 
                                 //FINN DE LEYENDAAAA
 
-                                document.getElementById('select-location').addEventListener('change', function (e) {
-                                    let coords = e.target.value.split(",");
-                                    let estado = getEstado();
-
-                                    if (estado === 6) {
-                                        L.marker(coords, { icon: redIcon }).addTo(map);
-                                    } else if (estado === 5 && estado === 4) {
-                                        L.marker(coords, { icon: greenIcon }).addTo(map);
-                                    } else if (estado === 3 ) {
-                                        L.marker(coords, { icon: yellowIcon }).addTo(map);
-                                    }
-
-                                    map.flyTo(coords, 17);
-                                });
-
                                 var redIcon = new L.Icon({
                                     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
                                     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -183,6 +169,8 @@
                                 });
 
                                 L.marker([-12.0690694, -77.0786442], {icon: yellowIcon}).addTo(map);
+                                L.marker([-13.5167110, -71.9788230], {icon: greenIcon}).addTo(map);
+                                L.marker([-12.1219000, -77.0297000], {icon: redIcon}).addTo(map);
 
                                 document.getElementById('select-location').addEventListener('change', function(e){
                                     let coords = e.target.value.split(",");
