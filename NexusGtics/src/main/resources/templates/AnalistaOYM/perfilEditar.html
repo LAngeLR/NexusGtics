@@ -21,16 +21,21 @@
       </ol>
     </nav>
   </div><!-- End Page Title -->
-
+  <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
+  </div>
+  <div class="alert alert-danger" role="alert" th:if="${msgImagen1 != null}" th:text="${msgImagen1}">
+  </div>
   <section class="section profile">
     <div class="row">
       <div class="col-xl-4">
 
         <div class="card">
           <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-            <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+            <img th:src="@{|/file/${session.usuario.archivo.getIdArchivos()}|}" alt="Profile" class="rounded-circle"
+                 onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
+
             <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">Kevin Anderson</h2>
-            <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Administrador</h3>
+            <h3 th:text="|${session.usuario.cargo.nombreCargo}|">Superadmin</h3>
             <h3 th:text="|${session.usuario.dni}|">ID: 123456789</h3>
           </div>
         </div>
@@ -153,6 +158,19 @@
   document.getElementById('uploadButton').addEventListener('click', function () {
     document.getElementById('fileInput').click();
   });
+</script>
+<script>
+  function previewImage(event, imageId) {
+    const input = event.target;
+    const image = document.querySelector(imageId);
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        image.src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
 </script>
 </body>
 
