@@ -81,8 +81,8 @@ public class GcsController {
                 Optional<Archivo> optArchivo = archivoRepository.findById(id);
                 if(optArchivo.isPresent()){
                     Archivo archivo1 = optArchivo.get();
-                    System.out.println(archivo1.getIdArchivos());
-                    System.out.println(archivo1.getNombre());
+//                    System.out.println(archivo1.getIdArchivos());
+//                    System.out.println(archivo1.getNombre());
                     String nombreArchivo = "archivo-"+archivo1.getIdArchivos();
                     byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", archivo1.getNombre());
                     HttpHeaders headers = new HttpHeaders();

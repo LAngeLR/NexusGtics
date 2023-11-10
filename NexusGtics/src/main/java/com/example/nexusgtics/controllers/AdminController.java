@@ -547,7 +547,7 @@ public class AdminController {
     public String inventarioSitio(Model model) {
         List<Ticket> listaT= ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
-        List<Sitio> sitioList = sitioRepository.findAll();
+        List<Sitio> sitioList = sitioRepository.listaDeSitios();
         model.addAttribute("sitioList", sitioList);
         return "Administrador/mapaInventarioSitio";
     }

@@ -29,13 +29,11 @@ public class Empresa implements Serializable {
     @Column(name = "ruc", nullable = false)
     @NotBlank(message = "El campo no debe estar vacío")
     @Pattern(regexp = "^[0-9]{11}$", message = "El RUC debe ser un número de 11 dígitos")
-    @Size(min = 11, max = 11, message = "El RUC debe tener exactamente 11 dígitos")
     private String ruc;
 
     @Column(name = "telefono", nullable = false)
     @NotBlank(message = "El campo no debe estar vacío")
-    @Size(min = 7, max = 15, message = "El teléfono debe tener entre 7 y 15 dígitos")
-    @Pattern(regexp = "^[0-9]+$", message = "El teléfono debe consistir solo en dígitos")
+    @Pattern(regexp = "^[0-9]{7,10}$", message = "El teléfono debe ser un número de entre 7 a 10 dígitos")
     private String telefono;
 
     @Column(name = "direccion", nullable = false, length = 120)
