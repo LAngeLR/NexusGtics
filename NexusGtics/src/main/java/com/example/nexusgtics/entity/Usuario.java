@@ -1,7 +1,10 @@
 package com.example.nexusgtics.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -59,10 +62,6 @@ public class Usuario implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idImagenPerfil")
     private Archivo archivo;
-
-    @ManyToOne
-    @JoinColumn(name = "IdCuadrilla")
-    private Cuadrilla cuadrilla;
 
     @Column(name = "dni")
     @Pattern(regexp = "^[0-9]{8}$", message = "El DNI debe ser un número de 8 dígitos")

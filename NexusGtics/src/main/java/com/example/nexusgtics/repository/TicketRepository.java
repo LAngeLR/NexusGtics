@@ -2,9 +2,7 @@ package com.example.nexusgtics.repository;
 
 import com.example.nexusgtics.dto.TicketsCreadosCulminadosDto;
 import com.example.nexusgtics.dto.TicketsDashSupDto;
-import com.example.nexusgtics.entity.Formulario;
 import com.example.nexusgtics.entity.Ticket;
-import com.example.nexusgtics.entity.Usuario;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -51,8 +49,11 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     //------------------------ Tecnico --------------------//
 
-    @Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE estado != ?1 and idSupervisorEncargado = ?2")
-    List<Ticket> listaTickets(int valor1, int idTecnico);
+//    @Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE estado NOT IN (1,2,7) and idSupervisorEncargado = 5 AND idEmpresaAsignada=3 and idCuadrilla=1")
+//    List<Ticket> listaTickets(int valor1, int idTecnico);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE estado NOT IN (1,2,7) and idSupervisorEncargado = 5 AND idEmpresaAsignada=3 and idCuadrilla=1")
+    List<Ticket> listaTicketsAsignado();
 
     @Query(nativeQuery = true, value = "SELECT * FROM nexus.tickets where estado not IN (1,2,7);")
     List<Ticket> listarmapa();

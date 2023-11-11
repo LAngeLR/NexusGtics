@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.nexusgtics.controllers.GcsController.uploadObject;
-
 @Controller
 @RequestMapping("/tecnico")
 public class TecnicoController {
@@ -29,7 +27,6 @@ public class TecnicoController {
     final TicketRepository ticketRepository;
     final UsuarioRepository usuarioRepository;
     final TipoticketRepository tipoticketRepository;
-
     final SitioRepository sitioRepository;
     final SitioCerradoRepository sitioCerradoRepository;
     final ComentarioRepository comentarioRepository;
@@ -42,6 +39,8 @@ public class TecnicoController {
     private final TecInstaladaRepository tecInstaladaRepository;
     private final TecnologiainstaladaFormularioRepository tecnologiainstaladaRepository;
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private TecnicosCuadrillaRepository tecnicosCuadrillaRepository;
 
 
     public TecnicoController(TicketRepository ticketRepository,
@@ -49,7 +48,7 @@ public class TecnicoController {
                              TipoticketRepository tipoticketRepository, SitioRepository sitioRepository, ComentarioRepository comentarioRepository,
                              CuadrillaRepository cuadrillaRepository, ArchivoRepository archivoRepository,
                              FormularioRepository formularioRepository,
-                             EquipoRepository equipoRepository, SitioCerradoRepository sitioCerradoRepository,TecInstaladaRepository tecInstaladaRepository ,
+                             EquipoRepository equipoRepository, SitioCerradoRepository sitioCerradoRepository, TecInstaladaRepository tecInstaladaRepository ,
                              EmpresaRepository empresaRepository, CargoRepository cargoRepository, TecnologiainstaladaFormularioRepository tecnologiainstaladaRepository, PasswordEncoder passwordEncoder) {
         this.ticketRepository = ticketRepository;
         this.usuarioRepository = usuarioRepository;
@@ -99,7 +98,7 @@ public class TecnicoController {
         return "Tecnico/perfilTecnico";
     }
 
-    /* PERFIL DEL Tecnico */
+    /* PERFIL DEL SUPERVISOR */
     @PostMapping("/savePerfil")
     public String savePerfil(@RequestParam("imagenSubida") MultipartFile file,
                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
@@ -116,7 +115,7 @@ public class TecnicoController {
             model.addAttribute("listaCargo", cargoRepository.findAll());
 
             if (usuario.getId() == null) {
-                return "Tecnico/tecnico";
+                return "Tecnico/menuSupervisor";
             } else {
                 return "Tecnico/perfilEditar";
             }
@@ -126,79 +125,59 @@ public class TecnicoController {
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
             if (usuario.getId() == null) {
-                return "Tecnico/tecnico";
+                return "Supervisor/menuSupervisor";
             } else {
-                return "Tecnico/perfilEditar";
+                return "Supervisor/perfilEditar";
             }
         }
 
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
             if (usuario.getId() == null) {
-                return "Tecnico/perfilTecnico";
+                return "Supervisor/menuSupervisor";
             } else {
-                return "Tecnico/perfilEditar";
+                return "Supervisor/perfilEditar";
             }
         }
 
-        String fileName1 = file.getOriginalFilename();
-        /*Validación para evitar 2 puntos*/
-        if (fileName1.contains("..") && !file.isEmpty()) {
-            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
-            if (usuario.getId() == null) {
-                return "Tecnico/perfilTecnico";
-            } else {
-                return "Tecnico/perfilEditar";
-            }
-        }
-
-        /*Validación para archivos grande (NO FUNCIONA :C)*/
         int maxFileSize = 10485760;
-        if (file.getSize() > maxFileSize && !file.isEmpty()) {
+
+        if (file.getSize() > maxFileSize) {
             System.out.println(file.getSize());
-            model.addAttribute("msgImagen", "El archivo subido excede el tamaño máximo permitido (10MB).");
+            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
             if (usuario.getId() == null) {
-                return "Tecnico/perfilTecnico";
+                return "Supervisor/menuSupervisor";
             } else {
-                return "redirect:/tecnico/perfilEditar";
+                return "redirect:/supervisor/perfilEditar";
             }
         }
-
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (usuario.getArchivo() == null) {
                 usuario.setArchivo(new Archivo());
             }
-
+            String fileName = file.getOriginalFilename();
             try{
-                /*Si file contiene algo --> Guardarlo*/
-                if(!file.isEmpty()){
-                    // Obtenemos el nombre del archivo
-                    String fileName = file.getOriginalFilename();
-                    String extension = "";
-                    int i = fileName.lastIndexOf('.');
-                    if (i > 0) {
-                        extension = fileName.substring(i+1);
-                    }
-                    Archivo archivo = usuario.getArchivo();
-                    archivo.setNombre(fileName);
-                    archivo.setTipo(1);
-                    archivo.setArchivo(file.getBytes());
-                    archivo.setContentType(file.getContentType());
-                    Archivo archivo1 = archivoRepository.save(archivo);
-                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
-                    archivo1.setNombre(nombreArchivo);
-                    archivoRepository.save(archivo1);
-                    uploadObject(archivo1);
-                }
+                //validación de nombre, apellido y correo
+                Archivo archivo = usuario.getArchivo();
+                archivo.setNombre(fileName);
+                archivo.setTipo(1);
+                archivo.setArchivo(file.getBytes());
+                archivo.setContentType(file.getContentType());
+                archivoRepository.save(archivo);
+                int idImagen = archivo.getIdArchivos();
+                usuario.getArchivo().setIdArchivos(idImagen);
                 if (usuario.getId() == null) {
                     attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
                 } else {
                     attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
                 }
                 usuarioRepository.save(usuario);
-                return "redirect:/tecnico/ticketasignado";
-
+                //Usuario u = (Usuario) httpSession.getAttribute("usuario");
+                //HttpSession session = request.getSession(true);
+                //session.setAttribute("nombreUsuario", "nuevoNombre");
+                session.setAttribute("usuario", usuario);
+                return "redirect:/supervisor/perfil";
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -207,9 +186,9 @@ public class TecnicoController {
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
             if (usuario.getId() == null) {
-                return "Tecnico/ticket_asignado";
+                return "Supervisor/menuSupervisor";
             } else {
-                return "Tecnico/perfilEditar";
+                return "Supervisor/perfilEditar";
             }
         }
     }
@@ -225,7 +204,7 @@ public class TecnicoController {
         try{
             //int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/tecnico/perfil";
+                return "redirect:/supervisor/supervisor";
             }
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
@@ -233,12 +212,12 @@ public class TecnicoController {
                 model.addAttribute("usuario", usuario);
                 model.addAttribute("listaEmpresa", empresaRepository.findAll());
                 model.addAttribute("listaCargo", cargoRepository.findAll());
-                return "Tecnico/perfilEditar";
+                return "Supervisor/perfilEditar";
             } else {
-                return "redirect:/tecnico/perfil";
+                return "redirect:/supervisor/perfil";
             }
         } catch (NumberFormatException e) {
-            return "redirect:/tecnico/perfil";
+            return "redirect:/supervisor/supervisor";
         }
 
     }
@@ -253,17 +232,17 @@ public class TecnicoController {
         int id = u.getId();
         try{
             if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/tecnico/perfil";
+                return "redirect:/supervisor/supervisor";
             }
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
                 model.addAttribute("idUsuario",id);
-                return "Tecnico/perfilContra";
+                return "Supervisor/perfilContra";
             } else {
-                return "redirect:/tecnico/perfil";
+                return "redirect:/supervisor/perfil";
             }
         } catch (NumberFormatException e) {
-            return "redirect:/tecnico/tecnico";
+            return "redirect:/supervisor/supervisor";
         }
     }
 
@@ -285,10 +264,10 @@ public class TecnicoController {
             usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
             redirectAttributes.addFlashAttribute("msg1", "La contraseña se ha actualizado exitosamente");
 
-            return "redirect:/tecnico/perfil";
+            return "redirect:/supervisor/perfil";
         } else {
             redirectAttributes.addFlashAttribute("error","La contraseña actual no es correcta.");
-            return "redirect:/tecnico/perfilContra";
+            return "redirect:/supervisor/perfilContra";
         }
     }
 
@@ -332,7 +311,9 @@ public class TecnicoController {
         model.addAttribute("listaTicket", listaT);
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idTecnico = u.getId();
-        List<Ticket> listaTickets = ticketRepository.listaTickets( 1, idTecnico);
+        Integer idSupervisor =u.getEmpresa().getIdEmpresas();
+        //List<Integer> tecnicoscuadrillas = tecnicosCuadrillaRepository.findAll();
+        List<Ticket> listaTickets = ticketRepository.listaTicketsAsignado();
         model.addAttribute("listaTickets",listaTickets);
 
         return "Tecnico/ticket_asignado";

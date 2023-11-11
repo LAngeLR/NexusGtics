@@ -21,10 +21,6 @@ public class Cuadrilla implements Serializable {
     @JoinColumn(name = "idSupervisor", nullable = false)
     private Usuario supervisor;  //cuidado
 
-    @ManyToOne
-    @JoinColumn(name = "idTecnico", nullable = false)
-    private Usuario tecnico;    //cuidado
-
     @Column(name = "ocupado", nullable = false)
     private Boolean ocupado = false;
 

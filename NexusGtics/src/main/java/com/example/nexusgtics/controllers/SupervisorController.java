@@ -6,8 +6,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.time.Instant;
-
 import java.util.*;
 
 @Controller
@@ -514,7 +513,9 @@ public class SupervisorController {
 
         cuadrillaRepository.save(cuadrilla);
         redirectAttributes.addFlashAttribute("msg","Cuadrilla " + cuadrilla.getIdCuadrillas() + " creada Correctamente");
-        usuarioRepository.cambiarTecnico(cuadrilla.getTecnico().getId(),cuadrilla.getIdCuadrillas());
+        //usuarioRepository.cambiarTecnico(cuadrilla.getTecnico().getId(),cuadrilla.getIdCuadrillas());
+        /* Creo que se tiene que trabajar con la tabla intermedia */
+        usuarioRepository.cambiarTecnico(cuadrilla.getIdCuadrillas(),cuadrilla.getIdCuadrillas());
 
         return "redirect:/supervisor/crearCuadrilla?id=" + cuadrilla.getIdCuadrillas();
     }
