@@ -1,5 +1,6 @@
 package com.example.nexusgtics.repository;
 
+import com.example.nexusgtics.dto.ListaTicketsDto;
 import com.example.nexusgtics.dto.TicketsCreadosCulminadosDto;
 import com.example.nexusgtics.dto.TicketsDashSupDto;
 import com.example.nexusgtics.entity.Ticket;
@@ -13,8 +14,9 @@ import java.util.List;
 public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     // ------------------------------ SUPERVISOR --------------------------------------- //
-    @Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE estado != ?1 and idSupervisorEncargado = ?2")
-    List<Ticket> listaTicketsModificado(int valor1, int idSupervisor);
+    @Query(nativeQuery = true, value = "SELECT t.idTickets, t.usuarioSolicitante, CONCAT(u.nombre, ' ', u.apellido) AS nombreCompleto, t.fechaCreacion, t.fechaCierre, t.prioridad, t.estado FROM tickets t LEFT JOIN cuadrillas c ON t.idCuadrilla = c.idCuadrillas LEFT JOIN tecnicoscuadrillas tc ON c.idCuadrillas = tc.idCuadrilla AND tc.liderTecnico = 1 LEFT JOIN usuarios u ON tc.idTecnico = u.idUsuarios WHERE t.estado != ?1 AND t.idSupervisorEncargado = ?2")
+    List<ListaTicketsDto> listaTicketsModificado(int valor1, int idSupervisor);
+
 
     @Transactional
     @Modifying

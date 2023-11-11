@@ -266,9 +266,8 @@ public class SupervisorController {
 
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idSupervisor = u.getId();
-        List<Ticket> listaTickets = ticketRepository.listaTicketsModificado( 1, idSupervisor);
 
-        model.addAttribute("listaTickets",listaTickets);
+        model.addAttribute("listaTickets",ticketRepository.listaTicketsModificado( 1, idSupervisor));
 
         return "Supervisor/listaTickets";
     }

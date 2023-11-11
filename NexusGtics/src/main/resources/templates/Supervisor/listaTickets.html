@@ -56,13 +56,8 @@
                                             <td th:text="${info.index + 1}"></td>
                                             <td th:text="${tickets.usuarioSolicitante}"></td>
 
-                                            <div th:if="${tickets.idCuadrilla}==null">
-                                                <td>Cuadrilla no asignada</td>
-                                            </div>
-
-                                            <div th:unless="${tickets.idCuadrilla}==null">
-                                                <td th:text="${tickets.idCuadrilla.tecnico.nombre} + ${tickets.idCuadrilla.tecnico.apellido}"></td>
-                                            </div>
+                                            <td th:if="${tickets.nombreCompleto } == null">Cuadrilla no asignada</td>
+                                            <td th:unless="${tickets.nombreCompleto} == null" th:text="${tickets.nombreCompleto}"></td>
 
                                             <td th:text="${tickets.fechaCreacion}"></td>
                                             <td th:text="${tickets.fechaCierre}"></td>
