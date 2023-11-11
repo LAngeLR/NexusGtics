@@ -287,7 +287,7 @@ public class TecnicoController {
             model.addAttribute("listaTicket", ticketRepository.findAll());
             return "Tecnico/comentarios";
         } else {
-            return "redirect:/ticket/verticket";
+            return "redirect:/tecnico/verticket";
         }
     }
 
@@ -323,11 +323,13 @@ public class TecnicoController {
     @GetMapping({"/verTicket", "/verticket"})
     public String pagdatostick(Model model, @RequestParam("id") int id,
                                RedirectAttributes attr) {
+        /* Lo que se mando al Header */
         List<Ticket> listaT = ticketRepository.listarEstado();
         model.addAttribute("listaTicket", listaT);
+
         try {
             if (id <= 0 || !ticketRepository.existsById(id)) {
-                return "redirect:/ticket/ticketasignado";
+                return "redirect:/tecnico/ticketasignado";
             }
             Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
             Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
@@ -339,7 +341,7 @@ public class TecnicoController {
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
                 return "Tecnico/datos_ticket";
             } else {
-                return "redirect:/ticket/ticketasignado";
+                return "redirect:/tecnico/ticketasignado";
             }
         } catch (NumberFormatException e) {
             return "redirect:/tecnico/ticketasignado";
@@ -354,7 +356,7 @@ public class TecnicoController {
         model.addAttribute("listaTicket", listaT1);
         try {
             if (id <= 0 || !ticketRepository.existsById(id)) {
-                return "redirect:/ticket/ticketasignado";
+                return "redirect:/tecnico/ticketasignado";
             }
             Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
             Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
@@ -366,7 +368,7 @@ public class TecnicoController {
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
                 return "Tecnico/datost_progreso";
             } else {
-                return "redirect:/ticket/ticketasignado";
+                return "redirect:/tecnico/ticketasignado";
             }
         } catch (NumberFormatException e) {
             return "redirect:/tecnico/ticketasignado";
@@ -381,7 +383,7 @@ public class TecnicoController {
         model.addAttribute("listaTicket", listaT);
         try {
             if (id <= 0 || !ticketRepository.existsById(id)) {
-                return "redirect:/ticket/ticketasignado";
+                return "redirect:/tecnico/ticketasignado";
             }
             Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
             Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
@@ -393,7 +395,7 @@ public class TecnicoController {
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
                 return "Tecnico/datost_nuevo";
             } else {
-                return "redirect:/ticket/ticketasignado";
+                return "redirect:/tecnico/ticketasignado";
             }
         } catch (NumberFormatException e) {
             return "redirect:/tecnico/ticketasignado";
@@ -424,7 +426,7 @@ public class TecnicoController {
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
                 return "Tecnico/datost_cerrado";
             } else {
-                return "redirect:/ticket/ticketasignado";
+                return "redirect:/tecnico/ticketasignado";
             }
         } catch (NumberFormatException e) {
             return "redirect:/tecnico/ticketasignado";

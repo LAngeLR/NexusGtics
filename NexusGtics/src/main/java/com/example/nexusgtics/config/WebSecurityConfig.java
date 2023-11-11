@@ -53,8 +53,7 @@ public class WebSecurityConfig {
                     HttpSession session = request.getSession();
                     Usuario usuario = usuarioRepository.findByCorreo(authentication.getName());
                     System.out.println("usuario wsc: " + usuario.getNombre());
-                    //usuario.getCuadrilla().setTecnico(null);
-                    //.setCuadrilla(null);
+
                     session.setAttribute("usuario",usuario);
 
                     if(defaultSavedRequest != null){

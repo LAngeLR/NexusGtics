@@ -55,7 +55,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE estado NOT IN (1,2,7) and idSupervisorEncargado = 5 AND idEmpresaAsignada=3 and idCuadrilla=1")
     List<Ticket> listaTicketsAsignado();
 
-    @Query(nativeQuery = true, value = "SELECT * FROM nexus.tickets where estado not IN (1,2,7);")
+    @Query(nativeQuery = true, value = "SELECT * FROM nexus.tickets where estado not IN (1,2,7)")
     List<Ticket> listarmapa();
 
     @Transactional
@@ -63,7 +63,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query(nativeQuery = true, value = "insert into ticket (estado) values (?1)")
     void guardarEstado(int estado);
 
-    @Query(value ="select * from nexus.tickets where estado not IN (1,2,7);", nativeQuery = true )
+    @Query(value ="select * from nexus.tickets where estado not IN (1,2,7)", nativeQuery = true )
     List<Ticket> listarEstado();
 
     //------------------------ Analista m --------------------//

@@ -96,15 +96,15 @@ public class Formulario {
 
     /* Analizar estas dos*/
 
-    @Size(max = 45)
-    @NotNull
-    @Column(name = "tipoTransporte", nullable = false, length = 45)
-    private String tipoTransporte;
-
-    @ManyToMany
-    @JoinTable(name = "tecnologiainstalada_formularios",
-            joinColumns = @JoinColumn(name = "idFormularios"),
-            inverseJoinColumns = @JoinColumn(name = "idTecnologiaInstalada"))
-    private Set<Tecnologiainstalada> tecnologiainstaladas = new LinkedHashSet<>();
+//    @Size(max = 45)
+//    @NotNull
+//    @Column(name = "tipoTransporte", nullable = false, length = 45)
+//    private String tipoTransporte;
+//
+//    @ManyToMany
+//    @JoinTable(name = "tecnologiainstalada_formularios",
+//            joinColumns = @JoinColumn(name = "idFormularios"),
+//            inverseJoinColumns = @JoinColumn(name = "idTecnologiaInstalada"))
+//    private Set<Tecnologiainstalada> tecnologiainstaladas = new LinkedHashSet<>();
 
 }
