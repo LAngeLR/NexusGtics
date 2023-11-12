@@ -24,4 +24,7 @@ public class Tecnicoscuadrilla implements Serializable {
     @JoinColumn(name = "idCuadrilla", nullable = false)
     private Cuadrilla idCuadrilla;
 
+    @Column(name = "liderTecnico", nullable = false)
+    private Integer liderTecnico;
+
 }
