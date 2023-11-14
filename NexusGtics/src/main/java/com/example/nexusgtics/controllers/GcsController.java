@@ -48,7 +48,7 @@ public class GcsController {
 
     }
 
-    /* Subir la imagen al repositorio */
+    /* Subir la imagen al repositorio (ARCHIVO) */
     public static void uploadObject
             (Archivo archivo) {
         try {
@@ -70,6 +70,7 @@ public class GcsController {
 
 
 
+    /* Obtener un archivo del Storage */
     @GetMapping("/file/{id}")
     public ResponseEntity<byte[]> displayItemImage(@PathVariable("id") String idStr) throws IOException {
         try{

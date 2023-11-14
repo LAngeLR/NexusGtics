@@ -92,12 +92,12 @@
 
                                 <div class="mb-3">
                                     <p class="form-label">Cargo (no modificable):</p>
-                                    <p class="form-control">Administrador</p>
+                                    <p class="form-control bg-dark-subtle">Administrador</p>
                                 </div>
 
                                 <div class="mb-3">
                                     <p class="form-label">Empresa (no modificable):</p>
-                                    <p class="form-control">Nexus</p>
+                                    <p class="form-control bg-dark-subtle">Nexus</p>
                                 </div>
 
 
@@ -113,13 +113,16 @@
                             <br><br>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="imagenSubida" class="form-label">Foto de Perfil:</label>
+                                    <label class="form-label">Foto de Perfil (Defecto)</label>
                                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
                                         <img id="imgPreview" th:src="@{/userDefault}" class="card-img-top rounded-circle" style="max-height: 250px">
                                     </div>
                                     <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
                                            accept="image/*" onchange="previewImage(event, '#imgPreview')">
                                 </div>
+
+                                <br>
+                                <br>
 
                                 <button type="submit" class="btn btn-outline-primary float-end">Crear</button>
                             </div>
@@ -194,6 +197,9 @@
             };
 
             reader.readAsDataURL(input.files[0]);
+        }else {
+            // No se seleccionó ningún archivo, establecer una imagen por defecto
+            img.src = '/userDefault'; // Ajusta la ruta según sea necesario
         }
     }
 </script>
