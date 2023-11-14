@@ -479,8 +479,8 @@ public class TecnicoController {
     @GetMapping("/desplazamiento")
     public String pagdesplazamiento(Model model, @RequestParam("id") int id,
                                     RedirectAttributes attr) {
-        List<Ticket> listaT = ticketRepository.findAll();
-        model.addAttribute("listaTicket1", listaT);
+        List<Ticket> lista = ticketRepository.listarEstado();
+        model.addAttribute("ticketList", lista);
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if (optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();
@@ -488,9 +488,8 @@ public class TecnicoController {
             model.addAttribute("listaTicket", ticketRepository.findAll());
             return "Tecnico/desplazamiento";
         } else {
-            return "redirect:/ticket/verticket";
+            return "redirect:/ticket/verTicket";
         }
-
     }
 
     //Desplazamiento en progreso para cerrado

@@ -59,14 +59,14 @@
         <h1>Mapa</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/Tecnico/tecnico.html}">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/Tecnico/tecnico}">Home</a></li>
                 <li class="breadcrumb-item active">Servicio</li>
                 <li class="breadcrumb-item active">Desplazamiento</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section profile">
+    <section class="section profile" th:object="${ticket}">
         <div class="row">
             <div class="col-xl-4">
                 <div class="h-100 p-5 rounded-3" style="background-color: #202a3b; color:white;">
@@ -116,19 +116,34 @@
             <div class="col-xl-8">
                 <div class="card">
                     <div class="card-body pt-3">
+                        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
                         <div id="map"></div>
-                        <!-- MAPA -->
+                        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
                         <script>
-                            var map = L.map('map').setView([-12.2681124, -74.8087287], 7);
-
-                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            var latitud = [[${ticket.idSitios.latitud}]];
+                            var longitud = [[${ticket.idSitios.longitud}]];
+                            let map = L.map('map').setView([latitud,longitud],18)
+                            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
                             }).addTo(map);
+                            L.marker([latitud,longitud]).addTo(map).bindPopup('Lugar').openPopup();
+                        </script>
 
-                            L.marker([-12.2681124, -74.8087287]).addTo(map)
-                                .bindPopup('Sitio Inicial')
-                                .openPopup();
+                        <script>
+                            function centrarMapaEnCoordenadasIniciales() {
+                                map.setView([latitud, longitud], 18);
+                            }
+                            var botonCentrar = L.control({ position: 'bottomright' });
 
+                            botonCentrar.onAdd = function (map) {
+                                var container = L.DomUtil.create('div', 'boton-centrar');
+                                var button = L.DomUtil.create('button', 'btn btn-primary', container);
+                                button.type = 'button';
+                                var icono = L.DomUtil.create('i', 'bx bx-collapse', button);
+                                L.DomEvent.on(button, 'click', centrarMapaEnCoordenadasIniciales);
+                                return container;
+                            };
+                            botonCentrar.addTo(map);
                         </script>
                     </div>
                 </div>
