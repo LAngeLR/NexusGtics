@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.math.RoundingMode;
 
+import static com.example.nexusgtics.controllers.GcsController.downloadObject;
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
 
 @Controller
@@ -168,16 +169,12 @@ public class AdminController {
         return "Administrador/crearUsuario";
     }
     /*CREAR NUEVO USUARIO*/
-    @PostMapping("/Usuario")
+    @PostMapping("/saveUsuario")
     public String saveUsuario(@RequestParam("imagenSubida") MultipartFile file,
                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
-       //si usuario es nuevo poner contrasnia a'123'
-//        if (usuario.getId()==null){
-//            usuario.setContrasenia(new BCryptPasswordEncoder().encode("123"));
-//        }
-
+        //poner contraseña a lo mismo que el correo hasta antes del @
         if (usuario.getId()==null){
             String mail = usuario.getCorreo();
             String[] partes = mail.split("@");
@@ -185,17 +182,25 @@ public class AdminController {
             usuario.setContrasenia(new BCryptPasswordEncoder().encode(password));
         }
 
-        List<String> correos = usuarioRepository.listaCorreos();
-        for (String correo : correos) {
-            if (correo.equals(usuario.getCorreo())) {
-                model.addAttribute("msgEmail", "El correo electrónico ya existe");
-                model.addAttribute("listaEmpresa", empresaRepository.findAll());
-                model.addAttribute("listaCargo", cargoRepository.findAll());
-                return "Administrador/crearUsuario";
-            }
-        }
+        //poner los demás campos con los valores por defecto (para que ya no se manden como hidden)
+        usuario.setHabilitado(Boolean.TRUE);
+        ZoneId zonaHoraria = ZoneId.of("GMT-5");
+        LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+        usuario.setFechaRegistro(fechaActual);
+        usuario.setTecnicoConCuadrilla(Boolean.FALSE);
 
-        //para "guardar" lo seleccionado y poder mostrarlo cuando haya un error y no tener q ponerlo de nuevo
+        //validar que no se repitan los emails
+//        List<String> correos = usuarioRepository.listaCorreos();
+//        for (String correo : correos) {
+//            if (correo.equals(usuario.getCorreo())) {
+//                model.addAttribute("msgEmail", "El correo electrónico ya existe");
+//                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+//                model.addAttribute("listaCargo", cargoRepository.findAll());
+//                return "Administrador/crearUsuario";
+//            }
+//        }
+
+        //para "guardar" lo seleccionado y poder mostrarlo cuando haya un error y no tener que ponerlo de nuevo
         Cargo cargoSeleccionado = usuario.getCargo();
         Empresa empresaSeleccionada = usuario.getEmpresa();
         model.addAttribute("cargoSeleccionado", cargoSeleccionado);
@@ -205,60 +210,36 @@ public class AdminController {
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
 
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
+            return "Administrador/crearUsuario";
         }
         if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
             model.addAttribute("msgEmpresa", "Escoger una empresa");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
-        }
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
-            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
-        }
-
-        if (file.getSize() > 10 * 1024 * 1024) {
-            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
-            if (usuario.getId() == null) {
-                return "Superadmin/perfil";
-            } else {
-                return "Superadmin/perfilEditar";
-            }
+            return "Administrador/crearUsuario";
         }
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (usuario.getArchivo() == null) {
                 usuario.setArchivo(new Archivo());
             }
-            String fileName = file.getOriginalFilename();
+
             try {
-                //validación de nombre, apellido y correo
+                //guardar foto por defecto
                 Archivo archivo = usuario.getArchivo();
-                archivo.setNombre(fileName);
+                archivo.setNombre("fotoPerfil");
                 archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-                archivoRepository.save(archivo);
-                int idImagen = archivo.getIdArchivos();
-                usuario.getArchivo().setIdArchivos(idImagen);
-                if (usuario.getId() == null) {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
-                } else {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
-                }
+                byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "userDefault.png");
+                archivo.setArchivo(image);
+                archivo.setContentType("image/png");
+                Archivo archivo1 = archivoRepository.save(archivo);
+                String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";
+                archivo1.setNombre(nombreArchivo);
+                archivoRepository.save(archivo1);
+                uploadObject(archivo1);
+
+//              mensaje de creación
+                attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
                 usuarioRepository.save(usuario);
                 return "redirect:/admin/listaUsuario";
             } catch (IOException e) {
@@ -268,11 +249,7 @@ public class AdminController {
         } else { //hay al menos 1 error
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
+            return "Administrador/crearUsuario";
         }
     }
 
