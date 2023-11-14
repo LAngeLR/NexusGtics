@@ -205,38 +205,22 @@ public class AdminController {
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
 
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
+            return "Administrador/crearUsuario";
         }
         if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
             model.addAttribute("msgEmpresa", "Escoger una empresa");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
+            return "Administrador/crearUsuario";
         }
         if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
+            return "Administrador/crearUsuario";
         }
 
         if (file.getSize() > 10 * 1024 * 1024) {
             model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
-            if (usuario.getId() == null) {
-                return "Superadmin/perfil";
-            } else {
-                return "Superadmin/perfilEditar";
-            }
+            return "Administrador/crearUsuario";
         }
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
@@ -268,11 +252,7 @@ public class AdminController {
         } else { //hay al menos 1 error
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
+            return "Administrador/crearUsuario";
         }
     }
 
