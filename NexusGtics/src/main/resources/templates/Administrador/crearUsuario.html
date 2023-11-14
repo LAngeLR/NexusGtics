@@ -43,10 +43,9 @@
             <div class="alert alert-danger" role="alert" th:if="${msgImagen1 != null}" th:text="${msgImagen1}">
               A simple success alert—check it out!
             </div>
-            <form method="POST" th:action="@{/admin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+              <form method="POST" th:action="@{/admin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
               <div class="row">
                 <div class="col-md-6">
-                  <input type="hidden" class="form-control" name="idJuego" id="idJuego">
                   <div class="mb-3">
                     <label class="form-label">Nombres:</label>
                     <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
@@ -83,13 +82,6 @@
                     </div>
                   </div>
 
-                  <!--input type="hidden" name="contrasenia" id="contrasenia" th:value="${codigoAleatorio}"-->
-
-                  <input type="hidden" name="habilitado" id="habilitado" value="1">
-
-                  <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:value="${fechaActual}">
-                  <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" value="0">
-
                   <div class="mb-3">
                     <label for="cargo" class="form-label">Selector de cargos</label>
                     <select class="form-select" name="cargo" id="cargo">
@@ -124,15 +116,15 @@
                 <br><br>
                 <div class="col-md-6">
                   <div class="mb-3">
-                    <label for="imagenSubida" class="form-label">Foto de Perfil:</label>
+                    <label class="form-label">Foto de Perfil (Defecto)</label>
                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
-<!--                      <img id="imgPreview" th:src="@{/file/nuevo}" class="card-img-top" style="max-height: 250px" alt="">-->
-                      <img id="imgPreview" th:src="@{/userDefault}" class="card-img-top rounded-circle" style="max-height: 250px" alt="">
-
+                      <img id="imgPreview" th:src="@{/userDefault}" class="card-img-top rounded-circle" style="max-height: 250px">
                     </div>
                     <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
                            accept="image/*" onchange="previewImage(event, '#imgPreview')">
                   </div>
+                  <br>
+                  <br>
 
                   <button type="submit" class="btn btn-outline-primary float-end">Crear</button>
                 </div>

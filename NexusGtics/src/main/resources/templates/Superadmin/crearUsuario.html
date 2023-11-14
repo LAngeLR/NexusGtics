@@ -43,7 +43,6 @@
                     <form method="POST" th:action="@{/superadmin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row">
                             <div class="col-md-6">
-                                <input type="hidden" class="form-control" name="idJuego" id="idJuego">
                                 <div class="mb-3">
                                     <label class="form-label">Nombres:</label>
                                     <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
@@ -80,7 +79,7 @@
                                     </div>
                                 </div>
 
-                                <input type="hidden" name="contrasenia" id="contrasenia" th:value="${codigoAleatorio}">
+<!--                                <input type="hidden" name="contrasenia" id="contrasenia" th:value="${codigoAleatorio}">-->
 
                                 <input type="hidden" name="habilitado" id="habilitado" value="1">
 
