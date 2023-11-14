@@ -26,6 +26,7 @@ import java.util.Optional;
 
 import java.time.LocalDate;
 
+import static com.example.nexusgtics.controllers.GcsController.downloadObject;
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
 
 @Controller
@@ -184,6 +185,9 @@ public class SuperAdminController {
 //        if (usuario.getId()==null){
 //            usuario.setContrasenia(new BCryptPasswordEncoder().encode("123"));
 //        }
+        System.out.println("El tamaño de la imagen es: ");
+        System.out.println(file.getSize());
+
         /*Creo que es para Hashear la contraseña*/
         if (usuario.getId()==null){
             String mail = usuario.getCorreo();
@@ -270,10 +274,9 @@ public class SuperAdminController {
             if (usuario.getArchivo() == null) {
                 usuario.setArchivo(new Archivo());
             }
-
             try{
                 /*Si file contiene algo --> Guardarlo*/
-                if(!file.isEmpty()){
+                if(file.getSize() > 0 && !file.isEmpty()){
                     // Obtenemos el nombre del archivo
                     String fileName = file.getOriginalFilename();
                     String extension = "";
@@ -288,6 +291,18 @@ public class SuperAdminController {
                     archivo.setContentType(file.getContentType());
                     Archivo archivo1 = archivoRepository.save(archivo);
                     String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
+                    archivo1.setNombre(nombreArchivo);
+                    archivoRepository.save(archivo1);
+                    uploadObject(archivo1);
+                } else{
+                    Archivo archivo = usuario.getArchivo();
+                    archivo.setNombre("fotoPerfil");
+                    archivo.setTipo(1);
+                    byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "userDefault.png");
+                    archivo.setArchivo(image);
+                    archivo.setContentType("image/png");
+                    Archivo archivo1 = archivoRepository.save(archivo);
+                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";
                     archivo1.setNombre(nombreArchivo);
                     archivoRepository.save(archivo1);
                     uploadObject(archivo1);
@@ -360,69 +375,61 @@ public class SuperAdminController {
 
     }
 
-
+    /* Actualizar información de los ADMINISTRADORES */
     @PostMapping("/updateUsuario")
     public String updateUsuario(@RequestParam("imagenSubida") MultipartFile file,
                                 @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                                 Model model,
                                 RedirectAttributes attr){
-        List<String> correos = usuarioRepository.listaCorreos();
-        for (String correo : correos) {
-            if (correo.equals(usuario.getCorreo())) {
-                model.addAttribute("msgEmail", "El correo electrónico ya existe");
-                model.addAttribute("listaEmpresa", empresaRepository.findAll());
-                model.addAttribute("listaCargo", cargoRepository.findAll());
-                return "Superadmin/editarUsuario";
-            }
+
+        /*Validación de imagen*/
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+            return "Superadmin/editarUsuario";
         }
 
-        if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
-            model.addAttribute("msgCargo", "Escoger un cargo");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
 
-            if (usuario.getId() == null) {
-                return "Superadmin/crearUsuario";
-            } else {
-                return "Superadmin/editarUsuario";
-            }
-        }
-        if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
-            model.addAttribute("msgEmpresa", "Escoger una empresa");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Superadmin/crearUsuario";
-            } else {
-                return "Superadmin/editarUsuario";
-            }
-        }
-        // Verificar si se cargó un nuevo archivo
-        if (!file.isEmpty()) {
-            try {
-                // Procesar el archivo
-                Archivo archivo = new Archivo();
-                archivo.setNombre(file.getOriginalFilename());
-                archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-                archivoRepository.save(archivo);
-
-                // Asignar el nuevo archivo al equipo
-                usuario.setArchivo(archivo);
-            } catch (IOException e) {
-                System.out.println("Error al procesar el archivo");
-                throw new RuntimeException(e);
-            }
+        String fileName1 = file.getOriginalFilename();
+        /*Validación para evitar 2 puntos*/
+        if (fileName1.contains("..") && !file.isEmpty()) {
+            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
+            return "Superadmin/editarUsuario";
         }
 
-        if (!bindingResult.hasErrors()) {
-            // Si no hay errores, se realiza el flujo normal
+        /*Validación para archivos grande (NO FUNCIONA :C)*/
+        int maxFileSize = 10485760;
+        if (file.getSize() > maxFileSize && !file.isEmpty()) {
+            System.out.println(file.getSize());
+            model.addAttribute("msgImagen", "El archivo subido excede el tamaño máximo permitido (10MB).");
+            return "redirect:/superadmin/editarUsuario";
+        }
+
+
+        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (usuario.getArchivo() == null) {
                 usuario.setArchivo(new Archivo());
             }
-
-            try {
+            try{
+                /*Si file contiene algo --> Guardarlo*/
+                if(file.getSize() > 0 && !file.isEmpty()){
+                    // Obtenemos el nombre del archivo
+                    String fileName = file.getOriginalFilename();
+                    String extension = "";
+                    int i = fileName.lastIndexOf('.');
+                    if (i > 0) {
+                        extension = fileName.substring(i+1);
+                    }
+                    Archivo archivo = usuario.getArchivo();
+                    archivo.setNombre(fileName);
+                    archivo.setTipo(1);
+                    archivo.setArchivo(file.getBytes());
+                    archivo.setContentType(file.getContentType());
+                    Archivo archivo1 = archivoRepository.save(archivo);
+                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
+                    archivo1.setNombre(nombreArchivo);
+                    archivoRepository.save(archivo1);
+                    uploadObject(archivo1);
+                }
                 if (usuario.getId() == null) {
                     attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
                 } else {
@@ -430,18 +437,15 @@ public class SuperAdminController {
                 }
                 usuarioRepository.save(usuario);
                 return "redirect:/superadmin/listaUsuario";
-            } catch (Exception e) {
-                System.out.println("Error al guardar el equipo");
+
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
         } else { //hay al menos 1 error
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Superadmin/crearUsuario";
-            } else {
-                return "Superadmin/editarUsuario";
-            }
+            return "Superadmin/editarUsuario";
         }
     }
 

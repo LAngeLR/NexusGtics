@@ -34,41 +34,46 @@
               <div class="col-md-6">
                 <div class="mb-3">
                   <label class="form-label">Nombres:</label>
-                  <input type="text" class="form-control" th:field="*{nombre}" disabled>
+                  <input type="text" class="form-control" th:field="*{nombre}" readonly>
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Apellidos:</label>
-                  <input type="text" class="form-control" th:field="*{apellido}" disabled>
+                  <input type="text" class="form-control" th:field="*{apellido}" readonly>
                 </div>
 
                 <div class="mb-3">
                   <label class="form-label">Correo:</label>
-                  <input type="text" class="form-control" th:field="*{correo}" disabled>
+                  <input type="text" class="form-control" th:field="*{correo}" readonly>
                 </div>
+
+<!--                <div class="mb-3">-->
+<!--                  <label class="form-label">DNI:</label>-->
+<!--                  <input type="text" class="form-control bg-info-light" th:field="*{dni}">-->
+<!--                </div>-->
 
                 <div class="mb-3">
                   <label class="form-label">DNI:</label>
-                  <input type="text" class="form-control" th:field="*{dni}" disabled>
+                  <input type="text" class="form-control bg-white" th:field="*{dni}" readonly>
                 </div>
 
                 <div class="mb-3">
                   <label class="form-label">Cargo:</label>
-                  <input type="text" class="form-control" th:field="*{cargo.nombreCargo}" disabled>
+                  <input type="text" class="form-control" th:field="*{cargo.nombreCargo}" readonly>
                 </div>
 
                 <div class="mb-3">
                   <label class="form-label">Empresa:</label>
-                  <input type="text" class="form-control" th:field="*{empresa.nombre}" disabled>
+                  <input type="text" class="form-control" th:field="*{empresa.nombre}" readonly>
                 </div>
 
                 <div class="mb-3">
                   <label class="form-label">Descripción:</label>
-                  <input type="text" class="form-control" th:field="*{descripcion}" disabled>
+                  <input type="text" class="form-control" th:field="*{descripcion}" readonly>
                 </div>
 
                 <div class="mb-3">
                   <label class="form-label">Fecha de registro:</label>
-                  <input type="text" class="form-control" th:field="*{fechaRegistro}" disabled>
+                  <input type="text" class="form-control" th:field="*{fechaRegistro}" readonly>
                 </div>
               </div>
               <br><br>
