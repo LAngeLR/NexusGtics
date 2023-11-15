@@ -75,9 +75,9 @@ public class TecnicoController {
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
         model.addAttribute("currentPage", "Inicio");
-        Usuario user = (Usuario) httpSession.getAttribute("usuario");
+        //Usuario user = (Usuario) httpSession.getAttribute("usuario");
         //Usuario user2 = (Usuario) session.getAttribute("usuario");
-        System.out.println("User: "+ user.getNombre());
+        //System.out.println("User: "+ user.getNombre());
         //System.out.println("User2: "+ user2.getNombre());
         return "Tecnico/tecnico";
     }

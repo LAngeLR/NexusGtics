@@ -81,6 +81,8 @@ public class WebSecurityConfig {
                         }
                         System.out.println(rol);
                     }
+                            session.setAttribute("usuario Salienod del form Login",usuario);
+                            session.setAttribute("usuario2",usuario);
                 }
                 );
 

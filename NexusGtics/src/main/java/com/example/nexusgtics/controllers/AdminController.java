@@ -34,8 +34,7 @@ import static org.aspectj.runtime.internal.Conversions.intValue;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    @Autowired
-    private HttpSession session;
+    private final HttpSession session;
 
     final EmpresaRepository empresaRepository;
     final SitioRepository sitioRepository;
@@ -52,7 +51,7 @@ public class AdminController {
                            EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository,
                            UsuarioRepository usuarioRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository,
                            CargoRepository cargoRepository, PasswordEncoder passwordEncoder,
-                           TicketRepository ticketRepository, ArchivoRepository archivoRepository) {
+                           TicketRepository ticketRepository, ArchivoRepository archivoRepository, HttpSession session) {
         this.empresaRepository = empresaRepository;
         this.sitioRepository = sitioRepository;
         this.equipoRepository = equipoRepository;
@@ -63,13 +62,14 @@ public class AdminController {
         this.ticketRepository = ticketRepository;
         this.archivoRepository = archivoRepository;
         this.passwordEncoder = passwordEncoder;
+        this.session = session;
     }
 
     @GetMapping({"/", "", "admin", "administrador"})
     public String paginaPrincipal(Model model, HttpSession httpSession) {
         model.addAttribute("currentPage", "Inicio");
-        Usuario user = (Usuario) session.getAttribute("usuario");
-        System.out.println("User: "+ user.getNombre());
+        //Usuario user = (Usuario) session.getAttribute("usuario");
+        //System.out.println("User: "+ user.getNombre());
         return "Administrador/admin";
     }
 
@@ -235,7 +235,7 @@ public class AdminController {
                 archivo.setNombre("fotoPerfil");
                 archivo.setTipo(1);
                 byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "userDefault.png");
-                archivo.setArchivo(image);
+                //archivo.setArchivo(image);
                 archivo.setContentType("image/png");
                 Archivo archivo1 = archivoRepository.save(archivo);
                 String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";

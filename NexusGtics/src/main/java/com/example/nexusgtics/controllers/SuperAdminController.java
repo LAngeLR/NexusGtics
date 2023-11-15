@@ -186,7 +186,7 @@ public class SuperAdminController {
                               Model model,
                               RedirectAttributes attr){
 //          todo lo comentado es de foto que y no se pide
-//        System.out.println("El tamaño de la imagen es: ");
+//         System.out.println("El tamaño de la imagen es: ");
 //        System.out.println(file.getSize());
 
         //poner contraseña a lo mismo que el correo hasta antes del @
@@ -291,7 +291,7 @@ public class SuperAdminController {
                 archivo.setNombre("fotoPerfil");
                 archivo.setTipo(1);
                 byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "userDefault.png");
-                archivo.setArchivo(image);
+                //archivo.setArchivo(image);
                 archivo.setContentType("image/png");
                 Archivo archivo1 = archivoRepository.save(archivo);
                 String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";
