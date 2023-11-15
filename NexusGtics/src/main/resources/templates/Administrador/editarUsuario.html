@@ -38,7 +38,7 @@
           <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}">
             A simple success alert—check it out!
           </div>
-          <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
+          <div class="alert alert-danger" role="alert" th:if="${msgEmail != null}" th:text="${msgEmail}">
             A simple success alert—check it out!
           </div>
           <form method="POST" th:action="@{/admin/updateUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">

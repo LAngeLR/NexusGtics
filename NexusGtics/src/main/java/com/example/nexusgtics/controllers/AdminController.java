@@ -28,6 +28,8 @@ import java.math.RoundingMode;
 
 import static com.example.nexusgtics.controllers.GcsController.downloadObject;
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
+import static java.lang.Integer.parseInt;
+import static org.aspectj.runtime.internal.Conversions.intValue;
 
 @Controller
 @RequestMapping("/admin")
@@ -128,7 +130,7 @@ public class AdminController {
     public String verUsuario(Model model, @RequestParam("id") String idStr) {
 
         try {
-            int id = Integer.parseInt(idStr);
+            int id = parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/admin/listaUsuario";
             }
@@ -194,6 +196,8 @@ public class AdminController {
         Empresa empresaSeleccionada = usuario.getEmpresa();
         model.addAttribute("cargoSeleccionado", cargoSeleccionado);
         model.addAttribute("empresaSeleccionada", empresaSeleccionada);
+        //TODAS LAS VALIDACIONES DESPUÉS DE AQUÍ
+
         if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
             model.addAttribute("msgCargo", "Escoger un cargo");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
@@ -206,6 +210,18 @@ public class AdminController {
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
             return "Administrador/crearUsuario";
+        }
+
+        //validar que no se repitan los emails (se pone después de cargoSeleccionado para que se aplique lo anterior antes)
+        List<String> correos = usuarioRepository.listaCorreos();
+        String correoActual = usuario.getCorreo();
+        for (String correo : correos) {
+            if (correo.equals(usuario.getCorreo())) {
+                model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Administrador/crearUsuario";
+            }
         }
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
@@ -247,8 +263,23 @@ public class AdminController {
                                 @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                                 Model model,
                                 RedirectAttributes attr) {
-        List<String> correos = usuarioRepository.listaCorreos();
-        String correoActual = usuario.getCorreo();
+//        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+//        Integer idSupervisor = u.getId();
+//
+//        model.addAttribute("listaTickets",ticketRepository.listaTicketsModificado( 1, idSupervisor));
+
+        //validar que no se repitan los emails
+        Integer id = usuario.getId();
+
+        List<String> correos = usuarioRepository.listaCorreos2(id);
+        for (String correo : correos) {
+            if (correo.equals(usuario.getCorreo())) {
+                model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Administrador/editarUsuario";
+            }
+        }
 
 
         if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
@@ -256,21 +287,14 @@ public class AdminController {
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
 
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
+            return "Administrador/editarUsuario";
         }
         if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
             model.addAttribute("msgEmpresa", "Escoger una empresa");
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
+
+            return "Administrador/editarUsuario";
         }
         //todo lo comentado es de foto que ya no se pide
         // Verificar si se cargó un nuevo archivo
@@ -321,11 +345,8 @@ public class AdminController {
         } else { //hay al menos 1 error
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
+
+            return "Administrador/editarUsuario";
         }
     }
 
@@ -335,7 +356,7 @@ public class AdminController {
                                 @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult) {
 
         try {
-            int id = Integer.parseInt(idStr);
+            int id = parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/admin/listaUsuario";
             }
@@ -373,7 +394,7 @@ public class AdminController {
                              @RequestParam("id") String idStr) {
 
         try {
-            int id = Integer.parseInt(idStr);
+            int id = parseInt(idStr);
             if (id <= 0 || !empresaRepository.existsById(id)) {
                 return "redirect:/admin/listaEmpresa";
             }
@@ -452,7 +473,7 @@ public class AdminController {
     public String verSitio(Model model, @RequestParam("id") String idStr) {
 
         try {
-            int id = Integer.parseInt(idStr);
+            int id = parseInt(idStr);
             if (id <= 0 || !sitioRepository.existsById(id)) {
                 return "redirect:/admin/listaSitio";
             }
@@ -478,7 +499,7 @@ public class AdminController {
                               @ModelAttribute("sitio") @Valid Sitio sitio, BindingResult bindingResult) {
 
         try {
-            int id = Integer.parseInt(idStr);
+            int id = parseInt(idStr);
             if (id <= 0 || !sitioRepository.existsById(id)) {
                 return "redirect:/admin/listaSitio";
             }
@@ -860,7 +881,7 @@ public class AdminController {
     @GetMapping({"/verEquipo", "/verequipo"})
     public String verEquipo(Model model, @RequestParam("id") String idStr) {
         try {
-            int id = Integer.parseInt(idStr);
+            int id = parseInt(idStr);
             if (id <= 0 || !equipoRepository.existsById(id)) {
                 return "redirect:/admin/listaEquipo";
             }
@@ -881,7 +902,7 @@ public class AdminController {
     @GetMapping({"/editarEquipo", "/editarequipo"})
     public String editarEquipo(Model model, @RequestParam("id") String idStr, @ModelAttribute("equipo") Equipo equipo) {
         try {
-            int id = Integer.parseInt(idStr);
+            int id = parseInt(idStr);
             if (id <= 0 || !equipoRepository.existsById(id)) {
                 return "redirect:/admin/listaEquipo";
             }

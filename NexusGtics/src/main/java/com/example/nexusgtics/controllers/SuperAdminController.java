@@ -208,6 +208,18 @@ public class SuperAdminController {
         Empresa empresa = empresaRepository.getReferenceById(1);
         usuario.setEmpresa(empresa);
 
+        //validar que no se repitan los emails (se pone después de cargoSeleccionado para que se aplique lo anterior antes)
+        List<String> correos = usuarioRepository.listaCorreos();
+        String correoActual = usuario.getCorreo();
+        for (String correo : correos) {
+            if (correo.equals(usuario.getCorreo())) {
+                model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Superadmin/crearUsuario";
+            }
+        }
+
         /*Validación de imagen*/
 //        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
 //            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
@@ -380,6 +392,19 @@ public class SuperAdminController {
 //            model.addAttribute("msgImagen", "El archivo subido excede el tamaño máximo permitido (10MB).");
 //            return "redirect:/superadmin/editarUsuario";
 //        }
+
+        //validar que no se repitan los emails
+        Integer id = usuario.getId();
+
+        List<String> correos = usuarioRepository.listaCorreos2(id);
+        for (String correo : correos) {
+            if (correo.equals(usuario.getCorreo())) {
+                model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                model.addAttribute("listaCargo", cargoRepository.findAll());
+                return "Superadmin/crearUsuario";
+            }
+        }
 
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
