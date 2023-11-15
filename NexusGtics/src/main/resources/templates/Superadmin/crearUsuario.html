@@ -79,27 +79,6 @@
                                     </div>
                                 </div>
 
-<!--                                <input type="hidden" name="contrasenia" id="contrasenia" th:value="${codigoAleatorio}">-->
-
-                                <input type="hidden" name="habilitado" id="habilitado" value="1">
-
-                                <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:value="${fechaActual}">
-                                <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" value="0">
-
-                                <input type="hidden" name="cargo" id="cargo" value="2">
-                                <input type="hidden" name="empresa" id="empresa" value="1">
-
-                                <div class="mb-3">
-                                    <p class="form-label">Cargo (no modificable):</p>
-                                    <p class="form-control bg-dark-subtle">Administrador</p>
-                                </div>
-
-                                <div class="mb-3">
-                                    <p class="form-label">Empresa (no modificable):</p>
-                                    <p class="form-control bg-dark-subtle">Nexus</p>
-                                </div>
-
-
                                 <div class="mb-3">
                                     <label class="form-label">Descripción:</label>
                                     <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
@@ -112,12 +91,20 @@
                             <br><br>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Foto de Perfil (Defecto)</label>
-                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img id="imgPreview" th:src="@{/userDefault}" class="card-img-top rounded-circle" style="max-height: 250px">
+                                    <p class="form-label">Cargo (no modificable):</p>
+                                    <p class="form-control bg-dark-subtle">Administrador</p>
+                                </div>
+
+                                <div class="mb-3">
+                                    <p class="form-label">Empresa (no modificable):</p>
+                                    <p class="form-control bg-dark-subtle">Nexus</p>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Foto de perfil por defecto:</label>
+                                    <div class="card mx-auto" style="width: 150px; max-height: 150px">
+                                        <img id="imgPreview" th:src="@{/userDefault}" class="card-img-top rounded-circle" style="max-height: 150px">
                                     </div>
-                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
-                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
                                 </div>
 
                                 <br>

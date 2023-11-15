@@ -83,6 +83,19 @@
                   </div>
 
                   <div class="mb-3">
+                    <label class="form-label">Descripción:</label>
+                    <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
+                    <div class="invalid-feedback"
+                         th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
+                      Mensaje de error de descripcion
+                    </div>
+                  </div>
+
+                </div>
+                <br><br>
+                <div class="col-md-6">
+
+                  <div class="mb-3">
                     <label for="cargo" class="form-label">Selector de cargos</label>
                     <select class="form-select" name="cargo" id="cargo">
                       <option value="">--Seleccione un cargo--</option>
@@ -104,27 +117,14 @@
                       >Open this select menu</option>
                     </select>
                   </div>
+
                   <div class="mb-3">
-                    <label class="form-label">Descripción:</label>
-                    <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
-                    <div class="invalid-feedback"
-                         th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
-                      Mensaje de error de descripcion
+                    <label class="form-label">Foto de perfil por defecto:</label>
+                    <div class="card mx-auto" style="width: 150px; max-height: 150px">
+                      <img id="imgPreview" th:src="@{/userDefault}" class="card-img-top rounded-circle" style="max-height: 150px" alt="">
                     </div>
+
                   </div>
-                </div>
-                <br><br>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Foto de Perfil (Defecto)</label>
-                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                      <img id="imgPreview" th:src="@{/userDefault}" class="card-img-top rounded-circle" style="max-height: 250px">
-                    </div>
-                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
-                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                  </div>
-                  <br>
-                  <br>
 
                   <button type="submit" class="btn btn-outline-primary float-end">Crear</button>
                 </div>

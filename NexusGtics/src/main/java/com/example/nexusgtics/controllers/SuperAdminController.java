@@ -1,6 +1,8 @@
 package com.example.nexusgtics.controllers;
 
 import com.example.nexusgtics.entity.Archivo;
+import com.example.nexusgtics.entity.Cargo;
+import com.example.nexusgtics.entity.Empresa;
 import com.example.nexusgtics.entity.Usuario;
 import com.example.nexusgtics.repository.*;
 import jakarta.servlet.http.HttpSession;
@@ -21,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -182,59 +185,28 @@ public class SuperAdminController {
                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
-//        if (usuario.getId()==null){
-//            usuario.setContrasenia(new BCryptPasswordEncoder().encode("123"));
-//        }
+
         System.out.println("El tamaño de la imagen es: ");
         System.out.println(file.getSize());
 
-        /*Creo que es para Hashear la contraseña*/
+        //poner contraseña a lo mismo que el correo hasta antes del @
         if (usuario.getId()==null){
             String mail = usuario.getCorreo();
             String[] partes = mail.split("@");
             String password = partes[0];
             usuario.setContrasenia(new BCryptPasswordEncoder().encode(password));
         }
-        /*Validacion de correo: Por ahora no esta fino*/
-//        List<String> correos = usuarioRepository.listaCorreos();
-//        for (String correo : correos) {
-//            if (correo.equals(usuario.getCorreo())) {
-//                if (usuario.getId() == null){
-//                    model.addAttribute("msgEmail", "El correo electrónico ya existe");
-//                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
-//                    model.addAttribute("listaCargo", cargoRepository.findAll());
-//                    return "Superadmin/crearUsuario";
-//                } else {
-//                    model.addAttribute("msgEmail", "El correo electrónico ya existe");
-//                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
-//                    model.addAttribute("listaCargo", cargoRepository.findAll());
-//                    return "Superadmin/editarUsuario";
-//                }
-//
-//            }
-//        }
 
-        if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
-            model.addAttribute("msgCargo", "Escoger un cargo");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-
-            if (usuario.getId() == null) {
-                return "Superadmin/crearUsuario";
-            } else {
-                return "Superadmin/editarUsuario";
-            }
-        }
-        if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
-            model.addAttribute("msgEmpresa", "Escoger una empresa");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Superadmin/crearUsuario";
-            } else {
-                return "Superadmin/editarUsuario";
-            }
-        }
+        //poner los demás campos con los valores por defecto (para que ya no se manden como hidden)
+        usuario.setHabilitado(Boolean.TRUE);
+        ZoneId zonaHoraria = ZoneId.of("GMT-5");
+        LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+        usuario.setFechaRegistro(fechaActual);
+        usuario.setTecnicoConCuadrilla(Boolean.FALSE);
+        Cargo cargo = cargoRepository.getReferenceById(2);
+        usuario.setCargo(cargo);
+        Empresa empresa = empresaRepository.getReferenceById(1);
+        usuario.setEmpresa(empresa);
 
         /*Validación de imagen*/
         if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
@@ -250,11 +222,7 @@ public class SuperAdminController {
         /*Validación para evitar 2 puntos*/
         if (fileName1.contains("..") && !file.isEmpty()) {
             model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
-            if (usuario.getId() == null) {
-                return "Superadmin/crearUsuario";
-            } else {
-                return "Superadmin/editarUsuario";
-            }
+            return "Superadmin/crearUsuario";
         }
 
         /*Validación para archivos grande (NO FUNCIONA :C)*/
@@ -307,11 +275,9 @@ public class SuperAdminController {
                     archivoRepository.save(archivo1);
                     uploadObject(archivo1);
                 }
-                if (usuario.getId() == null) {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
-                } else {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
-                }
+                //mensaje de creación
+                attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+
                 usuarioRepository.save(usuario);
                 return "redirect:/superadmin/listaUsuario";
 
