@@ -258,7 +258,7 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/updateUsuario")
+    @PutMapping("/updateUsuario")
     public String updateUsuario(/*@RequestParam("imagenSubida") MultipartFile file,*/
                                 @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                                 Model model,
@@ -268,34 +268,84 @@ public class AdminController {
 //
 //        model.addAttribute("listaTickets",ticketRepository.listaTicketsModificado( 1, idSupervisor));
 
-        //validar que no se repitan los emails
-        Integer id = usuario.getId();
-
-        List<String> correos = usuarioRepository.listaCorreos2(id);
-        for (String correo : correos) {
-            if (correo.equals(usuario.getCorreo())) {
-                model.addAttribute("msgEmail", "El correo electrónico ya existe");
-                model.addAttribute("listaEmpresa", empresaRepository.findAll());
-                model.addAttribute("listaCargo", cargoRepository.findAll());
-                return "Administrador/editarUsuario";
+        try {
+            int id = usuario.getId();
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/admin/listaUsuario";
             }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                Usuario usuarioDb = optionalUsuario.get();    //se crea un usuarioDb al que se le pasarán los campos del form que fueron a usuario
+
+                //validar que no se repitan los emails
+                Integer id1 = usuario.getId();
+
+                List<String> correos = usuarioRepository.listaCorreos2(id1);
+                for (String correo : correos) {
+                    if (correo.equals(usuario.getCorreo())) {
+                        model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                        model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                        model.addAttribute("listaCargo", cargoRepository.findAll());
+                        return "Administrador/editarUsuario";
+                    }
+                }
+
+                if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
+                    model.addAttribute("msgCargo", "Escoger un cargo");
+                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                    model.addAttribute("listaCargo", cargoRepository.findAll());
+
+                    return "Administrador/editarUsuario";
+                }
+                if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
+                    model.addAttribute("msgEmpresa", "Escoger una empresa");
+                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                    model.addAttribute("listaCargo", cargoRepository.findAll());
+
+                    return "Administrador/editarUsuario";
+                }
+                if (!bindingResult.hasErrors()) {
+                    // Si no hay errores, se realiza el flujo normal
+                    if (usuario.getArchivo() == null) {
+                        usuario.setArchivo(new Archivo());
+                    }
+
+                    try {
+                        if (usuario.getId() == null) {
+                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+                        } else {
+                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                        }
+                        //pasar del intermdio al db
+                        usuarioDb.setNombre(usuario.getNombre());
+                        usuarioDb.setApellido(usuario.getApellido());
+                        usuarioDb.setCorreo(usuario.getCorreo());
+                        usuarioDb.setDni(usuario.getDni());
+                        usuarioDb.setDescripcion(usuario.getDescripcion());
+                        usuarioDb.setCargo(usuario.getCargo());
+                        usuarioRepository.save(usuarioDb);
+
+                        return "redirect:/admin/listaUsuario";
+
+                    } catch (Exception e) {
+                        System.out.println("Error al guardar el equipo");
+                        throw new RuntimeException(e);
+                    }
+                } else { //hay al menos 1 error
+                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                    model.addAttribute("listaCargo", cargoRepository.findAll());
+
+                    return "Administrador/editarUsuario";
+                }
+
+            } else {
+                return "redirect:/admin";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaUsuario";
         }
 
 
-        if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
-            model.addAttribute("msgCargo", "Escoger un cargo");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-
-            return "Administrador/editarUsuario";
-        }
-        if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
-            model.addAttribute("msgEmpresa", "Escoger una empresa");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-
-            return "Administrador/editarUsuario";
-        }
         //todo lo comentado es de foto que ya no se pide
         // Verificar si se cargó un nuevo archivo
 //        if (!file.isEmpty()) {
@@ -324,30 +374,6 @@ public class AdminController {
 //            }
 //        }
 
-        if (!bindingResult.hasErrors()) {
-            // Si no hay errores, se realiza el flujo normal
-            if (usuario.getArchivo() == null) {
-                usuario.setArchivo(new Archivo());
-            }
-
-            try {
-                if (usuario.getId() == null) {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
-                } else {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
-                }
-                usuarioRepository.save(usuario);
-                return "redirect:/admin/listaUsuario";
-            } catch (Exception e) {
-                System.out.println("Error al guardar el equipo");
-                throw new RuntimeException(e);
-            }
-        } else { //hay al menos 1 error
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-
-            return "Administrador/editarUsuario";
-        }
     }
 
     /*EDITAR USUARIO*/

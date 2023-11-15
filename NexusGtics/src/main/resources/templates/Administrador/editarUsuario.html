@@ -41,11 +41,13 @@
           <div class="alert alert-danger" role="alert" th:if="${msgEmail != null}" th:text="${msgEmail}">
             A simple success alert—check it out!
           </div>
+
           <form method="POST" th:action="@{/admin/updateUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+            <input type="hidden" name="_method" value="PUT">
             <div class="row">
               <div class="col-md-6">
                 <input type="hidden" class="form-control" th:field="*{id}">
-                <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
+<!--                <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">-->
 
                 <div class="mb-3">
                   <label class="form-label">Nombres:</label>
@@ -84,10 +86,10 @@
                 </div>
 
 
-                <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
-                <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
-                <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:field="*{fechaRegistro}">
-                <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" th:field="*{tecnicoConCuadrilla}">
+<!--                <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">-->
+<!--                <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">-->
+<!--                <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:field="*{fechaRegistro}">-->
+<!--                <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" th:field="*{tecnicoConCuadrilla}">-->
 
                 <div class="mb-3">
                   <label class="form-label">Descripción:</label>
