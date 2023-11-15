@@ -243,23 +243,13 @@ public class AdminController {
     }
 
     @PostMapping("/updateUsuario")
-    public String updateUsuario(@RequestParam("imagenSubida") MultipartFile file,
+    public String updateUsuario(/*@RequestParam("imagenSubida") MultipartFile file,*/
                                 @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                                 Model model,
                                 RedirectAttributes attr) {
         List<String> correos = usuarioRepository.listaCorreos();
         String correoActual = usuario.getCorreo();
 
-        if (!correoActual.equals(usuario.getCorreo())) {
-            for (String correo : correos) {
-                if (correo.equals(usuario.getCorreo())) {
-                    model.addAttribute("msgEmail", "El correo electrónico ya existe");
-                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
-                    model.addAttribute("listaCargo", cargoRepository.findAll());
-                    return "Administrador/crearUsuario";
-                }
-            }
-        }
 
         if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
             model.addAttribute("msgCargo", "Escoger un cargo");
@@ -282,32 +272,33 @@ public class AdminController {
                 return "Administrador/editarUsuario";
             }
         }
+        //todo lo comentado es de foto que ya no se pide
         // Verificar si se cargó un nuevo archivo
-        if (!file.isEmpty()) {
-            try {
-                // Procesar el archivo
-                Archivo archivo = new Archivo();
-                archivo.setNombre(file.getOriginalFilename());
-                archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-                archivoRepository.save(archivo);
-
-                // Asignar el nuevo archivo al equipo
-                usuario.setArchivo(archivo);
-            } catch (IOException e) {
-                System.out.println("Error al procesar el archivo");
-                throw new RuntimeException(e);
-            }
-        }
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
-            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
-        }
+//        if (!file.isEmpty()) {
+//            try {
+//                // Procesar el archivo
+//                Archivo archivo = new Archivo();
+//                archivo.setNombre(file.getOriginalFilename());
+//                archivo.setTipo(1);
+//                archivo.setArchivo(file.getBytes());
+//                archivo.setContentType(file.getContentType());
+//                archivoRepository.save(archivo);
+//
+//                // Asignar el nuevo archivo al equipo
+//                usuario.setArchivo(archivo);
+//            } catch (IOException e) {
+//                System.out.println("Error al procesar el archivo");
+//                throw new RuntimeException(e);
+//            }
+//        }
+//        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+//            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+//            if (usuario.getId() == null) {
+//                return "Administrador/crearUsuario";
+//            } else {
+//                return "Administrador/editarUsuario";
+//            }
+//        }
 
         if (!bindingResult.hasErrors()) {
             // Si no hay errores, se realiza el flujo normal

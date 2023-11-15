@@ -185,7 +185,7 @@ public class SuperAdminController {
                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
-//          todo lo comentado tiene relación con imagen
+//          todo lo comentado es de foto que y no se pide
 //        System.out.println("El tamaño de la imagen es: ");
 //        System.out.println(file.getSize());
 
@@ -354,32 +354,32 @@ public class SuperAdminController {
 
     /* Actualizar información de los ADMINISTRADORES */
     @PostMapping("/updateUsuario")
-    public String updateUsuario(@RequestParam("imagenSubida") MultipartFile file,
+    public String updateUsuario(/*@RequestParam("imagenSubida") MultipartFile file,*/
                                 @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                                 Model model,
                                 RedirectAttributes attr){
-
-        /*Validación de imagen*/
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
-            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-            return "Superadmin/editarUsuario";
-        }
-
-
-        String fileName1 = file.getOriginalFilename();
-        /*Validación para evitar 2 puntos*/
-        if (fileName1.contains("..") && !file.isEmpty()) {
-            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
-            return "Superadmin/editarUsuario";
-        }
-
-        /*Validación para archivos grande (NO FUNCIONA :C)*/
-        int maxFileSize = 10485760;
-        if (file.getSize() > maxFileSize && !file.isEmpty()) {
-            System.out.println(file.getSize());
-            model.addAttribute("msgImagen", "El archivo subido excede el tamaño máximo permitido (10MB).");
-            return "redirect:/superadmin/editarUsuario";
-        }
+//          todo lo comentado es de foto que ya no se pide
+//        /*Validación de imagen*/
+//        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
+//            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+//            return "Superadmin/editarUsuario";
+//        }
+//
+//
+//        String fileName1 = file.getOriginalFilename();
+//        /*Validación para evitar 2 puntos*/
+//        if (fileName1.contains("..") && !file.isEmpty()) {
+//            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
+//            return "Superadmin/editarUsuario";
+//        }
+//
+//        /*Validación para archivos grande (NO FUNCIONA :C)*/
+//        int maxFileSize = 10485760;
+//        if (file.getSize() > maxFileSize && !file.isEmpty()) {
+//            System.out.println(file.getSize());
+//            model.addAttribute("msgImagen", "El archivo subido excede el tamaño máximo permitido (10MB).");
+//            return "redirect:/superadmin/editarUsuario";
+//        }
 
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
@@ -388,25 +388,25 @@ public class SuperAdminController {
             }
             try{
                 /*Si file contiene algo --> Guardarlo*/
-                if(file.getSize() > 0 && !file.isEmpty()){
-                    // Obtenemos el nombre del archivo
-                    String fileName = file.getOriginalFilename();
-                    String extension = "";
-                    int i = fileName.lastIndexOf('.');
-                    if (i > 0) {
-                        extension = fileName.substring(i+1);
-                    }
-                    Archivo archivo = usuario.getArchivo();
-                    archivo.setNombre(fileName);
-                    archivo.setTipo(1);
-                    archivo.setArchivo(file.getBytes());
-                    archivo.setContentType(file.getContentType());
-                    Archivo archivo1 = archivoRepository.save(archivo);
-                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
-                    archivo1.setNombre(nombreArchivo);
-                    archivoRepository.save(archivo1);
-                    uploadObject(archivo1);
-                }
+//                if(file.getSize() > 0 && !file.isEmpty()){
+//                    // Obtenemos el nombre del archivo
+//                    String fileName = file.getOriginalFilename();
+//                    String extension = "";
+//                    int i = fileName.lastIndexOf('.');
+//                    if (i > 0) {
+//                        extension = fileName.substring(i+1);
+//                    }
+//                    Archivo archivo = usuario.getArchivo();
+//                    archivo.setNombre(fileName);
+//                    archivo.setTipo(1);
+//                    archivo.setArchivo(file.getBytes());
+//                    archivo.setContentType(file.getContentType());
+//                    Archivo archivo1 = archivoRepository.save(archivo);
+//                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
+//                    archivo1.setNombre(nombreArchivo);
+//                    archivoRepository.save(archivo1);
+//                    uploadObject(archivo1);
+//                }
                 if (usuario.getId() == null) {
                     attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
                 } else {
@@ -415,13 +415,11 @@ public class SuperAdminController {
                 usuarioRepository.save(usuario);
                 return "redirect:/superadmin/listaUsuario";
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 
         } else { //hay al menos 1 error
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
             return "Superadmin/editarUsuario";
         }
     }
