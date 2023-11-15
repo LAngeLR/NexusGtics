@@ -181,13 +181,13 @@ public class SuperAdminController {
 
     /*CREAR NUEVO USUARIO --> Nuevo Administrador*/
     @PostMapping("/saveUsuario")
-    public String saveUsuario(@RequestParam("imagenSubida") MultipartFile file,
+    public String saveUsuario(//@RequestParam("imagenSubida") MultipartFile file,
                               @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
-
-        System.out.println("El tamaño de la imagen es: ");
-        System.out.println(file.getSize());
+//          todo lo comentado tiene relación con imagen
+//        System.out.println("El tamaño de la imagen es: ");
+//        System.out.println(file.getSize());
 
         //poner contraseña a lo mismo que el correo hasta antes del @
         if (usuario.getId()==null){
@@ -209,33 +209,33 @@ public class SuperAdminController {
         usuario.setEmpresa(empresa);
 
         /*Validación de imagen*/
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
-            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-            if (usuario.getId() == null) {
-                return "Superadmin/crearUsuario";
-            } else {
-                return "Superadmin/editarUsuario";
-            }
-        }
+//        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
+//            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+//            if (usuario.getId() == null) {
+//                return "Superadmin/crearUsuario";
+//            } else {
+//                return "Superadmin/editarUsuario";
+//            }
+//        }
 
-        String fileName1 = file.getOriginalFilename();
-        /*Validación para evitar 2 puntos*/
-        if (fileName1.contains("..") && !file.isEmpty()) {
-            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
-            return "Superadmin/crearUsuario";
-        }
+//        String fileName1 = file.getOriginalFilename();
+//        /*Validación para evitar 2 puntos*/
+//        if (fileName1.contains("..") && !file.isEmpty()) {
+//            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
+//            return "Superadmin/crearUsuario";
+//        }
 
         /*Validación para archivos grande (NO FUNCIONA :C)*/
-        int maxFileSize = 10485760;
-        if (file.getSize() > maxFileSize && !file.isEmpty()) {
-            System.out.println(file.getSize());
-            model.addAttribute("msgImagen", "El archivo subido excede el tamaño máximo permitido (10MB).");
-            if (usuario.getId() == null) {
-                return "Superadmin/perfil";
-            } else {
-                return "redirect:/superadmin/editarUsuario";
-            }
-        }
+//        int maxFileSize = 10485760;
+//        if (file.getSize() > maxFileSize && !file.isEmpty()) {
+//            System.out.println(file.getSize());
+//            model.addAttribute("msgImagen", "El archivo subido excede el tamaño máximo permitido (10MB).");
+//            if (usuario.getId() == null) {
+//                return "Superadmin/perfil";
+//            } else {
+//                return "redirect:/superadmin/editarUsuario";
+//            }
+//        }
 
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
@@ -244,37 +244,48 @@ public class SuperAdminController {
             }
             try{
                 /*Si file contiene algo --> Guardarlo*/
-                if(file.getSize() > 0 && !file.isEmpty()){
-                    // Obtenemos el nombre del archivo
-                    String fileName = file.getOriginalFilename();
-                    String extension = "";
-                    int i = fileName.lastIndexOf('.');
-                    if (i > 0) {
-                        extension = fileName.substring(i+1);
-                    }
-                    Archivo archivo = usuario.getArchivo();
-                    archivo.setNombre(fileName);
-                    archivo.setTipo(1);
-                    archivo.setArchivo(file.getBytes());
-                    archivo.setContentType(file.getContentType());
-                    Archivo archivo1 = archivoRepository.save(archivo);
-                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
-                    archivo1.setNombre(nombreArchivo);
-                    archivoRepository.save(archivo1);
-                    uploadObject(archivo1);
-                } else{
-                    Archivo archivo = usuario.getArchivo();
-                    archivo.setNombre("fotoPerfil");
-                    archivo.setTipo(1);
-                    byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "userDefault.png");
-                    archivo.setArchivo(image);
-                    archivo.setContentType("image/png");
-                    Archivo archivo1 = archivoRepository.save(archivo);
-                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";
-                    archivo1.setNombre(nombreArchivo);
-                    archivoRepository.save(archivo1);
-                    uploadObject(archivo1);
-                }
+//                if(file.getSize() > 0 && !file.isEmpty()){
+//                    // Obtenemos el nombre del archivo
+//                    String fileName = file.getOriginalFilename();
+//                    String extension = "";
+//                    int i = fileName.lastIndexOf('.');
+//                    if (i > 0) {
+//                        extension = fileName.substring(i+1);
+//                    }
+//                    Archivo archivo = usuario.getArchivo();
+//                    archivo.setNombre(fileName);
+//                    archivo.setTipo(1);
+//                    archivo.setArchivo(file.getBytes());
+//                    archivo.setContentType(file.getContentType());
+//                    Archivo archivo1 = archivoRepository.save(archivo);
+//                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
+//                    archivo1.setNombre(nombreArchivo);
+//                    archivoRepository.save(archivo1);
+//                    uploadObject(archivo1);
+//                } else{
+//                    Archivo archivo = usuario.getArchivo();
+//                    archivo.setNombre("fotoPerfil");
+//                    archivo.setTipo(1);
+//                    byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "userDefault.png");
+//                    archivo.setArchivo(image);
+//                    archivo.setContentType("image/png");
+//                    Archivo archivo1 = archivoRepository.save(archivo);
+//                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";
+//                    archivo1.setNombre(nombreArchivo);
+//                    archivoRepository.save(archivo1);
+//                    uploadObject(archivo1);
+//                }
+                Archivo archivo = usuario.getArchivo();
+                archivo.setNombre("fotoPerfil");
+                archivo.setTipo(1);
+                byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "userDefault.png");
+                archivo.setArchivo(image);
+                archivo.setContentType("image/png");
+                Archivo archivo1 = archivoRepository.save(archivo);
+                String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";
+                archivo1.setNombre(nombreArchivo);
+                archivoRepository.save(archivo1);
+                uploadObject(archivo1);
                 //mensaje de creación
                 attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
 

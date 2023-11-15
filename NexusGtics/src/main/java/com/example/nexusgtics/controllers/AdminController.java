@@ -170,8 +170,7 @@ public class AdminController {
     }
     /*CREAR NUEVO USUARIO*/
     @PostMapping("/saveUsuario")
-    public String saveUsuario(@RequestParam("imagenSubida") MultipartFile file,
-                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+    public String saveUsuario(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
         //poner contraseña a lo mismo que el correo hasta antes del @
@@ -189,16 +188,6 @@ public class AdminController {
         usuario.setFechaRegistro(fechaActual);
         usuario.setTecnicoConCuadrilla(Boolean.FALSE);
 
-        //validar que no se repitan los emails
-//        List<String> correos = usuarioRepository.listaCorreos();
-//        for (String correo : correos) {
-//            if (correo.equals(usuario.getCorreo())) {
-//                model.addAttribute("msgEmail", "El correo electrónico ya existe");
-//                model.addAttribute("listaEmpresa", empresaRepository.findAll());
-//                model.addAttribute("listaCargo", cargoRepository.findAll());
-//                return "Administrador/crearUsuario";
-//            }
-//        }
 
         //para "guardar" lo seleccionado y poder mostrarlo cuando haya un error y no tener que ponerlo de nuevo
         Cargo cargoSeleccionado = usuario.getCargo();

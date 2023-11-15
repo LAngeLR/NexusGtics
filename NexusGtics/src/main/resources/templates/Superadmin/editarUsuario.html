@@ -47,6 +47,16 @@
                     <form method="POST" th:action="@{/superadmin/updateUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row">
                             <div class="col-md-6">
+                                <input type="hidden" class="form-control" th:field="*{id}">
+                                <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
+                                <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
+                                <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
+                                <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:field="*{fechaRegistro}">
+                                <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" th:field="*{tecnicoConCuadrilla}">
+                                <input type="hidden" name="descripcion" id="descripcion" th:field="*{descripcion}">
+                                <input type="hidden" name="cargo" id="cargo" th:field="*{cargo}">
+                                <input type="hidden" name="empresa" id="empresa" th:field="*{empresa}">
+                                <input type="hidden" name="correo" id="correo" th:field="*{correo}">
                                 <div class="mb-3">
                                     <label class="form-label">Nombres:</label>
                                     <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
@@ -64,15 +74,6 @@
                                         Mensaje de error de nombre
                                     </div>
                                 </div>
-
-<!--                                <div class="mb-3">-->
-<!--                                    <label class="form-label">Correo:</label>-->
-<!--                                    <input th:field="*{correo}" type="text" th:class="${#fields.hasErrors('correo')?'form-control is-invalid':'form-control'}"/>-->
-<!--                                    <div class="invalid-feedback"-->
-<!--                                         th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">-->
-<!--                                        Mensaje de error de correo-->
-<!--                                    </div>-->
-<!--                                </div>-->
 
                                 <div class="mb-3">
                                     <label class="form-label">DNI:</label>
