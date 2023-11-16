@@ -92,4 +92,16 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE idUsuarioCreador = ?1 and idTipoTicket=1")
     List<Ticket> listaTicketsModificados(int idAnalista);
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM usuarios WHERE idEmpresas != 1 AND MONTH(fechaRegistro) = MONTH(NOW());")
+    int numeroClientesActual();
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM usuarios WHERE idEmpresas != 1 AND MONTH(fechaRegistro) = MONTH(DATE_SUB(NOW(), INTERVAL 1 MONTH));")
+    int numeroClientesAnterior();
+
+    @Query(nativeQuery = true, value = "SELECT\n" +
+            "    ((SELECT COUNT(*) FROM usuarios WHERE idEmpresas != 1 AND MONTH(fechaRegistro) = MONTH(NOW())) -\n" +
+            "    (SELECT COUNT(*) FROM usuarios WHERE idEmpresas != 1 AND MONTH(fechaRegistro) = MONTH(DATE_SUB(NOW(), INTERVAL 1 MONTH)))) /\n" +
+            "    (SELECT COUNT(*) FROM usuarios WHERE idEmpresas != 1 AND MONTH(fechaRegistro) = MONTH(DATE_SUB(NOW(), INTERVAL 1 MONTH))) * 100 as diferencia_porcentaje;")
+    int diferenciaRegistros();
 }

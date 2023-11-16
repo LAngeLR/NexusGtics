@@ -62,7 +62,7 @@
 
         <section class="section dashboard">
             <div class="row">
-                <div class="rounded p-5" style="background-color: #FFFFFF;">
+
                     <div class="pagetitle">
                         <h1 class="card-title">Editar ticket</h1>
                     </div>
@@ -99,22 +99,17 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Fecha de Cierre</label>
-                                    <input th:field="*{fechaCierre}" type="date" th:class="${#fields.hasErrors('fechaCierre')?'form-control is-invalid':'form-control'}"/>
-                                    <div class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('fechaCierre')}" th:errors="*{fechaCierre}">
-                                        Mensaje de error de correo
-                                    </div>
+                                    <label class="form-label">Fecha de Cierre: </label>
+                                    <!-- Muestra la fecha formateada en el label -->
+                                    <label th:text="${fechaCierreFormateada}" class="form-label"></label>
+
+                                    <!-- Mantén el campo de entrada de fecha si es necesario -->
+                                    <input th:value="${fechaCierreFormateada}" th:field="*{fechaCierre}" type="date" th:class="${#fields.hasErrors('fechaCierre')?'form-control is-invalid':'form-control'}"/>
+
+                                    <!-- Nuevo elemento para mostrar la fecha formateada -->
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('fechaCierre')}" th:errors="*{fechaCierre}"></div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Usuario Solicitante</label>
-                                    <input th:field="*{fechaCierre}" type="text" th:class="${#fields.hasErrors('fechaCierre')?'form-control is-invalid':'form-control'}"/>
-                                    <div class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('fechaCierre')}" th:errors="*{fechaCierre}">
-                                        Mensaje de error de correo
-                                    </div>
-                                </div>
                             </div>
 
                             <br><br>
@@ -158,8 +153,6 @@
                 </div>
                 <br><br>
 
-
-            </div>
         </section>
         <br>
 

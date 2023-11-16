@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -578,6 +579,10 @@ public class AnalistaOYMController {
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         System.out.println(ticket.getFechaCierre());
 
+        if (ticket.getFechaCierre() == null) {
+            bindingResult.rejectValue("fechaCierre", "error.ticket", "La fecha de cierre es obligatoria.");
+        }
+
         if(ticket.getIdEmpresaAsignada() == null || ticket.getIdEmpresaAsignada().equals("-1")){
             model.addAttribute("msgEmpresa", "Escoger una empresa");
             if(ticket.getIdTickets()==null){
@@ -603,6 +608,13 @@ public class AnalistaOYMController {
 
             }else{
                 return "AnalistaOYM/oymEditarTicket";            }
+        }
+        if (bindingResult.hasErrors()) {
+            // Si hay errores, vuelve a la vista mostrando los errores y los datos ingresados por el usuario
+            model.addAttribute("msgFechaCierre", "La fecha de cierre es obligatoria.");
+            model.addAttribute("idEmpresaAsignada", ticket.getIdEmpresaAsignada());
+            model.addAttribute("idSitios", ticket.getIdSitios());
+            return "AnalistaOYM/oymEditarTicket";
         }
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
@@ -637,6 +649,12 @@ public class AnalistaOYMController {
         Optional<Ticket> optTicket = ticketRepository.findById(id);
         if(optTicket.isPresent()){
             Ticket ticket = optTicket.get();
+
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String fechaCierreFormateada = ticket.getFechaCierre().format(formatter);
+
+            model.addAttribute("fechaCierreFormateada", fechaCierreFormateada);
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaSitios", sitioRepository.findAll());
@@ -678,7 +696,9 @@ public class AnalistaOYMController {
         model.addAttribute("ticketsRecienCreados", ticketRepository.recienCreados(idAnalista));
         model.addAttribute("cantidadEquipos", equipoRepository.obtenerEquiposMarca());
         model.addAttribute("culminados", ticketRepository.creadosCulminados(idAnalista,7));
-
+        model.addAttribute("numeroClientesActual", ticketRepository.numeroClientesActual());
+        model.addAttribute("numeroClientesAnterior", ticketRepository.numeroClientesAnterior());
+        model.addAttribute("diferenciaRegistros", ticketRepository.diferenciaRegistros());
         return "AnalistaOYM/oymDashboard";
     }
 
