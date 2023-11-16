@@ -57,8 +57,17 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE estado NOT IN (1,2,7) and idSupervisorEncargado = 5 AND idEmpresaAsignada=3 and idCuadrilla=1")
     List<Ticket> listaTicketsAsignado();
 
-    @Query(nativeQuery = true, value = " SELECT COUNT(*) AS total_tickets FROM tickets ")
-    List<Ticket> cantidadTickets();
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS total_tickets FROM tickets")
+    int cantidadTickets();
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS total_tickets FROM tickets WHERE estado=3")
+    int cantidadTicketsnuevos();
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS total_empresa FROM empresas")
+    int cantidadEmpresas();
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS total_cuadrilla FROM tickets where idCuadrilla=2")
+    int cantidadCuadrilla();
 
     @Query(nativeQuery = true, value = "SELECT * FROM nexus.tickets where estado not IN (1,2,7)")
     List<Ticket> listarmapa();

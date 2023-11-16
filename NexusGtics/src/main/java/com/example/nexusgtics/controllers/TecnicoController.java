@@ -43,6 +43,7 @@ public class TecnicoController {
     private final PasswordEncoder passwordEncoder;
     @Autowired
     private TecnicosCuadrillaRepository tecnicosCuadrillaRepository;
+    private EquipoRepository equipoRepository;
 
 
     public TecnicoController(TicketRepository ticketRepository,
@@ -319,16 +320,33 @@ public class TecnicoController {
     //-----------------------------------------------------------------------
     @GetMapping("/dashboard")
     public String pagdashboard(Model model) {
-        List<Ticket> listaT = ticketRepository.findAll();
+        // Obtener la cantidad total de tickets
+        int totalTickets = ticketRepository.cantidadTickets();
+        model.addAttribute("totalTickets", totalTickets);
+
+        // Obtener la cantidad total de tickets nuevos
+        int ticketsnuevos = ticketRepository.cantidadTicketsnuevos();
+        model.addAttribute("totalTicketsNuevos", ticketsnuevos);
+
+        // Obtener la cantidad total de empresas nuevos
+        int totalEmpresas = ticketRepository.cantidadEmpresas();
+        model.addAttribute("totalempresas", totalEmpresas);
+
+        // Obtener la cantidad total de empresas nuevos
+        int totalCuadrillas = ticketRepository.cantidadCuadrilla();
+        model.addAttribute("totalCuadrillas", totalCuadrillas);
+
+        // Obtener la lista de tickets
+        List<Ticket> listaT = ticketRepository.listaTicketsAsignado();
         model.addAttribute("listaTicket", listaT);
-        List<Ticket> listTic = ticketRepository.cantidadTickets();
-        model.addAttribute("cant", listTic);
+
+        // Obtener la lista de tickets por estado
         List<Ticket> lista = ticketRepository.listarEstado();
         model.addAttribute("ticketList", lista);
-        //List<Ticket> listaT = ticketRepository.listarEstado();
-        //model.addAttribute("listaTicket", listaT);
+
         return "Tecnico/dashboard";
     }
+
 
     //YA ESTA CRUD LISTAR
     @GetMapping("/ticketasignado")
