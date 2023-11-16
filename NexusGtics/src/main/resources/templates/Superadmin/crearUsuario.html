@@ -43,7 +43,6 @@
                     <form method="POST" th:action="@{/superadmin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row">
                             <div class="col-md-6">
-                                <input type="hidden" class="form-control" name="idJuego" id="idJuego">
                                 <div class="mb-3">
                                     <label class="form-label">Nombres:</label>
                                     <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
@@ -80,27 +79,6 @@
                                     </div>
                                 </div>
 
-                                <input type="hidden" name="contrasenia" id="contrasenia" th:value="${codigoAleatorio}">
-
-                                <input type="hidden" name="habilitado" id="habilitado" value="1">
-
-                                <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:value="${fechaActual}">
-                                <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" value="0">
-
-                                <input type="hidden" name="cargo" id="cargo" value="2">
-                                <input type="hidden" name="empresa" id="empresa" value="1">
-
-                                <div class="mb-3">
-                                    <p class="form-label">Cargo (no modificable):</p>
-                                    <p class="form-control">Administrador</p>
-                                </div>
-
-                                <div class="mb-3">
-                                    <p class="form-label">Empresa (no modificable):</p>
-                                    <p class="form-control">Nexus</p>
-                                </div>
-
-
                                 <div class="mb-3">
                                     <label class="form-label">Descripción:</label>
                                     <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
@@ -113,13 +91,24 @@
                             <br><br>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="imagenSubida" class="form-label">Foto de Perfil:</label>
-                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img id="imgPreview" th:src="@{/userDefault}" class="card-img-top rounded-circle" style="max-height: 250px">
-                                    </div>
-                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
-                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                                    <p class="form-label">Cargo (no modificable):</p>
+                                    <p class="form-control bg-dark-subtle">Administrador</p>
                                 </div>
+
+                                <div class="mb-3">
+                                    <p class="form-label">Empresa (no modificable):</p>
+                                    <p class="form-control bg-dark-subtle">Nexus</p>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Foto de perfil por defecto:</label>
+                                    <div class="card mx-auto" style="width: 150px; max-height: 150px">
+                                        <img id="imgPreview" th:src="@{/userDefault}" class="card-img-top rounded-circle" style="max-height: 150px">
+                                    </div>
+                                </div>
+
+                                <br>
+                                <br>
 
                                 <button type="submit" class="btn btn-outline-primary float-end">Crear</button>
                             </div>
@@ -194,6 +183,9 @@
             };
 
             reader.readAsDataURL(input.files[0]);
+        }else {
+            // No se seleccionó ningún archivo, establecer una imagen por defecto
+            img.src = '/userDefault'; // Ajusta la ruta según sea necesario
         }
     }
 </script>

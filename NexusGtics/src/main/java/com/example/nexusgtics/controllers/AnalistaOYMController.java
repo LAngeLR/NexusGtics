@@ -576,6 +576,7 @@ public class AnalistaOYMController {
                              Model model, HttpSession httpSession){
 
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        System.out.println(ticket.getFechaCierre());
 
         if(ticket.getIdEmpresaAsignada() == null || ticket.getIdEmpresaAsignada().equals("-1")){
             model.addAttribute("msgEmpresa", "Escoger una empresa");

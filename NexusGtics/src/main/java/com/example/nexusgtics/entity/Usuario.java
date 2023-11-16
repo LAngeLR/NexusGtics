@@ -59,7 +59,7 @@ public class Usuario implements Serializable {
     @JoinColumn(name = "idEmpresas", nullable = false)
     private Empresa empresa;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idImagenPerfil")
     private Archivo archivo;
 

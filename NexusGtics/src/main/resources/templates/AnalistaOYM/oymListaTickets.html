@@ -67,6 +67,9 @@
           <div class="card-body table-responsive">
             <h5 class="card-title">Lista de tickets</h5>
 
+            <div class="alert alert-success" role="alert" th:if="${msg1 != null}" th:text="${msg1}">
+              A simple success alert—check it out!
+            </div>
             <!-- Table with stripped rows -->
             <table class="table datatable">
               <thead>

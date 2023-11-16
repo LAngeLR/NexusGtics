@@ -26,13 +26,15 @@ import java.util.List;
 import java.util.Optional;
 import java.math.RoundingMode;
 
+import static com.example.nexusgtics.controllers.GcsController.downloadObject;
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
+import static java.lang.Integer.parseInt;
+import static org.aspectj.runtime.internal.Conversions.intValue;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    @Autowired
-    private HttpSession session;
+    private final HttpSession session;
 
     final EmpresaRepository empresaRepository;
     final SitioRepository sitioRepository;
@@ -49,7 +51,7 @@ public class AdminController {
                            EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository,
                            UsuarioRepository usuarioRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository,
                            CargoRepository cargoRepository, PasswordEncoder passwordEncoder,
-                           TicketRepository ticketRepository, ArchivoRepository archivoRepository) {
+                           TicketRepository ticketRepository, ArchivoRepository archivoRepository, HttpSession session) {
         this.empresaRepository = empresaRepository;
         this.sitioRepository = sitioRepository;
         this.equipoRepository = equipoRepository;
@@ -60,13 +62,14 @@ public class AdminController {
         this.ticketRepository = ticketRepository;
         this.archivoRepository = archivoRepository;
         this.passwordEncoder = passwordEncoder;
+        this.session = session;
     }
 
     @GetMapping({"/", "", "admin", "administrador"})
     public String paginaPrincipal(Model model, HttpSession httpSession) {
         model.addAttribute("currentPage", "Inicio");
-        Usuario user = (Usuario) session.getAttribute("usuario");
-        System.out.println("User: "+ user.getNombre());
+        //Usuario user = (Usuario) session.getAttribute("usuario");
+        //System.out.println("User: "+ user.getNombre());
         return "Administrador/admin";
     }
 
@@ -123,11 +126,12 @@ public class AdminController {
         return "redirect:/admin/listaBaneados";
     }
 
+    /* DIRECCIONA A LA VISTA PARA VER DETALLES DEL "USUARIO" */
     @GetMapping({"/verUsuario", "verusuario"})
     public String verUsuario(Model model, @RequestParam("id") String idStr) {
 
         try {
-            int id = Integer.parseInt(idStr);
+            int id = parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/admin/listaUsuario";
             }
@@ -145,6 +149,8 @@ public class AdminController {
             return "Administrador/crearUsuario";
         }
     }
+
+    /* DIRECCIONA AL FORMULARIO DE CREAR USUARIO */
     @GetMapping({"/crearUsuario", "crearusuario"})
     public String crearUsuario(Model model,
                                @ModelAttribute("usuario") Usuario usuario) {
@@ -167,17 +173,14 @@ public class AdminController {
         model.addAttribute("empresaSeleccionada", empresaSeleccionada);
         return "Administrador/crearUsuario";
     }
+
+
     /*CREAR NUEVO USUARIO*/
-    @PostMapping("/Usuario")
-    public String saveUsuario(@RequestParam("imagenSubida") MultipartFile file,
-                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+    @PostMapping("/saveUsuario")
+    public String saveUsuario(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr){
-       //si usuario es nuevo poner contrasnia a'123'
-//        if (usuario.getId()==null){
-//            usuario.setContrasenia(new BCryptPasswordEncoder().encode("123"));
-//        }
-
+        //poner contraseña a lo mismo que el correo hasta antes del @
         if (usuario.getId()==null){
             String mail = usuario.getCorreo();
             String[] partes = mail.split("@");
@@ -185,7 +188,38 @@ public class AdminController {
             usuario.setContrasenia(new BCryptPasswordEncoder().encode(password));
         }
 
+        //poner los demás campos con los valores por defecto (para que ya no se manden como hidden)
+        usuario.setHabilitado(Boolean.TRUE);
+        ZoneId zonaHoraria = ZoneId.of("GMT-5");
+        LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+        usuario.setFechaRegistro(fechaActual);
+        usuario.setTecnicoConCuadrilla(Boolean.FALSE);
+
+
+        //para "guardar" lo seleccionado y poder mostrarlo cuando haya un error y no tener que ponerlo de nuevo
+        Cargo cargoSeleccionado = usuario.getCargo();
+        Empresa empresaSeleccionada = usuario.getEmpresa();
+        model.addAttribute("cargoSeleccionado", cargoSeleccionado);
+        model.addAttribute("empresaSeleccionada", empresaSeleccionada);
+        //TODAS LAS VALIDACIONES DESPUÉS DE AQUÍ
+
+        if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
+            model.addAttribute("msgCargo", "Escoger un cargo");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+
+            return "Administrador/crearUsuario";
+        }
+        if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
+            model.addAttribute("msgEmpresa", "Escoger una empresa");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            return "Administrador/crearUsuario";
+        }
+
+        //validar que no se repitan los emails (se pone después de cargoSeleccionado para que se aplique lo anterior antes)
         List<String> correos = usuarioRepository.listaCorreos();
+        String correoActual = usuario.getCorreo();
         for (String correo : correos) {
             if (correo.equals(usuario.getCorreo())) {
                 model.addAttribute("msgEmail", "El correo electrónico ya existe");
@@ -195,70 +229,27 @@ public class AdminController {
             }
         }
 
-        //para "guardar" lo seleccionado y poder mostrarlo cuando haya un error y no tener q ponerlo de nuevo
-        Cargo cargoSeleccionado = usuario.getCargo();
-        Empresa empresaSeleccionada = usuario.getEmpresa();
-        model.addAttribute("cargoSeleccionado", cargoSeleccionado);
-        model.addAttribute("empresaSeleccionada", empresaSeleccionada);
-        if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
-            model.addAttribute("msgCargo", "Escoger un cargo");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
-        }
-        if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
-            model.addAttribute("msgEmpresa", "Escoger una empresa");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
-        }
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
-            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
-        }
-
-        if (file.getSize() > 10 * 1024 * 1024) {
-            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
-            if (usuario.getId() == null) {
-                return "Superadmin/perfil";
-            } else {
-                return "Superadmin/perfilEditar";
-            }
-        }
-
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (usuario.getArchivo() == null) {
                 usuario.setArchivo(new Archivo());
             }
-            String fileName = file.getOriginalFilename();
+
             try {
-                //validación de nombre, apellido y correo
+                //guardar foto por defecto
                 Archivo archivo = usuario.getArchivo();
-                archivo.setNombre(fileName);
+                archivo.setNombre("fotoPerfil");
                 archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-                archivoRepository.save(archivo);
-                int idImagen = archivo.getIdArchivos();
-                usuario.getArchivo().setIdArchivos(idImagen);
-                if (usuario.getId() == null) {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
-                } else {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
-                }
+                byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "userDefault.png");
+                //archivo.setArchivo(image);
+                archivo.setContentType("image/png");
+                Archivo archivo1 = archivoRepository.save(archivo);
+                String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";
+                archivo1.setNombre(nombreArchivo);
+                archivoRepository.save(archivo1);
+                uploadObject(archivo1);
+
+//              mensaje de creación
+                attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
                 usuarioRepository.save(usuario);
                 return "redirect:/admin/listaUsuario";
             } catch (IOException e) {
@@ -268,108 +259,126 @@ public class AdminController {
         } else { //hay al menos 1 error
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
+            return "Administrador/crearUsuario";
         }
     }
 
-    @PostMapping("/updateUsuario")
-    public String updateUsuario(@RequestParam("imagenSubida") MultipartFile file,
+    @PutMapping("/updateUsuario")
+    public String updateUsuario(/*@RequestParam("imagenSubida") MultipartFile file,*/
                                 @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                                 Model model,
                                 RedirectAttributes attr) {
-        List<String> correos = usuarioRepository.listaCorreos();
-        String correoActual = usuario.getCorreo();
+//        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+//        Integer idSupervisor = u.getId();
+//
+//        model.addAttribute("listaTickets",ticketRepository.listaTicketsModificado( 1, idSupervisor));
 
-        if (!correoActual.equals(usuario.getCorreo())) {
-            for (String correo : correos) {
-                if (correo.equals(usuario.getCorreo())) {
-                    model.addAttribute("msgEmail", "El correo electrónico ya existe");
+        try {
+            int id = usuario.getId();
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/admin/listaUsuario";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                Usuario usuarioDb = optionalUsuario.get();    //se crea un usuarioDb al que se le pasarán los campos del form que fueron a usuario
+
+                //validar que no se repitan los emails
+                Integer id1 = usuario.getId();
+
+                List<String> correos = usuarioRepository.listaCorreos2(id1);
+                for (String correo : correos) {
+                    if (correo.equals(usuario.getCorreo())) {
+                        model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                        model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                        model.addAttribute("listaCargo", cargoRepository.findAll());
+                        return "Administrador/editarUsuario";
+                    }
+                }
+
+                if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
+                    model.addAttribute("msgCargo", "Escoger un cargo");
                     model.addAttribute("listaEmpresa", empresaRepository.findAll());
                     model.addAttribute("listaCargo", cargoRepository.findAll());
-                    return "Administrador/crearUsuario";
+
+                    return "Administrador/editarUsuario";
                 }
+                if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
+                    model.addAttribute("msgEmpresa", "Escoger una empresa");
+                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                    model.addAttribute("listaCargo", cargoRepository.findAll());
+
+                    return "Administrador/editarUsuario";
+                }
+                if (!bindingResult.hasErrors()) {
+                    // Si no hay errores, se realiza el flujo normal
+                    if (usuario.getArchivo() == null) {
+                        usuario.setArchivo(new Archivo());
+                    }
+
+                    try {
+                        if (usuario.getId() == null) {
+                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+                        } else {
+                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                        }
+                        //pasar del intermdio al db
+                        usuarioDb.setNombre(usuario.getNombre());
+                        usuarioDb.setApellido(usuario.getApellido());
+                        usuarioDb.setCorreo(usuario.getCorreo());
+                        usuarioDb.setDni(usuario.getDni());
+                        usuarioDb.setDescripcion(usuario.getDescripcion());
+                        usuarioDb.setCargo(usuario.getCargo());
+                        usuarioRepository.save(usuarioDb);
+
+                        return "redirect:/admin/listaUsuario";
+
+                    } catch (Exception e) {
+                        System.out.println("Error al guardar el equipo");
+                        throw new RuntimeException(e);
+                    }
+                } else { //hay al menos 1 error
+                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                    model.addAttribute("listaCargo", cargoRepository.findAll());
+
+                    return "Administrador/editarUsuario";
+                }
+
+            } else {
+                return "redirect:/admin";
             }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaUsuario";
         }
 
-        if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
-            model.addAttribute("msgCargo", "Escoger un cargo");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
 
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
-        }
-        if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
-            model.addAttribute("msgEmpresa", "Escoger una empresa");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
-        }
+        //todo lo comentado es de foto que ya no se pide
         // Verificar si se cargó un nuevo archivo
-        if (!file.isEmpty()) {
-            try {
-                // Procesar el archivo
-                Archivo archivo = new Archivo();
-                archivo.setNombre(file.getOriginalFilename());
-                archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-                archivoRepository.save(archivo);
+//        if (!file.isEmpty()) {
+//            try {
+//                // Procesar el archivo
+//                Archivo archivo = new Archivo();
+//                archivo.setNombre(file.getOriginalFilename());
+//                archivo.setTipo(1);
+//                archivo.setArchivo(file.getBytes());
+//                archivo.setContentType(file.getContentType());
+//                archivoRepository.save(archivo);
+//
+//                // Asignar el nuevo archivo al equipo
+//                usuario.setArchivo(archivo);
+//            } catch (IOException e) {
+//                System.out.println("Error al procesar el archivo");
+//                throw new RuntimeException(e);
+//            }
+//        }
+//        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+//            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+//            if (usuario.getId() == null) {
+//                return "Administrador/crearUsuario";
+//            } else {
+//                return "Administrador/editarUsuario";
+//            }
+//        }
 
-                // Asignar el nuevo archivo al equipo
-                usuario.setArchivo(archivo);
-            } catch (IOException e) {
-                System.out.println("Error al procesar el archivo");
-                throw new RuntimeException(e);
-            }
-        }
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
-            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
-        }
-
-        if (!bindingResult.hasErrors()) {
-            // Si no hay errores, se realiza el flujo normal
-            if (usuario.getArchivo() == null) {
-                usuario.setArchivo(new Archivo());
-            }
-
-            try {
-                if (usuario.getId() == null) {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
-                } else {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
-                }
-                usuarioRepository.save(usuario);
-                return "redirect:/admin/listaUsuario";
-            } catch (Exception e) {
-                System.out.println("Error al guardar el equipo");
-                throw new RuntimeException(e);
-            }
-        } else { //hay al menos 1 error
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Administrador/crearUsuario";
-            } else {
-                return "Administrador/editarUsuario";
-            }
-        }
     }
 
     /*EDITAR USUARIO*/
@@ -378,7 +387,7 @@ public class AdminController {
                                 @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult) {
 
         try {
-            int id = Integer.parseInt(idStr);
+            int id = parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/admin/listaUsuario";
             }
@@ -416,7 +425,7 @@ public class AdminController {
                              @RequestParam("id") String idStr) {
 
         try {
-            int id = Integer.parseInt(idStr);
+            int id = parseInt(idStr);
             if (id <= 0 || !empresaRepository.existsById(id)) {
                 return "redirect:/admin/listaEmpresa";
             }
@@ -495,7 +504,7 @@ public class AdminController {
     public String verSitio(Model model, @RequestParam("id") String idStr) {
 
         try {
-            int id = Integer.parseInt(idStr);
+            int id = parseInt(idStr);
             if (id <= 0 || !sitioRepository.existsById(id)) {
                 return "redirect:/admin/listaSitio";
             }
@@ -521,7 +530,7 @@ public class AdminController {
                               @ModelAttribute("sitio") @Valid Sitio sitio, BindingResult bindingResult) {
 
         try {
-            int id = Integer.parseInt(idStr);
+            int id = parseInt(idStr);
             if (id <= 0 || !sitioRepository.existsById(id)) {
                 return "redirect:/admin/listaSitio";
             }
@@ -903,7 +912,7 @@ public class AdminController {
     @GetMapping({"/verEquipo", "/verequipo"})
     public String verEquipo(Model model, @RequestParam("id") String idStr) {
         try {
-            int id = Integer.parseInt(idStr);
+            int id = parseInt(idStr);
             if (id <= 0 || !equipoRepository.existsById(id)) {
                 return "redirect:/admin/listaEquipo";
             }
@@ -924,7 +933,7 @@ public class AdminController {
     @GetMapping({"/editarEquipo", "/editarequipo"})
     public String editarEquipo(Model model, @RequestParam("id") String idStr, @ModelAttribute("equipo") Equipo equipo) {
         try {
-            int id = Integer.parseInt(idStr);
+            int id = parseInt(idStr);
             if (id <= 0 || !equipoRepository.existsById(id)) {
                 return "redirect:/admin/listaEquipo";
             }

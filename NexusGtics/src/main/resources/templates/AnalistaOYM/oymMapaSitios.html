@@ -92,17 +92,22 @@
                             <select name="location" id="location">
                                 <option value="-1">Selecciona uno...</option>
                                 <option th:each="sitio :${sitioList}"
-                                        th:value="${sitio.latitud + ',' + sitio.longitud}" th:text="${sitio.distrito}">Empire State Building</option>
+                                        th:value="${sitio.latitud + ',' + sitio.longitud}"
+                                        th:text="${sitio.distrito}">Empire State Building</option>
                                 <!--<option value="40.689167, -74.044444">Estatua de la Libertad</option>
                                 <option value="51.507,0.1275">Londres</option>-->
                             </select>
                         </div>
+
                         <br>
-                        <div id="map">
-                        </div>
+
+                        <div id="map"></div>
+
                         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
                         <script>
                             let map = L.map('map').setView([-12.0690694, -77.0786442], 18);
+                            // let nombre = e.target.options[e.target.selectedIndex].getAttribute('data-nombre');
 
                             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                 attribution:
@@ -110,7 +115,7 @@
                             }).addTo(map);
 
                             let defaultCoords = [-12.0690694, -77.0786442];
-                            L.marker(defaultCoords).addTo(map);
+                            L.marker(defaultCoords).addTo(map).bindPopup(nombre).openPopup();
 
                             document.getElementById('select-location').addEventListener('change', function(e){
                                 let coords = e.target.value.split(",");
@@ -118,6 +123,7 @@
                                 map.flyTo(coords, 18);
                             });
                         </script>
+
                         <!-- MAPA -->
                     </div>
                 </div>

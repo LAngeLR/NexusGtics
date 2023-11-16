@@ -83,18 +83,18 @@
                         <div class="row">
                             <div class="col-md-6">
 
-                                <div class="mb-3">
-                                    <label for="idEmpresaAsignada" class="form-label">Empresa</label>
-                                    <select class="form-select" name="idEmpresaAsignada" id="idEmpresaAsignada">
-                                        <option value="-1">--Seleccione una empresa--</option>
-                                        <option th:each="empresa: ${listaEmpresa}"
-                                                th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}">Open this select menu</option>
-                                    </select>
+                                <div class="input-group mb-3">
+                                    <label for="idEmpresaAsignada">Empresa</label>
+                                    <div class="col-12">
+                                        <select class="form-select" name="idEmpresaAsignada" id="idEmpresaAsignada">
+                                            <option value="-1">--Seleccione una empresa--</option>
+                                            <option th:each="empresa: ${listaEmpresa}"
+                                                    th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}">Open this select menu</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <input type="hidden" name="estado" id="estado" value="1">
-
-                                <!-- id usuario creador -->
 
                                 <input type="hidden" name="idTipoTicket" id="idTipoTicket" value="1">
 

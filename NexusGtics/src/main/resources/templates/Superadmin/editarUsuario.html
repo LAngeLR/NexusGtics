@@ -44,13 +44,19 @@
                     <div class="alert alert-danger" role="alert" th:if="${msgEmail != null}" th:text="${msgEmail}">
                         A simple success alert—check it out!
                     </div>
-                    <form method="POST" th:action="@{/superadmin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+                    <form method="POST" th:action="@{/superadmin/updateUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row">
                             <div class="col-md-6">
                                 <input type="hidden" class="form-control" th:field="*{id}">
                                 <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
-                                <input type="hidden" class="form-control" th:field="*{correo}">
-
+                                <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
+                                <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
+                                <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:field="*{fechaRegistro}">
+                                <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" th:field="*{tecnicoConCuadrilla}">
+                                <input type="hidden" name="descripcion" id="descripcion" th:field="*{descripcion}">
+                                <input type="hidden" name="cargo" id="cargo" th:field="*{cargo}">
+                                <input type="hidden" name="empresa" id="empresa" th:field="*{empresa}">
+                                <input type="hidden" name="correo" id="correo" th:field="*{correo}">
                                 <div class="mb-3">
                                     <label class="form-label">Nombres:</label>
                                     <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
@@ -69,15 +75,6 @@
                                     </div>
                                 </div>
 
-<!--                                <div class="mb-3">-->
-<!--                                    <label class="form-label">Correo:</label>-->
-<!--                                    <input th:field="*{correo}" type="text" th:class="${#fields.hasErrors('correo')?'form-control is-invalid':'form-control'}"/>-->
-<!--                                    <div class="invalid-feedback"-->
-<!--                                         th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}">-->
-<!--                                        Mensaje de error de correo-->
-<!--                                    </div>-->
-<!--                                </div>-->
-
                                 <div class="mb-3">
                                     <label class="form-label">DNI:</label>
                                     <input th:field="*{dni}" type="text" th:class="${#fields.hasErrors('dni')?'form-control is-invalid':'form-control'}"/>
@@ -87,26 +84,14 @@
                                     </div>
                                 </div>
 
-
-                                <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
-                                <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
-                                <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:field="*{fechaRegistro}">
-                                <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" th:field="*{tecnicoConCuadrilla}">
-                                <input type="hidden" name="cuadrilla" id="cuadrilla" th:field="*{cuadrilla}">
-                                <input type="hidden" name="descripcion" id="descripcion" th:field="*{descripcion}">
-
-                                <input type="hidden" name="cargo" id="cargo" th:field="*{cargo}">
-                                <input type="hidden" name="empresa" id="empresa" th:field="*{empresa}">
-
-
                                 <div class="mb-3">
                                     <p class="form-label">Cargo (no modificable):</p>
-                                    <p class="form-control">Administrador</p>
+                                    <p class="form-control bg-dark-light">Administrador</p>
                                 </div>
 
                                 <div class="mb-3">
                                     <p class="form-label">Empresa (no modificable):</p>
-                                    <p class="form-control">Nexus</p>
+                                    <p class="form-control bg-dark-light">Nexus</p>
                                 </div>
 
 
@@ -123,11 +108,12 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="imagenSubida" class="form-label">Cargar nueva foto de perfil:</label>
-                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
-                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                                </div>
+<!--                                <div class="mb-3">-->
+<!--                                    <label class="form-label">Foto de perfil:</label>-->
+<!--                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">-->
+<!--                                        <img th:src="@{|image/${usuario.archivo.idArchivos}|}" style="max-width: 300px;" alt="">-->
+<!--                                    </div>-->
+<!--                                </div>-->
 
                                 <button type="submit" class="btn btn-outline-primary float-end">Aplicar cambios</button>
                             </div>
