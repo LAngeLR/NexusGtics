@@ -217,6 +217,21 @@ public class AdminController {
             return "Administrador/crearUsuario";
         }
 
+        //validar que analistas->nexus otros roles->otras empresas
+        if ((usuario.getCargo().getIdCargos()== 3 || usuario.getCargo().getIdCargos()== 4) && usuario.getEmpresa().getIdEmpresas()!=1  ) {
+            model.addAttribute("msgNexus1", "Los analistas solo pueden pertenecer a la empresa Nexus");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            return "Administrador/crearUsuario";
+        }
+        if ((usuario.getCargo().getIdCargos()== 5 || usuario.getCargo().getIdCargos()== 6) && usuario.getEmpresa().getIdEmpresas()==1  ) {
+            model.addAttribute("msgNexus2", "Los supervisores y técnicos solo pueden pertenecer a empresas externas");
+            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaCargo", cargoRepository.findAll());
+            return "Administrador/crearUsuario";
+        }
+
+
         //validar que no se repitan los emails (se pone después de cargoSeleccionado para que se aplique lo anterior antes)
         List<String> correos = usuarioRepository.listaCorreos();
         String correoActual = usuario.getCorreo();
@@ -228,6 +243,7 @@ public class AdminController {
                 return "Administrador/crearUsuario";
             }
         }
+        System.out.println("pasó el filtro de mail: "+ usuario.getCorreo());
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (usuario.getArchivo() == null) {
@@ -251,6 +267,7 @@ public class AdminController {
 //              mensaje de creación
                 attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
                 usuarioRepository.save(usuario);
+                System.out.println("se guardó");
                 return "redirect:/admin/listaUsuario";
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -309,6 +326,20 @@ public class AdminController {
 
                     return "Administrador/editarUsuario";
                 }
+                //validar que analistas->nexus supervisor y técnicos->otras empresas
+                if ((usuario.getCargo().getIdCargos()== 3 || usuario.getCargo().getIdCargos()== 4) && usuario.getEmpresa().getIdEmpresas()!=1  ) {
+                    model.addAttribute("msgNexus1", "Los analistas solo pueden pertenecer a la empresa Nexus");
+                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                    model.addAttribute("listaCargo", cargoRepository.findAll());
+                    return "Administrador/crearUsuario";
+                }
+                if ((usuario.getCargo().getIdCargos()== 5 || usuario.getCargo().getIdCargos()== 6) && usuario.getEmpresa().getIdEmpresas()==1  ) {
+                    model.addAttribute("msgNexus2", "Los supervisores y técnicos solo pueden pertenecer a empresas externas");
+                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                    model.addAttribute("listaCargo", cargoRepository.findAll());
+                    return "Administrador/crearUsuario";
+                }
+
                 if (!bindingResult.hasErrors()) {
                     // Si no hay errores, se realiza el flujo normal
                     if (usuario.getArchivo() == null) {
