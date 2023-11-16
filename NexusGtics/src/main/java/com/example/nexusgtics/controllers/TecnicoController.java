@@ -321,7 +321,8 @@ public class TecnicoController {
     public String pagdashboard(Model model) {
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
-
+        List<Ticket> listTic = ticketRepository.cantidadTickets();
+        model.addAttribute("cant", listTic);
         List<Ticket> lista = ticketRepository.listarEstado();
         model.addAttribute("ticketList", lista);
         //List<Ticket> listaT = ticketRepository.listarEstado();

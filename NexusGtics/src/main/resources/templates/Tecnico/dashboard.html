@@ -16,7 +16,7 @@
         <h1>Dashboard</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/Tecnico/tecnico}">Home</a></li>
                 <li class="breadcrumb-item active">Dashboard</li>
             </ol>
         </nav>
@@ -24,11 +24,9 @@
 
     <section class="section dashboard">
         <div class="row">
-
             <!-- Left side columns -->
             <div class="col-lg-8">
                 <div class="row">
-
                     <!-- Sales Card -->
                     <div class="col-xxl-4 col-md-6">
                         <div class="card info-card sales-card">
@@ -40,12 +38,11 @@
                                     </div>
                                     <div class="ps-3">
                                         <h6>1892</h6>
-                                        <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">más que el mes anterior</span>
-
+                                        <!--<span class="text-success small pt-1 fw-bold" th:object="${cant}">12%</span> <span class="text-muted small pt-2 ps-1">más que el mes anterior</span>
+                                        -->
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div><!-- End Sales Card -->
 
@@ -216,10 +213,8 @@
                         </div>
                     </div><!-- End Recent Sales -->
 
-
                 </div>
             </div><!-- End Left side columns -->
-
             <!-- Right side columns -->
             <div class="col-lg-4">
 
@@ -348,7 +343,6 @@
 
 
             </div><!-- End Right side columns -->
-
         </div>
     </section>
 
