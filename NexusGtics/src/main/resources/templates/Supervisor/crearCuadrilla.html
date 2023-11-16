@@ -49,13 +49,13 @@
                                     <div class="col-12">
                                         <select class="form-select" name="tecnico" id="tecnico">
                                             <option th:each="tecnico: ${listaTecnicos}"
-                                                    th:text="${tecnico.nombre}" th:value="${tecnico.id}">Open this select menu</option>
+                                                    th:text="${tecnico.nombre}+ ' '+${tecnico.apellido}" th:value="${tecnico.id}">Open this select menu</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <input type="hidden" class="form-control" name="ocupado" id="ocupado" value="0">
-                                <input type="hidden" class="form-control" name="supervisor" id="supervisor" value="5">
+                                <input type="hidden" class="form-control" name="supervisor" id="supervisor" th:value="${session.usuario.id}">
 
                                 <div class="mb-3" hidden="">
                                     <label for="idCuadrillas">Nro de Cuadrilla:</label>
@@ -80,7 +80,7 @@
                                     <div class="col-12">
                                         <select class="form-select" name="tecnicoslibres" id="tecnicoslibres" multiple>
                                             <option th:each="tecnicoslibres: ${listaTecnicos}"
-                                                    th:text="${tecnicoslibres.nombre}" th:value="${tecnicoslibres.id}">Open this select menu</option>
+                                                    th:text="${tecnico.nombre}+ ' '+${tecnico.apellido}" th:value="${tecnicoslibres.id}">Open this select menu</option>
                                         </select>
                                     </div>
                                 </div>

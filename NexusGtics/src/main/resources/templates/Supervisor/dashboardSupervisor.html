@@ -12,6 +12,10 @@
 
 <main id="main" class="main">
 
+    <div class="alert alert-success" role="alert" th:if="${mensaje!=null}" th:text="${mensaje}">
+        abc
+    </div>
+
     <div class="pagetitle">
         <h1>Detalles</h1>
         <nav>
@@ -233,53 +237,22 @@
                     <div class="card-body">
                         <h5 class="card-title">Actividad Reciente</h5>
                         <div class="activity">
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">32 min</div>
-                                <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                                <div class="activity-content">
-                                    Asignaste un nuevo tickets a Tecnico Eduardo. Cuadrilla 7
-                                </div>
-                            </div><!-- End activity item-->
+                            <div class="activity-item d-flex" th:each="actividad,info : ${actividad}">
+                                <div class="activite-label" th:text="${#temporals.format(actividad.fechaCambioEstado, 'mm') + ' min'}">32 min</div>
+                                <i class='bi bi-circle-fill activity-badge text-warning align-self-start' th:if="${info.index + 1 == 1}"></i>
+                                <i class='bi bi-circle-fill activity-badge text-info align-self-start' th:if="${info.index + 1 == 2}"></i>
+                                <i class='bi bi-circle-fill activity-badge text-success align-self-start' th:if="${info.index + 1 == 3}"></i>
+                                <i class='bi bi-circle-fill activity-badge text-danger align-self-start' th:if="${info.index + 1 == 4}"></i>
+                                <i class='bi bi-circle-fill activity-badge text-primary align-self-start' th:if="${info.index + 1 == 5}"></i>
+                                <i class='bi bi-circle-fill activity-badge text-secondary align-self-start' th:if="${info.index + 1 == 6}"></i>
 
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">56 min</div>
-                                <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                                <div class="activity-content">
-                                    Te asignaron un nuevo ticket
-                                </div>
+                                <div class="activity-content" th:if="${actividad.descripcion == 'Pasando a Analista'}" th:text="'Enviaste un ticket cerrado al analista ' + ${actividad.ticket.idUsuarioCreador.nombre + ' ' + actividad.ticket.idUsuarioCreador.apellido}"></div>
+                                <div class="activity-content" th:if="${actividad.descripcion == 'Pasando a Tecnico'}" th:text="'Asignaste un ticket a la cuadrilla ' + ${actividad.ticket.idCuadrilla.idCuadrillas}"></div>
+                                <div class="activity-content" th:if="${actividad.descripcion == 'Supervisor Asignado' && actividad.usuarioReasignado==null}">Te asignaste un ticket</div>
+                                <div class="activity-content" th:if="${actividad.descripcion == 'Supervisor Asignado' && actividad.usuarioReasignado!=null && actividad.usuarioReasignado.id!=session.usuario.id}" th:text="'Reasignaste un ticket al supervisor ' + ${actividad.ticket.idSupervisorEncargado.nombre + ' ' + actividad.ticket.idSupervisorEncargado.apellido}"></div>
+                                <div class="activity-content" th:if="${actividad.descripcion == 'Supervisor Asignado' && actividad.usuarioReasignado!=null && actividad.usuarioReasignado.id==session.usuario.id}" th:text="'El supervisor ' + ${actividad.usuario.nombre + ' ' + actividad.usuario.apellido} + ' te asignó un ticket'"></div>
                             </div><!-- End activity item-->
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">1 hr</div>
-                                <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
-                                <div class="activity-content">
-                                    El tecnico Eduardo envio el formulario del ticket nº145879
-                                </div>
-                            </div><!-- End activity item-->
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">2 hrs</div>
-                                <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
-                                <div class="activity-content">
-                                    Concluiste el ticket nº 124589
-                                </div>
-                            </div><!-- End activity item-->
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">4 hrs</div>
-                                <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                                <div class="activity-content">
-                                    Asignaste un ticket al supervisor Francisco
-                                </div>
-                            </div><!-- End activity item-->
-
-                            <div class="activity-item d-flex">
-                                <div class="activite-label">1 day</div>
-                                <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
-                                <div class="activity-content">
-                                    El supervisor Francisco Acepto el ticket
-                                </div>
-                            </div><!-- End activity item-->
+                            <!-- End activity item-->
 
                         </div>
 

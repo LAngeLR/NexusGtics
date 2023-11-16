@@ -18,4 +18,8 @@ public interface ComentarioRepository extends JpaRepository<Comentario, Integer>
 
     @Query(nativeQuery = true, value = "SELECT * FROM comentarios WHERE idTickets=?1 ORDER BY fechaPublicacion DESC")
     List<Comentario> listarComentarios(int id);
+
+    @Query(nativeQuery = true, value = "SELECT comentario FROM comentarios WHERE idTickets=?1 ORDER BY fechaPublicacion DESC LIMIT 1")
+    String obtenerUltimoComentario(int idTicket);
+
 }

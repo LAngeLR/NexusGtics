@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
@@ -69,14 +70,15 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     List<Usuario> unirUsuarioPorNombre(String nombre);
 
     // ------------------------------ SUPERVISOR --------------------------------------- //
-    @Query(nativeQuery = true, value = "SELECT * FROM usuarios where IdCuadrilla=?1")
+    @Query(nativeQuery = true, value = "SELECT u.* FROM tecnicoscuadrillas tc inner join usuarios u on tc.idTecnico = u.idUsuarios where idCuadrilla = ?1")
     List<Usuario> listaDeTecnicosPorCuadrilla(int idCuadrilla);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM usuarios where idCargos=?1 and idCuadrilla IS NULL and idUsuarios!=?2")
+    @Query(nativeQuery = true, value = "SELECT * FROM usuarios where idCargos=?1 and idUsuarios!=?2 and tecnicoConCuadrilla=false")
     List<Usuario> listaDeSupervisores(int valor, int idSupNo);
 
     @Modifying
     @Transactional
-    @Query(nativeQuery = true, value ="UPDATE nexus.usuarios SET tecnicoConCuadrilla = true, IdCuadrilla = ?2 WHERE idUsuarios = ?1")
-    void cambiarTecnico(int idUsuario, int idCuadrilla);
+    @Query(nativeQuery = true, value ="UPDATE nexus.usuarios SET tecnicoConCuadrilla = true WHERE idUsuarios = ?1")
+    void cambiarTecnico(int idUsuario);
+
 }

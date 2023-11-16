@@ -16,9 +16,9 @@ public interface CuadrillaRepository extends JpaRepository<Cuadrilla, Integer> {
             "GROUP BY t.idTickets;")
     Integer contarTrabajosFinalizados(int idCuadrilla);
 
-    @Query(nativeQuery = true, value = "SELECT COUNT(u.idUsuarios) AS cantidad_Tecnicos\n" +
-            "FROM usuarios u \n" +
-            "WHERE u.idCuadrilla = ?1 AND u.idCargos = 6;")
+    @Query(nativeQuery = true, value = "SELECT COUNT(tc.idTecnico) AS cantidad_Tecnicos\n" +
+            "            FROM tecnicoscuadrillas tc\n" +
+            "            WHERE tc.idCuadrilla = ?1")
     int numeroTecnicosPorCuadrilla(int idCuadrilla);
 
     @Query(nativeQuery = true, value = "SELECT COUNT(DISTINCT idCuadrillas) as cuadrilla_count FROM cuadrillas")
@@ -30,54 +30,45 @@ public interface CuadrillaRepository extends JpaRepository<Cuadrilla, Integer> {
             "    COUNT(DISTINCT t.idTickets) AS trabajos,\n" +
             "    MAX(t.fechaCierre) AS ultimo,\n" +
             "    IFNULL(ROUND(DATEDIFF(CURDATE(), u.fechaRegistro) / 365), 0) AS year\n" +
-            "FROM \n" +
-            "    cuadrillas c\n" +
-            "JOIN \n" +
-            "    usuarios u ON c.idTecnico = u.idUsuarios\n" +
-            "LEFT JOIN \n" +
-            "    usuarios u_tecnicos ON c.idCuadrillas = u_tecnicos.IdCuadrilla\n" +
-            "LEFT JOIN \n" +
-            "    tickets t ON c.idCuadrillas = t.idCuadrilla\n" +
-            "WHERE \n" +
-            "    (t.estado IN (6, 7) OR t.estado IS NULL)\n" +
-            "GROUP BY \n" +
-            "    c.idCuadrillas, u.idUsuarios\n" +
-            "HAVING \n" +
-            "    COUNT(DISTINCT u_tecnicos.idUsuarios) = 5;\n" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "\n")
+            "FROM tecnicoscuadrillas tc \n" +
+            "JOIN usuarios u ON tc.idTecnico = u.idUsuarios \n" +
+            "LEFT JOIN cuadrillas c ON tc.idCuadrilla = c.idCuadrillas\n" +
+            "LEFT JOIN tickets t ON c.idCuadrillas = t.idCuadrilla \n" +
+            "WHERE (t.estado IN (6, 7, 8) OR t.estado IS NULL) AND tc.liderTecnico = 1\n" +
+            "GROUP BY c.idCuadrillas, u.idUsuarios\n" +
+            "HAVING (SELECT COUNT(*) FROM tecnicoscuadrillas WHERE idCuadrilla = c.idCuadrillas) = 5;")
     List<ListaCuadrillaCompletaDto> cuadrillaCompleta();
 
     @Query(nativeQuery = true, value = "SELECT \n" +
-            "    c.idCuadrillas AS idCuadrilla,\n" +
-            "    CONCAT(u.nombre, ' ', u.apellido) AS lider,\n" +
-            "    COUNT(DISTINCT u_tecnicos.idUsuarios) AS cantidad,\n" +
-            "    c.fechaCreacion as fecha,\n" +
-            "    IFNULL(ROUND(DATEDIFF(CURDATE(), u.fechaRegistro) / 365), 0) AS year\n" +
-            "FROM \n" +
-            "    cuadrillas c\n" +
-            "JOIN \n" +
-            "    usuarios u ON c.idTecnico = u.idUsuarios\n" +
-            "LEFT JOIN \n" +
-            "    usuarios u_tecnicos ON c.idCuadrillas = u_tecnicos.IdCuadrilla\n" +
-            "LEFT JOIN \n" +
-            "    tickets t ON c.idCuadrillas = t.idCuadrilla\n" +
-            "WHERE \n" +
-            "    (t.estado IN (6, 7) OR t.estado IS NULL)\n" +
-            "GROUP BY \n" +
-            "    c.idCuadrillas, u.idUsuarios\n" +
-            "HAVING \n" +
-            "    COUNT(DISTINCT u_tecnicos.idUsuarios) < 5;\n" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "\n")
+            "    idCuadrilla,\n" +
+            "    CONCAT(leader.nombre, ' ', leader.apellido) AS lider,\n" +
+            "    cantidad,\n" +
+            "    fecha,\n" +
+            "    year\n" +
+            "FROM (\n" +
+            "    SELECT \n" +
+            "        c.idCuadrillas AS idCuadrilla,\n" +
+            "        MAX(CASE WHEN tc.liderTecnico = 1 THEN u.nombre END) AS nombreLider,\n" +
+            "        MAX(CASE WHEN tc.liderTecnico = 1 THEN u.apellido END) AS apellidoLider,\n" +
+            "        COUNT(DISTINCT u.idUsuarios) AS cantidad,\n" +
+            "        c.fechaCreacion as fecha,\n" +
+            "        IFNULL(ROUND(DATEDIFF(CURDATE(), MIN(u.fechaRegistro)) / 365), 0) AS year\n" +
+            "    FROM \n" +
+            "        cuadrillas c\n" +
+            "    JOIN \n" +
+            "        tecnicoscuadrillas tc ON c.idCuadrillas = tc.idCuadrilla\n" +
+            "    LEFT JOIN \n" +
+            "        usuarios u ON tc.idTecnico = u.idUsuarios\n" +
+            "    LEFT JOIN \n" +
+            "        tickets t ON c.idCuadrillas = t.idCuadrilla\n" +
+            "    WHERE \n" +
+            "        (t.estado IN (6, 7) OR t.estado IS NULL) \n" +
+            "    GROUP BY \n" +
+            "        c.idCuadrillas\n" +
+            "    HAVING \n" +
+            "        COUNT(DISTINCT u.idUsuarios) < 5\n" +
+            ") AS subquery\n" +
+            "JOIN usuarios leader ON leader.nombre = subquery.nombreLider AND leader.apellido = subquery.apellidoLider\n" +
+            "GROUP BY idCuadrilla, cantidad, fecha, year;\n")
     List<ListaCuadrillaImcompletaDto> cuadrillaImCompleta();
 }

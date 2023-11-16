@@ -68,7 +68,7 @@
 
                 <div class="row">
                   <div class="col-lg-4 col-md-5 label">Tecnico Lider:</div>
-                  <div class="col-lg-8 col-md-7" th:text="'Tec. ' + ${tickets.idCuadrilla.tecnico.nombre} + ${tickets.idCuadrilla.tecnico.apellido}"></div>
+                  <div class="col-lg-8 col-md-7" th:text="'Tec. ' + ${tecnicoLider.nombre} + ${tecnicoLider.apellido}"></div>
                 </div>
 
                 <div class="row">
@@ -120,9 +120,11 @@
 
               <div class="tab-pane fade show active profile-overview" id="profile-overview">
                 <h5 class="card-title" style="color: #095444">Comentario:</h5>
-                <p class="small fst-italic">Se completó con éxito la instalación de los gabinetes. Al finalizar la instalación se realizó la prueba de conexión correspondiente. Funciona. Cliente satisfecho.
+                <p class="small fst-italic" th:text="${comentario != null ? comentario : 'No hay comentario acerca del ticket'}">
+                  Se completó con éxito la instalación de los gabinetes. Al finalizar la instalación se realizó la prueba de conexión correspondiente. Funciona. Cliente satisfecho.
                 </p>
               </div>
+
 
               <div class="tab-pane fade show active profile-overview" id="profile-overview1">
                 <h5 class="card-title" style="color: #095444">Tiempo transcurrido: </h5>

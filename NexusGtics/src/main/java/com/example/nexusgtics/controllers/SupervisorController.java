@@ -1,5 +1,6 @@
 package com.example.nexusgtics.controllers;
 
+import com.example.nexusgtics.dto.DetalleCuadrillaDto;
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
 import jakarta.servlet.http.HttpSession;
@@ -35,6 +36,8 @@ public class SupervisorController {
     private final ComentarioRepository comentarioRepository;
     private final EquipoRepository equipoRepository;
     private final HistorialTicketRepository historialTicketRepository;
+    @Autowired
+    private TecnicosCuadrillaRepository tecnicosCuadrillaRepository;
 
 
     public SupervisorController(CuadrillaRepository cuadrillaRepository,
@@ -321,7 +324,11 @@ public class SupervisorController {
             Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
             if (ticketBuscado.isPresent()) {
                 Ticket ticket = ticketBuscado.get();
+                Integer idTecnicoLider = tecnicosCuadrillaRepository.obtenerIdLider(ticket.getIdCuadrilla().getIdCuadrillas());
+                Optional<Usuario> tecnicoLider = usuarioRepository.findById(idTecnicoLider);
+                Usuario user = tecnicoLider.get();
                 model.addAttribute("tickets", ticket);
+                model.addAttribute("tecnicoLider",user);
                 return "Supervisor/ticketProceso";
             } else {
                 return "redirect:/supervisor/listaTickets";
@@ -342,7 +349,12 @@ public class SupervisorController {
             Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
             if (ticketBuscado.isPresent()) {
                 Ticket ticket = ticketBuscado.get();
+                Integer idTecnicoLider = tecnicosCuadrillaRepository.obtenerIdLider(ticket.getIdCuadrilla().getIdCuadrillas());
+                Optional<Usuario> tecnicoLider = usuarioRepository.findById(idTecnicoLider);
+                Usuario user = tecnicoLider.get();
                 model.addAttribute("tickets", ticket);
+                model.addAttribute("comentario",comentarioRepository.obtenerUltimoComentario(ticket.getIdTickets()));
+                model.addAttribute("tecnicoLider",user);
                 return "Supervisor/ticketCerrado";
             } else {
                 return "redirect:/supervisor/listaTickets";
@@ -357,23 +369,22 @@ public class SupervisorController {
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idSupervisor = u.getId();
         Date fechaCambioEstado = new Date();
+
         ticketRepository.actualizarSupervisor(ticket.getIdTickets(),ticket.getIdSupervisorEncargado().getId(), condicion);
-        redirectAttributes.addAttribute("id",ticket.getIdTickets());
-        if(ticket.getIdSupervisorEncargado().getId() != null &&
-                ticket.getIdSupervisorEncargado().getId().intValue() != idSupervisor.intValue()){
-            historialTicketRepository.crearHistorialReasignado(1,fechaCambioEstado,ticket.getIdTickets(),idSupervisor,"Supervisor Asignado",ticket.getIdSupervisorEncargado().getId());
-        }
-        else{
-            historialTicketRepository.crearHistorial(1,fechaCambioEstado,ticket.getIdTickets(),idSupervisor,"Supervisor Asignado");
-        }
-        ticketRepository.actualizarEstado(ticket.getIdTickets(),2);
-        redirectAttributes.addFlashAttribute("mensaje","Supervisor " + ticket.getIdSupervisorEncargado().getNombre()+" asignado");
 
         if(ticket.getIdSupervisorEncargado().getId() != null &&
                 ticket.getIdSupervisorEncargado().getId().intValue() != idSupervisor.intValue()){
+            historialTicketRepository.crearHistorialReasignado(1,fechaCambioEstado,ticket.getIdTickets(),idSupervisor,"Supervisor Asignado",ticket.getIdSupervisorEncargado().getId());
+            ticketRepository.actualizarEstado(ticket.getIdTickets(),2);
+            redirectAttributes.addFlashAttribute("mensaje","Supervisor " + ticket.getIdSupervisorEncargado().getNombre()+" asignado");
+            System.out.println("Mensaje Flash: " + redirectAttributes.getFlashAttributes());
             return "redirect:/supervisor/dashboard";
         }
         else{
+            redirectAttributes.addAttribute("id",ticket.getIdTickets());
+            historialTicketRepository.crearHistorial(1,fechaCambioEstado,ticket.getIdTickets(),idSupervisor,"Supervisor Asignado");
+            ticketRepository.actualizarEstado(ticket.getIdTickets(),2);
+            redirectAttributes.addFlashAttribute("mensaje", "Supervisor " + ticket.getIdSupervisorEncargado().getNombre() + " asignado");
             return "redirect:/supervisor/ticketNuevo";
         }
     }
@@ -404,6 +415,7 @@ public class SupervisorController {
             Date fechaCambioEstado = new Date();
             historialTicketRepository.crearHistorial(6,fechaCambioEstado,id,idSupervisor,"Pasando a Analista");
             ticketRepository.actualizarEstado(id,estadoUtilizar);
+            redirectAttributes.addFlashAttribute("yum","El ticket ha sido cerrado correctamente");
             return "redirect:/supervisor/listaTickets";
         } else{
             return "redirect:/supervisor/ticketCerrado";
@@ -479,6 +491,7 @@ public class SupervisorController {
         model.addAttribute("listaTickets", listaTickets);
         model.addAttribute("cantidadEquipos", equipoRepository.obtenerEquiposMarca());
         model.addAttribute("culminados", ticketRepository.infoDash(idSup,7));
+        model.addAttribute("actividad",historialTicketRepository.actividadReciente(idSup));
 
 
         return "Supervisor/dashboardSupervisor";
@@ -505,16 +518,14 @@ public class SupervisorController {
     }
 
     @PostMapping("/guardarCuadrilla")
-    public String guardarCuadrilla(Cuadrilla cuadrilla, RedirectAttributes redirectAttributes) {
+    public String guardarCuadrilla(Cuadrilla cuadrilla, RedirectAttributes redirectAttributes, @RequestParam("tecnico") int tecnico) {
 
         Instant fechaCreacion = Instant.now();
         cuadrilla.setFechaCreacion(fechaCreacion);
-
         cuadrillaRepository.save(cuadrilla);
+        tecnicosCuadrillaRepository.insertarTecnico(cuadrilla.getIdCuadrillas(),tecnico,1);
         redirectAttributes.addFlashAttribute("msg","Cuadrilla " + cuadrilla.getIdCuadrillas() + " creada Correctamente");
-        //usuarioRepository.cambiarTecnico(cuadrilla.getTecnico().getId(),cuadrilla.getIdCuadrillas());
-        /* Creo que se tiene que trabajar con la tabla intermedia */
-        usuarioRepository.cambiarTecnico(cuadrilla.getIdCuadrillas(),cuadrilla.getIdCuadrillas());
+        usuarioRepository.cambiarTecnico(tecnico);
 
         return "redirect:/supervisor/crearCuadrilla?id=" + cuadrilla.getIdCuadrillas();
     }
@@ -528,7 +539,8 @@ public class SupervisorController {
                 Usuario usuario = usuarioRepository.findById(userId).orElse(null);
 
                 if (usuario != null) {
-                    usuarioRepository.cambiarTecnico(usuario.getId(), valor);
+                    tecnicosCuadrillaRepository.insertarTecnico(valor,usuario.getId(),0);
+                    usuarioRepository.cambiarTecnico(usuario.getId());
                 }
             }
         }
@@ -544,24 +556,25 @@ public class SupervisorController {
                 return "redirect:/supervisor/listaCuadrillas";
             }
             Optional<Cuadrilla> optShipper = cuadrillaRepository.findById(id);
+
             List<Usuario> integrantesCuadrilla = usuarioRepository.listaDeTecnicosPorCuadrilla(id);
-            List<Cuadrilla> listaCuadrilla = cuadrillaRepository.findAll();
             List<Ticket> listaTicketsCerradosPorCuadrilla = ticketRepository.listaTicketsCerradosPorCuadrilla(id);
 
-            Map<Integer, Integer> trabajosFinalizadosPorCuadrilla = new HashMap<>();
+            Integer idTecnicoLider = tecnicosCuadrillaRepository.obtenerIdLider(id);
+            Optional<Usuario> tecnicoLider = usuarioRepository.findById(idTecnicoLider);
+            Usuario user = tecnicoLider.get();
 
-            for (Cuadrilla cuadrilla : listaCuadrilla) {
-                Integer trabajosFinalizados = cuadrillaRepository.contarTrabajosFinalizados(cuadrilla.getIdCuadrillas()); // Reemplaza "getId()" con el método adecuado para obtener el ID de la cuadrilla
-                trabajosFinalizados = (trabajosFinalizados != null) ? trabajosFinalizados : 0;
-                trabajosFinalizadosPorCuadrilla.put(cuadrilla.getIdCuadrillas(), trabajosFinalizados);
-            }
+            Optional<DetalleCuadrillaDto> detalleOptional = tecnicosCuadrillaRepository.detalleCuadrilla(id);
+
+
 
             if (optShipper.isPresent()) {
-                Cuadrilla cuadrilla = optShipper.get();
-                model.addAttribute("cuadrilla", cuadrilla);
+                DetalleCuadrillaDto detalle = detalleOptional.get();
+                model.addAttribute("detalle", detalle);
                 model.addAttribute("integrantes", integrantesCuadrilla);
-                model.addAttribute("trabajosFinalizadosPorCuadrilla", trabajosFinalizadosPorCuadrilla);
                 model.addAttribute("listaTicketsCerradosPorCuadrilla", listaTicketsCerradosPorCuadrilla);
+                model.addAttribute("tecnicoLider",user);
+
                 return "Supervisor/detallesCuadrilla";
             } else {
                 return "redirect:/supervisor/listaCuadrillas";
