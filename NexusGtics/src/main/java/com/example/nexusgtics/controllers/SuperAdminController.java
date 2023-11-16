@@ -226,19 +226,18 @@ public class SuperAdminController {
                 archivo.setNombre("fotoPerfil");
                 archivo.setTipo(1);
                 byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "userDefault.png");
-                //archivo.setArchivo(image);
+                archivo.setArchivo(image);
                 archivo.setContentType("image/png");
                 Archivo archivo1 = archivoRepository.save(archivo);
                 String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";
                 archivo1.setNombre(nombreArchivo);
                 archivoRepository.save(archivo1);
                 uploadObject(archivo1);
+                archivo1.setArchivo(null);
                 //mensaje de creación
                 attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
-
                 usuarioRepository.save(usuario);
                 return "redirect:/superadmin/listaUsuario";
-
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -246,11 +245,8 @@ public class SuperAdminController {
         } else { //hay al menos 1 error
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Superadmin/crearUsuario";
-            } else {
-                return "Superadmin/editarUsuario";
-            }
+            return "Superadmin/crearUsuario";
+
         }
     }
 
@@ -267,9 +263,7 @@ public class SuperAdminController {
             }
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
-
-                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
-
+                Usuario usuario1 = optionalUsuario.get();
                 List<Usuario> administradores = usuarioRepository.listaDeAdministradores();
                 boolean encontrado = false;
                 for (Usuario administrador : administradores) {
@@ -277,18 +271,17 @@ public class SuperAdminController {
                     //int idAdministrador = administrador.getId();
                     if (administrador.getId() == id) {
                         encontrado = true;
-                        model.addAttribute("usuario", usuario);
                         break;
                     }
                 }
-
                 if (encontrado) {
+                    //Usuario usuario2 = optionalUsuario.get();
+                    System.out.printf(usuario1.getNombre() + " " + usuario1.getArchivo().getIdArchivos());
+                    model.addAttribute("usuario", usuario1);
                     return "Superadmin/editarUsuario";
                 } else {
                     return "redirect:/superadmin/listaUsuario";
                 }
-
-                //return "Superadmin/editarUsuario";
             } else {
                 return "redirect:/superadmin";
             }

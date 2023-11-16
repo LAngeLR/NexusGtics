@@ -47,7 +47,6 @@
             <div class="row">
               <div class="col-md-6">
                 <input type="hidden" class="form-control" th:field="*{id}">
-<!--                <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">-->
 
                 <div class="mb-3">
                   <label class="form-label">Nombres:</label>
@@ -85,12 +84,6 @@
                   </div>
                 </div>
 
-
-<!--                <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">-->
-<!--                <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">-->
-<!--                <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:field="*{fechaRegistro}">-->
-<!--                <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" th:field="*{tecnicoConCuadrilla}">-->
-
                 <div class="mb-3">
                   <label class="form-label">Descripción:</label>
                   <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
@@ -126,7 +119,7 @@
                 <div class="mb-3">
                   <label class="form-label">Foto de perfil:</label>
                   <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                    <img th:src="@{|image/${usuario.archivo.idArchivos}|}" style="max-width: 300px;" alt="">
+                    <img th:src="@{|/file/${usuario.archivo.idArchivos}|}" class="card-img-top rounded-circle" style="max-width: 300px;" alt="">
                   </div>
                 </div>
 

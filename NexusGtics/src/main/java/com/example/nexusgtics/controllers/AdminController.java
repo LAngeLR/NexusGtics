@@ -256,14 +256,14 @@ public class AdminController {
                 archivo.setNombre("fotoPerfil");
                 archivo.setTipo(1);
                 byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "userDefault.png");
-                //archivo.setArchivo(image);
+                archivo.setArchivo(image);
                 archivo.setContentType("image/png");
                 Archivo archivo1 = archivoRepository.save(archivo);
                 String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";
                 archivo1.setNombre(nombreArchivo);
                 archivoRepository.save(archivo1);
                 uploadObject(archivo1);
-
+                archivo1.setArchivo(null);
 //              mensaje de creación
                 attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
                 usuarioRepository.save(usuario);
@@ -292,6 +292,7 @@ public class AdminController {
 
         try {
             int id = usuario.getId();
+            System.out.println("El ID obtenido fue: "+id);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/admin/listaUsuario";
             }
@@ -331,13 +332,13 @@ public class AdminController {
                     model.addAttribute("msgNexus1", "Los analistas solo pueden pertenecer a la empresa Nexus");
                     model.addAttribute("listaEmpresa", empresaRepository.findAll());
                     model.addAttribute("listaCargo", cargoRepository.findAll());
-                    return "Administrador/crearUsuario";
+                    return "Administrador/editarUsuario";
                 }
                 if ((usuario.getCargo().getIdCargos()== 5 || usuario.getCargo().getIdCargos()== 6) && usuario.getEmpresa().getIdEmpresas()==1  ) {
                     model.addAttribute("msgNexus2", "Los supervisores y técnicos solo pueden pertenecer a empresas externas");
                     model.addAttribute("listaEmpresa", empresaRepository.findAll());
                     model.addAttribute("listaCargo", cargoRepository.findAll());
-                    return "Administrador/crearUsuario";
+                    return "Administrador/editarUsuario";
                 }
 
                 if (!bindingResult.hasErrors()) {
@@ -425,8 +426,9 @@ public class AdminController {
             }
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
-                usuario = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
-                model.addAttribute("usuario", usuario);
+                Usuario usuario1 = optionalUsuario.get();    //modifiqué Usuario usuario para poder usar @ModelAttribute
+                System.out.printf(usuario1.getNombre() + " " + usuario1.getArchivo().getIdArchivos());
+                model.addAttribute("usuario", usuario1);
                 model.addAttribute("listaEmpresa", empresaRepository.findAll());
                 model.addAttribute("listaCargo", cargoRepository.findAll());
                 return "Administrador/editarUsuario";
