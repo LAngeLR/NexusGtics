@@ -300,87 +300,68 @@ public class SuperAdminController {
 
 
     /* ACTUALIZAR INFORMACIÓN DE LOS "ADMINISTRADORES" */
-    @PostMapping("/updateUsuario")
+    @PutMapping("/updateUsuario")
     public String updateUsuario(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                                 Model model,
                                 RedirectAttributes attr){
-//          todo lo comentado es de foto que ya no se pide
-//        /*Validación de imagen*/
-//        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
-//            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-//            return "Superadmin/editarUsuario";
-//        }
-//
-//
-//        String fileName1 = file.getOriginalFilename();
-//        /*Validación para evitar 2 puntos*/
-//        if (fileName1.contains("..") && !file.isEmpty()) {
-//            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
-//            return "Superadmin/editarUsuario";
-//        }
-//
-//        /*Validación para archivos grande (NO FUNCIONA :C)*/
-//        int maxFileSize = 10485760;
-//        if (file.getSize() > maxFileSize && !file.isEmpty()) {
-//            System.out.println(file.getSize());
-//            model.addAttribute("msgImagen", "El archivo subido excede el tamaño máximo permitido (10MB).");
-//            return "redirect:/superadmin/editarUsuario";
-//        }
-
-        //validar que no se repitan los emails
-        Integer id = usuario.getId();
-
-        List<String> correos = usuarioRepository.listaCorreos2(id);
-        for (String correo : correos) {
-            if (correo.equals(usuario.getCorreo())) {
-                model.addAttribute("msgEmail", "El correo electrónico ya existe");
-                model.addAttribute("listaEmpresa", empresaRepository.findAll());
-                model.addAttribute("listaCargo", cargoRepository.findAll());
-                return "Superadmin/crearUsuario";
-            }
-        }
 
 
-        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
-            if (usuario.getArchivo() == null) {
-                usuario.setArchivo(new Archivo());
-            }
-            try{
-                /*Si file contiene algo --> Guardarlo*/
-//                if(file.getSize() > 0 && !file.isEmpty()){
-//                    // Obtenemos el nombre del archivo
-//                    String fileName = file.getOriginalFilename();
-//                    String extension = "";
-//                    int i = fileName.lastIndexOf('.');
-//                    if (i > 0) {
-//                        extension = fileName.substring(i+1);
-//                    }
-//                    Archivo archivo = usuario.getArchivo();
-//                    archivo.setNombre(fileName);
-//                    archivo.setTipo(1);
-//                    archivo.setArchivo(file.getBytes());
-//                    archivo.setContentType(file.getContentType());
-//                    Archivo archivo1 = archivoRepository.save(archivo);
-//                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
-//                    archivo1.setNombre(nombreArchivo);
-//                    archivoRepository.save(archivo1);
-//                    uploadObject(archivo1);
-//                }
-                if (usuario.getId() == null) {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
-                } else {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
-                }
-                usuarioRepository.save(usuario);
+        try{
+            int id = usuario.getId();
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/superadmin/listaUsuario";
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
             }
 
-        } else { //hay al menos 1 error
-            return "Superadmin/editarUsuario";
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            if (optionalUsuario.isPresent()) {
+                Usuario usuarioDb = optionalUsuario.get();
+                //validar que no se repitan los emails
+                Integer id1 = usuario.getId();
+
+                List<String> correos = usuarioRepository.listaCorreos2(id1);
+                for (String correo : correos) {
+                    if (correo.equals(usuario.getCorreo())) {
+                        model.addAttribute("msgEmail", "El correo electrónico ya existe");
+                        model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                        model.addAttribute("listaCargo", cargoRepository.findAll());
+                        return "Superadmin/crearUsuario";
+                    }
+                }
+
+
+                if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+                    if (usuario.getArchivo() == null) {
+                        usuario.setArchivo(new Archivo());
+                    }
+                    try{
+                        if (usuario.getId() == null) {
+                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+                        } else {
+                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                        }
+                        usuarioDb.setNombre(usuario.getNombre());
+                        usuarioDb.setApellido(usuario.getApellido());
+                        usuarioDb.setDni(usuario.getDni());
+                        usuarioRepository.save(usuarioDb);
+                        return "redirect:/superadmin/listaUsuario";
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
+                } else { //hay al menos 1 error
+                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
+                    model.addAttribute("listaCargo", cargoRepository.findAll());
+                    return "Superadmin/editarUsuario";
+                }
+            } else {
+                return "redirect:/superadmin";
+            }
+
+        } catch (NumberFormatException e) {
+            return "redirect:/superadmin/listaUsuario";
         }
+
     }
 
 

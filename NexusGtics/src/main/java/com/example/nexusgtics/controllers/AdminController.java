@@ -328,6 +328,7 @@ public class AdminController {
                         usuarioDb.setDni(usuario.getDni());
                         usuarioDb.setDescripcion(usuario.getDescripcion());
                         usuarioDb.setCargo(usuario.getCargo());
+                        usuarioDb.setEmpresa(usuario.getEmpresa());
                         usuarioRepository.save(usuarioDb);
 
                         return "redirect:/admin/listaUsuario";
@@ -465,16 +466,11 @@ public class AdminController {
     @GetMapping("/image/{id}")
     public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") int id) {
         Optional<Archivo> opt = archivoRepository.findById(id);
-
         if (opt.isPresent()) {
             Archivo u = opt.get();
-
             byte[] imagenComoBytes = u.getArchivo();
-
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(MediaType.parseMediaType(u.getContentType()));
-
-
             return new ResponseEntity<>(
                     imagenComoBytes,
                     httpHeaders,

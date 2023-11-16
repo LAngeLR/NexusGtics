@@ -46,6 +46,7 @@
               <form method="POST" th:action="@{/admin/saveUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
               <div class="row">
                 <div class="col-md-6">
+                  <input type="hidden" class="form-control" th:field="*{id}">
                   <div class="mb-3">
                     <label class="form-label">Nombres:</label>
                     <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
