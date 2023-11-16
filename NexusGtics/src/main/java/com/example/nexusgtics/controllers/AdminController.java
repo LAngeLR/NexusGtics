@@ -126,6 +126,7 @@ public class AdminController {
         return "redirect:/admin/listaBaneados";
     }
 
+    /* DIRECCIONA A LA VISTA PARA VER DETALLES DEL "USUARIO" */
     @GetMapping({"/verUsuario", "verusuario"})
     public String verUsuario(Model model, @RequestParam("id") String idStr) {
 
@@ -148,6 +149,8 @@ public class AdminController {
             return "Administrador/crearUsuario";
         }
     }
+
+    /* DIRECCIONA AL FORMULARIO DE CREAR USUARIO */
     @GetMapping({"/crearUsuario", "crearusuario"})
     public String crearUsuario(Model model,
                                @ModelAttribute("usuario") Usuario usuario) {
@@ -170,6 +173,8 @@ public class AdminController {
         model.addAttribute("empresaSeleccionada", empresaSeleccionada);
         return "Administrador/crearUsuario";
     }
+
+
     /*CREAR NUEVO USUARIO*/
     @PostMapping("/saveUsuario")
     public String saveUsuario(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
