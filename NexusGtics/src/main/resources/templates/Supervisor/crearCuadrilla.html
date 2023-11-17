@@ -80,7 +80,7 @@
                                     <div class="col-12">
                                         <select class="form-select" name="tecnicoslibres" id="tecnicoslibres" multiple>
                                             <option th:each="tecnicoslibres: ${listaTecnicos}"
-                                                    th:text="${tecnico.nombre}+ ' '+${tecnico.apellido}" th:value="${tecnicoslibres.id}">Open this select menu</option>
+                                                    th:text="${tecnicoslibres.nombre}+ ' '+${tecnicoslibres.apellido}" th:value="${tecnicoslibres.id}">Open this select menu</option>
                                         </select>
                                     </div>
                                 </div>
