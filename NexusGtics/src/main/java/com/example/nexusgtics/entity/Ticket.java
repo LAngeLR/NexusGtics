@@ -3,6 +3,7 @@ package com.example.nexusgtics.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +40,8 @@ public class Ticket implements Serializable {
     private LocalDate fechaCierre;
 
     @Column(name = "usuarioSolicitante", length = 70)
+    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "El nombre solo debe contener letras")
+    @Size(max = 70)
     private String usuarioSolicitante;
 
     @ManyToOne

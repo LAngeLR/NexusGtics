@@ -582,6 +582,15 @@ public class AnalistaOYMController {
         }
         model.addAttribute("sitioSeleccionada", sitioSeleccionada);
 
+        //falta que se mantenga prioridad
+//        Ticket ticket2 = new Ticket();
+//        ticket2.setPrioridad(ticket.getPrioridad());
+//        String prioridad =ticket2.getPrioridad();
+//        if (prioridad.equals(null)){
+//            ticket2 = new Ticket();
+//        }
+//        model.addAttribute("prioridad", prioridad);
+
         return "AnalistaOYM/oymCrearTicket";
     }
 
@@ -600,12 +609,20 @@ public class AnalistaOYMController {
         LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
         ticket.setFechaCreacion(fechaActual);
 
+        Empresa empresaSeleccionada = ticket.getIdEmpresaAsignada();
+        model.addAttribute("empresaSeleccionada", empresaSeleccionada);
+
+        Sitio sitioSeleccionada = ticket.getIdSitios();
+        model.addAttribute("sitioSeleccionada", sitioSeleccionada);
+
+        String prioridad = ticket.getPrioridad();
+        model.addAttribute("prioridad", prioridad);
+
 
 
         if (ticket.getFechaCierre() == null) {
             //bindingResult.rejectValue("fechaCierre", "error.ticket", "La fecha de cierre es obligatoria.");
             model.addAttribute("fechaCierre", "La fecha de cierre es obligatoria");
-            model.addAttribute("msgEmpresa", "Escoger una empresa");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
             model.addAttribute("listaSitios", sitioRepository.findAll());
             return "AnalistaOYM/oymCrearTicket";
@@ -632,13 +649,13 @@ public class AnalistaOYMController {
             return "AnalistaOYM/oymCrearTicket";
 
         }
-        if (bindingResult.hasErrors()) {
-            // Si hay errores, vuelve a la vista mostrando los errores y los datos ingresados por el usuario
-            model.addAttribute("msgFechaCierre", "La fecha de cierre es obligatoria.");
-            model.addAttribute("idEmpresaAsignada", ticket.getIdEmpresaAsignada());
-            model.addAttribute("idSitios", ticket.getIdSitios());
-            return "AnalistaOYM/oymCrearTicket";
-        }
+//        if (bindingResult.hasErrors()) {
+//            // Si hay errores, vuelve a la vista mostrando los errores y los datos ingresados por el usuario
+//            model.addAttribute("msgFechaCierre", "La fecha de cierre es obligatoria.");
+//            model.addAttribute("idEmpresaAsignada", ticket.getIdEmpresaAsignada());
+//            model.addAttribute("idSitios", ticket.getIdSitios());
+//            return "AnalistaOYM/oymCrearTicket";
+//        }
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
 
