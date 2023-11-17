@@ -88,34 +88,30 @@
                     <form method="POST" th:action="@{/analistaOYM/saveTicket}" th:object="${ticket}" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6">
+                                <input type="hidden" class="form-control" th:field="*{idTickets}">
 
-                                <div class="input-group mb-3">
+                                <div class="mb-3">
                                     <label for="idEmpresaAsignada">Empresa</label>
-                                    <div class="col-12">
-                                        <select class="form-select" name="idEmpresaAsignada" id="idEmpresaAsignada">
-                                            <option value="">--Seleccione una empresa--</option>
-                                            <option th:each="empresa: ${listaEmpresa}"
-                                                    th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
-                                                    th:selected="${empresaSeleccionada != null && empresaSeleccionada.idEmpresas == empresa.idEmpresas}"
-                                            >Open this select menu</option>
-                                        </select>
-                                    </div>
+                                    <select class="form-select" name="idEmpresaAsignada" id="idEmpresaAsignada">
+                                        <option value="">--Seleccione una empresa--</option>
+                                        <option th:each="empresa: ${listaEmpresa}"
+                                                th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
+                                                th:selected="${empresaSeleccionada != null && empresaSeleccionada.idEmpresas == empresa.idEmpresas}"
+                                        >Open this select menu</option>
+                                    </select>
                                 </div>
 
                                 <input type="hidden" name="idTipoTicket" id="idTipoTicket" value="1">
 
-
-                                <div class="input-group mb-3">
+                                <div class="mb-3">
                                     <label for="idSitios">Sitio de despliegue:</label>
-                                    <div class="col-12">
-                                        <select name="idSitios" id="idSitios" class="form-control">
-                                            <option value="">--Seleccione el sitio--</option>
-                                            <option th:each="sitio: ${listaSitios}"
-                                                    th:text="${sitio.distrito}" th:value="${sitio.idSitios}"
-                                                    th:selected="${sitioSeleccionada != null && sitioSeleccionada.idSitios == sitio.idSitios}"
-                                            >Sitio de Tipo</option>
-                                        </select>
-                                    </div>
+                                    <select name="idSitios" id="idSitios" class="form-select">
+                                        <option value="">--Seleccione el sitio--</option>
+                                        <option th:each="sitio: ${listaSitios}"
+                                                th:text="${sitio.distrito}" th:value="${sitio.idSitios}"
+                                                th:selected="${sitioSeleccionada != null && sitioSeleccionada.idSitios == sitio.idSitios}"
+                                        >Sitio de Tipo</option>
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">
