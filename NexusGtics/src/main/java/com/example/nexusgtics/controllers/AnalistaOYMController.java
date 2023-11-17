@@ -699,6 +699,13 @@ public class AnalistaOYMController {
         model.addAttribute("numeroClientesActual", ticketRepository.numeroClientesActual());
         model.addAttribute("numeroClientesAnterior", ticketRepository.numeroClientesAnterior());
         model.addAttribute("diferenciaRegistros", ticketRepository.diferenciaRegistros());
+        model.addAttribute("numeroEmpresasAfiliadasMes", empresaRepository.numeroEmpresasAfiliadasMes());
+        model.addAttribute("EmpresasAfiliadasDiferencia", empresaRepository.EmpresasAfiliadasDiferencia());
+        model.addAttribute("cantTicketsCreados", ticketRepository.cantTicketsCreados());
+        model.addAttribute("cantTicketsFinalizados", ticketRepository.cantTicketsFinalizados());
+        model.addAttribute("CantporMes", ticketRepository.CantporMes());
+        model.addAttribute("CantporMesAnterior", ticketRepository.CantporMesAnterior());
+        model.addAttribute("CantHaceDosMeses", ticketRepository.CantHaceDosMeses());
         return "AnalistaOYM/oymDashboard";
     }
 
