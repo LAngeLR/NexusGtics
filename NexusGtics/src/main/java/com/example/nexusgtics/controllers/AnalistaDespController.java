@@ -603,7 +603,23 @@ public class AnalistaDespController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(){
+    public String dashboard(Model model, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idAnalista = u.getId();
+
+        model.addAttribute("ticketsRecienCreados", ticketRepository.recienCreados(idAnalista));
+        model.addAttribute("cantidadEquipos", equipoRepository.obtenerEquiposMarca());
+        model.addAttribute("culminados", ticketRepository.creadosCulminados(idAnalista,7));
+        model.addAttribute("numeroClientesActual", ticketRepository.numeroClientesActual());
+        model.addAttribute("numeroClientesAnterior", ticketRepository.numeroClientesAnterior());
+        model.addAttribute("diferenciaRegistros", ticketRepository.diferenciaRegistros());
+        model.addAttribute("numeroEmpresasAfiliadasMes", empresaRepository.numeroEmpresasAfiliadasMes());
+        model.addAttribute("EmpresasAfiliadasDiferencia", empresaRepository.EmpresasAfiliadasDiferencia());
+        model.addAttribute("cantTicketsCreados", ticketRepository.cantTicketsCreados());
+        model.addAttribute("cantTicketsFinalizados", ticketRepository.cantTicketsFinalizados());
+        model.addAttribute("CantporMes", ticketRepository.CantporMes());
+        model.addAttribute("CantporMesAnterior", ticketRepository.CantporMesAnterior());
+        model.addAttribute("CantHaceDosMeses", ticketRepository.CantHaceDosMeses());
         return "AnalistaDespliegue/despliegueDashboard";
     }
     @GetMapping("/comentarios")
