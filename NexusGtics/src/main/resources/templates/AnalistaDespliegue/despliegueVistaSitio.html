@@ -53,7 +53,7 @@
     <div class="pagetitle">
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Gestión de sitios</a></li>
+          <li class="breadcrumb-item"><a th:href="@{'listaSitio'}">Lisa de sitios</a></li>
           <li class="breadcrumb-item active">Visualizar sitio</li>
         </ol>
       </nav>
@@ -120,12 +120,13 @@
 
                 <div class="mb-3">
                   <label for="imagenSubida" class="form-label">Foto de Sitio:</label>
-                  <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                    <img id="imgPreview" th:src="@{|image/${sitio.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                  <div class="mx-auto" style="width: 250px; max-height: 250px">
+                    <img th:src="@{|/file/*{archivo?.idArchivos}|}" class="card-img-top"
+                         onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/34/241/png-transparent-telecommunications-tower-computer-icons-cell-site-telecom-tower-text-trademark-logo.png'">
                   </div>
                 </div>
-                <div class="mb-3">
 
+                <div class="mb-3">
                   <label >Ubicación del sitio:</label>
                   <div class="d-flex justify-content-center align-items-center">
                     <div class="card-body pt-3">
