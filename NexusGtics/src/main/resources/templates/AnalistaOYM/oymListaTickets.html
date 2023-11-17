@@ -90,7 +90,24 @@
                 <td th:text="${ticket.idEmpresaAsignada.nombre}"></td>
                 <td th:text="${ticket.usuarioSolicitante}"></td>
                 <td th:text="${ticket.idSitios.provincia}"></td>
-                <td th:text="${ticket.estado}"></td>
+
+                <!--estados segun flujo del proyecto on estilos-->
+                <td th:if="${ticket.estado==7}">
+                  <span class="badge text-bg-danger text-center">Cerrado</span>
+                </td>
+                <td th:if="${ticket.estado==6}">
+                  <span class="badge text-bg-warning">Atendido en campo</span>
+                </td>
+                <td th:if="${ticket.estado==1}">
+                  <span class="badge text-bg-primary text-center">Nuevo</span>
+                </td>
+                <td th:if="${ticket.estado==2}">
+                  <span class="badge text-bg-warning">En supervision</span>
+                </td>
+                <td th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5}">
+                  <span class="badge text-bg-success text-center">Asignado a tecnico</span>
+                </td>
+
                 <td th:text="${ticket.fechaCreacion}"></td>
                 <td th:text="${ticket.fechaCierre}"></td>
                 <td>

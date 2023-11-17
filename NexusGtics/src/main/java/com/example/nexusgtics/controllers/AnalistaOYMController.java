@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
@@ -562,9 +563,24 @@ public class AnalistaOYMController {
 
     /* DIRECCIONAR A FORMULARIO*/
     @GetMapping("/crearTicket")
-    public String crearTicket(Model model) {
+    public String crearTicket(Model model,
+                              @ModelAttribute("ticket") Ticket ticket) {
         model.addAttribute("listaEmpresa", empresaRepository.noNexus());
         model.addAttribute("listaSitios", sitioRepository.findAll());
+
+        Empresa empresaSeleccionada = ticket.getIdEmpresaAsignada();
+        if (empresaSeleccionada == null) {
+            empresaSeleccionada = new Empresa();
+            empresaSeleccionada.setIdEmpresas(-1);
+        }
+        model.addAttribute("empresaSeleccionada", empresaSeleccionada);
+
+        Sitio sitioSeleccionada = ticket.getIdSitios();
+        if (sitioSeleccionada == null) {
+            sitioSeleccionada = new Sitio();
+            sitioSeleccionada.setIdSitios(-1);
+        }
+        model.addAttribute("sitioSeleccionada", sitioSeleccionada);
 
         return "AnalistaOYM/oymCrearTicket";
     }
@@ -577,44 +593,51 @@ public class AnalistaOYMController {
                              Model model, HttpSession httpSession){
 
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
-        System.out.println(ticket.getFechaCierre());
+
+        ticket.setEstado(1);
+        //ticket.setIdTipoTicket(1);
+        ZoneId zonaHoraria = ZoneId.of("GMT-5");
+        LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+        ticket.setFechaCreacion(fechaActual);
+
+
 
         if (ticket.getFechaCierre() == null) {
-            bindingResult.rejectValue("fechaCierre", "error.ticket", "La fecha de cierre es obligatoria.");
-        }
-
-        if(ticket.getIdEmpresaAsignada() == null || ticket.getIdEmpresaAsignada().equals("-1")){
+            //bindingResult.rejectValue("fechaCierre", "error.ticket", "La fecha de cierre es obligatoria.");
+            model.addAttribute("fechaCierre", "La fecha de cierre es obligatoria");
             model.addAttribute("msgEmpresa", "Escoger una empresa");
-            if(ticket.getIdTickets()==null){
-                return "AnalistaOYM/oymCrearTicket";
-
-            }else{
-                return "AnalistaOYM/oymEditarTicket";            }
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+            model.addAttribute("listaSitios", sitioRepository.findAll());
+            return "AnalistaOYM/oymCrearTicket";
         }
 
-        if(ticket.getIdSitios() == null || ticket.getIdSitios().equals("-1")){
-            model.addAttribute("msgSitio", "Escoger una sitio");
-            if(ticket.getIdTickets()==null){
-                return "AnalistaOYM/oymCrearTicket";
+        if(ticket.getIdEmpresaAsignada() == null || ticket.getIdEmpresaAsignada().getIdEmpresas() == null || ticket.getIdEmpresaAsignada().getIdEmpresas() == -1){
+            model.addAttribute("msgEmpresa", "Escoger una empresa");
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+            model.addAttribute("listaSitios", sitioRepository.findAll());
+            return "AnalistaOYM/oymCrearTicket";
+        }
 
-            }else{
-                return "AnalistaOYM/oymEditarTicket";            }
+        if(ticket.getIdSitios() == null || ticket.getIdSitios().getIdSitios() == null || ticket.getIdSitios().getIdSitios() == -1){
+            model.addAttribute("msgSitio", "Escoger una sitio");
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+            model.addAttribute("listaSitios", sitioRepository.findAll());
+            return "AnalistaOYM/oymCrearTicket";
         }
 
         if(ticket.getPrioridad() == null || ticket.getPrioridad().equals("-1")){
             model.addAttribute("msgPrioridad", "Seleccionar prioridad");
-            if(ticket.getIdTickets()==null){
-                return "AnalistaOYM/oymCrearTicket";
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+            model.addAttribute("listaSitios", sitioRepository.findAll());
+            return "AnalistaOYM/oymCrearTicket";
 
-            }else{
-                return "AnalistaOYM/oymEditarTicket";            }
         }
         if (bindingResult.hasErrors()) {
             // Si hay errores, vuelve a la vista mostrando los errores y los datos ingresados por el usuario
             model.addAttribute("msgFechaCierre", "La fecha de cierre es obligatoria.");
             model.addAttribute("idEmpresaAsignada", ticket.getIdEmpresaAsignada());
             model.addAttribute("idSitios", ticket.getIdSitios());
-            return "AnalistaOYM/oymEditarTicket";
+            return "AnalistaOYM/oymCrearTicket";
         }
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
@@ -622,23 +645,17 @@ public class AnalistaOYMController {
             Random random = new Random();
             int numeroRandom = random.nextInt(7) + 1;
 
-            LocalDate fechaCreacion = LocalDate.now();
-            ticket.setFechaCreacion(fechaCreacion);
             ticket.setIdUsuarioCreador(u);
             ticket.setIdsitioCerrado(numeroRandom);
             ticket.setReasignado(0);
-
             ticketRepository.save(ticket);
-            attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente");
+            attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente por el usuario: " + ticket.getUsuarioSolicitante());
 
             return "redirect:/analistaOYM/ticket";
         } else { //hay al menos 1 error
-            if(ticket.getIdTickets()==null){
-                return "AnalistaOYM/oymCrearTicket";
-
-            }else {
-                return "AnalistaOYM/oymEditarTicket";
-            }
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+            model.addAttribute("listaSitios", sitioRepository.findAll());
+            return "AnalistaOYM/oymCrearTicket";
         }
 
     }
