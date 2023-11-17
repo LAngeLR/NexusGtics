@@ -23,10 +23,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
 
@@ -564,7 +561,7 @@ public class AnalistaOYMController {
     /* DIRECCIONAR A FORMULARIO*/
     @GetMapping("/crearTicket")
     public String crearTicket(Model model,
-                              @ModelAttribute("ticket") Ticket ticket) {
+                              @ModelAttribute("ticket") Ticket ticket, Ticket ticket2) {
         model.addAttribute("listaEmpresa", empresaRepository.noNexus());
         model.addAttribute("listaSitios", sitioRepository.findAll());
 
@@ -582,14 +579,19 @@ public class AnalistaOYMController {
         }
         model.addAttribute("sitioSeleccionada", sitioSeleccionada);
 
-        //falta que se mantenga prioridad
-//        Ticket ticket2 = new Ticket();
-//        ticket2.setPrioridad(ticket.getPrioridad());
-//        String prioridad =ticket2.getPrioridad();
-//        if (prioridad.equals(null)){
-//            ticket2 = new Ticket();
-//        }
-//        model.addAttribute("prioridad", prioridad);
+        //para mandar las pripridades como una lista y no como 1 a 1 en HTML
+        List<String> listaPrioridad = new ArrayList<>();
+        listaPrioridad.add("Baja prioridad");
+        listaPrioridad.add("Hacer");
+        listaPrioridad.add("No crítico");
+        listaPrioridad.add("Urgente");
+        model.addAttribute("listaPrioridad", listaPrioridad);
+
+        if(ticket2 == null) {
+            ticket2 = new Ticket();
+            ticket2.setPrioridad("");
+        }
+        model.addAttribute("ticket2",ticket2);
 
         return "AnalistaOYM/oymCrearTicket";
     }
@@ -599,7 +601,7 @@ public class AnalistaOYMController {
     public String saveTicket(RedirectAttributes attr,
                               @ModelAttribute("ticket") @Valid Ticket ticket,
                               BindingResult bindingResult,
-                             Model model, HttpSession httpSession){
+                             Model model, HttpSession httpSession, Ticket ticket2){
 
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
 
@@ -615,8 +617,8 @@ public class AnalistaOYMController {
         Sitio sitioSeleccionada = ticket.getIdSitios();
         model.addAttribute("sitioSeleccionada", sitioSeleccionada);
 
-        String prioridad = ticket.getPrioridad();
-        model.addAttribute("prioridad", prioridad);
+        ticket2.setPrioridad(ticket.getPrioridad());
+        model.addAttribute("ticket2", ticket2);
 
 
 
@@ -649,13 +651,6 @@ public class AnalistaOYMController {
             return "AnalistaOYM/oymCrearTicket";
 
         }
-//        if (bindingResult.hasErrors()) {
-//            // Si hay errores, vuelve a la vista mostrando los errores y los datos ingresados por el usuario
-//            model.addAttribute("msgFechaCierre", "La fecha de cierre es obligatoria.");
-//            model.addAttribute("idEmpresaAsignada", ticket.getIdEmpresaAsignada());
-//            model.addAttribute("idSitios", ticket.getIdSitios());
-//            return "AnalistaOYM/oymCrearTicket";
-//        }
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
 

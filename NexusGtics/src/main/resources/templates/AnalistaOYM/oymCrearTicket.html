@@ -134,13 +134,15 @@
 
                                 <div class="mb-3">
                                     <label for="prioridad" class="form-label">Selector de Prioridad</label>
-                                    <select class="form-select" name="prioridad" id="prioridad">
+                                    <select class="form-select" name="prioridad" id="prioridad"
+                                            th:if="${ticket2 != null}" th:field="*{prioridad}">
                                         <option value="-1">--Seleccione una Prioridad--</option>
                                         <option value="Baja prioridad">Baja prioridad</option>
                                         <option value="Hacer">Hacer</option>
                                         <option value="No critico">No critico</option>
                                         <option value="Urgente">Urgente</option>
                                     </select>
+
                                 </div>
 
                                 <div class="mb-3">
