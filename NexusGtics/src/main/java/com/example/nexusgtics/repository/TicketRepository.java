@@ -97,11 +97,31 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     int numeroClientesActual();
 
     @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM usuarios WHERE idEmpresas != 1 AND MONTH(fechaRegistro) = MONTH(DATE_SUB(NOW(), INTERVAL 1 MONTH));")
-    int numeroClientesAnterior();
+    Integer numeroClientesAnterior();
 
     @Query(nativeQuery = true, value = "SELECT\n" +
             "    ((SELECT COUNT(*) FROM usuarios WHERE idEmpresas != 1 AND MONTH(fechaRegistro) = MONTH(NOW())) -\n" +
             "    (SELECT COUNT(*) FROM usuarios WHERE idEmpresas != 1 AND MONTH(fechaRegistro) = MONTH(DATE_SUB(NOW(), INTERVAL 1 MONTH)))) /\n" +
             "    (SELECT COUNT(*) FROM usuarios WHERE idEmpresas != 1 AND MONTH(fechaRegistro) = MONTH(DATE_SUB(NOW(), INTERVAL 1 MONTH))) * 100 as diferencia_porcentaje;")
-    int diferenciaRegistros();
+    Integer diferenciaRegistros();
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) as total_tickets FROM tickets WHERE MONTH(fechaCreacion) = MONTH(NOW());\n")
+    Integer cantTicketsCreados();
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) as total_tickets_estado_8\n" +
+            "FROM tickets\n" +
+            "WHERE estado = 8 AND MONTH(fechaCreacion) = MONTH(NOW());\n")
+    Integer cantTicketsFinalizados();
+
+    @Query(nativeQuery = true, value = "SELECT count(*) FROM tickets WHERE MONTH(fechaCreacion) = MONTH(CURRENT_DATE())\n")
+    Integer CantporMes();
+
+    @Query(nativeQuery = true, value = "SELECT count(*) FROM tickets WHERE MONTH(fechaCreacion) = MONTH(CURRENT_DATE()) - 1")
+    Integer CantporMesAnterior();
+
+    @Query(nativeQuery = true, value = "SELECT count(*) FROM tickets WHERE MONTH(fechaCreacion) = MONTH(CURRENT_DATE()) - 2")
+    Integer CantHaceDosMeses();
+
+
+
 }
