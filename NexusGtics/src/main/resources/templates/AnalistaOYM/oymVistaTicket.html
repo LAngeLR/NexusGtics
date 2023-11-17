@@ -31,7 +31,8 @@
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section profile">
+
+    <section class="section profile" th:object="${ticket}">
         <div class="row">
             <div class="col-xl-6">
                 <div class="card">
@@ -39,112 +40,82 @@
                         <!-- Bordered Tabs -->
                         <div class="tab-content pt-2">
                             <div class="tab-pane fade show active profile-overview" id="datos-overview">
-                                <h5 class="card-title" style="color: #095444">Datos generale del Ticket</h5>
+                                <h5 class="card-title" style="color: #095444">Datos generales del Ticket</h5>
+                                <br>
 
-                                <form method="POST" action="" enctype="multipart/form-data" th:object="${ticket}" disabled>
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Usuario creador:</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{idUsuarioCreador.nombre}" disabled>
-                                        </div>
-                                    </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-5 label">Prioridad:</div>
+                                    <div class="col-lg-8 col-md-7" style="color: #D01515" th:if="${ticket.prioridad eq 'Urgente'}"><b th:text="${ticket.prioridad}"></b></div>
+                                    <div class="col-lg-8 col-md-7" style="color: #3498DB" th:if="${ticket.prioridad eq 'Baja prioridad'}"><b th:text="${ticket.prioridad}"></b></div>
+                                    <div class="col-lg-8 col-md-7" style="color: #FFC300" th:if="${ticket.prioridad eq 'Hacer'}"><b th:text="${ticket.prioridad}"></b></div>
+                                    <div class="col-lg-8 col-md-7" style="color: #4CAF50" th:if="${ticket.prioridad eq 'No critico'}"><b th:text="${ticket.prioridad}"></b></div>
+                                </div>
 
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Usuario solicitante:</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{usuarioSolicitante}" disabled>
-                                        </div>
-                                    </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-5 label">Nombre de Usuario:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${ticket.usuarioSolicitante}"></div>
+                                </div>
 
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Tipo de ticket</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{idTipoTicket.nombreTipoTicket}" disabled>
-                                        </div>
-                                    </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-5 label">Fecha de apertura:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${ticket.fechaCreacion}"></div>
+                                </div>
 
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Empresa proveedora</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{idEmpresaAsignada.nombre}" disabled>
-                                        </div>
-                                    </div>
+                                <div class="row">
 
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Sitio asignado</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{idSitios.provincia}" disabled>
-                                        </div>
-                                    </div>
+                                    <div class="col-lg-4 col-md-5 label">Fecha de vencimiento:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${ticket.fechaCierre}"></div>
+                                </div>
 
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Estado</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{estado}" disabled>
-                                        </div>
-                                    </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-5 label">Servicio Relacionado:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${ticket.idTipoTicket.nombreTipoTicket}"></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-5 label">Cuadrilla Asignada:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="'Cuadrilla ' + ${ticket.idCuadrilla.idCuadrillas}"></div>
+                                </div>
 
 
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Fecha de vencimiento:</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{fechaCierre}" disabled>
-                                        </div>
-                                    </div>
-
-                                </form>
-
-
-
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-5 label">Estado:</div>
+                                    <div class="col-lg-8 col-md-7"><span class="badge text-bg-success">Progreso</span></div>
+                                </div>
 
                             </div>
                             <br>
                         </div><!-- End Bordered Tabs -->
-                        <center>
-                            <a class="btn" style="background-color: #E0AD4B" th:href="@{'/analistaOYM/comentarios?id=' + ${ticket.idTickets}}">Comentarios</a>
-                            <a class="btn btn-danger" th:href="@{/analistaOYM/ticket}">Regresar</a></center>
+                        <div class="d-flex justify-content-end">
+                            <a type="button" class="btn btn-outline-warning" th:href="@{'/supervisor/comentarios?id=' + ${ticket.idTickets}}" style="margin-right: 25px;">Comentarios</a>
+                        </div>
                     </div>
                 </div>
-
             </div>
             <div class="col-xl-6">
                 <div class="card">
                     <div class="card-body pt-3">
                         <div class="col-md-8 col-lg-9">
-                            <h5 class="card-title" style="color: #095444">Formulario:</h5>
-                            <img th:src="@{https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg}" alt="Profile" style="max-height:14rem">
+                            <h5 class="card-title" style="color: #095444">Foto del Sitio:</h5>
+                            <img th:src="@{https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg}" alt="Profile" style="max-width: 100%; height: auto; display: block; margin: 0 auto; max-height: 70vh;">
                         </div>
-
                         <div class="tab-content pt-2">
 
                             <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                <h5 class="card-title" style="color: #095444">Comentario:</h5>
-                                <p class="small fst-italic" th:text="${ticket.descripcion}"></p>
-
+                                <br><br>
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">Líder Técnico:</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${ticket.idCuadrilla.tecnico != null ? 'Tec. ' + ticket.idCuadrilla.tecnico.nombre + ' ' + ticket.idCuadrilla.tecnico.apellido : 'No hay técnico asignado'}"></div>
-
+                                    <div class="col-lg-3 col-md-4 label">Descripcion:</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${ticket.descripcion}"></div>
                                 </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Nº Cuadrilla:</div>
-                                    <div class="col-lg-9 col-md-8" th:text="${ticket.idCuadrilla.idCuadrillas == 0 ? 'Sin cuadrilla' : 'Cuadrilla ' + ticket.idCuadrilla.idCuadrillas}"></div>
-
-                                </div>
-
+                                <br>
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Tiempo Transcurrido:</div>
                                     <div class="col-lg-9 col-md-8">2hrs : 26 min : 50 seg</div>
                                 </div>
-
                             </div>
-
                         </div><!-- End Bordered Tabs -->
-
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -188,15 +159,21 @@
                     </script>
 
                     <div class="mb-3" style="margin-top: 25px;"> <!-- Agrega un margen en la parte superior -->
-                        <input type="text" class="form-control" th:value="'Direccion: ' + ${ticket.idSitios.departamento} +', '+ ${ticket.idSitios.provincia} +', '+ ${ticket.idSitios.distrito}" disabled>
+                        <input type="text" class="form-control" th:value="'Direccion: ' + ${tickets.idSitios.departamento} +', '+ ${tickets.idSitios.provincia} +', '+ ${tickets.idSitios.distrito}" disabled>
                     </div>
                     <!-- MAPA -->
                 </div>
             </div>
         </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
     </section>
 
 </main><!-- End #main -->
+
 
 <!-- ======= Footer ======= -->
 <footer th:replace="Fragmentos/footer :: footer"></footer>
