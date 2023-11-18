@@ -117,7 +117,7 @@
                     <div class="card-body pt-3">
                         <div class="mb-3 row">
                             <label class="form-label">Foto de perfil:</label>
-
+                            <img th:src="@{|/file/${ticket.idSupervisorEncargado.archivo.getIdArchivos()}|}" alt="Profile" style="max-height:14rem">
                         </div>
                         <div class="mb-3 row">
                             <div class="col-lg-3 col-md-4 label">Descripción:</div>

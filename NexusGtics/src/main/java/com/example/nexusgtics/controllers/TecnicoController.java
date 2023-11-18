@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
+import static java.lang.Integer.valueOf;
 
 @Controller
 @RequestMapping("/tecnico")
@@ -457,12 +458,23 @@ public class TecnicoController {
             if (id <= 0 || !ticketRepository.existsById(id)) {
                 return "redirect:/ticket/ticketasignado";
             }
+
             Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
-            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
-            Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(id);
-            if (optionalTicket1.isPresent() && optionalFormulario.isPresent() && optionalSitioCerrado.isPresent()) {
+            System.out.println("Optional Ticket 1: " + optionalTicket1.isPresent());
+
+            Optional<Formulario> optionalFormulario1 = formularioRepository.findById(id);
+            System.out.println("Optional Formulario 1: " + optionalFormulario1.isPresent());
+
+            /* Obtenemos el objeto ticket para obtener el idSitioCerrado */
+            Ticket ticketPrevio = optionalTicket1.get();
+            Integer idSitioCerradoTicket = ticketPrevio.getIdsitioCerrado();
+
+            Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(idSitioCerradoTicket);
+            System.out.println("Optional Sitio 1: " + optionalSitioCerrado.isPresent());
+
+            if (optionalTicket1.isPresent() && optionalFormulario1.isPresent() && optionalSitioCerrado.isPresent()) {
                 Ticket ticket = optionalTicket1.get();
-                Formulario formulario = optionalFormulario.get();
+                Formulario formulario = optionalFormulario1.get();
                 SitioCerrado sitioCerrado = optionalSitioCerrado.get();
                 model.addAttribute("ticket", ticket);
                 model.addAttribute("formulario", formulario);
