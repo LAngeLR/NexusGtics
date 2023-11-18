@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
+import static java.lang.Integer.valueOf;
 
 @Controller
 @RequestMapping("/tecnico")
@@ -457,20 +458,33 @@ public class TecnicoController {
             if (id <= 0 || !ticketRepository.existsById(id)) {
                 return "redirect:/ticket/ticketasignado";
             }
+
+            Integer idBuscador = valueOf(id);
+
             Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
-            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
-            Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(id);
-            if (optionalTicket1.isPresent() && optionalFormulario.isPresent() && optionalSitioCerrado.isPresent()) {
+            System.out.println("Optional Ticket 1: " + optionalTicket1.isPresent());
+
+
+            Optional<Formulario> prueba = formularioRepository.findById(idBuscador);
+            System.out.println("Optional Formulario Prueba: " + prueba.isPresent());
+
+            Optional<Formulario> optionalFormulario1 = formularioRepository.findById(id);
+            System.out.println("Optional Formulario 1: " + optionalFormulario1.isPresent());
+
+            Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(5);
+            System.out.println("Optional Sitio 1: " + optionalSitioCerrado.isPresent());
+
+            if (optionalTicket1.isPresent()) {
                 Ticket ticket = optionalTicket1.get();
-                Formulario formulario = optionalFormulario.get();
-                SitioCerrado sitioCerrado = optionalSitioCerrado.get();
+                //Formulario formulario = optionalFormulario1.get();
+                //SitioCerrado sitioCerrado = optionalSitioCerrado.get();
                 model.addAttribute("ticket", ticket);
-                model.addAttribute("formulario", formulario);
-                model.addAttribute("sitioCerrado", sitioCerrado);
+                //model.addAttribute("formulario", formulario);
+                //model.addAttribute("sitioCerrado", sitioCerrado);
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
                 return "Tecnico/datost_cerrado";
             } else {
-                return "redirect:/tecnico/ticketasignado";
+                return "redirect:/tecnico/";
             }
         } catch (NumberFormatException e) {
             return "redirect:/tecnico/ticketasignado";
