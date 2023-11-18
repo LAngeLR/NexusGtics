@@ -1,10 +1,11 @@
 package com.example.nexusgtics.controllers;
 
+import com.example.nexusgtics.controllers.Email.Authenticate;
+import com.example.nexusgtics.controllers.Email.LoginRequest;
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,7 +30,6 @@ import java.math.RoundingMode;
 import static com.example.nexusgtics.controllers.GcsController.downloadObject;
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
 import static java.lang.Integer.parseInt;
-import static org.aspectj.runtime.internal.Conversions.intValue;
 
 @Controller
 @RequestMapping("/admin")
@@ -1203,4 +1203,23 @@ public class AdminController {
         return "redirect:/admin/listaSitio";
     }
 
+    @RestController
+    @RequestMapping("/auth")
+    public static class AuthController {
+
+        Authenticate authenticate;
+
+        public AuthController(Authenticate authenticate) {
+            this.authenticate = authenticate;
+        }
+
+        @PostMapping("/authenticate")
+        public ResponseEntity<Object> authenticate(@RequestBody LoginRequest loginRequest){
+
+            authenticate.sendMessageUser(loginRequest.getEmailUser(), loginRequest.getMessage());
+
+            return  ResponseEntity.ok()
+                    .body("HOLA...");
+        }
+    }
 }

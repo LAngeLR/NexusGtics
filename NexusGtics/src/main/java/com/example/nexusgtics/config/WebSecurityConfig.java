@@ -87,7 +87,7 @@ public class WebSecurityConfig {
                 );
 
         http.authorizeHttpRequests()
-                .requestMatchers("/superadmin", "/superadmin/**").hasAnyAuthority("Super administrador")
+                .requestMatchers("/superadmin", "/superadmin/**","/auth/**").hasAnyAuthority("Super administrador")
                 .requestMatchers("/admin", "/admin/**").hasAnyAuthority("Administrador")
                 .requestMatchers("/analistaOYM", "/analistaOYM/**").hasAnyAuthority("Analista de OyM")
                 .requestMatchers("/analistaDespliegue", "/analistaDespliegue/**").hasAnyAuthority("Analista de Planificacion o Ingenieria")
