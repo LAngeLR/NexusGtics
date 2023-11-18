@@ -124,24 +124,34 @@
                             <div class="col-md-6">
 
                                 <div class="mb-3">
-                                    <label for="usuarioSolicitante">Usuario Solicitante</label>
-                                    <input type="text" class="form-control" name="usuarioSolicitante" id="usuarioSolicitante" >
+                                    <label class="form-label">Usuario Solicitante</label>
+                                    <input type="text" th:field="*{usuarioSolicitante}" th:class="${#fields.hasErrors('usuarioSolicitante')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('usuarioSolicitante')}" th:errors="*{usuarioSolicitante}">
+                                        Mensaje de error de usuarioSolicitante
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="prioridad" class="form-label">Selector de Prioridad</label>
-                                    <select class="form-select" name="prioridad" id="prioridad">
+                                    <select class="form-select" name="prioridad" id="prioridad"
+                                            th:if="${ticket2 != null}" th:field="*{prioridad}">
                                         <option value="-1">--Seleccione una Prioridad--</option>
                                         <option value="Baja prioridad">Baja prioridad</option>
                                         <option value="Hacer">Hacer</option>
                                         <option value="No critico">No critico</option>
                                         <option value="Urgente">Urgente</option>
                                     </select>
+
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="descripcion">Descripcion</label>
-                                    <input type="text" class="form-control" name="descripcion" id="descripcion" >
+                                    <label class="form-label">Usuario Solicitante</label>
+                                    <input type="text" th:field="*{descripcion}" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
+                                        Mensaje de error de descripción
+                                    </div>
                                 </div>
                             <div>
                             </div>
