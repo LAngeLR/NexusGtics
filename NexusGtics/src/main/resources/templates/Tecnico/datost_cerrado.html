@@ -112,7 +112,7 @@
                     <div class="col-xl-6">
                         <div class="mb-3 row">
                             <h5 class="card-title" style="color: #095444">Formulario:</h5>
-                            <img th:object="${formulario}" th:src="@{|image/${formulario.archivo}|}" alt="Profile" style="max-height:14rem">
+                            <img th:src="@{|/file/${formulario.archivo.getIdArchivos()}|}" alt="Profile" style="max-height:14rem">
                         </div>
                         <div class="mb-3 row">
                             <label class="col-sm-4 form-label" style="color: #095444">Comentario:</label>
