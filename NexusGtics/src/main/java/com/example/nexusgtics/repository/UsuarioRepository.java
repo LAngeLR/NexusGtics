@@ -85,4 +85,23 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(nativeQuery = true, value ="UPDATE nexus.usuarios SET tecnicoConCuadrilla = true WHERE idUsuarios = ?1")
     void cambiarTecnico(int idUsuario);
 
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS NumeroUsuariosCreadosEsteMes\n" +
+            "FROM usuarios\n" +
+            "WHERE idCargos = ?1\n" +
+            "  AND habilitado = 1\n" +
+            "  AND idEmpresas = ?2\n" +
+            "  AND MONTH(fechaRegistro) = MONTH(CURRENT_DATE())\n" +
+            "  AND YEAR(fechaRegistro) = YEAR(CURRENT_DATE());\n")
+    int tecnicosEsteMes(int cargo, int idEmpresa);
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS umespasado\n" +
+            "FROM usuarios\n" +
+            "WHERE idCargos = ?1\n" +
+            "  AND habilitado = 1\n" +
+            "  AND idEmpresas = ?2\n" +
+            "  AND MONTH(fechaRegistro) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH)\n" +
+            "  AND YEAR(fechaRegistro) = YEAR(CURRENT_DATE() - INTERVAL 1 MONTH);\n" +
+            "\n")
+    int tecnicosMesPasado(int cargo, int idEmpresa);
+
 }

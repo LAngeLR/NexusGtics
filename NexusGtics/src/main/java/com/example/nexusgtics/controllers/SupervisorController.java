@@ -1,5 +1,6 @@
 package com.example.nexusgtics.controllers;
 
+import com.example.nexusgtics.dto.DashboardGraficoDto;
 import com.example.nexusgtics.dto.DetalleCuadrillaDto;
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
@@ -472,12 +473,25 @@ public class SupervisorController {
     }
 
     @GetMapping("/mapaTickets")
-    public String mapaTickets(Model model){
+    public String mapaTickets(Model model, HttpSession httpSession){
 
-        List<Ticket> listaT= ticketRepository.findAll();
-        model.addAttribute("listaTicket", listaT);
-        List<Sitio> sitioList = sitioRepository.findAll();
-        model.addAttribute("sitioList", sitioList);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idSupervisor = u.getId();
+
+        List<Sitio> listaSitios = sitioRepository.findAll();
+
+        List<Ticket> listaTickets1 = ticketRepository.cerrados();
+        List<Ticket> listaTickets2 = ticketRepository.progreso();
+        List<Ticket> listaTickets3 = ticketRepository.nuevos();
+
+
+        //List<Ticket> listaTickets = ticketRepository.listarMapaSupervisor(idSupervisor,u.getEmpresa().getIdEmpresas());
+
+        model.addAttribute("ticketsCerrados", listaTickets1);
+        model.addAttribute("ticketsProgreso", listaTickets2);
+        model.addAttribute("ticketsNuevos", listaTickets3);
+
+        model.addAttribute("sitios", listaSitios);
 
         return "Supervisor/mapaTickets";
     }
@@ -488,11 +502,35 @@ public class SupervisorController {
         Integer idEmpresa = u.getEmpresa().getIdEmpresas();
         Integer idSup = u.getId();
         List<Ticket> listaTickets = ticketRepository.listaTicketsSinSupervisor(idEmpresa);
+
         model.addAttribute("listaTickets", listaTickets);
         model.addAttribute("cantidadEquipos", equipoRepository.obtenerEquiposMarca());
         model.addAttribute("culminados", ticketRepository.infoDash(idSup,7));
         model.addAttribute("actividad",historialTicketRepository.actividadReciente(idSup));
 
+        //Valores cuadrillas
+        model.addAttribute("ultimoMesCuadrilla",cuadrillaRepository.obtenerCuadrillasUltimoMes());
+        model.addAttribute("cMesPasado",cuadrillaRepository.cuadrillaMesPasado());
+
+        //valores tecnicos
+        model.addAttribute("tecnicosMes",usuarioRepository.tecnicosEsteMes(6,u.getEmpresa().getIdEmpresas()));
+        model.addAttribute("tecnicosPasados",usuarioRepository.tecnicosMesPasado(6,u.getEmpresa().getIdEmpresas()));
+
+        /*
+        List<DashboardGraficoDto> graficoData = historialTicketRepository.grafico();
+
+        model.addAttribute("grafico",historialTicketRepository.grafico());
+
+        for (DashboardGraficoDto entry : graficoData) {
+            System.out.println("ID Cuadrilla: " + entry.getIdCuadrilla() +
+                    ", Cantidad: " + entry.getCantidad() +
+                    ", Mes: " + entry.getMonth());
+        }
+
+        model.addAttribute("grafico", graficoData);
+
+        No funciona
+        */
 
         return "Supervisor/dashboardSupervisor";
     }

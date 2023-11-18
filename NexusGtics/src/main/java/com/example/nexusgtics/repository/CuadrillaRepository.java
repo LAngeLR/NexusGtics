@@ -71,4 +71,29 @@ public interface CuadrillaRepository extends JpaRepository<Cuadrilla, Integer> {
             "JOIN usuarios leader ON leader.nombre = subquery.nombreLider AND leader.apellido = subquery.apellidoLider\n" +
             "GROUP BY idCuadrilla, cantidad, fecha, year;\n")
     List<ListaCuadrillaImcompletaDto> cuadrillaImCompleta();
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS nuevos\n" +
+            "FROM (\n" +
+            "    SELECT c.idCuadrillas\n" +
+            "    FROM cuadrillas c\n" +
+            "    JOIN tecnicoscuadrillas ct ON c.idCuadrillas = ct.idCuadrilla\n" +
+            "    WHERE MONTH(c.fechaCreacion) = MONTH(CURRENT_DATE())\n" +
+            "      AND YEAR(c.fechaCreacion) = YEAR(CURRENT_DATE())\n" +
+            "    GROUP BY c.idCuadrillas\n" +
+            "    HAVING COUNT(ct.idAsignacion) = 5\n" +
+            ") AS CuadrillasCon5Tecnicos;")
+    int obtenerCuadrillasUltimoMes();
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS mespasado\n" +
+            "FROM (\n" +
+            "    SELECT c.idCuadrillas\n" +
+            "    FROM cuadrillas c\n" +
+            "    JOIN tecnicoscuadrillas ct ON c.idCuadrillas = ct.idCuadrilla\n" +
+            "    WHERE MONTH(c.fechaCreacion) = MONTH(CURRENT_DATE() - INTERVAL 1 MONTH)\n" +
+            "      AND YEAR(c.fechaCreacion) = YEAR(CURRENT_DATE() - INTERVAL 1 MONTH)\n" +
+            "    GROUP BY c.idCuadrillas\n" +
+            "    HAVING COUNT(ct.idAsignacion) = 5\n" +
+            ") AS CuadrillasCon5Tecnicos;")
+    int cuadrillaMesPasado();
+
 }

@@ -1209,6 +1209,65 @@ h6 {
   }
 }
 
+.option-btn1,
+.option-btn2,
+.option-btn3 {
+  margin-right: 10px;
+  border-radius: 7px;
+  padding: 5px 11px;
+  cursor: pointer;
+  margin-bottom: 25px;
+}
+
+.option-btn1 {
+  color: #007bff; /* Color del texto para primary */
+  border: 1px solid #007bff; /* Color del borde para primary */
+  background-color: transparent; /* Fondo transparente */
+}
+
+.option-btn1:hover {
+  background-color: #007bff; /* Color del fondo al pasar el mouse para primary */
+  color: #fff; /* Cambiar color del texto al pasar el mouse */
+}
+
+.option-btn2 {
+  color: #28a745; /* Color del texto para success */
+  border: 1px solid #28a745; /* Color del borde para success */
+  background-color: transparent; /* Fondo transparente */
+}
+
+.option-btn2:hover {
+  background-color: #28a745; /* Color del fondo al pasar el mouse para success */
+  color: #fff; /* Cambiar color del texto al pasar el mouse */
+}
+
+.option-btn3 {
+  color: #dc3545; /* Color del texto para danger */
+  border: 1px solid #dc3545; /* Color del borde para danger */
+  background-color: transparent; /* Fondo transparente */
+}
+
+.option-btn3:hover {
+  background-color: #dc3545; /* Color del fondo al pasar el mouse para danger */
+  color: #fff; /* Cambiar color del texto al pasar el mouse */
+}
+
+.map-container {
+  width: 100%;
+  height: 50vh;
+  max-height: 400px;
+  overflow: hidden;
+}
+
+.select-location {
+  display: none;
+}
+
+select {
+  width: 30%;
+  font-size: 0.8rem;
+}
+
 /*--------------------------------------------------------------
 # Footer
 --------------------------------------------------------------*/
