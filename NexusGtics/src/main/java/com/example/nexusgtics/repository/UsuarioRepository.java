@@ -77,8 +77,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(nativeQuery = true, value = "SELECT u.* FROM tecnicoscuadrillas tc inner join usuarios u on tc.idTecnico = u.idUsuarios where idCuadrilla = ?1")
     List<Usuario> listaDeTecnicosPorCuadrilla(int idCuadrilla);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM usuarios where idCargos=?1 and idUsuarios!=?2 and tecnicoConCuadrilla=false")
-    List<Usuario> listaDeSupervisores(int valor, int idSupNo);
+    @Query(nativeQuery = true, value = "SELECT * FROM usuarios where idCargos=?1 and idUsuarios!=?2 and tecnicoConCuadrilla=false and idEmpresas=?3")
+    List<Usuario> listaDeSupervisores(int valor, int idSupNo, int idEmpresa);
 
     @Modifying
     @Transactional

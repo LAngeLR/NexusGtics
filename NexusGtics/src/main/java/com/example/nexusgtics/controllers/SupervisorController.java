@@ -2,6 +2,7 @@ package com.example.nexusgtics.controllers;
 
 import com.example.nexusgtics.dto.DashboardGraficoDto;
 import com.example.nexusgtics.dto.DetalleCuadrillaDto;
+import com.example.nexusgtics.dto.ListaCuadrillaCompletaDto;
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
 import jakarta.servlet.http.HttpSession;
@@ -96,7 +97,7 @@ public class SupervisorController {
             model.addAttribute("listaCargo", cargoRepository.findAll());
 
             if (usuario.getId() == null) {
-                return "Supervisor/menuSupervisor";
+                return "Supervisor/perfilSupervisor";
             } else {
                 return "Supervisor/perfilEditar";
             }
@@ -106,7 +107,7 @@ public class SupervisorController {
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
             if (usuario.getId() == null) {
-                return "Supervisor/menuSupervisor";
+                return "Supervisor/perfilSupervisor";
             } else {
                 return "Supervisor/perfilEditar";
             }
@@ -115,7 +116,7 @@ public class SupervisorController {
         if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
             if (usuario.getId() == null) {
-                return "Supervisor/menuSupervisor";
+                return "Supervisor/perfilSupervisor";
             } else {
                 return "Supervisor/perfilEditar";
             }
@@ -126,7 +127,7 @@ public class SupervisorController {
         if (fileName1.contains("..") && !file.isEmpty()) {
             model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
             if (usuario.getId() == null) {
-                return "Supervisor/menuSupervisor";
+                return "Supervisor/perfilSupervisor";
             } else {
                 return "Supervisor/perfilEditar";
             }
@@ -139,7 +140,7 @@ public class SupervisorController {
             System.out.println(file.getSize());
             model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
             if (usuario.getId() == null) {
-                return "Supervisor/menuSupervisor";
+                return "Supervisor/perfilSupervisor";
             } else {
                 return "redirect:/supervisor/perfilEditar";
             }
@@ -179,7 +180,7 @@ public class SupervisorController {
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaCargo", cargoRepository.findAll());
             if (usuario.getId() == null) {
-                return "Supervisor/menuSupervisor";
+                return "Supervisor/perfilSupervisor";
             } else {
                 return "Supervisor/perfilEditar";
             }
@@ -195,7 +196,7 @@ public class SupervisorController {
         try{
             //int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/supervisor/supervisor";
+                return "redirect:/supervisor/perfil";
             }
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
@@ -208,7 +209,7 @@ public class SupervisorController {
                 return "redirect:/supervisor/perfil";
             }
         } catch (NumberFormatException e) {
-            return "redirect:/supervisor/supervisor";
+            return "redirect:/supervisor/perfil";
         }
 
     }
@@ -277,10 +278,12 @@ public class SupervisorController {
     }
 
     @GetMapping("/listaCuadrillas")
-    public String Cuadrillas(Model model){
+    public String Cuadrillas(Model model, HttpSession httpSession){
 
-        model.addAttribute("listaCuadrillaCompleta", cuadrillaRepository.cuadrillaCompleta());
-        model.addAttribute("listaCuadrillaImcompleta", cuadrillaRepository.cuadrillaImCompleta());
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+
+        model.addAttribute("listaCuadrillaCompleta", cuadrillaRepository.cuadrillaCompleta(u.getEmpresa().getIdEmpresas()));
+        model.addAttribute("listaCuadrillaImcompleta", cuadrillaRepository.cuadrillaImCompleta(u.getEmpresa().getIdEmpresas()));
         return "Supervisor/listaCuadrillas";
     }
 
@@ -297,8 +300,8 @@ public class SupervisorController {
                 return "redirect:/supervisor/listaTickets";
             }
             Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
-            List<Usuario> listaSupervisor = usuarioRepository.listaDeSupervisores(5,idSupervisor);
-            List<Cuadrilla> listaCuadrillas = cuadrillaRepository.findAll();
+            List<Usuario> listaSupervisor = usuarioRepository.listaDeSupervisores(5,idSupervisor, u.getEmpresa().getIdEmpresas());
+            List<ListaCuadrillaCompletaDto> listaCuadrillas = cuadrillaRepository.cuadrillaCompleta(u.getEmpresa().getIdEmpresas());
             if (ticketBuscado.isPresent()) {
                 Ticket ticket = ticketBuscado.get();
                 model.addAttribute("ticket", ticket);
@@ -551,7 +554,7 @@ public class SupervisorController {
             model.addAttribute("valor", cuadrillaRepository.numeroTecnicosPorCuadrilla(id));
             model.addAttribute("a", id);
         }
-        model.addAttribute("listaTecnicos",usuarioRepository.listaDeSupervisores(6, idSupervisor));
+        model.addAttribute("listaTecnicos",usuarioRepository.listaDeSupervisores(6, idSupervisor, u.getEmpresa().getIdEmpresas()));
         return "Supervisor/crearCuadrilla";
     }
 

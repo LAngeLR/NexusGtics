@@ -69,7 +69,7 @@
                                     <div class="ps-3">
                                         <h6 th:text="${ultimoMesCuadrilla} + ' +'">2+</h6>
                                         <span class="text-success small pt-1 fw-bold" th:if="${cMesPasado != 0}" th:text="${((ultimoMesCuadrilla - cMesPasado) * 100) / cMesPasado + '%' }"></span>
-                                        <span class="text-muted small pt-2 ps-1" th:if="${cMesPasado == 0}">No se crearon cuadrillas el último mes</span>
+                                        <span class="text-muted small pt-2 ps-1" th:if="${cMesPasado == 0}">No se crearon cuadrillas el mes pasado</span>
                                         <span class="text-muted small pt-2 ps-1" th:if="${cMesPasado != 0}">más que el mes anterior</span>
                                     </div>
 

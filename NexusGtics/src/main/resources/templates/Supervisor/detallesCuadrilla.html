@@ -28,8 +28,8 @@
 
                 <div class="card">
                     <div class="card-body pt-5 d-flex flex-column align-items-center">
-                        <img th:src="@{'/assets/img/' + detalle.foto}" alt="Profile" width="320" height="325">
-
+                        <img th:src="@{|/file/${detalle.foto}|}" alt="Profile"  class="rounded-circle" width="250" height="250"
+                             onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
                         <br>
                         <h2 style="color: #095444">Sup. Creador</h2>
                         <br>
@@ -105,7 +105,8 @@
                                     <div class="row">
                                         <div class="col-md-3 integrante-item">
                                             <div>
-                                                <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="img-fluid">
+                                                <img th:src="@{|/file/${tecnicoLider.archivo.idArchivos}|}" alt="Profile"  class="rounded-circle img-fluid"
+                                                     onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
                                                 <br>
                                                 <br>
                                                 <div th:text="'Tec. ' + ${tecnicoLider.nombre} + ${tecnicoLider.apellido}"></div>
@@ -114,7 +115,8 @@
                                         </div>
                                         <div class="col-md-2 integrante-item2" th:each="integrante : ${integrantes}" th:if="${tecnicoLider.id!=integrante.id}">
                                             <div>
-                                                <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="img-fluid">
+                                                <img th:src="@{|/file/${integrante.archivo.idArchivos}|}" alt="Profile"  class="rounded-circle img-fluid"
+                                                     onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
                                                 <br>
                                                 <br>
                                                 <div th:text="'Tec. ' + ${integrante.nombre} + ${integrante.apellido}"></div>
@@ -200,7 +202,8 @@
                                 <div class="col-lg-9 col-md-8" style="color: #4CAF50" th:if="${cerrados.prioridad eq 'No critico'}"><span class="badge text-bg-success" th:text="${cerrados.prioridad}"></span></div>
                             </div>
                             <br>
-                            <img class="ticket-image" th:src="@{https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg}" alt="Imagen del ticket" style="width: 100px; height: auto; float: right; cursor: pointer;">
+                        <img  class="ticket-image" th:src="@{|/image/${cerrados.idSitios.archivo.idArchivos}|}" alt="Imagen del ticket" style="width: 100px; height: auto; float: right; cursor: pointer;"
+                             onerror="this.onerror=null; this.src='https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg'">
                     </div>
                 </div>
             </div>

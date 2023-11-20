@@ -27,17 +27,16 @@ public interface CuadrillaRepository extends JpaRepository<Cuadrilla, Integer> {
     @Query(nativeQuery = true, value = "SELECT \n" +
             "    c.idCuadrillas AS idCuadrilla,\n" +
             "    CONCAT(u.nombre, ' ', u.apellido) AS lider,\n" +
-            "    COUNT(DISTINCT t.idTickets) AS trabajos,\n" +
+            "    COUNT(DISTINCT CASE WHEN (t.estado IN (6, 7, 8) OR t.estado IS NULL) THEN t.idTickets END) AS trabajos,\n" +
             "    MAX(t.fechaCierre) AS ultimo,\n" +
             "    IFNULL(ROUND(DATEDIFF(CURDATE(), u.fechaRegistro) / 365), 0) AS year\n" +
             "FROM tecnicoscuadrillas tc \n" +
             "JOIN usuarios u ON tc.idTecnico = u.idUsuarios \n" +
             "LEFT JOIN cuadrillas c ON tc.idCuadrilla = c.idCuadrillas\n" +
             "LEFT JOIN tickets t ON c.idCuadrillas = t.idCuadrilla \n" +
-            "WHERE (t.estado IN (6, 7, 8) OR t.estado IS NULL) AND tc.liderTecnico = 1\n" +
-            "GROUP BY c.idCuadrillas, u.idUsuarios\n" +
-            "HAVING (SELECT COUNT(*) FROM tecnicoscuadrillas WHERE idCuadrilla = c.idCuadrillas) = 5;")
-    List<ListaCuadrillaCompletaDto> cuadrillaCompleta();
+            "WHERE tc.liderTecnico = 1 AND u.idEmpresas = ?1\n" +
+            "GROUP BY c.idCuadrillas, u.idUsuarios;\n")
+    List<ListaCuadrillaCompletaDto> cuadrillaCompleta(int idEmpresa);
 
     @Query(nativeQuery = true, value = "SELECT \n" +
             "    idCuadrilla,\n" +
@@ -69,8 +68,9 @@ public interface CuadrillaRepository extends JpaRepository<Cuadrilla, Integer> {
             "        COUNT(DISTINCT u.idUsuarios) < 5\n" +
             ") AS subquery\n" +
             "JOIN usuarios leader ON leader.nombre = subquery.nombreLider AND leader.apellido = subquery.apellidoLider\n" +
+            "WHERE leader.idEmpresas = ?1\n" +
             "GROUP BY idCuadrilla, cantidad, fecha, year;\n")
-    List<ListaCuadrillaImcompletaDto> cuadrillaImCompleta();
+    List<ListaCuadrillaImcompletaDto> cuadrillaImCompleta(int idEmpresa);
 
     @Query(nativeQuery = true, value = "SELECT COUNT(*) AS nuevos\n" +
             "FROM (\n" +

@@ -26,7 +26,7 @@ public interface TecnicosCuadrillaRepository extends JpaRepository<Tecnicoscuadr
             "    c.idCuadrillas AS idCuadrilla,\n" +
             "    CONCAT(u.nombre, ' ', u.apellido) AS lider,\n" +
             "    CONCAT(supervisor.nombre, ' ', supervisor.apellido) AS supervisor,\n" +
-            "    archivos.archivo AS foto,  -- Nuevo campo agregado\n" +
+            "    archivos.idArchivos AS foto,  -- Nuevo campo agregado\n" +
             "    COUNT(DISTINCT t.idTickets) AS trabajos,\n" +
             "    MAX(t.fechaCierre) AS ultimo,\n" +
             "    IFNULL(ROUND(DATEDIFF(CURDATE(), u.fechaRegistro) / 365), 0) AS year,\n" +
