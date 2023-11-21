@@ -110,10 +110,49 @@
                         </form>
                     </div>
                     <div class="col-xl-6">
-                        <div class="mb-3 row">
-                            <h5 class="card-title" style="color: #095444">Formulario:</h5>
-                            <img th:src="@{|/file/${formulario.archivo.getIdArchivos()}|}" alt="Profile" style="max-height:25rem; max-width:25rem">
+                        <!--Aqui inicia carusel-->
+
+                        <div id="carouselExampleIndicators" class="mb-3 row carousel slide">
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            </div>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img th:src="@{|/file/${ticket.idSupervisorEncargado.archivo.getIdArchivos()}|}" class="d-block w-100" alt="Profile" style="max-height:25rem; max-width:30rem">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5>Formulario</h5>
+                                        <p>Llegada a sitio</p>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <img th:src="@{|/file/${ticket.idSupervisorEncargado.archivo.getIdArchivos()}|}" alt="Profile" style="max-height:25rem; max-width:30rem">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5>Formulario</h5>
+                                        <p>Validación de sitio</p>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <img th:src="@{|/file/${ticket.idSupervisorEncargado.archivo.getIdArchivos()}|}" class="d-block w-100" alt="Profile" style="max-height:25rem; max-width:30rem">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5>Formulario</h5>
+                                        <p>Trabajo realizado</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
                         </div>
+
+                        <!--Aqui finaliza carusel-->
+
                         <div class="mb-3 row">
                             <label class="col-sm-4 form-label" style="color: #095444">Comentario:</label>
                             <div class="col-sm-8">
