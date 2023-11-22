@@ -24,7 +24,7 @@ public interface CuadrillaRepository extends JpaRepository<Cuadrilla, Integer> {
     @Query(nativeQuery = true, value = "SELECT COUNT(DISTINCT idCuadrillas) as cuadrilla_count FROM cuadrillas")
     int cantidadCuadrillas();
 
-    @Query(nativeQuery = true, value = "SELECT \n" +
+    @Query(nativeQuery = true, value = "SELECT\n" +
             "    c.idCuadrillas AS idCuadrilla,\n" +
             "    CONCAT(u.nombre, ' ', u.apellido) AS lider,\n" +
             "    COUNT(DISTINCT CASE WHEN (t.estado IN (6, 7, 8) OR t.estado IS NULL) THEN t.idTickets END) AS trabajos,\n" +
@@ -35,7 +35,8 @@ public interface CuadrillaRepository extends JpaRepository<Cuadrilla, Integer> {
             "LEFT JOIN cuadrillas c ON tc.idCuadrilla = c.idCuadrillas\n" +
             "LEFT JOIN tickets t ON c.idCuadrillas = t.idCuadrilla \n" +
             "WHERE tc.liderTecnico = 1 AND u.idEmpresas = ?1\n" +
-            "GROUP BY c.idCuadrillas, u.idUsuarios;\n")
+            "GROUP BY c.idCuadrillas, u.idUsuarios\n" +
+            "HAVING (SELECT COUNT(DISTINCT idTecnico) FROM tecnicoscuadrillas WHERE idCuadrilla = c.idCuadrillas) = 5;\n")
     List<ListaCuadrillaCompletaDto> cuadrillaCompleta(int idEmpresa);
 
     @Query(nativeQuery = true, value = "SELECT \n" +
