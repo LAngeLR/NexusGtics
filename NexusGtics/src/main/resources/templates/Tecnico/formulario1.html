@@ -46,12 +46,13 @@
 <main id="main" class="main">
     <div class="container">
         <div class="pagetitle">
-            <h1>Formulario 1</h1>
+            <h1>Formulario</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a th:href="@{/tecnico/}">Home</a></li>
                     <li class="breadcrumb-item active">Tickets Asignados</li>
                     <li class="breadcrumb-item active">Datos del ticket</li>
+                    <li class="breadcrumb-item active">Formulario</li>
                     <li class="breadcrumb-item active">Formulario 1</li>
                 </ol>
             </nav>
@@ -302,11 +303,16 @@
                     <div class="alert alert-danger" role="alert" th:if="${msgFormulario != null}" th:text="${msgFormulario}">
                         A simple success alert—check it out!
                     </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
+                        A simple success alert—check it out!
+                    </div>
                     <form method="POST" th:action="@{/tecnico/saveFormulario1}" th:object="${formulario1}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row">
                             <div class="col-md-6">
+                                <!--
                                 <input type="hidden" class="form-control" th:field="*{idFormularios}">
                                 <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
+                                -->
                                 <div class="mb-3">
                                     <label class="form-label">Hechos relevantes en la llegada al sitio:</label>
                                     <input th:field="*{hrelevantes}" type="text" th:class="${#fields.hasErrors('hrelevantes')?'form-control is-invalid':'form-control'}"/>
@@ -338,6 +344,7 @@
                                     </div>
                                     <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
                                            accept="image/*" onchange="previewImage(event, '#imgPreview')">
+
                                 </div>
 
                                 <button type="submit" class="btn btn-outline-primary float-end">Guardar</button>

@@ -5,6 +5,7 @@ import com.example.nexusgtics.repository.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.nexusgtics.controllers.GcsController.downloadObject;
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
 import static java.lang.Integer.valueOf;
 
@@ -652,22 +656,36 @@ public class TecnicoController {
     @GetMapping({"/formulario1", "formulario1"})
     public String pagformulario1(Model model, @RequestParam("id") String idStr,
                                 @ModelAttribute("formulario1") @Valid Formulario formulario1, BindingResult bindingResult) {
-        List<Ticket> listaT = ticketRepository.findAll();
-        model.addAttribute("listaTicket", listaT);
         try{
             int id = Integer.parseInt(idStr);
-            if(id <= 0|| !formularioRepository.existsById(id)){
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/tecnico/formulario";
             }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
-            if(optionalFormulario.isPresent()){
-                formulario1 = optionalFormulario.get();
-                model.addAttribute("formulario", formulario1);
-                return "Tecnico/formulario1";
-            }else{
+            if (optionalUsuario.isPresent() && optionalFormulario.isPresent()) {
+                Usuario usuario1 = optionalUsuario.get();
+                List<Formulario> formularios = formularioRepository.formulariosSD(id);
+                boolean encontrado = false;
+                for (Formulario formulario : formularios) {
+                    System.out.println(formulario.getHrelevantes());
+                    if (formulario.getIdFormularios() == id) {
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (encontrado) {
+                    System.out.printf(usuario1.getNombre() + " " + usuario1.getArchivo().getIdArchivos());
+                    model.addAttribute("usuario", usuario1);
+                    model.addAttribute("formulario1", formulario1);
+                    return "Tecnico/formulario1";
+                } else {
+                    return "redirect:/tecnico/formulario";
+                }
+            } else {
                 return "redirect:/tecnico";
             }
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return "redirect:/tecnico/formulario";
         }
 
@@ -676,69 +694,49 @@ public class TecnicoController {
     /* Guardar Datos*/
     @PostMapping("/saveFormulario1")
     public String saveFormulario1(@RequestParam("imagenSubida") MultipartFile file,@RequestParam("imagenSubida2") MultipartFile file2,
-                                 @ModelAttribute("formulario1") @Valid Formulario formulario1, BindingResult bindingResult,
-                                 Model model, RedirectAttributes attr) {
-        if(formulario1.getHrelevantes() == null){
-            model.addAttribute("msgFormulario","Por favor, complete el recuadro de texto");
-            model.addAttribute("form1",formularioRepository.findAll());
-            if(formulario1.getIdFormularios() == null){
-                return "Tecnico/datost_nuevo";
-            }else{
-                return "Tecnico/formulario1";
-            }
-        }
-        if(!file.isEmpty()){
-            try {
-
-                Archivo archivo = new Archivo();
-                archivo.setNombre(file.getOriginalFilename());
-                archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-                archivoRepository.save(archivo);
-                formulario1.setArchivo(archivo);
-            } catch (IOException e) {
-                System.out.println("Error al procesar el archivo");
-                throw new RuntimeException(e);
-            }
-        }
-        if(!file2.isEmpty()){
-            try {
-                Archivo archivo = new Archivo();
-                archivo.setNombre(file.getOriginalFilename());
-                archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-                archivoRepository.save(archivo);
-                formulario1.setArchivo(archivo);
-            } catch (IOException e) {
-                System.out.println("Error al procesar el archivo");
-                throw new RuntimeException(e);
-            }
-        }
-        if(!bindingResult.hasErrors()){
-            if (formulario1.getArchivo() == null) {
-                formulario1.setArchivo(new Archivo());
-            }
-            try {
-                if (formulario1.getIdFormularios() == null) {
-                    attr.addFlashAttribute("msg", "Datos de formulario 1 - llegada a sitio guardados exitosamente");
-                } else {
-                    attr.addFlashAttribute("msg", "Datos de formulario 1 - llegada a sitio guardados exitosamente");
-                }
-                formularioRepository.save(formulario1);
+                                  @ModelAttribute("formulario1") @Valid Formulario formulario1, BindingResult bindingResult,
+                                  Model model, RedirectAttributes attr) {
+        try{
+            int id = formulario1.getIdFormularios();
+            if (id <= 0 || !formularioRepository.existsById(id)) {
                 return "redirect:/tecnico/formulario";
-            } catch (Exception e) {
-                System.out.println("Error al guardar los datos del formulario");
-                throw new RuntimeException(e);
             }
-        } else{
-            model.addAttribute("formulario", formularioRepository.findAll());
-            if (formulario1.getIdFormularios() == null) {
-                return "Tecnico/datost_nuevo";
+
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+
+            if (optionalUsuario.isPresent() && optionalFormulario.isPresent()) {
+                Usuario usuarioDb = optionalUsuario.get();
+                Formulario formulario = optionalFormulario.get();
+
+                if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+                    if (formulario.getArchivo() == null) {
+                        formulario.setArchivo(new Archivo());
+                    }
+                    try{
+                        if (formulario1.getIdFormularios() == null) {
+                            attr.addFlashAttribute("msg", "Los datos del formulario 1 se han guardado exitosamente");
+                        } else {
+                            attr.addFlashAttribute("msg", "Los datos del formulario 1 se han guardado exitosamente");
+                        }
+                        formulario1.setHrelevantes(formulario1.getHrelevantes());
+                        formularioRepository.save(formulario);
+                        return "redirect:/tecnico/formulario";
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
+                } else { //hay al menos 1 error
+                    model.addAttribute("formulario", formularioRepository.findAll());
+                    return "Tecnico/formulario1";
+                }
             } else {
-                return "Tecnico/formulario1";
+                return "redirect:/tecnico";
             }
+
+        } catch (NumberFormatException e) {
+            return "redirect:/tecnico/formulario";
         }
     }
 

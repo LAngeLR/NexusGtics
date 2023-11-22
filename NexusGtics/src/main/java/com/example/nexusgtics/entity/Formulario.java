@@ -1,7 +1,9 @@
 package com.example.nexusgtics.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,6 +52,8 @@ public class Formulario implements Serializable {
     @Size(max = 45)
     @NotNull
     @Column(name = "hrelevantes", nullable = false, length = 45)
+    @NotBlank(message = "El campo no debe estar vacío")
+    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "Los hechos relevantes solo debe contener letras")
     private String hrelevantes;
 
     @NotNull
