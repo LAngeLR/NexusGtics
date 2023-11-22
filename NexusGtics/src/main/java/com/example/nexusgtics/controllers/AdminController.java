@@ -50,7 +50,7 @@ public class AdminController {
     public AdminController(EmpresaRepository empresaRepository, SitioRepository sitioRepository,
                            EquipoRepository equipoRepository, TipoEquipoRepository tipoEquipoRepository,
                            UsuarioRepository usuarioRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository,
-                           CargoRepository cargoRepository, PasswordEncoder passwordEncoder,
+                            CargoRepository cargoRepository, PasswordEncoder passwordEncoder,
                            TicketRepository ticketRepository, ArchivoRepository archivoRepository, HttpSession session) {
         this.empresaRepository = empresaRepository;
         this.sitioRepository = sitioRepository;
@@ -603,6 +603,9 @@ public class AdminController {
         model.addAttribute("tipoSeleccionado", tipoSeleccionado);
         model.addAttribute("tipoZonaSeleccionado", tipoZonaSeleccionado);
 
+        System.out.println("Tamañao en bits: " +file.getSize());
+        System.out.println("Es vacio: " +file.isEmpty());
+
         if (sitio.getTipo() == null || sitio.getTipo().equals("-1")) {
             model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
 
@@ -633,16 +636,41 @@ public class AdminController {
             if (sitio.getArchivo() == null) {
                 sitio.setArchivo(new Archivo());
             }
-            String fileName = file.getOriginalFilename();
             try {
-                Archivo archivo = sitio.getArchivo();
-                archivo.setNombre(fileName);
-                archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-                archivoRepository.save(archivo);
-                int idImagen = archivo.getIdArchivos();
-                sitio.getArchivo().setIdArchivos(idImagen);
+                if(file.getSize()>1){
+                    // Obtenemos el nombre del archivo
+                    String fileName = file.getOriginalFilename();
+                    String extension = "";
+                    int i = fileName.lastIndexOf('.');
+                    if (i > 0) {
+                        extension = fileName.substring(i+1);
+                    }
+                    Archivo archivo = sitio.getArchivo();
+                    archivo.setNombre(fileName);
+                    archivo.setTipo(1);
+                    archivo.setArchivo(file.getBytes());
+                    archivo.setContentType(file.getContentType());
+                    Archivo archivo1 = archivoRepository.save(archivo);
+                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
+                    archivo1.setNombre(nombreArchivo);
+                    archivoRepository.save(archivo1);
+                    uploadObject(archivo1);
+                    archivo1.setArchivo(null);
+                }else {
+                    Archivo archivo = sitio.getArchivo();
+                    archivo.setNombre("fotoSitio");
+                    archivo.setTipo(1);
+                    byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "siteDefault.png");
+                    archivo.setArchivo(image);
+                    archivo.setContentType("image/png");
+                    Archivo archivo1 = archivoRepository.save(archivo);
+                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";
+                    archivo1.setNombre(nombreArchivo);
+                    archivoRepository.save(archivo1);
+                    uploadObject(archivo1);
+                    archivo1.setArchivo(null);
+
+                }
 
                 if (sitio.getIdSitios() == null) {
                     attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido creado exitosamente");
@@ -695,29 +723,6 @@ public class AdminController {
             }
         }
 
-        // Verificar si se cargó un nuevo archivo
-        if (!file.isEmpty()) {
-            try {
-                // Procesar el archivo
-                Archivo archivo = new Archivo();
-                archivo.setNombre(file.getOriginalFilename());
-                archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-
-                BigDecimal longitud1 = sitio.getLongitud();
-                BigDecimal latitud1 = sitio.getLatitud();
-                sitio.setLongitud(longitud1.setScale(7, RoundingMode.DOWN));
-                sitio.setLatitud(latitud1.setScale(7, RoundingMode.DOWN));
-                archivoRepository.save(archivo);
-
-                // Asignar el nuevo archivo al equipo
-                sitio.setArchivo(archivo);
-            } catch (IOException e) {
-                System.out.println("Error al procesar el archivo");
-                throw new RuntimeException(e);
-            }
-        }
         if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
             if (sitio.getIdSitios() == null) {
@@ -727,6 +732,29 @@ public class AdminController {
             }
         }
 
+
+        // Verificar si se cargó un nuevo archivo
+//        if (!file.isEmpty()) {
+//            try {
+//                // Procesar el archivo
+//                Archivo archivo = new Archivo();
+//                archivo.setNombre(file.getOriginalFilename());
+//                archivo.setTipo(1);
+//                archivo.setArchivo(file.getBytes());
+//                archivo.setContentType(file.getContentType());
+//
+//
+//                archivoRepository.save(archivo);
+//
+//                // Asignar el nuevo archivo al equipo
+//                sitio.setArchivo(archivo);
+//            } catch (IOException e) {
+//                System.out.println("Error al procesar el archivo");
+//                throw new RuntimeException(e);
+//            }
+//        }
+
+
         if (!bindingResult.hasErrors()) {
             // Si no hay errores, se realiza el flujo normal
             if (sitio.getArchivo() == null) {
@@ -734,11 +762,37 @@ public class AdminController {
             }
 
             try {
+
+                if(file.getSize()>1){
+                    // Obtenemos el nombre del archivo
+                    String fileName = file.getOriginalFilename();
+                    String extension = "";
+                    int i = fileName.lastIndexOf('.');
+                    if (i > 0) {
+                        extension = fileName.substring(i+1);
+                    }
+                    Archivo archivo = sitio.getArchivo();
+                    archivo.setNombre(fileName);
+                    archivo.setTipo(1);
+                    archivo.setArchivo(file.getBytes());
+                    archivo.setContentType(file.getContentType());
+                    Archivo archivo1 = archivoRepository.save(archivo);
+                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
+                    archivo1.setNombre(nombreArchivo);
+                    archivoRepository.save(archivo1);
+                    uploadObject(archivo1);
+                    archivo1.setArchivo(null);
+                }
+
                 if (sitio.getIdSitios() == null) {
                     attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido creado exitosamente");
                 } else {
                     attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido actualizado exitosamente");
                 }
+                BigDecimal longitud1 = sitio.getLongitud();
+                BigDecimal latitud1 = sitio.getLatitud();
+                sitio.setLongitud(longitud1.setScale(7, RoundingMode.DOWN));
+                sitio.setLatitud(latitud1.setScale(7, RoundingMode.DOWN));
                 sitioRepository.save(sitio);
                 return "redirect:/admin/listaSitio";
             } catch (Exception e) {
@@ -832,16 +886,44 @@ public class AdminController {
                 equipo.setArchivo(new Archivo());
             }
 
-            String fileName = file.getOriginalFilename();
             try {
-                Archivo archivo = equipo.getArchivo();
-                archivo.setNombre(fileName);
-                archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-                archivoRepository.save(archivo);
-                int idImagen = archivo.getIdArchivos();
-                equipo.getArchivo().setIdArchivos(idImagen);
+
+                if(file.getSize()>1){
+                    // Obtenemos el nombre del archivo
+                    String fileName = file.getOriginalFilename();
+                    String extension = "";
+                    int i = fileName.lastIndexOf('.');
+                    if (i > 0) {
+                        extension = fileName.substring(i+1);
+                    }
+                    Archivo archivo = equipo.getArchivo();
+                    archivo.setNombre(fileName);
+                    archivo.setTipo(1);
+                    archivo.setArchivo(file.getBytes());
+                    archivo.setContentType(file.getContentType());
+                    Archivo archivo1 = archivoRepository.save(archivo);
+                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
+                    archivo1.setNombre(nombreArchivo);
+                    archivoRepository.save(archivo1);
+                    uploadObject(archivo1);
+                    archivo1.setArchivo(null);
+                }else {
+                    Archivo archivo = equipo.getArchivo();
+                    archivo.setNombre("fotoEquipo");
+                    archivo.setTipo(1);
+                    byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "deviceDefault.png");
+                    archivo.setArchivo(image);
+                    archivo.setContentType("image/png");
+                    Archivo archivo1 = archivoRepository.save(archivo);
+                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";
+                    archivo1.setNombre(nombreArchivo);
+                    archivoRepository.save(archivo1);
+                    uploadObject(archivo1);
+                    archivo1.setArchivo(null);
+
+                }
+
+
                 if (equipo.getIdEquipos() == null) {
                     attr.addFlashAttribute("msg", "El equipo '" + equipo.getModelo() + "' ha sido creado exitosamente");
                 } else {
@@ -881,24 +963,7 @@ public class AdminController {
             }
         }
 
-        // Verificar si se cargó un nuevo archivo
-        if (!file.isEmpty()) {
-            try {
-                // Procesar el archivo
-                Archivo archivo = new Archivo();
-                archivo.setNombre(file.getOriginalFilename());
-                archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-                archivoRepository.save(archivo);
 
-                // Asignar el nuevo archivo al equipo
-                equipo.setArchivo(archivo);
-            } catch (IOException e) {
-                System.out.println("Error al procesar el archivo");
-                throw new RuntimeException(e);
-            }
-        }
         if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
             if (equipo.getIdEquipos() == null) {
@@ -915,6 +980,28 @@ public class AdminController {
             }
 
             try {
+
+                if(file.getSize()>1){
+                    // Obtenemos el nombre del archivo
+                    String fileName = file.getOriginalFilename();
+                    String extension = "";
+                    int i = fileName.lastIndexOf('.');
+                    if (i > 0) {
+                        extension = fileName.substring(i+1);
+                    }
+                    Archivo archivo = equipo.getArchivo();
+                    archivo.setNombre(fileName);
+                    archivo.setTipo(1);
+                    archivo.setArchivo(file.getBytes());
+                    archivo.setContentType(file.getContentType());
+                    Archivo archivo1 = archivoRepository.save(archivo);
+                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
+                    archivo1.setNombre(nombreArchivo);
+                    archivoRepository.save(archivo1);
+                    uploadObject(archivo1);
+                    archivo1.setArchivo(null);
+                }
+
                 if (equipo.getIdEquipos() == null) {
                     attr.addFlashAttribute("msg", "El equipo '" + equipo.getModelo() + "' ha sido creado exitosamente");
                 } else {

@@ -341,29 +341,6 @@ public class AnalistaOYMController {
             return "AnalistaOYM/oymEditarSitio";
         }
 
-        // Verificar si se cargó un nuevo archivo
-        if (!file.isEmpty()) {
-            try {
-                // Procesar el archivo
-                Archivo archivo = new Archivo();
-                archivo.setNombre(file.getOriginalFilename());
-                archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-
-                BigDecimal longitud1 = sitio.getLongitud();
-                BigDecimal latitud1 = sitio.getLatitud();
-                sitio.setLongitud(longitud1.setScale(7, RoundingMode.DOWN));
-                sitio.setLatitud(latitud1.setScale(7, RoundingMode.DOWN));
-                archivoRepository.save(archivo);
-
-                // Asignar el nuevo archivo al equipo
-                sitio.setArchivo(archivo);
-            } catch (IOException e) {
-                System.out.println("Error al procesar el archivo");
-                throw new RuntimeException(e);
-            }
-        }
         if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
 
@@ -377,11 +354,38 @@ public class AnalistaOYMController {
             }
 
             try {
+
+
+                if(file.getSize()>1){
+                    // Obtenemos el nombre del archivo
+                    String fileName = file.getOriginalFilename();
+                    String extension = "";
+                    int i = fileName.lastIndexOf('.');
+                    if (i > 0) {
+                        extension = fileName.substring(i+1);
+                    }
+                    Archivo archivo = sitio.getArchivo();
+                    archivo.setNombre(fileName);
+                    archivo.setTipo(1);
+                    archivo.setArchivo(file.getBytes());
+                    archivo.setContentType(file.getContentType());
+                    Archivo archivo1 = archivoRepository.save(archivo);
+                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
+                    archivo1.setNombre(nombreArchivo);
+                    archivoRepository.save(archivo1);
+                    uploadObject(archivo1);
+                    archivo1.setArchivo(null);
+                }
+
                 if (sitio.getIdSitios() == null) {
                     attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido creado exitosamente");
                 } else {
                     attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido actualizado exitosamente");
                 }
+                BigDecimal longitud1 = sitio.getLongitud();
+                BigDecimal latitud1 = sitio.getLatitud();
+                sitio.setLongitud(longitud1.setScale(7, RoundingMode.DOWN));
+                sitio.setLatitud(latitud1.setScale(7, RoundingMode.DOWN));
                 sitioRepository.save(sitio);
                 return "redirect:/analistaOYM/listaSitio";
             } catch (Exception e) {
