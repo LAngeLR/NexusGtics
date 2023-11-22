@@ -450,7 +450,6 @@ public class SuperAdminController {
                     archivo1.setNombre(nombreArchivo);
                     archivoRepository.save(archivo1);
                     uploadObject(archivo1);
-
                 }
 
                 if (usuario.getId() == null) {
@@ -459,9 +458,7 @@ public class SuperAdminController {
                     attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
                 }
                 usuarioRepository.save(usuario);
-                //Usuario u = (Usuario) httpSession.getAttribute("usuario");
-                //HttpSession session = request.getSession(true);
-                //session.setAttribute("nombreUsuario", "nuevoNombre");
+
                 session.setAttribute("usuario", usuario);
                 return "redirect:/superadmin/perfil";
             } catch (IOException e) {

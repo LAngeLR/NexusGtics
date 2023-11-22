@@ -79,7 +79,7 @@
                   <label class="form-label">Foto de perfil:</label>
                   <br>
                   <br>
-                  <img th:src="@{|image/${usuario.archivo.idArchivos}|}" style="max-width: 300px;" alt="">
+                  <img th:src="@{|/file/${usuario.archivo.idArchivos}|}" class="rounded-circle" style="max-width: 300px;" alt="">
                 </div>
 
                 <a th:href="@{'/admin/editarUsuario?id=' + ${usuario.id}}" class="btn btn-outline-primary me-2 float-end">Editar</a>
