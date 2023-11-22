@@ -576,14 +576,11 @@ public class TecnicoController {
         List<Sitio> sitio = sitioRepository.findAll();
         model.addAttribute("sitioListC", sitio);
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
-        Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(id);
         Optional<Sitio> optionalSitio = sitioRepository.findById(id);
-        if (optionalTicket.isPresent() && optionalSitioCerrado.isPresent() && optionalSitio.isPresent()) {
+        if (optionalTicket.isPresent() && optionalSitio.isPresent()) {
             Ticket ticket = optionalTicket.get();
-            SitioCerrado sitioCerrado = optionalSitioCerrado.get();
             Sitio sitio1 = optionalSitio.get();
             model.addAttribute("sitio",sitio1);
-            model.addAttribute("sitioCerrado", sitioCerrado);
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaTicket", ticketRepository.findAll());
             return "Tecnico/desplazamientoCerrado";
@@ -932,27 +929,30 @@ public class TecnicoController {
     }
 
     @GetMapping("/formularioCerrado")
-    public String formularioCerrado(Model model, @RequestParam("id") String idStr) {
+    public String formularioCerrado(Model model, @RequestParam("id") String idStr,
+                                    @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult) {
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+
         try {
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !formularioRepository.existsById(id)) {
                 return "redirect:/tecnico/datostickets";
             }
-            Optional<Formulario> formularioOptional = formularioRepository.findById(id);
-            Optional<SitioCerrado> sitioCerradoOptional = sitioCerradoRepository.findById(id);
-            if (formularioOptional.isPresent() && sitioCerradoOptional.isPresent()) {
-                Formulario formulario = formularioOptional.get();
-                SitioCerrado sitioCerrado = sitioCerradoOptional.get();
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            Optional<Sitio> sitioOptional = sitioRepository.findById(id);
+            if (optionalFormulario.isPresent() && sitioOptional.isPresent()) {
+                formulario = optionalFormulario.get();
+                Sitio sitio = sitioOptional.get();
                 model.addAttribute("formulario", formulario);
-                model.addAttribute("sitioCerrado", sitioCerrado);
-                List<Ticket> listaT = ticketRepository.listarEstado();
-                model.addAttribute("listaTicket", listaT);
+                model.addAttribute("sitio", sitio);
+                model.addAttribute("idTick", formularioRepository.obtenerid(id));
                 return "Tecnico/formularioCerrado";
             } else {
-            return "redirect:/tecnico/datostickets";
+                return "redirect:/tecnico/datostickets";
             }
         } catch (NumberFormatException e) {
-            return "redirect:/tecnico/datosticket";
+            return "redirect:/tecnico/datostickets";
         }
     }
 
