@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -302,19 +303,51 @@ public class TecnicoController {
 
 
     @GetMapping("/comentarios")
-    public String pagcomentarios(Model model, @RequestParam("id") int id,
-                                 RedirectAttributes attr) {
-        List<Ticket> listaT = ticketRepository.findAll();
-        model.addAttribute("listaTicket", listaT);
+    public String pagcomentarios(Model model, @RequestParam("id") String idStr) {
 
-        Optional<Ticket> optionalTicket = ticketRepository.findById(id);
-        if (optionalTicket.isPresent()) {
-            Ticket ticket = optionalTicket.get();
-            model.addAttribute("ticket", ticket);
-            model.addAttribute("listaTicket", ticketRepository.findAll());
-            return "Tecnico/comentarios";
-        } else {
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/tecnico/verticket";
+            }
+            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            List<Comentario> listaComentarios = comentarioRepository.listarComentarios(id);
+            if (ticketOptional.isPresent() && optionalFormulario.isPresent()) {
+                Ticket ticket = ticketOptional.get();
+                Formulario formulario = optionalFormulario.get();
+                model.addAttribute("formulario", formulario);
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("listComentarios", listaComentarios);
+                return "Tecnico/comentarios";
+            } else {
+                return "redirect:/tecnico/verticket";
+            }
+        } catch (NumberFormatException e) {
             return "redirect:/tecnico/verticket";
+        }
+
+    }
+
+    @PostMapping("/subircomentarios")
+    public String subirComentario(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr,
+                                  @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes){
+        try{
+            int idTicket = Integer.parseInt(idTicketStr);
+            if(idTicket <= 0 || !ticketRepository.existsById(idTicket)){
+                return "redirect:/tecnico/ticketasignado";
+            }
+            Optional<Ticket> optionalTicket = ticketRepository.findById(idTicket);
+            if(optionalTicket.isPresent()){
+                Date fechaCreacion = new Date();
+                comentarioRepository.ingresarComentario(id,idTicket,comentario,fechaCreacion);
+                redirectAttributes.addFlashAttribute("error","Comentario Añadido");
+                return "redirect:/tecnico/comentarios?id="+idTicketStr;
+            }else{
+                return "redirect:/tecnico/ticketasignado";
+            }
+        }catch (NumberFormatException e){
+            return "redirect:/tecnico/ticketasignado";
         }
     }
 

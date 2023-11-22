@@ -8,6 +8,7 @@
     <title>Comentarios Técnico</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Favicons -->
     <link th:href="@{/assets/img/favicon.png}" rel="icon">
@@ -25,21 +26,32 @@
     <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
     <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
     <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- Template Main CSS File -->
     <link th:href="@{/assets/css/style.css}" rel="stylesheet">
     <style>
         .card {
-            border-radius: 30px; /* Ajusta el valor según el nivel de redondeo deseado */
+            border-radius: 30px;
             padding: 20px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Establece la sombra */
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
         }
-         .imagen-circular {
-             width: 60px; /* Ajusta el ancho según tu preferencia */
-             height: 60px; /* Ajusta la altura según tu preferencia */
-             border-radius: 50%; /* Hace que la imagen sea circular */
-             overflow: hidden; /* Oculta cualquier parte de la imagen que se extienda más allá del círculo */
-         }
+        .comment-balloon {
+            position: relative;
+            background-color: #e5f1f6;
+            padding: 10px;
+            border-radius: 10px;
+        }
 
+        .comment-balloon:before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 20%;
+            margin-left: -15px;
+            border-width: 15px;
+            border-style: solid;
+            border-color: transparent transparent #e5f1f6 transparent;
+        }
     </style>
 </head>
 
@@ -52,6 +64,10 @@
 <aside th:replace="Fragmentos/menuTecnico :: menu('comentarios')"></aside>
 
 <main id="main" class="main">
+    <div class="alert alert-success" role="alert" th:if="${error!=null}" th:text="${error}">
+        abc
+    </div>
+
     <div class="pagetitle">
         <h1>Comentarios del Ticket</h1>
         <nav>
@@ -69,46 +85,52 @@
             <div class="col-xl-5">
                 <div class="row">
                     <div class="col-lg-12">
-                            <div class="info-box card" th:each="comentarios: ${listComentarios}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-quote" viewBox="0 0 16 16">
-                                    <path d="M12 12a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1h-1.388c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 9 7.558V11a1 1 0 0 0 1 1h2Zm-6 0a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1H4.612c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 3 7.558V11a1 1 0 0 0 1 1h2Z"/>
-                                </svg>
-                                <p th:text="${ticket.idCuadrilla.tecnico.nombre} + ' ' +  ${ticket.idCuadrilla.tecnico.apellido}" style="font-weight: bold;color: #00489b;font-size: large"></p>
-                                <p th:text="${comentarios.ticket.descripcion}"> </p>
-                                <p th:text="${comentarios.comentario}"></p>
-                                <div class="col-lg-12 text-end">
-                                    <p th:utext="${#dates.format(comentarios.fechaPublicacion, 'yyyy-MM-dd HH:mm:ss')}" style="color: rgba(0,0,0,0.51)"></p>
+                        <div th:each="comentarios: ${listComentarios}">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <img th:src="@{|/file/${session.usuario.archivo.getIdArchivos()}|}" alt="Profile" class="rounded-circle"
+                                                     onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'" height="45rem" width="45rem">
+                                            </td>
+                                            <td>
+                                                <h4 th:text="${comentarios.comentarista.nombre} + ' ' + ${comentarios.comentarista.apellido}" style="font-weight: bold; color: #336419;"></h4>
+                                            </td>
+                                            <td style="color: rgba(0,0,0,0)">__________</td>
+                                            <td style="align-items: end">
+                                                <p th:utext="${#dates.format(comentarios.fechaPublicacion, 'yyyy-MM-dd HH:mm:ss')}" style="color: rgba(0,0,0,0.45); font-size: smaller;"></p>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
+                            <p></p>
+                            <div class="row comment-balloon card">
+                                <div class="col-lg-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-quote" viewBox="0 0 16 16">
+                                        <path d="M12 12a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1h-1.388c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 9 7.558V11a1 1 0 0 0 1 1zm-6 0a1 1 0 0 0 1-1V8.558a1 1 0 0 0-1-1H4.612c0-.351.021-.703.062-1.054.062-.372.166-.703.31-.992.145-.29.331-.517.559-.683.227-.186.516-.279.868-.279V3c-.579 0-1.085.124-1.52.372a3.322 3.322 0 0 0-1.085.992 4.92 4.92 0 0 0-.62 1.458A7.712 7.712 0 0 0 3 7.558V11a1 1 0 0 0 1 1z"/>
+                                    </svg>
+                                </div>
+                                <div class="col-lg-12">
+                                    <p th:text="${comentarios.ticket.descripcion}" style="color: rgba(0,0,0,0.51)"></p>
+                                    <p th:text="${comentarios.comentario}" style="font-size: 20px; color: black;"></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
             </div>
+
             <div class="col-xl-7">
                 <div class="container p-4" style="background-color: white;">
-                    <!--<form th:action="@{/tecnico/subircomentarios}" method="POST">
-                        <div class="row gy-4">
-                            <div class="col-md-2">
-                                <center>
-                                    <div class="imagen-circular">
-                                        <img th:src="@{/assets/img/profile-img.jpg}" alt="fotoTecnico" style="height:60px;width:60px">
-                                    </div>
-                                </center>
-                            </div>
-                            <div class="col-md-10">
-                                    <textarea class="form-control" name="comentario" rows="2" placeholder="Deja tu comentario aquí..." required></textarea>
-                            </div>
-                            <div class="col-md-12 text-center">
-                                <button type="submit" class="btn btn-danger" style="background-color: #d01616; padding: 10px 35px;">Agregar</button>
-                            </div>
-                        </div>
-                    </form>-->
                     <form th:action="@{/tecnico/subircomentarios}" method="POST">
                         <div class="row gy-4">
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-lg-5 col-md-4 label "><b>Servicio:</b></div>
-                                    <div class="col-lg-7 col-md-8">Mantenimiento de Gabinete</div>
+                                    <div class="col-lg-7 col-md-8" th:text="${ticket.idTipoTicket.nombreTipoTicket}">Mantenimiento de Gabinete</div>
                                 </div>
                             </div>
 
@@ -119,7 +141,8 @@
                             </div>
 
                             <div class="col-md-12 text-center">
-                                <button type="submit" class="btn btn-danger" style="background-color: #d01616; padding: 10px 35px;">Agregar</button>
+                                <button type="submit" class="btn btn-outline-danger">Agregar</button>
+                                <a type="button" class="btn btn-outline-success" th:href="@{'/tecnico/verTicketCerrado?id=' + ${ticket.idTickets}}">Atrás</a>
                             </div>
                         </div>
                     </form>
@@ -150,6 +173,9 @@
 <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
 <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
 <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyCqO8iE9QpLE6aIe4CCU9F3/SqUlrJL+9" crossorigin="anonymous"></script>
 
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
