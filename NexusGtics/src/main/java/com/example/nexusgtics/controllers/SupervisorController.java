@@ -333,6 +333,7 @@ public class SupervisorController {
                 Usuario user = tecnicoLider.get();
                 model.addAttribute("tickets", ticket);
                 model.addAttribute("tecnicoLider",user);
+
                 return "Supervisor/ticketProceso";
             } else {
                 return "redirect:/supervisor/listaTickets";
@@ -359,6 +360,7 @@ public class SupervisorController {
                 model.addAttribute("tickets", ticket);
                 model.addAttribute("comentario",comentarioRepository.obtenerUltimoComentario(ticket.getIdTickets()));
                 model.addAttribute("tecnicoLider",user);
+                model.addAttribute("tiempoTranscurrido",historialTicketRepository.tiempoTranscurrido(id));
                 return "Supervisor/ticketCerrado";
             } else {
                 return "redirect:/supervisor/listaTickets";

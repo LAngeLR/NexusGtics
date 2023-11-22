@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head th:include="Fragmentos/head :: head('Historial Comentarios')"></head>
+<head th:include="Fragmentos/head :: head('Comentarios')"></head>
 
 <body>
 <!-- ======= Header ======= -->
@@ -51,8 +51,10 @@
 
                 <div class="card">
                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                        <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+                        <img th:src="@{|/file/${session.usuario.archivo.idArchivos}|}" alt="Profile"  class="rounded-circle" width="150" height="150"
+                             onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
                         <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">German Cisneros</h2>
+                        <br>
                         <h3 th:text="${session.usuario.cargo.nombreCargo}">Supervisor</h3>
                         <h3 th:text="${session.usuario.dni}">ID: 113253983</h3>
                     </div>
@@ -96,11 +98,16 @@
 
                         <div class="info-box card" th:each="comentarios: ${listaComentarios}">
                             <div class="row align-items-center">
-                                <div class="col-lg-1">
-                                    <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle" style="max-width: 50px; max-height: 50px;">
+                                <div class="col-lg-2">
+                                    <img th:src="@{|/file/${comentarios.comentarista.archivo.idArchivos}|}" alt="Profile" class="rounded-circle" style="max-width: 50px; max-height: 50px;"
+                                         onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
                                 </div>
-                                <div class="col-lg-5" style="margin-left: 20px;"> <!-- Ajusta el margen izquierdo según tus necesidades -->
-                                    <h3 th:text="${comentarios.comentarista.nombre} + ' ' + ${comentarios.comentarista.apellido}" style="font-weight: bold; color: #00489b; font-size: large"></h3>
+                                <div class="col-lg-8" style="margin-left: 20px;"> <!-- Ajusta el margen izquierdo según tus necesidades -->
+                                    <h3>
+                                        <span th:text="${comentarios.comentarista.nombre + ' ' + comentarios.comentarista.apellido}" style="font-weight: bold; color: #00489b; font-size: large"></span>
+                                        <p th:text="${' (' + comentarios.comentarista.cargo.nombreCargo + ' ' + comentarios.comentarista.empresa.nombre + ')'}" style="color: rgba(0,0,0,0.51)"></p>
+                                    </h3>
+
 
                                 </div>
                             </div>

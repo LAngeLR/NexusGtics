@@ -75,43 +75,43 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-body pt-3">
-                        <div id="select-options" class="d-flex">
-                            <button class="option-btn3 active" data-option="cerrado">Cerrado</button>
-                            <button class="option-btn2" data-option="progreso">Progreso</button>
-                            <button class="option-btn1" data-option="nuevo">Nuevo</button>
-                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <div id="select-location-cerrado" class="select-location flex-grow-1">
+                                <select name="location" id="location-cerrado" class="location-select">
+                                    <option value="-1">Selecciona uno...</option>
+                                    <option th:each="ticketC :${ticketsCerrados}"
+                                            th:text="${ticketC.idSitios.nombre}"
+                                            th:value="${ticketC.idSitios.latitud + ',' + ticketC.idSitios.longitud + ',' + ticketC.estado}">
+                                        Empire State Building
+                                    </option>
+                                </select>
+                            </div>
+                            <div id="select-location-progreso" class="select-location flex-grow-1">
+                                <select name="location" id="location-progreso" class="location-select">
+                                    <option value="-1">Selecciona uno...</option>
+                                    <option th:each="ticketP :${ticketsProgreso}"
+                                            th:text="${ticketP.idSitios.nombre}"
+                                            th:value="${ticketP.idSitios.latitud + ',' + ticketP.idSitios.longitud + ',' + ticketP.estado}">
+                                        Empire State Building
+                                    </option>
+                                </select>
+                            </div>
+                            <div id="select-location-nuevo" class="select-location flex-grow-1">
+                                <select name="location" id="location-nuevo" class="location-select">
+                                    <option value="-1">Selecciona uno...</option>
+                                    <option th:each="ticketN :${ticketsNuevos}"
+                                            th:text="${ticketN.idSitios.nombre}"
+                                            th:value="${ticketN.idSitios.latitud + ',' + ticketN.idSitios.longitud + ',' + ticketN.estado}">
 
-                        <div id="select-location-cerrado" class="select-location">
-                            <select name="location" id="location-cerrado" class="location-select">
-                                <option value="-1">Selecciona uno...</option>
-                                <option th:each="ticketC :${ticketsCerrados}"
-                                        th:text="${ticketC.idSitios.nombre}"
-                                        th:value="${ticketC.idSitios.latitud + ',' + ticketC.idSitios.longitud + ',' + ticketC.estado}">
-                                    Empire State Building
-                                </option>
-                            </select>
-                        </div>
-
-                        <div id="select-location-progreso" class="select-location">
-                            <select name="location" id="location-progreso" class="location-select">
-                                <option value="-1">Selecciona uno...</option>
-                                <option th:each="ticketP :${ticketsProgreso}"
-                                        th:text="${ticketP.idSitios.nombre}"
-                                        th:value="${ticketP.idSitios.latitud + ',' + ticketP.idSitios.longitud + ',' + ticketP.estado}">
-                                    Empire State Building
-                                </option>
-                            </select>
-                        </div>
-
-                        <div id="select-location-nuevo" class="select-location">
-                            <select name="location" id="location-nuevo" class="location-select">
-                                <option value="-1">Selecciona uno...</option>
-                                <option th:each="ticketN :${ticketsNuevos}"
-                                        th:text="${ticketN.idSitios.nombre}"
-                                        th:value="${ticketN.idSitios.latitud + ',' + ticketN.idSitios.longitud + ',' + ticketN.estado}">
-                                    Empire State Building
-                                </option>
-                            </select>
+                                        Empire State Building
+                                    </option>
+                                </select>
+                            </div>
+                            <div id="select-options" class="d-flex">
+                                <button class="option-btn3 active" data-option="cerrado">Cerrado</button>
+                                <button class="option-btn2" data-option="progreso">Progreso</button>
+                                <button class="option-btn1" data-option="nuevo">Nuevo</button>
+                            </div>
                         </div>
 
                         <!-- Mapas -->
