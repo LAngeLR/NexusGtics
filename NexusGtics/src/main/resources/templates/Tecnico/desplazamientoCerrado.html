@@ -80,13 +80,13 @@
                             <div class="col-auto">
                                 <input id="fechaHora" class="form-control" name="fechahora" step="1" th:value="${ticket.fechaCreacion}" disabled>
                             </div>
-                            <div class="col-auto">
+                            <!--<div class="col-auto">
                                 <label for="lugarCierre" class="col-form-label" style="font-size: small; color:#b98462"><b>Lugar de cierre:</b></label>
                             </div>
 
                             <div class="col-auto">
                                 <input type="text" id="lugarCierre" class="form-control" aria-describedby="lugarInicio" th:field="*{idsitioCerrado.nombre}" disabled>
-                            </div>
+                            </div>-->
 
                             <div class="col-auto">
                                 <label for="fechaHora2" class="col-form-label" style="font-size: small; color:#b98462"><b>Fecha y hora determino:</b></label></div>
@@ -97,7 +97,7 @@
                             </div>
                             <center>
                                 <p style="font-size: x-small">A continuación, podrás ver tu recorrido dentro de este ticket</p>
-                                <a type="button" class="btn btn-outline-danger" th:href="@{'/tecnico/verTicketCerrado?id='+${ticket.idTickets}}">Terminar</a>
+                                <a type="button" class="btn btn-outline-danger" th:href="@{'/tecnico/verTicketCerrado?id='+${ticket.idTickets}}">Atrás</a>
                             </center>
                         </div>
                     </form>
@@ -112,8 +112,6 @@
                         <script>
                             var latitud = [[${sitio.latitud}]];
                             var longitud = [[${sitio.longitud}]];
-                            var latitud1 = [[${sitioCerrado.latitud}]];
-                            var longitud1 = [[${sitioCerrado.longitud}]];
                             var map = L.map('map').setView([latitud, longitud], 7);
 
                             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -129,10 +127,6 @@
                             });
                             L.marker([latitud, longitud], {icon: greenIcon}).addTo(map)
                                 .bindPopup('Sitio Inicial')
-                                .openPopup();
-
-                            L.marker([latitud1, longitud1]).addTo(map)
-                                .bindPopup('Sitio Final')
                                 .openPopup();
 
                         </script>

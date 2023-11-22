@@ -99,7 +99,7 @@
                 <div class="mb-3">
                   <label for="imagenSubida" class="form-label">Foto de Equipo:</label>
                   <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                    <img id="imgPreview" th:src="@{/assets/img/fotoSitio.png}" class="card-img-top" style="max-height: 250px" alt="">
+                    <img id="imgPreview" th:src="@{/deviceDefault}" class="card-img-top" style="max-height: 250px" alt="">
                   </div>
                   <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
                          accept="image/*" onchange="previewImage(event, '#imgPreview')">
@@ -138,7 +138,19 @@
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
 <script th:src="@{/assets/js/foto.js}"></script>
-
+<script>
+  function previewImage(event, imageId) {
+    const input = event.target;
+    const image = document.querySelector(imageId);
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        image.src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
 </body>
 
 </html>
