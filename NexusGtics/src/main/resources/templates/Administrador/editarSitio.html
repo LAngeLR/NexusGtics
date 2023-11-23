@@ -40,13 +40,11 @@
             A simple success alert—check it out!
           </div>
           <form method="POST" th:action="@{/admin/updateSitio}" th:object="${sitio}" enctype="multipart/form-data" style="margin-bottom: -35px;">
-<!--            <input type="hidden" name="_method" value="PUT">-->
+            <input type="hidden" name="_method" value="PUT">
             <div class="row">
               <div class="col-md-6">
 
                 <input type="hidden" class="form-control" th:field="*{idSitios}">
-                <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
-                <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
 
                 <div class="mb-3">
                   <label class="form-label">Nombre del Sitio:</label>
@@ -134,7 +132,8 @@
                   <div class="card mx-auto" style="width: 250px; max-height: 250px">
                     <img id="imgPreview" th:src="@{|/file/${sitio.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
                   </div>
-                  <input class="form-control" type="file" name="imagenSubida" id="imagenSubida" accept="image/*" style="display: none;">
+                  <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                         accept="image/*" style="display: none;">
                   <button type="button" class="btn btn-primary" id="selectImageButton">Seleccionar Imagen</button>
                 </div>
 
