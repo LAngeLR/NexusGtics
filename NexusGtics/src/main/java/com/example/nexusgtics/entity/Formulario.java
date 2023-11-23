@@ -67,6 +67,8 @@ public class Formulario implements Serializable {
     @Size(max = 45)
     @NotNull
     @Column(name = "nomredantario", nullable = false, length = 45)
+    @NotBlank(message = "El campo no debe estar vacío")
+    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "El nombre del arrendantario solo debe contener letras")
     private String nomredantario;
 
     @NotNull
@@ -99,17 +101,17 @@ public class Formulario implements Serializable {
     @Column(name = "trabarealizados", nullable = false, length = 45)
     private String trabarealizados;
 
-    /* Analizar estas dos*/
+    /* Analizar estas dos
 
-//    @Size(max = 45)
-//    @NotNull
-//    @Column(name = "tipoTransporte", nullable = false, length = 45)
-//    private String tipoTransporte;
+    @Size(max = 45)
+    @NotNull
+    @Column(name = "tipoTransporte", nullable = false, length = 45)
+   private String tipoTransporte;*/
 //
-//    @ManyToMany
-//    @JoinTable(name = "tecnologiainstalada_formularios",
-//            joinColumns = @JoinColumn(name = "idFormularios"),
-//            inverseJoinColumns = @JoinColumn(name = "idTecnologiaInstalada"))
-//    private Set<Tecnologiainstalada> tecnologiainstaladas = new LinkedHashSet<>();
+    /*@ManyToMany
+    @JoinTable(name = "tecnologiainstalada_formularios",
+           joinColumns = @JoinColumn(name = "idFormularios"),
+            inverseJoinColumns = @JoinColumn(name = "idTecnologiaInstalada"))
+    private Set<Tecnologiainstalada> tecnologiainstaladas = new LinkedHashSet<>();*/
 
 }
