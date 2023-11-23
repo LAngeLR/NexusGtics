@@ -364,9 +364,7 @@ public class AdminController {
                         usuarioDb.setCargo(usuario.getCargo());
                         usuarioDb.setEmpresa(usuario.getEmpresa());
                         usuarioRepository.save(usuarioDb);
-
                         return "redirect:/admin/listaUsuario";
-
                     } catch (Exception e) {
                         System.out.println("Error al guardar el equipo");
                         throw new RuntimeException(e);
@@ -700,115 +698,116 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/updateSitio")
+    @PutMapping("/updateSitio")
     public String updateSitio(@RequestParam("imagenSubida") MultipartFile file,
                               @ModelAttribute("sitio") @Valid Sitio sitio,
                               BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr) {
 
-        if (sitio.getTipo() == null || sitio.getTipo().equals("-1")) {
-            model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
+        try{
 
-            if (sitio.getIdSitios() == null) {
-                return "Administrador/crearSitio";
-            } else {
-                return "Administrador/editarSitio";
-            }
-        }
-        if (sitio.getTipoZona() == null || sitio.getTipoZona().equals("-1")) {
-            model.addAttribute("msgZona", "Escoger un tipo de zona");
-            if (sitio.getIdSitios() == null) {
-                return "Administrador/crearSitio";
-            } else {
-                return "Administrador/editarSitio";
-            }
-        }
+            Integer idSitio = sitio.getIdSitios();
+            Optional<Sitio> optionalSitio = sitioRepository.findById(idSitio);
 
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
-            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-            if (sitio.getIdSitios() == null) {
-                return "Administrador/crearSitio";
-            } else {
-                return "Administrador/editarSitio";
-            }
-        }
+            if (optionalSitio.isPresent()) {
+                Sitio sitioBD = optionalSitio.get();
 
+                if (sitio.getTipo() == null || sitio.getTipo().equals("-1")) {
+                    model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
+                    return "Administrador/editarSitio";
+                }
 
-        // Verificar si se cargó un nuevo archivo
-//        if (!file.isEmpty()) {
-//            try {
-//                // Procesar el archivo
-//                Archivo archivo = new Archivo();
-//                archivo.setNombre(file.getOriginalFilename());
-//                archivo.setTipo(1);
-//                archivo.setArchivo(file.getBytes());
-//                archivo.setContentType(file.getContentType());
-//
-//
-//                archivoRepository.save(archivo);
-//
-//                // Asignar el nuevo archivo al equipo
-//                sitio.setArchivo(archivo);
-//            } catch (IOException e) {
-//                System.out.println("Error al procesar el archivo");
-//                throw new RuntimeException(e);
-//            }
-//        }
+                if (sitio.getTipoZona() == null || sitio.getTipoZona().equals("-1")) {
+                    model.addAttribute("msgZona", "Escoger un tipo de zona");
+                    return "Administrador/editarSitio";
+                }
 
+                if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+                    model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+                    return "Administrador/editarSitio";
+                }
 
-        if (!bindingResult.hasErrors()) {
-            // Si no hay errores, se realiza el flujo normal
-            if (sitio.getArchivo() == null) {
-                sitio.setArchivo(new Archivo());
-            }
+                String fileName1 = file.getOriginalFilename();
+                if (fileName1.contains("..") && !file.isEmpty()) {
+                    model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
+                    return "Administrador/editarSitio";
+                }
 
-            try {
+                int maxFileSize = 10485760;
+                if (file.getSize() > maxFileSize && !file.isEmpty()) {
+                    System.out.println(file.getSize());
+                    model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
+                    return "redirect:/administrador/editarSitio";
+                }
 
-                if(file.getSize()>1){
-                    // Obtenemos el nombre del archivo
-                    String fileName = file.getOriginalFilename();
-                    String extension = "";
-                    int i = fileName.lastIndexOf('.');
-                    if (i > 0) {
-                        extension = fileName.substring(i+1);
+                if (!bindingResult.hasErrors()) {
+                    // Si no hay errores, se realiza el flujo normal
+                    if (sitio.getArchivo() == null) {
+                        sitio.setArchivo(new Archivo());
                     }
-                    Archivo archivo = sitio.getArchivo();
-                    archivo.setNombre(fileName);
-                    archivo.setTipo(1);
-                    archivo.setArchivo(file.getBytes());
-                    archivo.setContentType(file.getContentType());
-                    Archivo archivo1 = archivoRepository.save(archivo);
-                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
-                    archivo1.setNombre(nombreArchivo);
-                    archivoRepository.save(archivo1);
-                    uploadObject(archivo1);
-                    archivo1.setArchivo(null);
-                }
+                    try {
+                        if(file.getSize()>1){
+                            // Obtenemos el nombre del archivo
+                            String fileName = file.getOriginalFilename();
+                            String extension = "";
+                            int i = fileName.lastIndexOf('.');
+                            if (i > 0) {
+                                extension = fileName.substring(i+1);
+                            }
+                            Archivo archivo = sitio.getArchivo();
+                            archivo.setNombre(fileName);
+                            archivo.setTipo(1);
+                            archivo.setArchivo(file.getBytes());
+                            archivo.setContentType(file.getContentType());
+                            Archivo archivo1 = archivoRepository.save(archivo);
+                            String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
+                            archivo1.setNombre(nombreArchivo);
+                            archivoRepository.save(archivo1);
+                            uploadObject(archivo1);
+                            archivo1.setArchivo(null);
+                            sitioBD.setArchivo(archivo1);
+                        }
 
-                if (sitio.getIdSitios() == null) {
-                    attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido creado exitosamente");
-                } else {
-                    attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido actualizado exitosamente");
+                        if (sitio.getIdSitios() == null) {
+                            attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido creado exitosamente");
+                        } else {
+                            attr.addFlashAttribute("msg1", "El sitio '" + sitio.getNombre() + "' ha sido actualizado exitosamente");
+                        }
+
+                        sitioBD.setNombre(sitio.getNombre());
+                        sitioBD.setDepartamento(sitio.getDepartamento());
+                        sitioBD.setProvincia(sitio.getProvincia());
+                        sitioBD.setDistrito(sitio.getDistrito());
+                        sitioBD.setUbigeo(sitio.getUbigeo());
+                        sitioBD.setLatitud(sitio.getLatitud());
+                        sitioBD.setLongitud(sitio.getLongitud());
+                        sitioBD.setTipoZona(sitio.getTipoZona());
+                        sitioBD.setTipo(sitio.getTipo());
+
+//                        BigDecimal longitud1 = sitio.getLongitud();
+//                        BigDecimal latitud1 = sitio.getLatitud();
+//                        sitio.setLongitud(longitud1.setScale(7, RoundingMode.DOWN));
+//                        sitio.setLatitud(latitud1.setScale(7, RoundingMode.DOWN));
+                        sitioRepository.save(sitioBD);
+                        return "redirect:/admin/listaSitio";
+                    } catch (Exception e) {
+                        System.out.println("Error al guardar el equipo");
+                        throw new RuntimeException(e);
+                    }
+                } else { //hay al menos 1 error
+                    System.out.println("se mando en sitio, Binding");
+                    return "Administrador/editarSitio";
                 }
-                BigDecimal longitud1 = sitio.getLongitud();
-                BigDecimal latitud1 = sitio.getLatitud();
-                sitio.setLongitud(longitud1.setScale(7, RoundingMode.DOWN));
-                sitio.setLatitud(latitud1.setScale(7, RoundingMode.DOWN));
-                sitioRepository.save(sitio);
-                return "redirect:/admin/listaSitio";
-            } catch (Exception e) {
-                System.out.println("Error al guardar el equipo");
-                throw new RuntimeException(e);
-            }
-        } else { //hay al menos 1 error
-            System.out.println("se mando en sitio, Binding");
-            if (sitio.getIdSitios() == null) {
-                return "Administrador/crearSitio";
             } else {
-                return "Administrador/editarSitio";
+                return "redirect:/admin";
             }
+
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaUsuario";
         }
+
+
     }
 
 
@@ -948,83 +947,108 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/updateEquipo")
+    @PutMapping("/updateEquipo")
     public String updateEquipo(@RequestParam("imagenSubida") MultipartFile file,
                                @ModelAttribute("equipo") @Valid Equipo equipo, BindingResult bindingResult,
                                Model model,
                                RedirectAttributes attr) {
+        try{
 
-        if (equipo.getTipoequipo() == null || equipo.getTipoequipo().getIdTipoEquipo() == null) {
-            model.addAttribute("msgTipoEquipo", "Escoger un tipo de Equipo");
-            model.addAttribute("listaTipoEquipos", tipoEquipoRepository.findAll());
+            Integer idEquipos = equipo.getIdEquipos();
+            Optional<Equipo> optionalEquipo = equipoRepository.findById(idEquipos);
 
-            if (equipo.getIdEquipos() == null) {
-                return "Administrador/crearEquipo";
-            } else {
-                return "Administrador/editarEquipo";
-            }
-        }
+            if (optionalEquipo.isPresent()) {
+                Equipo equipoBD = optionalEquipo.get();
 
+                if (equipo.getTipoequipo() == null || equipo.getTipoequipo().getIdTipoEquipo() == null) {
+                    model.addAttribute("msgTipoEquipo", "Escoger un tipo de Equipo");
+                    model.addAttribute("listaTipoEquipos", tipoEquipoRepository.findAll());
+                    return "Administrador/editarEquipo";
+                }
 
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
-            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-            if (equipo.getIdEquipos() == null) {
-                return "Administrador/crearEquipo";
-            } else {
-                return "Administrador/editarEquipo";
-            }
-        }
+                if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
+                    model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+                    return "Administrador/editarEquipo";
+                }
 
-        if (!bindingResult.hasErrors()) {
-            // Si no hay errores, se realiza el flujo normal
-            if (equipo.getArchivo() == null) {
-                equipo.setArchivo(new Archivo());
-            }
+                String fileName1 = file.getOriginalFilename();
+                if (fileName1.contains("..") && !file.isEmpty()) {
+                    model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
+                    return "Administrador/editarEquipo";
+                }
 
-            try {
+                int maxFileSize = 10485760;
+                if (file.getSize() > maxFileSize && !file.isEmpty()) {
+                    System.out.println(file.getSize());
+                    model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
+                    return "redirect:/administrador/editarEquipo";
+                }
 
-                if(file.getSize()>1){
-                    // Obtenemos el nombre del archivo
-                    String fileName = file.getOriginalFilename();
-                    String extension = "";
-                    int i = fileName.lastIndexOf('.');
-                    if (i > 0) {
-                        extension = fileName.substring(i+1);
+                if (!bindingResult.hasErrors()) {
+                    // Si no hay errores, se realiza el flujo normal
+                    if (equipo.getArchivo() == null) {
+                        equipo.setArchivo(new Archivo());
                     }
-                    Archivo archivo = equipo.getArchivo();
-                    archivo.setNombre(fileName);
-                    archivo.setTipo(1);
-                    archivo.setArchivo(file.getBytes());
-                    archivo.setContentType(file.getContentType());
-                    Archivo archivo1 = archivoRepository.save(archivo);
-                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
-                    archivo1.setNombre(nombreArchivo);
-                    archivoRepository.save(archivo1);
-                    uploadObject(archivo1);
-                    archivo1.setArchivo(null);
-                }
 
-                if (equipo.getIdEquipos() == null) {
-                    attr.addFlashAttribute("msg", "El equipo '" + equipo.getModelo() + "' ha sido creado exitosamente");
+                    try {
+
+                        if(file.getSize()>1){
+                            // Obtenemos el nombre del archivo
+                            String fileName = file.getOriginalFilename();
+                            String extension = "";
+                            int i = fileName.lastIndexOf('.');
+                            if (i > 0) {
+                                extension = fileName.substring(i+1);
+                            }
+                            Archivo archivo = equipo.getArchivo();
+                            archivo.setNombre(fileName);
+                            archivo.setTipo(1);
+                            archivo.setArchivo(file.getBytes());
+                            archivo.setContentType(file.getContentType());
+                            Archivo archivo1 = archivoRepository.save(archivo);
+                            String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
+                            archivo1.setNombre(nombreArchivo);
+                            archivoRepository.save(archivo1);
+                            uploadObject(archivo1);
+                            archivo1.setArchivo(null);
+                            equipoBD.setArchivo(archivo1);
+                        }
+
+                        if (equipo.getIdEquipos() == null) {
+                            attr.addFlashAttribute("msg", "El equipo '" + equipo.getModelo() + "' ha sido creado exitosamente");
+                        } else {
+                            attr.addFlashAttribute("msg", "El equipo '" + equipo.getModelo() + "' ha sido actualizado exitosamente");
+                        }
+
+                        equipoBD.setTipoequipo(equipo.getTipoequipo());
+                        equipoBD.setMarca(equipo.getMarca());
+                        equipoBD.setModelo(equipo.getModelo());
+                        equipoBD.setDescripcion(equipo.getDescripcion());
+                        equipoBD.setPaginaModelo(equipo.getPaginaModelo());
+
+                        equipoRepository.save(equipoBD);
+                        return "redirect:/admin/listaEquipo";
+                    } catch (Exception e) {
+                        System.out.println("Error al guardar el equipo");
+                        throw new RuntimeException(e);
+                    }
                 } else {
-                    attr.addFlashAttribute("msg", "El equipo '" + equipo.getModelo() + "' ha sido actualizado exitosamente");
+                    // Hay al menos 1 error
+                    model.addAttribute("listaTipoEquipos", tipoEquipoRepository.findAll());
+                    return "Administrador/editarEquipo";
                 }
 
-                equipoRepository.save(equipo);
-                return "redirect:/admin/listaEquipo";
-            } catch (Exception e) {
-                System.out.println("Error al guardar el equipo");
-                throw new RuntimeException(e);
-            }
-        } else {
-            // Hay al menos 1 error
-            model.addAttribute("listaTipoEquipos", tipoEquipoRepository.findAll());
-            if (equipo.getIdEquipos() == null) {
-                return "Administrador/crearEquipo";
             } else {
-                return "Administrador/editarEquipo";
+                return "redirect:/admin";
             }
+
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/editarEquipo";
         }
+
+
+
+
     }
 
     @GetMapping({"/verEquipo", "/verequipo"})

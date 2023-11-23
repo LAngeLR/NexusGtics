@@ -34,11 +34,10 @@
               A simple success alert—check it out!
             </div>
             <form method="POST" th:action="@{/admin/updateEquipo}" th:object="${equipo}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+              <input type="hidden" name="_method" value="PUT">
               <div class="row">
                 <div class="col-md-6">
                   <input type="hidden" class="form-control" th:field="*{idEquipos}">
-                  <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
-                  <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
 
                   <div class="mb-3">
                     <label class="form-label">Tipo de equipo:</label>
@@ -91,12 +90,14 @@
                 <div class="col-md-6">
 
                   <div class="mb-3">
-                    <label for="imagenSubida" class="form-label">Foto de perfil:</label>
+                    <label for="imagenSubida" class="form-label">Foto de equipo:</label>
                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
                       <img id="imgPreview" th:src="@{|/file/${equipo.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
                     </div>
                     <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
-                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                           accept="image/*" style="display: none;">
+                    <button type="button" class="btn btn-primary" id="selectImageButton">Seleccionar Imagen</button>
+
                   </div>
 
                   <button type="submit" class="btn btn-outline-primary float-end">Aplicar cambios</button>
@@ -131,7 +132,29 @@
 
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
+<script>
+  // Obtener el campo de entrada de archivo y el botón de selección de imagen
+  var fileInput = document.getElementById('imagenSubida');
+  var selectImageButton = document.getElementById('selectImageButton');
 
+  // Manejar el evento de clic en el botón de selección de imagen
+  selectImageButton.addEventListener('click', function () {
+    fileInput.click(); // Simular un clic en el campo de entrada de archivo
+  });
+
+  // Mostrar la imagen preseleccionada cuando se carga la página
+  var imgPreview = document.getElementById('imgPreview');
+  fileInput.addEventListener('change', function () {
+    var selectedFile = fileInput.files[0];
+    if (selectedFile) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        imgPreview.src = e.target.result; // Mostrar la imagen seleccionada
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  });
+</script>
 </body>
 
 </html>
