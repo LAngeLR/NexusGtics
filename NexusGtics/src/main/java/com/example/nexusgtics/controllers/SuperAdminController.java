@@ -7,14 +7,11 @@ import com.example.nexusgtics.entity.Usuario;
 import com.example.nexusgtics.repository.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import jakarta.websocket.SessionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +28,7 @@ import java.time.LocalDate;
 
 import static com.example.nexusgtics.controllers.GcsController.downloadObject;
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
+import static java.lang.Integer.parseInt;
 
 @Controller
 @RequestMapping("/superadmin")
@@ -360,71 +358,66 @@ public class SuperAdminController {
 
 
     /* PERFIL DEL SUPERADMINISTRADOR */
-    @PostMapping("/savePerfil")
+    @PutMapping("/savePerfil")
     public String savePerfil(@RequestParam("imagenSubida") MultipartFile file,
-                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+                              @ModelAttribute("usuario") @Valid Usuario usuario,
+                              BindingResult bindingResult,
                               Model model,
                               RedirectAttributes attr, HttpSession httpSession){
 
         // ESTO SE AÑADIO DE BARD
         //session.setAttribute("usuario", usuario);
 
-        if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
-            model.addAttribute("msgCargo", "Escoger un cargo");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-
-            if (usuario.getId() == null) {
-                return "Superadmin/superadmin";
-            } else {
-                return "Superadmin/perfilEditar";
-            }
-        }
-        if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
-            model.addAttribute("msgEmpresa", "Escoger una empresa");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Superadmin/superadmin";
-            } else {
-                return "Superadmin/perfilEditar";
-            }
-        }
-
-
+//        if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
+//            model.addAttribute("msgCargo", "Escoger un cargo");
+//            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+//            model.addAttribute("listaCargo", cargoRepository.findAll());
+//
+//            if (usuario.getId() == null) {
+//                return "Superadmin/superadmin";
+//            } else {
+//                return "Superadmin/perfilEditar";
+//            }
+//        }
+//        if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
+//            model.addAttribute("msgEmpresa", "Escoger una empresa");
+//            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+//            model.addAttribute("listaCargo", cargoRepository.findAll());
+//            if (usuario.getId() == null) {
+//                return "Superadmin/superadmin";
+//            } else {
+//                return "Superadmin/perfilEditar";
+//            }
+//        }
 
 
         if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-            if (usuario.getId() == null) {
-                return "Superadmin/superadmin";
-            } else {
-                return "Superadmin/perfilEditar";
-            }
+            return "Superadmin/perfilEditar";
         }
 
-        String fileName1 = file.getOriginalFilename();
-
-        if (fileName1.contains("..") && !file.isEmpty()) {
-            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
-            if (usuario.getId() == null) {
-                return "Superadmin/superadmin";
-            } else {
-                return "Superadmin/perfilEditar";
-            }
-        }
-
-        int maxFileSize = 10485760;
-
-        if (file.getSize() > maxFileSize && !file.isEmpty()) {
-            System.out.println(file.getSize());
-            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
-            if (usuario.getId() == null) {
-                return "Superadmin/superadmin";
-            } else {
-                return "redirect:/superadmin/perfilEditar";
-            }
-        }
+//        String fileName1 = file.getOriginalFilename();
+//
+//        if (fileName1.contains("..") && !file.isEmpty()) {
+//            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
+//            if (usuario.getId() == null) {
+//                return "Superadmin/superadmin";
+//            } else {
+//                return "Superadmin/perfilEditar";
+//            }
+//        }
+//
+//        int maxFileSize = 10485760;
+//
+//        if (file.getSize() > maxFileSize && !file.isEmpty()) {
+//            System.out.println(file.getSize());
+//            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
+//            if (usuario.getId() == null) {
+//                return "Superadmin/superadmin";
+//            } else {
+//                return "redirect:/superadmin/perfilEditar";
+//            }
+//        }
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (usuario.getArchivo() == null) {
@@ -432,7 +425,7 @@ public class SuperAdminController {
             }
 
             try{
-                if(!file.isEmpty()){
+                if(file.getSize()>1){
                     // Obtenemos el nombre del archivo
                     String fileName = file.getOriginalFilename();
                     String extension = "";
@@ -450,6 +443,21 @@ public class SuperAdminController {
                     archivo1.setNombre(nombreArchivo);
                     archivoRepository.save(archivo1);
                     uploadObject(archivo1);
+                    archivo1.setArchivo(null);
+                } else {
+                    Archivo archivo = usuario.getArchivo();
+                    archivo.getNombre();
+                    archivo.setTipo(1);
+                    byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "deviceDefault.png");
+                    archivo.setArchivo(image);
+                    archivo.setContentType("image/png");
+                    Archivo archivo1 = archivoRepository.save(archivo);
+                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";
+                    archivo1.setNombre(nombreArchivo);
+                    archivoRepository.save(archivo1);
+                    uploadObject(archivo1);
+                    archivo1.setArchivo(null);
+
                 }
 
                 if (usuario.getId() == null) {
@@ -457,6 +465,8 @@ public class SuperAdminController {
                 } else {
                     attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
                 }
+                usuario.getArchivo().setTipo(1);
+                System.out.println("El tipo de archivo es: " + usuario.getArchivo().getTipo());
                 usuarioRepository.save(usuario);
 
                 session.setAttribute("usuario", usuario);
