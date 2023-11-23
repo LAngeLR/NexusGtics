@@ -150,6 +150,7 @@
                             </div>
 
                             <center><br>
+                                <a type="button" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" class="btn btn-outline-dark" th:href="@{'/tecnico/ticketasignado'}">Atrás</a>
                                 <a class="btn btn-outline-success" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" th:href="@{'/tecnico/formulario?id=' + ${ticket.idTickets}}"><b>Formulario</b></a>
                                 <a class="btn btn-outline-info" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" th:href="@{'/tecnico/desplazamientoProgreso?id=' + ${ticket.idTickets}}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-fill" viewBox="0 0 16 16">

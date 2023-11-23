@@ -403,24 +403,30 @@ public class TecnicoController {
 
     //-----------------------------------------------------------------------
     @GetMapping({"/verTicket", "/verticket"})
-    public String pagdatostick(Model model, @RequestParam("id") int id,
-                               RedirectAttributes attr) {
+    public String pagdatostick(Model model, @RequestParam("id") String idStr,
+                               RedirectAttributes attr , HttpSession httpSession) {
         /* Lo que se mando al Header */
         List<Ticket> listaT = ticketRepository.listarEstado();
         model.addAttribute("listaTicket", listaT);
 
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idTecnico = u.getId();
+
         try {
+            int id = Integer.parseInt(idStr);
             if (id <= 0 || !ticketRepository.existsById(id)) {
                 return "redirect:/tecnico/ticketasignado";
             }
             Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
             Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            List<Usuario> listaTecnicos = usuarioRepository.listaDeTecnicos(6,idTecnico,u.getEmpresa().getIdEmpresas());
             if (optionalTicket1.isPresent() && optionalFormulario.isPresent()) {
                 Ticket ticket = optionalTicket1.get();
                 Formulario formulario = optionalFormulario.get();
                 model.addAttribute("ticket", ticket);
                 model.addAttribute("formulario", formulario);
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
+                model.addAttribute("listaTecnicos",listaTecnicos);
                 return "Tecnico/datos_ticket";
             } else {
                 return "redirect:/tecnico/ticketasignado";

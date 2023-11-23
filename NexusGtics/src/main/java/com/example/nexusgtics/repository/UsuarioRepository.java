@@ -70,8 +70,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
 
     // ------------------------------ TECNICO --------------------------------------- //
-    @Query(value ="SELECT nombre, apellido FROM nexus.usuarios", nativeQuery = true )
-    List<Usuario> unirUsuarioPorNombre(String nombre);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM usuarios where idCargos=?1 and idUsuarios!=?2 and tecnicoConCuadrilla=false and idEmpresas=?3")
+    List<Usuario> listaDeTecnicos(int valor, int idSupNo, int idEmpresa);
 
     // ------------------------------ SUPERVISOR --------------------------------------- //
     @Query(nativeQuery = true, value = "SELECT u.* FROM tecnicoscuadrillas tc inner join usuarios u on tc.idTecnico = u.idUsuarios where idCuadrilla = ?1")
