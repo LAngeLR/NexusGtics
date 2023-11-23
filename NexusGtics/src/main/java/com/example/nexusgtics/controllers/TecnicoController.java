@@ -418,10 +418,26 @@ public class TecnicoController {
             if (optionalTicket1.isPresent() && optionalFormulario.isPresent()) {
                 Ticket ticket = optionalTicket1.get();
                 Formulario formulario = optionalFormulario.get();
-                model.addAttribute("ticket", ticket);
-                model.addAttribute("formulario", formulario);
-                model.addAttribute("listaTicket", ticketRepository.listarEstado());
-                return "Tecnico/datos_ticket";
+                List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado();
+
+                boolean encontrado = false;
+                for (Ticket ticket1 : ticketAsignados) {
+                    System.out.println(ticket1.getIdTickets());
+                    if (ticket1.getIdTickets() == id) {
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (encontrado) {
+                    //Usuario usuario2 = optionalUsuario.get();
+                    model.addAttribute("ticket", ticket);
+                    model.addAttribute("formulario", formulario);
+                    model.addAttribute("listaTicket", ticketRepository.listarEstado());
+                    return "Tecnico/datos_ticket";
+                } else {
+                    return "redirect:/tecnico/ticketasignado";
+                }
+
             } else {
                 return "redirect:/tecnico/ticketasignado";
             }
