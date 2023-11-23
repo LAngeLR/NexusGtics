@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f646692a-d729-46f1-8cbf-604bcf613df0" name="Changes" comment="idk" />
+    <list default="true" id="f646692a-d729-46f1-8cbf-604bcf613df0" name="Changes" comment="idk">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/7d281804-f29f-48f8-a247-757cf5ea443c.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/7d281804-f29f-48f8-a247-757cf5ea443c.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AnalistaDespController.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AnalistaDespController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AnalistaOYMController.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AnalistaOYMController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/repository/TicketRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/repository/TicketRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueDashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueDashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaOYM/oymDashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaOYM/oymDashboard.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,6 +26,7 @@
       <list>
         <option value="com.haulmont.jpb.JpaEntity" />
         <option value="HTML File" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -36,6 +48,10 @@
   <component name="MavenRunner">
     <option name="skipTests" value="true" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2WOhwr3c5so7ZjgNvgppLIZXQQ1" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -53,7 +69,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Daniel/IdeaProjects/NexusGtics&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/david/Downloads/NexusGtics&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -77,6 +93,9 @@
   </component>
   <component name="RunManager">
     <configuration name="NexusGticsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <envs>
+        <env name="GOOGLE_APPLICATION_CREDENTIALS" value="C:\Users\david\Downloads\NexusGtics\NexusGtics\src\main\resources\proyectoGtics.json" />
+      </envs>
       <module name="NexusGtics" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.nexusgtics.NexusGticsApplication" />
       <method v="2">
@@ -97,6 +116,10 @@
       <workItem from="1698174478604" duration="14361000" />
       <workItem from="1698369306164" duration="2281000" />
       <workItem from="1698385227082" duration="4068000" />
+      <workItem from="1700519326795" duration="10496000" />
+      <workItem from="1700611243424" duration="90000" />
+      <workItem from="1700710692299" duration="3272000" />
+      <workItem from="1700764007221" duration="2288000" />
     </task>
     <task id="LOCAL-00001" summary="detalles sadmin 2">
       <created>1696643792919</created>

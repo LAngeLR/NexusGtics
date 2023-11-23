@@ -133,6 +133,10 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query(nativeQuery = true, value = "SELECT count(*) FROM tickets WHERE MONTH(fechaCreacion) = MONTH(CURRENT_DATE()) - 2")
     Integer CantHaceDosMeses();
 
-
-
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) AS total_tickets\n" +
+            "FROM nexus.tickets\n" +
+            "WHERE idEmpresaAsignada = ?1\n" +
+            "AND YEAR(fechaCreacion) = YEAR(CURRENT_DATE() - INTERVAL ?2 MONTH)\n" +
+            "AND MONTH(fechaCreacion) = MONTH(CURRENT_DATE() - INTERVAL ?2 MONTH);\n")
+    Integer TicketXMes(int idEmpresa,int mes);
 }

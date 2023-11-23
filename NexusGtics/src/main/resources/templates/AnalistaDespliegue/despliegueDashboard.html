@@ -70,7 +70,7 @@
                                     </div>
                                     <div class="ps-3">
                                         <h6 th:text="${numeroClientesActual}">1892</h6>
-                                        <span class="text-success small pt-1 fw-bold" th:text="${diferenciaRegistros+ '%'}">10%</span>
+                                        <span class="text-success small pt-1 fw-bold" th:text="${diferenciaRegistros != null ? diferenciaRegistros + '%' : '0%'}">10%</span>
                                         <span class="text-muted small pt-2 ps-1"> a diferencia del mes anterior</span>
                                     </div>
 
@@ -127,23 +127,75 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Reportes de clientes <span>Nuestro top 3 clientes de la semana</span></h5>
+                                <h5 class="card-title">Reportes de tickets por empresa <span>Los ultimos 7 meses</span></h5>
 
                                 <!-- Line Chart -->
                                 <div id="reportsChart"></div>
 
                                 <script>
                                     document.addEventListener("DOMContentLoaded", () => {
+                                        const meses = [
+                                            "Enero",
+                                            "Febrero",
+                                            "Marzo",
+                                            "Abril",
+                                            "Mayo",
+                                            "Junio",
+                                            "Julio",
+                                            "Agosto",
+                                            "Septiembre",
+                                            "Octubre",
+                                            "Noviembre",
+                                            "Diciembre"
+                                        ];
+
+                                        const obtenerNombresMeses = () => {
+                                            const fechaActual = new Date();
+                                            const mesesActuales = [];
+
+                                            for (let i = 0; i < 7; i++) {
+                                                const fechaMesAnterior = new Date();
+                                                fechaMesAnterior.setMonth(fechaActual.getMonth() - i);
+                                                const nombreMes = meses[fechaMesAnterior.getMonth()];
+                                                mesesActuales.push(nombreMes);
+                                            }
+
+                                            return mesesActuales.reverse();
+                                        };
                                         new ApexCharts(document.querySelector("#reportsChart"), {
                                             series: [{
-                                                name: 'Empresa 1',
-                                                data: [31, 40, 28, 51, 42, 82, 56],
+                                                name: 'Nexus',
+                                                data: [
+                                                    [[${TicketXMes17}]],
+                                                    [[${TicketXMes16}]],
+                                                    [[${TicketXMes15}]],
+                                                    [[${TicketXMes14}]],
+                                                    [[${TicketXMes13}]],
+                                                    [[${TicketXMes12}]],
+                                                    [[${TicketXMes11}]]
+                                                ],
                                             }, {
-                                                name: 'Empresa 2',
-                                                data: [11, 32, 45, 32, 34, 52, 41]
+                                                name: '4T',
+                                                data: [
+                                                    [[${TicketXMes27}]],
+                                                    [[${TicketXMes26}]],
+                                                    [[${TicketXMes25}]],
+                                                    [[${TicketXMes24}]],
+                                                    [[${TicketXMes23}]],
+                                                    [[${TicketXMes22}]],
+                                                    [[${TicketXMes21}]]
+                                                ],
                                             }, {
-                                                name: 'Empresa 3',
-                                                data: [15, 11, 32, 18, 9, 24, 11]
+                                                name: 'Huawei',
+                                                data: [
+                                                    [[${TicketXMes37}]],
+                                                    [[${TicketXMes36}]],
+                                                    [[${TicketXMes35}]],
+                                                    [[${TicketXMes34}]],
+                                                    [[${TicketXMes33}]],
+                                                    [[${TicketXMes32}]],
+                                                    [[${TicketXMes31}]]
+                                                ],
                                             }],
                                             chart: {
                                                 height: 350,
@@ -173,14 +225,9 @@
                                                 width: 2
                                             },
                                             xaxis: {
-                                                type: 'datetime',
-                                                categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+                                                type: 'category',
+                                                categories: obtenerNombresMeses()
                                             },
-                                            tooltip: {
-                                                x: {
-                                                    format: 'dd/MM/yy HH:mm'
-                                                },
-                                            }
                                         }).render();
                                     });
                                 </script>
