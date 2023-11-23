@@ -44,321 +44,80 @@
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuTecnico :: menu('formulario1')"></aside><!-- End Sidebar-->
 <main id="main" class="main">
-    <div class="container">
-        <div class="pagetitle">
-            <h1>Formulario</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/tecnico/}">Home</a></li>
-                    <li class="breadcrumb-item active">Tickets Asignados</li>
-                    <li class="breadcrumb-item active">Datos del ticket</li>
-                    <li class="breadcrumb-item active">Formulario</li>
-                    <li class="breadcrumb-item active">Formulario 1</li>
-                </ol>
-            </nav>
-        </div>
+    <div class="pagetitle">
+        <h1>Formulario</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/tecnico/tecnico}">Home</a></li>
+                <li class="breadcrumb-item active">Tickets Asignados</li>
+                <li class="breadcrumb-item active">Datos del ticket</li>
+                <li class="breadcrumb-item active">Formulario</li>
+                <li class="breadcrumb-item active">Formulario 1</li>
+            </ol>
+        </nav>
+    </div>
 
-        <!--<section class="section">
+    <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
+    </div>
+    <div class="alert alert-danger" role="alert" th:if="${msgImagen1 != null}" th:text="${msgImagen1}">
+    </div>
+
+    <section class="section dashboard">
         <div class="row">
-            <div class="col-lg-8">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Información del cliente y ticket:</h5>
-                        <form method="POST" th:action="@{/tecnico/saveFormulario}" th:object="${formulario}"  enctype="multipart/form-data" style="margin-bottom: -35px;">
-                            <div class="row">
-                                <div class="col-sm-10">
-                                    <div class="mb-3 ">
-                                        <label class="form-label">ID del Ticket</label>
-                                        <input type="number" class="form-control"  th:field="*{ticket.idTickets}" disabled>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Nombre completo</label>
-                                        <input type="text" class="form-control"  th:field="*{ticket.usuarioSolicitante}" disabled>
-                                    </div>
-                                    <div class="mb-3 ">
-                                        <label class=" form-label">Prioridad del Ticket</label>
-                                        <input type="text" class="form-control" th:field="*{ticket.prioridad}" disabled>
-
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Servicio</label>
-                                        <input type="text" class="form-control" th:field="*{ticket.idTipoTicket.nombreTipoTicket}" disabled>
-
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Fecha y hora:</label>
-                                        <br>
-                                        <input type="datetime-local" class="form-control" name="fechahora" step="1" min="2023-01-01T00:00" max="2023-12-31T12:00" value="2023-01-01T12:00">
-                                    </div>
-
-                                </div>
-                                <div class="mb-3">
-                                    <h5>Descripción:</h5>
-                                    <label class="form-label">Del trabajo realizado</label>
-                                    <input type="text" class="form-control" th:field="*{descripcion}">
-
-                                </div>
-                                <div class="mb-3">
-                                    <label for="imagenSubida" class="form-label">Foto de trabajo realizado:</label>
-                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img id="imgPreview" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                                    </div>
-                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
-                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                                </div>
-                                <div class="row mb-5">
-                                    <h5><b>Datos del técnico:</b></h5>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-4 col-form-label">Nombre </label>
-                                        <div class="col-sm-8">
-                                            <input class="form-control" type="text" th:field="*{tecnico.nombre}" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-4 col-form-label">Apellido </label>
-                                        <div class="col-sm-8">
-                                            <input class="form-control" type="text" th:field="*{tecnico.apellido}" disabled>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="row mb-5">
-                                    <h5><b>Información General del ticket</b></h5>
-                                    <p>Llegada a sitio:</p>
-                                    <div class="mb-3 row">
-                                        <label for="imagenSubida1" class="form-label">Foto del técnico </label>
-                                        <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                            <img id="imgPreview1" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                                        </div>
-                                        <input class="form-control" type="file" name="imagenSubida1" id="imagenSubida1"
-                                               accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <p>Descripción</p>
-                                        <label class="col-sm-4 col-form-label">Hechos relevantes: </label>
-                                        <div class="form-floating col-sm-8">
-                                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" style="height: 100px" disabled>He colocado la maquina en su lugar despues de repararlo</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label for="imagenSubida2" class="form-label">Foto del sitio </label>
-                                        <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                            <img id="imgPreview2" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                                        </div>
-                                        <input class="form-control" type="file" name="imagenSubida2" id="imagenSubida2"
-                                               accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                                    </div>
-
-                                </div>
-                                <div class="row mb-5">
-                                    <h5><b>Validación de Sitio</b></h5>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-6 col-form-label">¿Existe conexión de energía? </label>
-                                        <div class="col-sm-6">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
-                                                <label class="form-check-label" for="flexSwitchCheckChecked">Sí</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-5 col-form-label">Nombre de arrendatario: </label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control"  th:field="*{ticket.usuarioSolicitante}" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-5 col-form-label">DNI del arrendatario: </label>
-                                        <div class="col-sm-7">
-                                            <input class="form-control" type="text" placeholder="72495536" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-6 col-form-label">¿La movilidad llega al sitio?</label>
-                                        <div class="col-sm-6">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked1" checked>
-                                                <label class="form-check-label" for="flexSwitchCheckChecked1">Sí</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-6 col-form-label">Área del sitio /m2: </label>
-                                        <div class="col-sm-6">
-                                            <input class="form-control" type="number" placeholder="25,2" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <p>Observaciones</p>
-                                        <label class="col-sm-4 col-form-label">Descripción: </label>
-                                        <div class="form-floating col-sm-8">
-                                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
-                                            <label for="floatingTextarea2">Comments</label>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <div id="map" ></div>
-                                        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                                        <script>
-                                            let map = L.map('map').setView([-12.06802,-77.03462],14)
-                                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                            }).addTo(map);
-                                            L.marker([-12.06802,-77.03462]).addTo(map).bindPopup('Sitio').openPopup();
-
-                                        </script>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label for="imagenSubida3" class="form-label">Foto del sitio </label>
-                                        <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                            <img id="imgPreview3" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                                        </div>
-                                        <input class="form-control" type="file" name="imagenSubida3" id="imagenSubida3"
-                                               accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                                    </div>
-                                </div>
-                                <div class="row mb-5">
-                                    <h5><b>Trabajo realizado</b></h5>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-6 col-form-label">¿Se realizó construcción de infraestructura? </label>
-                                        <div class="col-sm-6">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked2" checked>
-                                                <label class="form-check-label" for="flexSwitchCheckChecked2">Sí</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-6 col-form-label">¿Se realizó instalaciones electricas? </label>
-                                        <div class="col-sm-6">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked3" checked>
-                                                <label class="form-check-label" for="flexSwitchCheckChecked3">Sí</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-6 col-form-label">Tecnología instalada: </label>
-                                        <div class="col-sm-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                                <label class="form-check-label" for="flexCheckDefault">FFTH</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
-                                                <label class="form-check-label" for="flexCheckDefault1">HFC</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2">
-                                                <label class="form-check-label" for="flexCheckDefault2">2G</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault3">
-                                                <label class="form-check-label" for="flexCheckDefault3">3G</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault4">
-                                                <label class="form-check-label" for="flexCheckDefault4">4G</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault5">
-                                                <label class="form-check-label" for="flexCheckDefault5">5G</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <p><b>Descripción</b></p>
-                                        <label class="col-sm-4 col-form-label">Trabajos realizados: </label>
-                                        <div class="form-floating col-sm-8">
-                                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled1" style="height: 100px" disabled>Se procedió con lel montaje de la torre, además de la adecuación del gabinete para la correcta operación de los equipos a instalarse. Se instalron: BBU, RRU, Router, Switch, Rectificadores y baterías.</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-2 col-form-label">Foto del sitio </label>
-                                        <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                            <img id="imgPreview4" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                                        </div>
-                                        <input class="form-control" type="file" name="imagenSubida3" id="imagenSubida4"
-                                               accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                                    </div>
-                                    <center><button type="submit" class="btn btn-danger">Enviar</button>
-                                        <a type="button" class="btn btn-secondary" th:href="@{'/tecnico/verTicket?id='+${formulario.ticket.idTickets}}">Cancelar</a></center>
-                                </div>
-                                </div>
-                        </form>
-
-                    </div>
+            <div class="rounded p-5" style="background-color: #FFFFFF;">
+                <div class="pagetitle">
+                    <h1 class="card-title">Formulario 1 </h1>
                 </div>
+                <form method="POST" th:action="@{/tecnico/saveFormulario1}" th:object="${formulario1}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+                    <input type="hidden" class="form-control" th:field="*{idFormularios}">
+                    <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
+                    <input type="hidden" name="hrelevantes" id="hrelevantes" th:field="*{hrelevantes}">
 
-            </div>
-        </div>
-    </section>-->
-
-        <section class="section dashboard">
-            <div class="row">
-                <div class="rounded p-5" style="background-color: #FFFFFF;">
-                    <div class="pagetitle">
-                        <h1 class="card-title">Formulario 1 </h1>
-                    </div>
-                    <div class="alert alert-danger" role="alert" th:if="${msgFormulario != null}" th:text="${msgFormulario}">
-                        A simple success alert—check it out!
-                    </div>
-                    <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
-                        A simple success alert—check it out!
-                    </div>
-                    <form method="POST" th:action="@{/tecnico/saveFormulario1}" th:object="${formulario1}" enctype="multipart/form-data" style="margin-bottom: -35px;">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <!--
-                                <input type="hidden" class="form-control" th:field="*{idFormularios}">
-                                <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
-                                -->
-                                <div class="mb-3">
-                                    <label class="form-label">Hechos relevantes en la llegada al sitio:</label>
-                                    <input th:field="*{hrelevantes}" type="text" th:class="${#fields.hasErrors('hrelevantes')?'form-control is-invalid':'form-control'}"/>
-                                    <div class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('hrelevantes')}" th:errors="*{hrelevantes}">
-                                        Mensaje de error de hrelevantes
-                                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Hechos relevantes en la llegada al sitio:</label>
+                                <input th:field="*{hrelevantes}" type="text" th:class="${#fields.hasErrors('hrelevantes')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('hrelevantes')}" th:errors="*{hrelevantes}">
+                                    Mensaje de error de hrelevantes
                                 </div>
                             </div>
-                            <br><br>
-                            <div class="col-md-6">
-
-                                <div class="mb-3">
-                                    <label for="imagenSubida" class="form-label">Foto de perfil1:</label>
-                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img id="imgPreview1" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                                    </div>
-                                    <input class="form-control" type="file" name="imagenSubida1" id="imagenSubida1"
-                                           accept="image/*" onchange="previewImage(event, '#imgPreview1')">
+                            <div class="mb-3">
+                                <label for="imagenSubida" class="form-label">Foto de usted en el sitio:</label>
+                                <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                    <img id="imgPreview" th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile" class="rounded-circle"
+                                         onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
                                 </div>
-
-                            </div>
-                            <div class="col-md-6">
-
-                                <div class="mb-3">
-                                    <label for="imagenSubida" class="form-label">Foto de perfil:</label>
-                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img id="imgPreview" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                                    </div>
-                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
-                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
-
-                                </div>
-
-                                <button type="submit" class="btn btn-outline-primary float-end">Guardar</button>
+                                <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                                       accept="image/*" onchange="previewImage(event, '#imgPreview')">
 
                             </div>
                         </div>
-                    </form>
-                </div>
-                <br><br>
+                        <br><br>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="imagenSubida2" class="form-label">Foto de usted en el sitio:</label>
+                                <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                    <img id="imgPreview2" th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile" class="rounded-circle"
+                                         onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
+                                </div>
+                                <input class="form-control" type="file" name="imagenSubida2" id="imagenSubida2"
+                                       accept="image/*" onchange="previewImage(event, '#imgPreview2')">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-danger">Guardar cambios</button>
+                    </div>
+                </form>
             </div>
-        </section>
-        <br>
-        <a th:href="@{'/tecnico/formulario?id='+${formulario.ticket.idTickets}}" class="btn btn-outline-danger">Regresar</a>
-    </div>
+            <br><br>
+        </div>
+    </section>
+    <br>
+    <a th:href="@{'/tecnico/formulario?id='+${formulario1.idFormularios}}" class="btn btn-outline-danger">Regresar</a>
 </main>
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
@@ -382,7 +141,20 @@
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
 <script th:src="@{/assets/js/foto.js}"></script>
+<script>
+    function previewImage(event, imageId) {
+        const input = event.target;
+        const image = document.querySelector(imageId);
 
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                image.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
 </body>
 
 </html>
