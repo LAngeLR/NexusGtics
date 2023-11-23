@@ -956,7 +956,7 @@ public class TecnicoController {
                 formulario3 = optionalFormulario.get();
                 List<TecnologiainstaladaFormulario> list = tecnologiainstaladaRepository.agruparTecnologia(formulario3.getIdFormularios());
                 List<Tecnologiainstalada> listInst = tecInstaladaRepository.findAll();
-                model.addAttribute("formulario", formulario3);
+                model.addAttribute("formulario3", formulario3);
                 model.addAttribute("tecFormList", list);
                 model.addAttribute("tecInsList", listInst);
                 return "Tecnico/formulario3";
@@ -970,69 +970,90 @@ public class TecnicoController {
 
     /* Guardar Datos*/
     @PostMapping("/saveFormulario3")
-    public String saveFormulario3(@RequestParam("files") List<MultipartFile> files,
-                                 @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult,
-                                 Model model, RedirectAttributes attr) {
-        List<Archivo> archivos = new ArrayList<>();
-        for (MultipartFile file : files) {
-            if (!file.isEmpty()) {
-                try {
-                    Archivo archivo = new Archivo();
-                    archivo.setNombre(file.getOriginalFilename());
-                    archivo.setTipo(1);
-                    archivo.setArchivo(file.getBytes());
-                    archivo.setContentType(file.getContentType());
-                    archivoRepository.save(archivo);
-                    archivos.add(archivo);
-                } catch (IOException e) {
-                    System.out.println("Error al procesar los archivos");
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        if(formulario.getConstruccion() == null || formulario.getInstalacion()==null || formulario.getDespliegue() == null){
-            model.addAttribute("msgFormulario3","Por favor, complete lo pedido por el formulario");
-            model.addAttribute("form3",formularioRepository.findAll());
-            if(formulario.getIdFormularios() == null){
-                return "Tecnico/datost_nuevo";
-            }else{
-                return "Tecnico/formulario2";
-            }
-        }
-        if( formulario.getDescripcion()==null){
-            model.addAttribute("msgFormulario","Por favor, complete lo pedido por el formulario");
-            model.addAttribute("form3",formularioRepository.findAll());
-            if(formulario.getIdFormularios() == null){
-                return "Tecnico/datost_nuevo";
-            }else{
-                return "Tecnico/formulario3";
-            }
-        }
+    public String saveFormulario3(@RequestParam("imagenSubida") MultipartFile file,
+                                 @ModelAttribute("formulario3") @Valid Formulario formulario3, BindingResult bindingResult,
+                                 Model model, RedirectAttributes attr, HttpSession httpSession) {
 
-        if(!bindingResult.hasErrors()){
-            if (formulario.getArchivo() == null) {
-                formulario.setArchivo(new Archivo());
-            }
-            try {
-                if (formulario.getIdFormularios() == null) {
-                    attr.addFlashAttribute("msg", "Datos de formulario 3 - Trabajo realizado guardados exitosamente");
-                } else {
-                    attr.addFlashAttribute("msg", "Datos de formulario 3 - Trabajo realizado guardados exitosamente");
-                }
-                formularioRepository.save(formulario);
-                return "redirect:/tecnico/formulario";
-            } catch (Exception e) {
-                System.out.println("Error al guardar los datos del formulario");
-                throw new RuntimeException(e);
-            }
-        } else{
-            model.addAttribute("formulario", formularioRepository.findAll());
-            if (formulario.getIdFormularios() == null) {
-                return "Tecnico/datost_nuevo";
+        List<Ticket> ticketList = ticketRepository.findAll();
+        model.addAttribute("listaTicket", ticketList);
+
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+            if (formulario3.getIdFormularios() == null) {
+                return "Tecnico/formulario";
             } else {
                 return "Tecnico/formulario3";
             }
         }
+
+        String fileName1 = file.getOriginalFilename();
+        if (fileName1.contains("..") && !file.isEmpty()) {
+            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
+            if (formulario3.getIdFormularios() == null) {
+                return "Tecnico/formulario";
+            } else {
+                return "Tecnico/formulario3";
+            }
+        }
+
+        int maxFileSize = 10485760;
+        if (file.getSize() > maxFileSize && !file.isEmpty()) {
+            System.out.println(file.getSize());
+            model.addAttribute("msgImagen", "El archivo subido excede el tamaño máximo permitido (10MB).");
+            if (formulario3.getIdFormularios() == null) {
+                return "Tecnico/formulario";
+            } else {
+                return "redirect:/tecnico/formulario3";
+            }
+        }
+
+        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+            if (formulario3.getArchivo() == null) {
+                formulario3.setArchivo(new Archivo());
+            }
+
+            try{
+                /*Si file contiene algo --> Guardarlo*/
+                if(!file.isEmpty()){
+                    // Obtenemos el nombre del archivo
+                    String fileName = file.getOriginalFilename();
+                    String extension1 = "";
+                    int i = fileName.lastIndexOf('.');
+                    if (i > 0) {
+                        extension1 = fileName.substring(i+1);
+                    }
+
+                    Archivo archivo = formulario3.getArchivo();
+                    archivo.setNombre(fileName);
+                    archivo.setTipo(1);
+                    archivo.setArchivo(file.getBytes());
+                    archivo.setContentType(file.getContentType());
+                    Archivo archivo1 = archivoRepository.save(archivo);
+                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension1;
+                    archivo1.setNombre(nombreArchivo);
+                    archivoRepository.save(archivo1);
+                    uploadObject(archivo1);
+                }
+                if (formulario3.getIdFormularios() == null) {
+                    attr.addFlashAttribute("msg", "El formulario 2 se ha guardado exitosamente");
+                } else {
+                    attr.addFlashAttribute("msg", "El formulario 2 se ha guardado exitosamente");
+                }
+                formularioRepository.save(formulario3);
+                return "redirect:/tecnico/formulario";
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        } else {
+            if (formulario3.getIdFormularios() == null) {
+                return "Tecnico/formulario";
+            } else {
+                return "Tecnico/formulario3";
+            }
+        }
+
     }
 
     //-----------------------------------------------------------------------
