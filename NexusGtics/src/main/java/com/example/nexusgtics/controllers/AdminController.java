@@ -6,6 +6,7 @@ import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,6 +35,7 @@ import static java.lang.Integer.parseInt;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
     private final HttpSession session;
 
     final EmpresaRepository empresaRepository;
@@ -1160,7 +1162,9 @@ public class AdminController {
                     }
                     Archivo archivo = usuario.getArchivo();
                     archivo.setNombre(fileName);
-                    archivo.setTipo(1);
+                    Integer tipo = 1;
+                    archivo.setTipo(tipo);
+                    System.out.println("El tipo (integer) de archivo es: " + archivo.getTipo());
                     archivo.setArchivo(file.getBytes());
                     archivo.setContentType(file.getContentType());
                     Archivo archivo1 = archivoRepository.save(archivo);
@@ -1168,16 +1172,18 @@ public class AdminController {
                     archivo1.setNombre(nombreArchivo);
                     archivoRepository.save(archivo1);
                     uploadObject(archivo1);
+                    archivo1.setArchivo(null);
                 }
+                System.out.println("El tipo de archivo es: " + usuario.getArchivo().getTipo());
+                usuarioRepository.save(usuario);
+                session.setAttribute("usuario", usuario);
 
                 if (usuario.getId() == null) {
                     attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
                 } else {
                     attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
                 }
-                usuarioRepository.save(usuario);
 
-                session.setAttribute("usuario", usuario);
                 return "redirect:/admin/perfil";
             } catch (IOException e) {
                 throw new RuntimeException(e);
