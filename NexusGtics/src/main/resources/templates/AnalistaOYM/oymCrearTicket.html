@@ -108,7 +108,7 @@
                                     <select name="idSitios" id="idSitios" class="form-select">
                                         <option value="">--Seleccione el sitio--</option>
                                         <option th:each="sitio: ${listaSitios}"
-                                                th:text="${sitio.distrito}" th:value="${sitio.idSitios}"
+                                                th:text="${sitio.nombre}" th:value="${sitio.idSitios}"
                                                 th:selected="${sitioSeleccionada != null && sitioSeleccionada.idSitios == sitio.idSitios}"
                                         >Sitio de Tipo</option>
                                     </select>
@@ -124,8 +124,8 @@
                             <div class="col-md-6">
 
                                 <div class="mb-3">
-                                    <label class="form-label">Usuario Solicitante</label>
-                                    <input type="text" th:field="*{usuarioSolicitante}" th:class="${#fields.hasErrors('usuarioSolicitante')?'form-control is-invalid':'form-control'}"/>
+                                    <label class="form-label">Usuario solicitante:</label>
+                                    <input th:field="*{usuarioSolicitante}" type="text" th:class="${#fields.hasErrors('usuarioSolicitante')?'form-control is-invalid':'form-control'}"/>
                                     <div class="invalid-feedback"
                                          th:if="${#fields.hasErrors('usuarioSolicitante')}" th:errors="*{usuarioSolicitante}">
                                         Mensaje de error de usuarioSolicitante
@@ -146,15 +146,13 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Usuario Solicitante</label>
-                                    <input type="text" th:field="*{descripcion}" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
+                                    <label class="form-label">Descripción:</label>
+                                    <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
                                     <div class="invalid-feedback"
                                          th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
-                                        Mensaje de error de descripción
+                                        Mensaje de error de descripcion
                                     </div>
                                 </div>
-                            <div>
-                            </div>
                             </div>
                         </div>
                         <div class="col-md-3">

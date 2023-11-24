@@ -638,6 +638,7 @@ public class AnalistaOYMController {
 
             return "redirect:/analistaOYM/ticket";
         } else { //hay al menos 1 error
+            System.out.println("error binding");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
             model.addAttribute("listaSitios", sitioRepository.findAll());
             return "AnalistaOYM/oymCrearTicket";
