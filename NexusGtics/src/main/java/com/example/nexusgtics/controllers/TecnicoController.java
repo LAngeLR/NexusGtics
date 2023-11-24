@@ -297,7 +297,7 @@ public class TecnicoController {
                 return "redirect:/tecnico/";
             }
         } catch (NumberFormatException e) {
-            return "redirect:/tecnico/listaUsuario";
+            return "redirect:/Tecnico/listaUsuario";
         }
     }
 
