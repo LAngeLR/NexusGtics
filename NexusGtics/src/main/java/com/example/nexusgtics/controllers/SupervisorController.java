@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 
+import static com.example.nexusgtics.controllers.GcsController.uploadObject;
+
 @Controller
 @RequestMapping("/supervisor")
 public class SupervisorController {
@@ -82,7 +84,7 @@ public class SupervisorController {
     }
 
     /* PERFIL DEL SUPERVISOR */
-    @PostMapping("/savePerfil")
+    @PutMapping("/savePerfil")
     public String savePerfil(@RequestParam("imagenSubida") MultipartFile file,
                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                              Model model,
@@ -91,99 +93,176 @@ public class SupervisorController {
         // ESTO SE AÑADIO DE BARD
         //session.setAttribute("usuario", usuario);
 
-        if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
-            model.addAttribute("msgCargo", "Escoger un cargo");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
+//        if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
+//            model.addAttribute("msgCargo", "Escoger un cargo");
+//            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+//            model.addAttribute("listaCargo", cargoRepository.findAll());
+//
+//            if (usuario.getId() == null) {
+//                return "Supervisor/perfilSupervisor";
+//            } else {
+//                return "Supervisor/perfilEditar";
+//            }
+//        }
+//        if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
+//            model.addAttribute("msgEmpresa", "Escoger una empresa");
+//            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+//            model.addAttribute("listaCargo", cargoRepository.findAll());
+//            if (usuario.getId() == null) {
+//                return "Supervisor/perfilSupervisor";
+//            } else {
+//                return "Supervisor/perfilEditar";
+//            }
+//        }
+//
+//        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
+//            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+//            if (usuario.getId() == null) {
+//                return "Supervisor/perfilSupervisor";
+//            } else {
+//                return "Supervisor/perfilEditar";
+//            }
+//        }
+//
+//        String fileName1 = file.getOriginalFilename();
+//
+//        if (fileName1.contains("..") && !file.isEmpty()) {
+//            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
+//            if (usuario.getId() == null) {
+//                return "Supervisor/perfilSupervisor";
+//            } else {
+//                return "Supervisor/perfilEditar";
+//            }
+//        }
+//
+//
+//        int maxFileSize = 10485760;
+//
+//        if (file.getSize() > maxFileSize && !file.isEmpty()) {
+//            System.out.println(file.getSize());
+//            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
+//            if (usuario.getId() == null) {
+//                return "Supervisor/perfilSupervisor";
+//            } else {
+//                return "redirect:/supervisor/perfilEditar";
+//            }
+//        }
+//
+//        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+//            if (usuario.getArchivo() == null) {
+//                usuario.setArchivo(new Archivo());
+//            }
+//            String fileName = file.getOriginalFilename();
+//            try{
+//                //validación de nombre, apellido y correo
+//                Archivo archivo = usuario.getArchivo();
+//                archivo.setNombre(fileName);
+//                archivo.setTipo(1);
+//                archivo.setArchivo(file.getBytes());
+//                archivo.setContentType(file.getContentType());
+//                archivoRepository.save(archivo);
+//                int idImagen = archivo.getIdArchivos();
+//                usuario.getArchivo().setIdArchivos(idImagen);
+//                if (usuario.getId() == null) {
+//                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+//                } else {
+//                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+//                }
+//                usuarioRepository.save(usuario);
+//                //Usuario u = (Usuario) httpSession.getAttribute("usuario");
+//                //HttpSession session = request.getSession(true);
+//                //session.setAttribute("nombreUsuario", "nuevoNombre");
+//                session.setAttribute("usuario", usuario);
+//                return "redirect:/supervisor/perfil";
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//        } else { //hay al menos 1 error
+//            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+//            model.addAttribute("listaCargo", cargoRepository.findAll());
+//            if (usuario.getId() == null) {
+//                return "Supervisor/perfilSupervisor";
+//            } else {
+//                return "Supervisor/perfilEditar";
+//            }
+//        }
+        try {
+            Integer idUsuario = usuario.getId();
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(idUsuario);
 
-            if (usuario.getId() == null) {
-                return "Supervisor/perfilSupervisor";
-            } else {
-                return "Supervisor/perfilEditar";
-            }
-        }
-        if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
-            model.addAttribute("msgEmpresa", "Escoger una empresa");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Supervisor/perfilSupervisor";
-            } else {
-                return "Supervisor/perfilEditar";
-            }
-        }
+            if (optionalUsuario.isPresent()) {
+                Usuario usuarioDB = optionalUsuario.get();
 
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
-            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-            if (usuario.getId() == null) {
-                return "Supervisor/perfilSupervisor";
-            } else {
-                return "Supervisor/perfilEditar";
-            }
-        }
-
-        String fileName1 = file.getOriginalFilename();
-
-        if (fileName1.contains("..") && !file.isEmpty()) {
-            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
-            if (usuario.getId() == null) {
-                return "Supervisor/perfilSupervisor";
-            } else {
-                return "Supervisor/perfilEditar";
-            }
-        }
-
-
-        int maxFileSize = 10485760;
-
-        if (file.getSize() > maxFileSize && !file.isEmpty()) {
-            System.out.println(file.getSize());
-            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
-            if (usuario.getId() == null) {
-                return "Supervisor/perfilSupervisor";
-            } else {
-                return "redirect:/supervisor/perfilEditar";
-            }
-        }
-
-        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
-            if (usuario.getArchivo() == null) {
-                usuario.setArchivo(new Archivo());
-            }
-            String fileName = file.getOriginalFilename();
-            try{
-                //validación de nombre, apellido y correo
-                Archivo archivo = usuario.getArchivo();
-                archivo.setNombre(fileName);
-                archivo.setTipo(1);
-                archivo.setArchivo(file.getBytes());
-                archivo.setContentType(file.getContentType());
-                archivoRepository.save(archivo);
-                int idImagen = archivo.getIdArchivos();
-                usuario.getArchivo().setIdArchivos(idImagen);
-                if (usuario.getId() == null) {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
-                } else {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
+                    model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+                    return "Supervisor/perfilEditar";
                 }
-                usuarioRepository.save(usuario);
-                //Usuario u = (Usuario) httpSession.getAttribute("usuario");
-                //HttpSession session = request.getSession(true);
-                //session.setAttribute("nombreUsuario", "nuevoNombre");
-                session.setAttribute("usuario", usuario);
-                return "redirect:/supervisor/perfil";
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+                String fileName1 = file.getOriginalFilename();
+                if (fileName1.contains("..") && !file.isEmpty()) {
+                    model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
+                    return "Supervisor/perfilEditar";
+                }
 
-        } else { //hay al menos 1 error
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Supervisor/perfilSupervisor";
-            } else {
-                return "Supervisor/perfilEditar";
+                int maxFileSize = 10485760;
+                if (file.getSize() > maxFileSize && !file.isEmpty()) {
+                    System.out.println(file.getSize());
+                    model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
+                    return "redirect:/supervisor/perfilEditar";
+                }
+
+                if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+                    if (usuario.getArchivo() == null) {
+                        usuario.setArchivo(new Archivo());
+                    }
+
+                    try {
+                        if (file.getSize() > 1) {
+                            // Obtenemos el nombre del archivo
+                            String fileName = file.getOriginalFilename();
+                            String extension = "";
+                            int i = fileName.lastIndexOf('.');
+                            if (i > 0) {
+                                extension = fileName.substring(i + 1);
+                            }
+                            Archivo archivo = usuario.getArchivo();
+                            archivo.setNombre(fileName);
+                            archivo.setTipo(1);
+                            archivo.setArchivo(file.getBytes());
+                            archivo.setContentType(file.getContentType());
+                            Archivo archivo1 = archivoRepository.save(archivo);
+                            String nombreArchivo = "archivo-" + archivo1.getIdArchivos() + "." + extension;
+                            archivo1.setNombre(nombreArchivo);
+                            archivoRepository.save(archivo1);
+                            uploadObject(archivo1);
+                            archivo1.setArchivo(null);
+                            usuarioDB.setArchivo(archivo1);
+                        }
+                        if (usuario.getId() == null) {
+                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+                        } else {
+                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                        }
+
+                        usuarioDB.setNombre(usuario.getNombre());
+                        usuarioDB.setApellido(usuario.getApellido());
+                        usuarioDB.setCorreo(usuario.getCorreo());
+                        usuarioDB.setDescripcion(usuario.getDescripcion());
+                        usuarioRepository.save(usuarioDB);
+                        session.setAttribute("usuario", usuarioDB);
+                        return "redirect:/supervisor/perfil";
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                } else { //hay al menos 1 error
+                    return "Supervisor/perfilEditar";
+                }
+            }else {
+                return "redirect:/supervisor/";
             }
+        } catch (NumberFormatException e) {
+            return "redirect:/supervisor/listaUsuario";
         }
     }
 

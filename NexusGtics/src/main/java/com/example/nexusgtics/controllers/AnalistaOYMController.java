@@ -74,7 +74,7 @@ public class AnalistaOYMController {
     }
 
     /* PERFIL DEL SUPERADMINISTRADOR */
-    @PostMapping("/savePerfil")
+    @PutMapping("/savePerfil")
     public String savePerfil(@RequestParam("imagenSubida") MultipartFile file,
                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                              Model model,
@@ -83,113 +83,82 @@ public class AnalistaOYMController {
         // ESTO SE AÑADIO DE BARD
         //session.setAttribute("usuario", usuario);
 
-        if(usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1){
-            model.addAttribute("msgCargo", "Escoger un cargo");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
+        try {
+            Integer idUsuario = usuario.getId();
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(idUsuario);
 
-            if (usuario.getId() == null) {
-                return "AnalistaOYM/analistaOYM";
-            } else {
-                return "AnalistaOYM/perfilEditar";
-            }
-        }
-        if(usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1){
-            model.addAttribute("msgEmpresa", "Escoger una empresa");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "AnalistaOYM/analistaOYM";
-            } else {
-                return "AnalistaOYM/perfilEditar";
-            }
-        }
+            if (optionalUsuario.isPresent()) {
+                Usuario usuarioDB = optionalUsuario.get();
 
+                if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
+                    model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+                    return "AnalistaOYM/perfilEditar";
+                }
+                String fileName1 = file.getOriginalFilename();
+                if (fileName1.contains("..") && !file.isEmpty()) {
+                    model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
+                    return "AnalistaOYM/perfilEditar";
+                }
 
+                int maxFileSize = 10485760;
+                if (file.getSize() > maxFileSize && !file.isEmpty()) {
+                    System.out.println(file.getSize());
+                    model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
+                    return "redirect:/analistaOYM/perfilEditar";
+                }
 
-
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
-            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-            if (usuario.getId() == null) {
-                return "AnalistaOYM/analistaOYM";
-            } else {
-                return "AnalistaOYM/perfilEditar";
-            }
-        }
-
-        String fileName1 = file.getOriginalFilename();
-
-        if (fileName1.contains("..") && !file.isEmpty()) {
-            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
-            if (usuario.getId() == null) {
-                return "AnalistaOYM/analistaOYM";
-            } else {
-                return "AnalistaOYM/perfilEditar";
-            }
-        }
-
-        int maxFileSize = 10485760;
-
-        if (file.getSize() > maxFileSize && !file.isEmpty()) {
-            System.out.println(file.getSize());
-            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
-            if (usuario.getId() == null) {
-                return "AnalistaOYM/analistaOYM";
-            } else {
-                return "redirect:/analistaOYM/perfilEditar";
-            }
-        }
-
-        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
-            if (usuario.getArchivo() == null) {
-                usuario.setArchivo(new Archivo());
-            }
-
-            try{
-                if(!file.isEmpty()){
-                    // Obtenemos el nombre del archivo
-                    String fileName = file.getOriginalFilename();
-                    String extension = "";
-                    int i = fileName.lastIndexOf('.');
-                    if (i > 0) {
-                        extension = fileName.substring(i+1);
+                if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+                    if (usuario.getArchivo() == null) {
+                        usuario.setArchivo(new Archivo());
                     }
-                    Archivo archivo = usuario.getArchivo();
-                    archivo.setNombre(fileName);
-                    archivo.setTipo(1);
-                    archivo.setArchivo(file.getBytes());
-                    archivo.setContentType(file.getContentType());
-                    Archivo archivo1 = archivoRepository.save(archivo);
-                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
-                    archivo1.setNombre(nombreArchivo);
-                    archivoRepository.save(archivo1);
-                    uploadObject(archivo1);
 
+                    try {
+                        if (file.getSize() > 1) {
+                            // Obtenemos el nombre del archivo
+                            String fileName = file.getOriginalFilename();
+                            String extension = "";
+                            int i = fileName.lastIndexOf('.');
+                            if (i > 0) {
+                                extension = fileName.substring(i + 1);
+                            }
+                            Archivo archivo = usuario.getArchivo();
+                            archivo.setNombre(fileName);
+                            archivo.setTipo(1);
+                            archivo.setArchivo(file.getBytes());
+                            archivo.setContentType(file.getContentType());
+                            Archivo archivo1 = archivoRepository.save(archivo);
+                            String nombreArchivo = "archivo-" + archivo1.getIdArchivos() + "." + extension;
+                            archivo1.setNombre(nombreArchivo);
+                            archivoRepository.save(archivo1);
+                            uploadObject(archivo1);
+                            archivo1.setArchivo(null);
+                            usuarioDB.setArchivo(archivo1);
+                        }
+                        if (usuario.getId() == null) {
+                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+                        } else {
+                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                        }
+
+                        usuarioDB.setNombre(usuario.getNombre());
+                        usuarioDB.setApellido(usuario.getApellido());
+                        usuarioDB.setCorreo(usuario.getCorreo());
+                        usuarioDB.setDescripcion(usuario.getDescripcion());
+                        usuarioRepository.save(usuarioDB);
+                        session.setAttribute("usuario", usuarioDB);
+                        return "redirect:/analistaOYM/perfil";
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                } else { //hay al menos 1 error
+                    return "AnalistaOYM/perfilEditar";
                 }
-
-                if (usuario.getId() == null) {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
-                } else {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
-                }
-                usuarioRepository.save(usuario);
-                //Usuario u = (Usuario) httpSession.getAttribute("usuario");
-                //HttpSession session = request.getSession(true);
-                //session.setAttribute("nombreUsuario", "nuevoNombre");
-                session.setAttribute("usuario", usuario);
-                return "redirect:/analistaOYM/perfil";
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            }else {
+                return "redirect:/analistaOYM/";
             }
-
-        } else { //hay al menos 1 error
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "AnalistaOYM/perfilOYM";
-            } else {
-                return "AnalistaOYM/perfilEditar";
-            }
+        } catch (NumberFormatException e) {
+            return "redirect:/analistaOYM/listaUsuario";
         }
     }
 
