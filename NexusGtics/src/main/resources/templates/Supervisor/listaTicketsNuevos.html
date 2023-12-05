@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="Fragmentos/head :: head('Tickets')"></head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header th:replace="Fragmentos/header :: header('supervisor')"><!-- End Header --></header><!-- End Header -->
+<!-- ======= Sidebar ======= -->
+<aside th:replace="Fragmentos/menuSupervisor :: menu('listaTicket')">
+</aside><!-- End Sidebar-->
+
+<main id="main" class="main">
+    <div class="container">
+
+        <div class="alert alert-success" role="alert" th:if="${abc!=null}" th:text="${abc}">
+            abc
+        </div>
+
+        <div class="alert alert-success" role="alert" th:if="${yum!=null}" th:text="${yum}">
+            yum
+        </div>
+
+        <div class="pagetitle">
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active">Lista de tickets nuevos</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="card">
+
+                        <div class="card-body table-responsive">
+                            <div class="container">
+                                <h5 class="card-title">Tickets Nuevos</h5>
+                            </div>
+                            <!-- Table with stripped rows -->
+                            <table class="table datatable-borderless datatable">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Analista creador</th>
+                                    <th scope="col">Usuario solicitante</th>
+                                    <th scope="col">Fecha de Apertura</th>
+                                    <th scope="col">Prioridad</th>
+                                    <th scope="col">Ver más</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr th:each="tickets, info: ${listaTicketsNuevos}">
+                                    <td th:text="${info.index + 1}"></td>
+
+                                    <td th:text="${tickets.analistaCreador}"></td>
+                                    <td th:text="${tickets.usuarioSolicitante}"></td>
+                                    <td th:text="${tickets.fechaCreacion}"></td>
+                                    <td th:text="${tickets.prioridad}"></td>
+
+                                    <td><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/ticketAsignar?id=' + ${tickets.idTickets}}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                                        </svg>
+                                    </a></center></td>
+
+                                </tr>
+
+                                </tbody>
+                            </table>
+                            <!-- End Table with stripped rows -->
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+</main>
+<!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer th:replace="Fragmentos/footer :: footer"></footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+</body>
+
+</html>

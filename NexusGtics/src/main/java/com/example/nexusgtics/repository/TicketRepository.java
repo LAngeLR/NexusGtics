@@ -1,5 +1,6 @@
 package com.example.nexusgtics.repository;
 
+import com.example.nexusgtics.dto.ListaTicketNuevoDto;
 import com.example.nexusgtics.dto.ListaTicketsDto;
 import com.example.nexusgtics.dto.TicketsCreadosCulminadosDto;
 import com.example.nexusgtics.dto.TicketsDashSupDto;
@@ -16,7 +17,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     // ------------------------------ SUPERVISOR --------------------------------------- //
     @Query(nativeQuery = true, value = "SELECT t.idTickets, t.usuarioSolicitante, CONCAT(u.nombre, ' ', u.apellido) AS nombreCompleto, t.fechaCreacion, t.fechaCierre, t.prioridad, t.estado FROM tickets t LEFT JOIN cuadrillas c ON t.idCuadrilla = c.idCuadrillas LEFT JOIN tecnicoscuadrillas tc ON c.idCuadrillas = tc.idCuadrilla AND tc.liderTecnico = 1 LEFT JOIN usuarios u ON tc.idTecnico = u.idUsuarios WHERE t.estado != ?1 AND t.idSupervisorEncargado = ?2")
     List<ListaTicketsDto> listaTicketsModificado(int valor1, int idSupervisor);
-
 
     @Transactional
     @Modifying
@@ -60,6 +60,14 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
             "    (SELECT COUNT(*) FROM tickets WHERE idSupervisorEncargado != ?1 AND reasignado=1 AND estado = ?2) AS terminados;", nativeQuery = true )
     List<TicketsDashSupDto> infoDash(int id, int estado);
 
+    @Query(nativeQuery = true, value = "SELECT t.idTickets, CONCAT(ucreador.nombre, ' ', ucreador.apellido) AS analistaCreador, t.usuarioSolicitante, t.fechaCreacion, t.prioridad\n" +
+            "FROM tickets t\n" +
+            "JOIN usuarios ucreador ON t.idUsuarioCreador = ucreador.idUsuarios\n" +
+            "WHERE t.estado = 1 AND t.idSupervisorEncargado IS NULL AND t.idEmpresaAsignada = ?1\n" +
+            "ORDER BY t.fechaCreacion ASC;")
+    List<ListaTicketNuevoDto> listaTicketsNuevos (int idEmpresaAsignada);
+
+    //------------------------ Tecnico --------------------//
     //------------------------ Tecnico --------------------//
 
 //    @Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE estado NOT IN (1,2,7) and idSupervisorEncargado = 5 AND idEmpresaAsignada=3 and idCuadrilla=1")

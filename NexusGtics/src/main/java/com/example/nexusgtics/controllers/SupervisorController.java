@@ -356,6 +356,18 @@ public class SupervisorController {
         return "Supervisor/listaTickets";
     }
 
+    //lista de tickets nuevos asignados a la empresa
+    @GetMapping("/listaTicketsNuevos")
+    public String TicketsNuevos(Model model, HttpSession httpSession){
+
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idEmpresa = u.getEmpresa().getIdEmpresas();
+        System.out.println(idEmpresa);
+        model.addAttribute("listaTicketsNuevos",ticketRepository.listaTicketsNuevos(idEmpresa));
+
+        return "Supervisor/listaTicketsNuevos";
+    }
+
     @GetMapping("/listaCuadrillas")
     public String Cuadrillas(Model model, HttpSession httpSession){
 
@@ -388,6 +400,31 @@ public class SupervisorController {
                 model.addAttribute("listaCuadrillas",listaCuadrillas);
 
                 return "Supervisor/ticketNuevo";
+            } else {
+                return "redirect:/supervisor/listaTickets";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/supervisor/listaTickets";
+        }
+    }
+
+    //vista para asignarse el ticket
+    @GetMapping("/ticketAsignar")
+    public String asignarTicket(Model model, @RequestParam("id") String idStr, HttpSession httpSession){
+
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idSupervisor = u.getId();
+
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/supervisor/listaTickets";
+            }
+            Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
+            if (ticketBuscado.isPresent()) {
+                Ticket ticket = ticketBuscado.get();
+                model.addAttribute("ticket", ticket);
+                return "Supervisor/ticketAsignar";
             } else {
                 return "redirect:/supervisor/listaTickets";
             }

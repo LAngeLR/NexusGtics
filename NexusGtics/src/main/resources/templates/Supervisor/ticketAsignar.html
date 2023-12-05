@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+
+<head th:include="Fragmentos/head :: head('Ticket Nuevo')"></head>
+
+<body>
+<!-- ======= Header ======= -->
+<header th:replace="Fragmentos/header :: header('supervisor')"><!-- End Header --></header><!-- End Header -->
+<style>
+  #map { height: 50vh; width: 100hw; }
+  select {
+    width: 30%;
+    font-size: 0.8rem
+  }
+
+</style>
+
+<!-- ======= Sidebar ======= -->
+<aside th:replace="Fragmentos/menuSupervisor :: menu('ticketNuevo')">
+</aside><!-- End Sidebar-->
+
+<main id="main" class="main" th:object="${ticket}">
+
+
+  <div class="alert alert-success" role="alert" th:if="${mensaje!=null}" th:text="${mensaje}">
+    abc
+  </div>
+
+  <div class="pagetitle">
+    <div class="d-flex justify-content-between align-items-center">
+      <h1>Detalles</h1>
+
+      <div class="d-flex align-items-center" th:if="${ticket.idSupervisorEncargado == null}">
+        <button type="button" class="btn btn-outline-success me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">Aceptar Ticket</button>
+        <!-- MODAL 1 -->
+        <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel1">Advertencia</h1>
+              </div>
+
+              <form th:action="@{/supervisor/actualizarSupervisor}" method="post"> <!-- Reemplaza por tu ruta de procesamiento del formulario -->
+                <input th:value="${ticket.idTickets}" name="idTickets" type="hidden"/>
+                <input th:value="${session.usuario.id}" name="idSupervisorEncargado" type="hidden"/>
+                <input type="hidden" name="condicion" value="0"/>
+                <div class="modal-body">
+                  <h3>¿Está seguro de aceptar el ticket?</h3>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-outline-primary">Confirmar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a th:href="@{/supervisor/listaTickets}">Lista Tickets</a></li>
+        <li class="breadcrumb-item active">Detalles Ticket</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+
+
+  <section class="section profile">
+    <div class="row">
+      <div class="col-xl-6">
+        <div class="card">
+          <div class="card-body pt-3">
+            <!-- Bordered Tabs -->
+            <div class="tab-content pt-2">
+              <div class="tab-pane fade show active profile-overview" id="datos-overview">
+                <h5 class="card-title" style="color: #095444">Datos generales del Ticket</h5>
+                <br>
+
+                <div class="row">
+                  <div class="col-lg-4 col-md-5 label">Prioridad:</div>
+                  <div class="col-lg-8 col-md-7" style="color: #D01515" th:if="${ticket.prioridad eq 'Urgente'}"><b th:text="${ticket.prioridad}"></b></div>
+                  <div class="col-lg-8 col-md-7" style="color: #3498DB" th:if="${ticket.prioridad eq 'Baja prioridad'}"><b th:text="${ticket.prioridad}"></b></div>
+                  <div class="col-lg-8 col-md-7" style="color: #FFC300" th:if="${ticket.prioridad eq 'Hacer'}"><b th:text="${ticket.prioridad}"></b></div>
+                  <div class="col-lg-8 col-md-7" style="color: #4CAF50" th:if="${ticket.prioridad eq 'No critico'}"><b th:text="${ticket.prioridad}"></b></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-4 col-md-5 label">Nombre de Usuario:</div>
+                  <div class="col-lg-8 col-md-7" th:text="${ticket.usuarioSolicitante}"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-4 col-md-5 label">Fecha de apertura</div>
+                  <div class="col-lg-8 col-md-7" th:text="${ticket.fechaCreacion}"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-4 col-md-5 label">Fecha de vencimiento:</div>
+                  <div class="col-lg-8 col-md-7" th:text="${ticket.fechaCierre}"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-4 col-md-5 label">Servicio Relacionado:</div>
+                  <div class="col-lg-8 col-md-7" th:text="${ticket.idTipoTicket.nombreTipoTicket}"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-4 col-md-5 label">Estado:</div>
+                  <div class="col-lg-8 col-md-7"><span class="badge text-bg-primary">Nuevo</span></div>
+                </div>
+
+                <br>
+
+              </div>
+              <br>
+            </div><!-- End Bordered Tabs -->
+            <div class="d-flex justify-content-end">
+              <a type="button" class="btn btn-outline-warning" th:href="@{'/supervisor/comentarios?id=' + ${ticket.idTickets}}" style="margin-right: 25px;">comentarios</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-6">
+        <div class="card">
+          <div class="card-body pt-3">
+            <div class="col-md-8 col-lg-9">
+              <h5 class="card-title" style="color: #095444">Foto del Sitio:</h5>
+              <img th:src="@{|/image/${ticket.idSitios.archivo.idArchivos}|}" alt="Profile" style="max-width: 100%; height: auto; display: block; margin: 0 auto; max-height: 70vh;"
+                   onerror="this.onerror=null; this.src='https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg'">
+              <br>
+              <div class="tab-content pt-2">
+
+                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                  <br>
+                  <div class="row">
+                    <div class="col-lg-4 col-md-5 label">Descripcion:</div>
+                    <div class="col-lg-8 col-md-7" th:text="${ticket.descripcion}"></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <!-- End Bordered Tabs -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-body pt-3">
+          <h5 class="card-title" style="color: #095444; text-align: center; ">Ubicacion</h5>
+          <div id="map" ></div>
+          <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+          <script>
+            var latitud = [[${ticket.idSitios.latitud}]];
+            var longitud = [[${ticket.idSitios.longitud}]];
+            let map = L.map('map').setView([latitud,longitud],18)
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            L.marker([latitud,longitud]).addTo(map).bindPopup('Sitio').openPopup();
+          </script>
+
+          <script>
+            function centrarMapaEnCoordenadasIniciales() {
+              map.setView([latitud, longitud], 18);
+            }
+
+            var botonCentrar = L.control({ position: 'bottomright' });
+
+            botonCentrar.onAdd = function (map) {
+              var container = L.DomUtil.create('div', 'boton-centrar');
+              var button = L.DomUtil.create('button', 'btn btn-primary', container);
+              button.type = 'button';
+
+              var icono = L.DomUtil.create('i', 'bx bx-collapse', button);
+
+              L.DomEvent.on(button, 'click', centrarMapaEnCoordenadasIniciales);
+              return container;
+            };
+            botonCentrar.addTo(map);
+          </script>
+
+
+          <div class="mb-3" style="margin-top: 25px;">
+            <input type="text" class="form-control" th:value="'Direccion: ' + ${ticket.idSitios.departamento} +', '+ ${ticket.idSitios.provincia} +', '+ ${ticket.idSitios.distrito}" disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- End Bordered Tabs -->
+
+  </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer th:replace="Fragmentos/footer :: footer"></footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+</body>
+
+</html>
