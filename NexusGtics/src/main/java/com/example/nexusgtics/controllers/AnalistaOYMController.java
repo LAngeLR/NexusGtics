@@ -571,10 +571,10 @@ public class AnalistaOYMController {
 
     /*CREAR NUEVO TICKET*/
     @PostMapping("/saveTicket")
-    public String saveTicket(RedirectAttributes attr,
-                              @ModelAttribute("ticket") @Valid Ticket ticket,
+    public String saveTicket(@ModelAttribute("ticket") @Valid Ticket ticket,
                               BindingResult bindingResult,
-                             Model model, HttpSession httpSession, Ticket ticket2){
+                             Model model, HttpSession httpSession, Ticket ticket2,
+                             RedirectAttributes attr){
 
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
 

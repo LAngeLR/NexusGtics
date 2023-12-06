@@ -291,7 +291,6 @@ public class AdminController {
 //        Integer idSupervisor = u.getId();
 //
 //        model.addAttribute("listaTickets",ticketRepository.listaTicketsModificado( 1, idSupervisor));
-
         try {
             int id = usuario.getId();
             System.out.println("El ID obtenido fue: "+id);
@@ -301,7 +300,7 @@ public class AdminController {
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
                 Usuario usuarioDb = optionalUsuario.get();    //se crea un usuarioDb al que se le pasarán los campos del form que fueron a usuario
-
+                usuario.setArchivo(optionalUsuario.get().getArchivo());
                 //validar que no se repitan los emails
                 Integer id1 = usuario.getId();
 
@@ -342,19 +341,14 @@ public class AdminController {
                     model.addAttribute("listaCargo", cargoRepository.findAll());
                     return "Administrador/editarUsuario";
                 }
-
+                //------------------------------------------
                 if (!bindingResult.hasErrors()) {
                     // Si no hay errores, se realiza el flujo normal
                     if (usuarioDb.getArchivo() == null) {
                         usuarioDb.setArchivo(usuario.getArchivo());
                     }
-
                     try {
-                        if (usuario.getId() == null) {
-                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
-                        } else {
-                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
-                        }
+                        attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
                         //pasar del intermdio al db
                         usuarioDb.setNombre(usuario.getNombre());
                         usuarioDb.setApellido(usuario.getApellido());
@@ -364,12 +358,13 @@ public class AdminController {
                         usuarioDb.setCargo(usuario.getCargo());
                         usuarioDb.setEmpresa(usuario.getEmpresa());
                         usuarioRepository.save(usuarioDb);
+
                         return "redirect:/admin/listaUsuario";
                     } catch (Exception e) {
-                        System.out.println("Error al guardar el equipo");
                         throw new RuntimeException(e);
                     }
                 } else { //hay al menos 1 error
+                    System.out.println("error binding, else");
                     model.addAttribute("listaEmpresa", empresaRepository.findAll());
                     model.addAttribute("listaCargo", cargoRepository.findAll());
 
@@ -682,6 +677,7 @@ public class AdminController {
 
             if (optionalSitio.isPresent()) {
                 Sitio sitioBD = optionalSitio.get();
+                sitio.setArchivo(optionalSitio.get().getArchivo());
 
                 if (sitio.getTipo() == null || sitio.getTipo().equals("-1")) {
                     model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
@@ -929,7 +925,7 @@ public class AdminController {
 
             if (optionalEquipo.isPresent()) {
                 Equipo equipoBD = optionalEquipo.get();
-
+                equipo.setArchivo(optionalEquipo.get().getArchivo());
                 if (equipo.getTipoequipo() == null || equipo.getTipoequipo().getIdTipoEquipo() == null) {
                     model.addAttribute("msgTipoEquipo", "Escoger un tipo de Equipo");
                     model.addAttribute("listaTipoEquipos", tipoEquipoRepository.findAll());
