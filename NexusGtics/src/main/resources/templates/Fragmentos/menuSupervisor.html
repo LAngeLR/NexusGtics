@@ -10,28 +10,6 @@
             </a>
         </li>
 
-<!--        <li class="nav-item">-->
-<!--            <a th:class="${currentPage == 'listaTicketsNuevos' or currentPage == 'dashboard' or currentPage == 'listaTicket' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">-->
-<!--                <i class="bi bi-card-list"></i><span>Tickets</span><i class="bi bi-chevron-down ms-auto"></i>-->
-<!--            </a>-->
-<!--            <ul id="tables-nav" th:classappend="${currentPage == 'listaTicketsNuevos' or currentPage == 'listaTicket' or currentPage == 'dashboard' ? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">-->
-<!--                <li>-->
-<!--                    <a th:classappend="${currentPage == 'listaTicketsNuevos' ? 'active' : ''}" th:href="@{/supervisor/listaTicketsNuevos}">-->
-<!--                        <i class="bi bi-circle"></i><span>Tickets Nuevos</span>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--                <li>-->
-<!--                    <a th:classappend="${currentPage == 'listaTicket' ? 'active' : ''}" th:href="@{/supervisor/listaTickets}">-->
-<!--                        <i class="bi bi-circle"></i><span>Ver Tickets</span>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--                <li>-->
-<!--                    <a th:classappend="${currentPage == 'dashboard' ? 'active' : ''}" th:href="@{/supervisor/dashboard}">-->
-<!--                        <i class="bi bi-circle"></i><span>Dashboard</span>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </li>-->
         <li class="nav-item">
             <a th:class="${currentPage == 'listaTicketsNuevos' or currentPage == 'listaTicket' or currentPage == 'dashboard' ? 'nav-link' : 'nav-link collapsed'}" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-people"></i><span>Tickets</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -39,7 +17,7 @@
             <ul id="tables-nav" th:classappend="${currentPage == 'listaTicketsNuevos' or currentPage == 'listaTicket' or currentPage == 'dashboard' ? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">
                 <li>
                     <a th:classappend="${currentPage == 'listaTicketsNuevos' ? 'active' : ''}" th:href="@{/supervisor/listaTicketsNuevos}">
-                        <i class="bi bi-circle"></i><span>Tickets Nuevos</span>
+                        <i class="bi bi-circle"></i><span>Tickets Sin Asignar</span>
                     </a>
                 </li>
                 <li>

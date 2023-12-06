@@ -8,7 +8,7 @@
 <!-- ======= Header ======= -->
 <header th:replace="Fragmentos/header :: header('supervisor')"><!-- End Header --></header><!-- End Header -->
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuSupervisor :: menu('listaTicket')">
+<aside th:replace="Fragmentos/menuSupervisor :: menu('listaTicketsNuevos')">
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
@@ -25,7 +25,7 @@
         <div class="pagetitle">
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item active">Lista de tickets nuevos</li>
+                    <li class="breadcrumb-item active">Lista de tickets sin asignar</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -38,7 +38,7 @@
 
                         <div class="card-body table-responsive">
                             <div class="container">
-                                <h5 class="card-title">Tickets Nuevos</h5>
+                                <h5 class="card-title">Tickets No Asignados</h5>
                             </div>
                             <!-- Table with stripped rows -->
                             <table class="table datatable-borderless datatable">
@@ -60,9 +60,22 @@
                                     <td th:text="${tickets.analistaCreador}"></td>
                                     <td th:text="${tickets.usuarioSolicitante}"></td>
                                     <td th:text="${tickets.fechaCreacion}"></td>
-                                    <td th:text="${tickets.prioridad}"></td>
+                                    <td>
+                                        <div th:if="${tickets.prioridad == 'Baja prioridad'}">
+                                            <span class="badge text-bg-info" th:text="${tickets.prioridad}">Baja Prioridad</span>
+                                        </div>
+                                        <div th:if="${tickets.prioridad == 'No critico'}">
+                                            <span class="badge text-bg-success" th:text="${tickets.prioridad}">Baja Prioridad</span>
+                                        </div>
+                                        <div th:if="${tickets.prioridad == 'Urgente'}">
+                                            <span class="badge text-bg-danger" th:text="${tickets.prioridad}">Baja Prioridad</span>
+                                        </div>
+                                        <div th:if="${tickets.prioridad == 'Hacer'}">
+                                            <span class="badge text-bg-warning" th:text="${tickets.prioridad}">Baja Prioridad</span>
+                                        </div>
+                                    </td>
 
-                                    <td><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/ticketAsignar?id=' + ${tickets.idTickets}}">
+                                    <td><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/ticketNuevo?id=' + ${tickets.idTickets}}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                                             <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
                                             <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
