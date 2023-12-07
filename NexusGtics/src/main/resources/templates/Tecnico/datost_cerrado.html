@@ -39,7 +39,7 @@
 
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Inicio</h1>
+        <h1 th:text="'Ticket N°' + ${ticket.idTickets}" >Inicio</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/Tecnico/tecnico}">Home</a></li>
