@@ -23,7 +23,7 @@ public class Ticket implements Serializable {
     @Column(name = "idTickets", nullable = false)
     private Integer idTickets;
 
-    @Column(name = "descripcion", nullable = false)
+    @Column(name = "descripcion", nullable = false, length = 45)
     @NotBlank(message = "El campo no debe estar vacío")
     @Size(max = 45)
     private String descripcion;
@@ -40,7 +40,7 @@ public class Ticket implements Serializable {
     private LocalDate fechaCierre;
 
     @Column(name = "usuarioSolicitante", length = 70)
-    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "El nombre solo debe contener letras")
+    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ. ]+$", message = "El nombre solo debe contener letras")
     @Size(max = 70)
     private String usuarioSolicitante;
 

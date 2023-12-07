@@ -101,7 +101,7 @@
                             <select name="location" id="location">
                                 <option value="-1">Selecciona uno...</option>
                                 <option th:each="sitio :${sitioList}"
-                                        th:value="${sitio.latitud + ',' + sitio.longitud}" th:text="${sitio.distrito}">Empire State Building</option>
+                                        th:value="${sitio.latitud + ',' + sitio.longitud}" th:text="${sitio.nombre}">Empire State Building</option>
                                 <!--<option value="40.689167, -74.044444">Estatua de la Libertad</option>
                                 <option value="51.507,0.1275">Londres</option>-->
                             </select>

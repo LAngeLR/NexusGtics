@@ -72,10 +72,10 @@
                                     <div class="col-lg-8 col-md-7" th:text="${ticket.idTipoTicket.nombreTipoTicket}"></div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-5 label">Cuadrilla Asignada:</div>
-                                    <div class="col-lg-8 col-md-7" th:text="'Cuadrilla ' + ${ticket.idCuadrilla.idCuadrillas}"></div>
-                                </div>
+<!--                                <div class="row">-->
+<!--                                    <div class="col-lg-4 col-md-5 label">Cuadrilla Asignada:</div>-->
+<!--                                    <div class="col-lg-8 col-md-7" th:text="'Cuadrilla ' + ${ticket.idCuadrilla.idCuadrillas}"></div>-->
+<!--                                </div>-->
 
 
                                 <div class="row">
@@ -87,7 +87,7 @@
                             <br>
                         </div><!-- End Bordered Tabs -->
                         <div class="d-flex justify-content-end">
-                            <a type="button" class="btn btn-outline-warning" th:href="@{'/supervisor/comentarios?id=' + ${ticket.idTickets}}" style="margin-right: 25px;">Comentarios</a>
+                            <a type="button" class="btn btn-outline-warning" th:href="@{'/analistaOYM/comentarios?id=' + ${ticket.idTickets}}" style="margin-right: 25px;">Comentarios</a>
                         </div>
                     </div>
                 </div>
@@ -159,7 +159,7 @@
                     </script>
 
                     <div class="mb-3" style="margin-top: 25px;"> <!-- Agrega un margen en la parte superior -->
-                        <input type="text" class="form-control" th:value="'Direccion: ' + ${tickets.idSitios.departamento} +', '+ ${tickets.idSitios.provincia} +', '+ ${tickets.idSitios.distrito}" disabled>
+                        <input type="text" class="form-control" th:value="'Direccion: ' + ${ticket.idSitios.departamento} +', '+ ${ticket.idSitios.provincia} +', '+ ${ticket.idSitios.distrito}" disabled>
                     </div>
                     <!-- MAPA -->
                 </div>

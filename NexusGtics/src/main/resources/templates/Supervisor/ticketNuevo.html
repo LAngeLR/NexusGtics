@@ -79,6 +79,44 @@
 
     <section class="section profile">
         <div class="row">
+            <div class="card" th:if="${ticket.idSupervisorEncargado!=null && ticket.idSupervisorEncargado.id == session.usuario.id && ticket.idCuadrilla==null}">
+                <div class="card-body pt-3">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="card-title" style="color: #095444">Seleccionar Cuadrilla</h5>
+                        <button type="button" class="btn btn-outline-warning mt-auto" data-bs-toggle="modal" data-bs-target="#staticBackdrop4">Asignar Cuadrilla</button>
+                    </div>
+
+                    <div class="search-bar">
+                        <form th:action="@{/supervisor/actualizarCuadrilla}" class="search-form" method="POST">
+                            <input th:value="${ticket.idTickets}" name="idTickets" type="hidden"/>
+                            <div class="input-group mb-3">
+                                <select class="form-select" th:field="*{idCuadrilla}" id="cuadrillas">
+                                    <option th:each="cuadrilla : ${listaCuadrillas}" th:text="'Cuadrilla ' + ${cuadrilla.idCuadrilla}" th:value="${cuadrilla.idCuadrilla}"></option>
+                                </select>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="modal fade" id="staticBackdrop4" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel4" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel4">Advertencia</h1>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h3>¿Esta seguro asignar el ticket a esta cuadrilla?</h3>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                                                <button type="submit" class="btn btn-outline-primary">Confirmar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- End Bordered Tabs -->
+                </div>
+            </div>
             <div class="col-xl-6">
                 <div class="card">
                     <div class="card-body pt-3">
@@ -225,7 +263,7 @@
                                                 <h1 class="modal-title fs-5" id="staticBackdropLabel3">Advertencia</h1>
                                             </div>
                                             <div class="modal-body">
-                                                <h3>¿Esta seguro reasignar el ticket a otro supervisor?</h3>
+                                                <h3>¿Estás seguro reasignar el ticket a otro supervisor?</h3>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
@@ -244,43 +282,7 @@
                 </div>
             </div>
 
-            <div class="card" th:if="${ticket.idSupervisorEncargado!=null && ticket.idSupervisorEncargado.id == session.usuario.id && ticket.idCuadrilla==null}">
-                <div class="card-body pt-3">
-                    <h5 class="card-title" style="color: #095444">Seleccionar Cuadrilla</h5>
-                    <div class="search-bar">
-                        <form th:action="@{/supervisor/actualizarCuadrilla}" class="search-form" method="POST">
-                            <input th:value="${ticket.idTickets}" name="idTickets" type="hidden"/>
-                            <div class="input-group mb-3">
-                                <select class="form-select" th:field="*{idCuadrilla}" id="cuadrillas">
-                                    <option th:each="cuadrilla : ${listaCuadrillas}" th:text="'Cuadrilla ' + ${cuadrilla.idCuadrilla}" th:value="${cuadrilla.idCuadrilla}"></option>
-                                </select>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="modal fade" id="staticBackdrop4" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel4" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="staticBackdropLabel4">Advertencia</h1>
-                                            </div>
-                                            <div class="modal-body">
-                                                <h3>¿Esta seguro asignar el ticket a esta cuadrilla?</h3>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                                                <button type="submit" class="btn btn-outline-primary">Confirmar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-end align-items-center flex-grow-1">
-                                    <button type="button" class="btn btn-outline-warning me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop4">Asignar Cuadrilla</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- End Bordered Tabs -->
-                </div>
-            </div>
+
         </div>
         </div>
             <!-- End Bordered Tabs -->

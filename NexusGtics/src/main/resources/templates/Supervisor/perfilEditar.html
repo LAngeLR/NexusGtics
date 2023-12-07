@@ -61,15 +61,16 @@
               <div class="tab-pane show active fade profile-edit pt-3" id="profile-edit">
 
                 <form method="POST" th:action="@{/supervisor/savePerfil}" th:object="${usuario}" enctype="multipart/form-data">
+                  <input type="hidden" name="_method" value="PUT">
                   <input type="hidden" class="form-control" th:field="*{id}">
-                  <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
-                  <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">
-                  <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">
-                  <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:field="*{fechaRegistro}">
-                  <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" th:field="*{tecnicoConCuadrilla}">
-                  <input type="hidden" name="cargo" id="cargo" th:field="*{cargo}">
-                  <input type="hidden" name="empresa" id="empresa" th:field="*{empresa}">
-                  <input type="hidden" name="dni" id="dni" th:field="*{dni}">
+<!--                  <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">-->
+<!--                  <input type="hidden" name="contrasenia" id="contrasenia" th:field="*{contrasenia}">-->
+<!--                  <input type="hidden" name="habilitado" id="habilitado" th:field="*{habilitado}">-->
+<!--                  <input type="hidden" name="fechaRegistro" id="fechaRegistro" th:field="*{fechaRegistro}">-->
+<!--                  <input type="hidden" name="tecnicoConCuadrilla" id="tecnicoConCuadrilla" th:field="*{tecnicoConCuadrilla}">-->
+<!--                  <input type="hidden" name="cargo" id="cargo" th:field="*{cargo}">-->
+<!--                  <input type="hidden" name="empresa" id="empresa" th:field="*{empresa}">-->
+<!--                  <input type="hidden" name="dni" id="dni" th:field="*{dni}">-->
 
                   <!-- Esto es para que se previsualize la imagen -->
                   <div class="mb-3">

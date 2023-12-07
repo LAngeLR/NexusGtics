@@ -89,7 +89,7 @@
                 <th th:text="${info.index + 1}" scope="row"></th>
                 <td th:text="${ticket.idEmpresaAsignada.nombre}"></td>
                 <td th:text="${ticket.usuarioSolicitante}"></td>
-                <td th:text="${ticket.idSitios.provincia}"></td>
+                <td th:text="${ticket.idSitios.nombre}"></td>
 
                 <!--estados segun flujo del proyecto on estilos-->
                 <td th:if="${ticket.estado==7}">

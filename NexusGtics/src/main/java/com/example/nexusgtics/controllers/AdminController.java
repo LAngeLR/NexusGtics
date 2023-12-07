@@ -291,7 +291,6 @@ public class AdminController {
 //        Integer idSupervisor = u.getId();
 //
 //        model.addAttribute("listaTickets",ticketRepository.listaTicketsModificado( 1, idSupervisor));
-
         try {
             int id = usuario.getId();
             System.out.println("El ID obtenido fue: "+id);
@@ -301,7 +300,7 @@ public class AdminController {
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             if (optionalUsuario.isPresent()) {
                 Usuario usuarioDb = optionalUsuario.get();    //se crea un usuarioDb al que se le pasarán los campos del form que fueron a usuario
-
+                usuario.setArchivo(optionalUsuario.get().getArchivo());
                 //validar que no se repitan los emails
                 Integer id1 = usuario.getId();
 
@@ -342,19 +341,14 @@ public class AdminController {
                     model.addAttribute("listaCargo", cargoRepository.findAll());
                     return "Administrador/editarUsuario";
                 }
-
+                //------------------------------------------
                 if (!bindingResult.hasErrors()) {
                     // Si no hay errores, se realiza el flujo normal
-                    if (usuario.getArchivo() == null) {
-                        usuario.setArchivo(new Archivo());
+                    if (usuarioDb.getArchivo() == null) {
+                        usuarioDb.setArchivo(usuario.getArchivo());
                     }
-
                     try {
-                        if (usuario.getId() == null) {
-                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
-                        } else {
-                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
-                        }
+                        attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
                         //pasar del intermdio al db
                         usuarioDb.setNombre(usuario.getNombre());
                         usuarioDb.setApellido(usuario.getApellido());
@@ -364,12 +358,13 @@ public class AdminController {
                         usuarioDb.setCargo(usuario.getCargo());
                         usuarioDb.setEmpresa(usuario.getEmpresa());
                         usuarioRepository.save(usuarioDb);
+
                         return "redirect:/admin/listaUsuario";
                     } catch (Exception e) {
-                        System.out.println("Error al guardar el equipo");
                         throw new RuntimeException(e);
                     }
                 } else { //hay al menos 1 error
+                    System.out.println("error binding, else");
                     model.addAttribute("listaEmpresa", empresaRepository.findAll());
                     model.addAttribute("listaCargo", cargoRepository.findAll());
 
@@ -382,36 +377,6 @@ public class AdminController {
         } catch (NumberFormatException e) {
             return "redirect:/admin/listaUsuario";
         }
-
-
-        //todo lo comentado es de foto que ya no se pide
-        // Verificar si se cargó un nuevo archivo
-//        if (!file.isEmpty()) {
-//            try {
-//                // Procesar el archivo
-//                Archivo archivo = new Archivo();
-//                archivo.setNombre(file.getOriginalFilename());
-//                archivo.setTipo(1);
-//                archivo.setArchivo(file.getBytes());
-//                archivo.setContentType(file.getContentType());
-//                archivoRepository.save(archivo);
-//
-//                // Asignar el nuevo archivo al equipo
-//                usuario.setArchivo(archivo);
-//            } catch (IOException e) {
-//                System.out.println("Error al procesar el archivo");
-//                throw new RuntimeException(e);
-//            }
-//        }
-//        if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
-//            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-//            if (usuario.getId() == null) {
-//                return "Administrador/crearUsuario";
-//            } else {
-//                return "Administrador/editarUsuario";
-//            }
-//        }
-
     }
 
     /*EDITAR USUARIO*/
@@ -712,6 +677,7 @@ public class AdminController {
 
             if (optionalSitio.isPresent()) {
                 Sitio sitioBD = optionalSitio.get();
+                sitio.setArchivo(optionalSitio.get().getArchivo());
 
                 if (sitio.getTipo() == null || sitio.getTipo().equals("-1")) {
                     model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
@@ -959,7 +925,7 @@ public class AdminController {
 
             if (optionalEquipo.isPresent()) {
                 Equipo equipoBD = optionalEquipo.get();
-
+                equipo.setArchivo(optionalEquipo.get().getArchivo());
                 if (equipo.getTipoequipo() == null || equipo.getTipoequipo().getIdTipoEquipo() == null) {
                     model.addAttribute("msgTipoEquipo", "Escoger un tipo de Equipo");
                     model.addAttribute("listaTipoEquipos", tipoEquipoRepository.findAll());
@@ -1108,119 +1074,88 @@ public class AdminController {
     // ------------------------------------- Acabo equipos -----------------------------
 
     /* PERFIL DEL ADMINISTRADOR */
-    @PostMapping("/savePerfil")
+    @PutMapping("/savePerfil")
     public String savePerfil(@RequestParam("imagenSubida") MultipartFile file,
                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                              Model model,
                              RedirectAttributes attr, HttpSession httpSession) {
 
+        try {
+            Integer idUsuario = usuario.getId();
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(idUsuario);
 
-        if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
-            model.addAttribute("msgCargo", "Escoger un cargo");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
+            if (optionalUsuario.isPresent()) {
+                Usuario usuarioDB = optionalUsuario.get();
 
-            if (usuario.getId() == null) {
-                return "Administrador/perfil";
-            } else {
-                return "Administrador/perfilEditar";
-            }
-        }
-        if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
-            model.addAttribute("msgEmpresa", "Escoger una empresa");
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Administrador/perfil";
-            } else {
-                return "Administrador/perfilEditar";
-            }
-        }
-        /*Validación de imagen*/
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
-            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-            if (usuario.getId() == null) {
-                return "Administrador/perfil";
-            } else {
-                return "Administrador/perfilEditar";
-            }
-        }
+                if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
+                    model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+                    return "Administrador/perfilEditar";
+                }
+                String fileName1 = file.getOriginalFilename();
+                if (fileName1.contains("..") && !file.isEmpty()) {
+                    model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
+                    return "Administrador/perfilEditar";
+                }
 
-        String fileName1 = file.getOriginalFilename();
-        /*Validación para evitar 2 puntos*/
-        if (fileName1.contains("..") && !file.isEmpty()) {
-            model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
-            if (usuario.getId() == null) {
-                return "Administrador/perfil";
-            } else {
-                return "Administrador/perfilEditar";
-            }
-        }
+                int maxFileSize = 10485760;
+                if (file.getSize() > maxFileSize && !file.isEmpty()) {
+                    System.out.println(file.getSize());
+                    model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
+                    return "redirect:/admin/perfilEditar";
+                }
 
-        /*Validación para archivos grande (NO FUNCIONA :C)*/
-        int maxFileSize = 10485760;
-        if (file.getSize() > maxFileSize && !file.isEmpty()) {
-            System.out.println(file.getSize());
-            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
-            if (usuario.getId() == null) {
-                return "Administrador/perfil";
-            } else {
-                return "redirect:/admin/perfilEditar";
-            }
-        }
-
-        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
-            if (usuario.getArchivo() == null) {
-                usuario.setArchivo(new Archivo());
-            }
-
-            try {
-                /*Si file contiene algo --> Guardarlo*/
-                if(!file.isEmpty()){
-                    // Obtenemos el nombre del archivo
-                    String fileName = file.getOriginalFilename();
-                    String extension = "";
-                    int i = fileName.lastIndexOf('.');
-                    if (i > 0) {
-                        extension = fileName.substring(i+1);
+                if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+                    if (usuario.getArchivo() == null) {
+                        usuario.setArchivo(new Archivo());
                     }
-                    Archivo archivo = usuario.getArchivo();
-                    archivo.setNombre(fileName);
-                    Integer tipo = 1;
-                    archivo.setTipo(tipo);
-                    System.out.println("El tipo (integer) de archivo es: " + archivo.getTipo());
-                    archivo.setArchivo(file.getBytes());
-                    archivo.setContentType(file.getContentType());
-                    Archivo archivo1 = archivoRepository.save(archivo);
-                    String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension;
-                    archivo1.setNombre(nombreArchivo);
-                    archivoRepository.save(archivo1);
-                    uploadObject(archivo1);
-                    archivo1.setArchivo(null);
+
+                    try {
+                        if (file.getSize() > 1) {
+                            // Obtenemos el nombre del archivo
+                            String fileName = file.getOriginalFilename();
+                            String extension = "";
+                            int i = fileName.lastIndexOf('.');
+                            if (i > 0) {
+                                extension = fileName.substring(i + 1);
+                            }
+                            Archivo archivo = usuario.getArchivo();
+                            archivo.setNombre(fileName);
+                            archivo.setTipo(1);
+                            archivo.setArchivo(file.getBytes());
+                            archivo.setContentType(file.getContentType());
+                            Archivo archivo1 = archivoRepository.save(archivo);
+                            String nombreArchivo = "archivo-" + archivo1.getIdArchivos() + "." + extension;
+                            archivo1.setNombre(nombreArchivo);
+                            archivoRepository.save(archivo1);
+                            uploadObject(archivo1);
+                            archivo1.setArchivo(null);
+                            usuarioDB.setArchivo(archivo1);
+                        }
+                        if (usuario.getId() == null) {
+                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
+                        } else {
+                            attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
+                        }
+
+                        usuarioDB.setNombre(usuario.getNombre());
+                        usuarioDB.setApellido(usuario.getApellido());
+                        usuarioDB.setCorreo(usuario.getCorreo());
+                        usuarioDB.setDescripcion(usuario.getDescripcion());
+                        usuarioRepository.save(usuarioDB);
+                        session.setAttribute("usuario", usuarioDB);
+                        return "redirect:/admin/perfil";
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                } else { //hay al menos 1 error
+                    return "Administrador/perfilEditar";
                 }
-                System.out.println("El tipo de archivo es: " + usuario.getArchivo().getTipo());
-                usuarioRepository.save(usuario);
-                session.setAttribute("usuario", usuario);
-
-                if (usuario.getId() == null) {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha creado exitosamente");
-                } else {
-                    attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
-                }
-
-                return "redirect:/admin/perfil";
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            }else {
+                return "redirect:/admin/";
             }
-
-        } else { //hay al menos 1 error
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaCargo", cargoRepository.findAll());
-            if (usuario.getId() == null) {
-                return "Administrador/perfil";
-            } else {
-                return "Administrador/perfilEditar";
-            }
+        } catch (NumberFormatException e) {
+            return "redirect:/admin/listaUsuario";
         }
     }
 
