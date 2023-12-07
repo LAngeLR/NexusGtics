@@ -80,7 +80,6 @@
                 <th scope="col">Sitio</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Fecha inicio</th>
-                <th scope="col">Fecha vencimiento</th>
                 <th scope="col">Acciones</th>
               </tr>
               </thead>
@@ -92,6 +91,9 @@
                 <td th:text="${ticket.idSitios.nombre}"></td>
 
                 <!--estados segun flujo del proyecto on estilos-->
+                <td th:if="${ticket.estado==8}">
+                  <span class="badge text-bg-danger text-center">Finalizado</span>
+                </td>
                 <td th:if="${ticket.estado==7}">
                   <span class="badge text-bg-danger text-center">Cerrado</span>
                 </td>
@@ -109,7 +111,6 @@
                 </td>
 
                 <td th:text="${ticket.fechaCreacion}"></td>
-                <td th:text="${ticket.fechaCierre}"></td>
                 <td>
                   <div class="dropdown">
                     <button class="btn btn-light dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">

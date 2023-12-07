@@ -72,10 +72,10 @@
                                     <div class="col-lg-8 col-md-7" th:text="${ticket.idTipoTicket.nombreTipoTicket}"></div>
                                 </div>
 
-<!--                                <div class="row">-->
-<!--                                    <div class="col-lg-4 col-md-5 label">Cuadrilla Asignada:</div>-->
-<!--                                    <div class="col-lg-8 col-md-7" th:text="'Cuadrilla ' + ${ticket.idCuadrilla.idCuadrillas}"></div>-->
-<!--                                </div>-->
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-5 label">Empresa Asignada:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${ticket.idEmpresaAsignada.nombre}"></div>
+                                </div>
 
 
                                 <div class="row">
@@ -86,8 +86,29 @@
                             </div>
                             <br>
                         </div><!-- End Bordered Tabs -->
-                        <div class="d-flex justify-content-end">
+                        <div class="d-flex justify-content-end" th:if="${ticket.estado != 7}">
                             <a type="button" class="btn btn-outline-warning" th:href="@{'/analistaOYM/comentarios?id=' + ${ticket.idTickets}}" style="margin-right: 25px;">Comentarios</a>
+                        </div>
+                        <div th:if="${ticket.estado == 7}">
+                            <form th:action="@{/analistaOYM/actualizarEstado}" class="search-form" method="POST">
+                                <input th:value="${ticket.idTickets}" name="idTickets" type="hidden" />
+
+                                <div class="row" th:if="${ticket.estado==7}">
+                                    <div class="col-lg-4 col-md-5 label">Estado:</div>
+                                    <div class="col-lg-4 col-md-5 label">
+                                        <select class="form-select small select" aria-label="Default select example" name="cambioEstado">
+                                            <option value="Cerrado">Cerrado</option>
+                                            <option value="Finalizado">Finalizado</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <center><br>
+                                    <a type="button" class="btn btn-outline-success" th:href="@{'/analistaOYM/formulario?id=' + ${ticket.idTickets}}">Formulario</a>
+                                    <a type="button" class="btn btn-outline-warning" th:href="@{'/analistaOYM/comentarios?id=' + ${ticket.idTickets}}">comentarios</a>
+                                    <button type="submit" class="btn btn-outline-danger" th:if="${ticket.estado==7}">Guardar</button>
+                                </center>
+                            </form>
                         </div>
                     </div>
                 </div>

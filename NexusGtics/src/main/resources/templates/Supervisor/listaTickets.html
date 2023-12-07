@@ -48,7 +48,6 @@
                                     <th scope="col">Usuario</th>
                                     <th scope="col">Tecnico</th>
                                     <th scope="col">Fecha de Apertura</th>
-                                    <th scope="col">Fecha de Vencimiento</th>
                                     <th scope="col">Prioridad</th>
                                     <th scope="col">Estado</th>
                                     <th scope="col">Ver más</th>
@@ -64,7 +63,6 @@
                                             <td th:unless="${tickets.nombreCompleto} == null" th:text="${tickets.nombreCompleto}"></td>
 
                                             <td th:text="${tickets.fechaCreacion}"></td>
-                                            <td th:text="${tickets.fechaCierre}"></td>
 
                                             <!--prioridades con botones estilos-->
                                             <td th:if="${tickets.prioridad eq 'Hacer'}">

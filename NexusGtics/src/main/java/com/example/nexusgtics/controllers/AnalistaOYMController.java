@@ -36,6 +36,7 @@ public class AnalistaOYMController {
     final SitioRepository sitioRepository;
     final UsuarioRepository usuarioRepository;
     final EquipoRepository equipoRepository;
+    final HistorialTicketRepository historialTicketRepository;
     final EmpresaRepository empresaRepository;
     private final ComentarioRepository comentarioRepository;
     final ArchivoRepository archivoRepository;
@@ -45,10 +46,11 @@ public class AnalistaOYMController {
     @Autowired
     private SitioCerradoRepository sitioCerradoRepository;
 
-    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1, UsuarioRepository usuarioRepository, ComentarioRepository comentarioRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository, PasswordEncoder passwordEncoder, SitioCerradoRepository  sitioCerradoRepository){
+    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, HistorialTicketRepository historialTicketRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1, UsuarioRepository usuarioRepository, ComentarioRepository comentarioRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository, PasswordEncoder passwordEncoder, SitioCerradoRepository  sitioCerradoRepository){
         this.sitioRepository = sitioRepository;
         this.ticketRepository = ticketRepository;
         this.equipoRepository = equipoRepository;
+        this.historialTicketRepository = historialTicketRepository;
         this.empresaRepository = empresaRepository;
         this.usuarioRepository = usuarioRepository;
         this.comentarioRepository = comentarioRepository;
@@ -688,6 +690,29 @@ public class AnalistaOYMController {
             }
         } catch (NumberFormatException e) {
             return "redirect:/analistaOYM/ticket";
+        }
+    }
+
+    //método para pasar el ticket en estado 7 a estado 8
+    @PostMapping("/actualizarEstado")
+    public String actualizarEstado(@RequestParam("idTickets") int id, @RequestParam("cambioEstado") String cambioEstado, RedirectAttributes redirectAttributes, HttpSession httpSession) {
+
+        int estadoUtilizar;
+        redirectAttributes.addAttribute("id",id);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idAnalista = u.getId();
+        System.out.println(cambioEstado);
+        if (cambioEstado.equals("Finalizado")) {
+            estadoUtilizar = 8;
+            Date fechaCambioEstado = new Date();
+            historialTicketRepository.crearHistorial(7,fechaCambioEstado,id,idAnalista,"Aprobación y finalización del ticket.");
+            ticketRepository.actualizarEstado(id,estadoUtilizar);
+            redirectAttributes.addFlashAttribute("yum","El ticket ha sido finalizado correctamente");
+            System.out.println("711");
+            return "redirect:/analistaOYM/ticket";
+        } else{
+            System.out.println("714");
+            return "redirect:/analistaOYM/verTicket?id=" + id;
         }
     }
 
