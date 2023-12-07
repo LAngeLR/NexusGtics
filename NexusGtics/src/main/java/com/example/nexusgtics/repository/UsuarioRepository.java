@@ -74,6 +74,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM usuarios where idCargos=?1 and idUsuarios!=?2 and tecnicoConCuadrilla=false and idEmpresas=?3")
     List<Usuario> listaDeTecnicos(int valor, int idSupNo, int idEmpresa);
 
+    //@Query(nativeQuery = true, value = "SELECT * FROM usuarios where idCargos=?1 and idEmpresas=?2 ")
+    //List<Usuario> dashboard(int valor, int idEmpresa);
+
     // ------------------------------ SUPERVISOR --------------------------------------- //
     @Query(nativeQuery = true, value = "SELECT u.* FROM tecnicoscuadrillas tc inner join usuarios u on tc.idTecnico = u.idUsuarios where idCuadrilla = ?1")
     List<Usuario> listaDeTecnicosPorCuadrilla(int idCuadrilla);

@@ -95,9 +95,6 @@ public class TecnicoController {
         return "Fragmentos/headerDos";
     }
 
-
-    /* -------------------------- PERFIL -------------------------- */
-
     /* -------------------------- PERFIL -------------------------- */
     @GetMapping({"/perfil"})
     public String perfilTecnico(Model model,
@@ -306,8 +303,8 @@ public class TecnicoController {
                                @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
-
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("usuario", u);
         int id = u.getId();
         try{
             //int id = Integer.parseInt(idStr);
@@ -434,64 +431,65 @@ public class TecnicoController {
 
     //-----------------------------------------------------------------------
     @GetMapping("/dashboard")
-    public String pagdashboard(Model model) {
-        // Obtener la cantidad total de tickets
-        int totalTickets = ticketRepository.cantidadTickets();
-        model.addAttribute("totalTickets", totalTickets);
+    public String pagdashboard(Model model,@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,HttpSession httpSession) {
 
-        // Obtener la cantidad total de tickets nuevos
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        model.addAttribute("usuario", u);
+
+        //Ticket u = (Ticket) httpSession.getAttribute("ticket");
+        //Integer idTickets = u.getIdTickets();
         int ticketsnuevos = ticketRepository.cantidadTicketsnuevos();
         model.addAttribute("totalTicketsNuevos", ticketsnuevos);
 
-        // Obtener la cantidad total de empresas nuevos
         int totalEmpresas = ticketRepository.cantidadEmpresas();
         model.addAttribute("totalempresas", totalEmpresas);
 
-        // Obtener la cantidad total de empresas nuevos
         int totalCuadrillas = ticketRepository.cantidadCuadrilla();
         model.addAttribute("totalCuadrillas", totalCuadrillas);
 
-        // Obtener la lista de tickets
-        List<Ticket> listaT = ticketRepository.listaTicketsAsignado();
-        model.addAttribute("listaTicket", listaT);
-
-        // Obtener la lista de tickets por estado
-        List<Ticket> lista = ticketRepository.listarEstado();
-        model.addAttribute("ticketList", lista);
+        List<Ticket> listaT1 = ticketRepository.listaTicketsAsignado();
+        model.addAttribute("listaTicket1", listaT1);
 
         return "Tecnico/dashboard";
+
     }
 
 
     //YA ESTA CRUD LISTAR
     @GetMapping("/ticketasignado")
-    public String Tickets(Model model, HttpSession httpSession){
+    public String Tickets(Model model,
+                          RedirectAttributes attr,HttpSession httpSession){
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
-        Usuario u = (Usuario) httpSession.getAttribute("usuario");
-        Integer idTecnico = u.getId();
-        Integer idSupervisor =u.getEmpresa().getIdEmpresas();
-        //List<Integer> tecnicoscuadrillas = tecnicosCuadrillaRepository.findAll();
-        List<Ticket> listaTickets = ticketRepository.listaTicketsAsignado();
-        model.addAttribute("listaTickets",listaTickets);
 
-        return "Tecnico/ticket_asignado";
+                List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado();
+                model.addAttribute("ticketAsignados",ticketAsignados);
+
+                    return "Tecnico/ticket_asignado";
+
     }
 
     //-----------------------------------------------------------------------
     @GetMapping({"/verTicket", "/verticket"})
-    public String pagdatostick(Model model, @RequestParam("id") int id,
-                               RedirectAttributes attr) {
+    public String pagdatostick(Model model, @RequestParam("id") String idStr,
+                               RedirectAttributes attr, HttpSession httpSession) {
         /* Lo que se mando al Header */
+
         List<Ticket> listaT = ticketRepository.listarEstado();
         model.addAttribute("listaTicket", listaT);
 
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idTecnico = u.getId();
+
         try {
-            if (id <= 0 || !ticketRepository.existsById(id)) {
+            int id = Integer.parseInt(idStr);
+            if (idTecnico <= 0 || !ticketRepository.existsById(idTecnico)) {
                 return "redirect:/tecnico/ticketasignado";
             }
-            Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
-            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            Optional<Ticket> optionalTicket1 = ticketRepository.findById(idTecnico);
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(idTecnico);
             if (optionalTicket1.isPresent() && optionalFormulario.isPresent()) {
                 Ticket ticket = optionalTicket1.get();
                 Formulario formulario = optionalFormulario.get();

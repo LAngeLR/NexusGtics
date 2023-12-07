@@ -178,7 +178,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each=" ticket, info : ${listaTicket}">
+                                    <tr th:each=" ticket, info : ${listaTicket1}">
                                         <th th:text="${info.index + 1}"></th>
                                         <td th:text="${ticket.usuarioSolicitante}"></td>
                                         <td th:text="${ticket.idTipoTicket.nombreTipoTicket}"></td>
