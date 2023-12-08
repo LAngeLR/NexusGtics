@@ -1,14 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 
-<head th:include="Fragmentos/head :: head('Analista de Despliegue')"></head>
-
+<head th:include="Fragmentos/head :: head('Vista Ticket')"></head>
 
 <body>
 
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('analistaDespliegue')"><!-- End Header --></header><!-- End Header -->
+<header th:replace="Fragmentos/header :: header('analistaDespliegue')"><!-- End Header --></header>
+<style>
+    #map { height: 50vh; width: 100hw; }
+    select {
+        width: 30%;
+        font-size: 0.8rem
+    }
 
+</style>
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuDespliegue :: menu('vistaTicket')">
 </aside><!-- End Sidebar-->
@@ -25,7 +31,8 @@
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section profile">
+
+    <section class="section profile" th:object="${ticket}">
         <div class="row">
             <div class="col-xl-6">
                 <div class="card">
@@ -33,124 +40,163 @@
                         <!-- Bordered Tabs -->
                         <div class="tab-content pt-2">
                             <div class="tab-pane fade show active profile-overview" id="datos-overview">
-                                <h5 class="card-title" style="color: #095444">Datos generale del Ticket</h5>
+                                <h5 class="card-title" style="color: #095444">Datos generales del Ticket</h5>
+                                <br>
 
-                                <form method="POST" action="" enctype="multipart/form-data" th:object="${ticket}" disabled>
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Usuario creador:</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{idUsuarioCreador.nombre}" disabled>
-                                        </div>
-                                    </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-5 label">Prioridad:</div>
+                                    <div class="col-lg-8 col-md-7" style="color: #D01515" th:if="${ticket.prioridad eq 'Urgente'}"><b th:text="${ticket.prioridad}"></b></div>
+                                    <div class="col-lg-8 col-md-7" style="color: #3498DB" th:if="${ticket.prioridad eq 'Baja prioridad'}"><b th:text="${ticket.prioridad}"></b></div>
+                                    <div class="col-lg-8 col-md-7" style="color: #FFC300" th:if="${ticket.prioridad eq 'Hacer'}"><b th:text="${ticket.prioridad}"></b></div>
+                                    <div class="col-lg-8 col-md-7" style="color: #4CAF50" th:if="${ticket.prioridad eq 'No critico'}"><b th:text="${ticket.prioridad}"></b></div>
+                                </div>
 
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Usuario solicitante:</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{usuarioSolicitante}" disabled>
-                                        </div>
-                                    </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-5 label">Nombre de Usuario:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${ticket.usuarioSolicitante}"></div>
+                                </div>
 
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Tipo de ticket</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{idTipoTicket.nombreTipoTicket}" disabled>
-                                        </div>
-                                    </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-5 label">Fecha de apertura:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${ticket.fechaCreacion}"></div>
+                                </div>
 
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Empresa proveedora</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{idEmpresaAsignada.nombre}" disabled>
-                                        </div>
-                                    </div>
+                                <div class="row">
 
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Sitio asignado</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{idSitios.provincia}" disabled>
-                                        </div>
-                                    </div>
+                                    <div class="col-lg-4 col-md-5 label">Fecha de vencimiento:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${ticket.fechaCierre}"></div>
+                                </div>
 
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Estado</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{estado}" disabled>
-                                        </div>
-                                    </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-5 label">Servicio Relacionado:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${ticket.idTipoTicket.nombreTipoTicket}"></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-5 label">Empresa Asignada:</div>
+                                    <div class="col-lg-8 col-md-7" th:text="${ticket.idEmpresaAsignada.nombre}"></div>
+                                </div>
 
 
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Fecha de vencimiento:</div>
-                                        <div class="col-lg-9 col-md-8">
-                                            <input type="text" th:field="*{fechaCierre}" disabled>
-                                        </div>
-                                    </div>
-
-                                </form>
-
-
-
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-5 label">Estado:</div>
+                                    <div class="col-lg-8 col-md-7"><span class="badge text-bg-success">Progreso</span></div>
+                                </div>
 
                             </div>
                             <br>
                         </div><!-- End Bordered Tabs -->
-                        <center>
-                            <a class="btn btn-info " th:href="@{/analistaDespliegue/mapaTickets}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-fill" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z"/>
-                                </svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe-americas" viewBox="0 0 16 16">
-                                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM2.04 4.326c.325 1.329 2.532 2.54 3.717 3.19.48.263.793.434.743.484-.08.08-.162.158-.242.234-.416.396-.787.749-.758 1.266.035.634.618.824 1.214 1.017.577.188 1.168.38 1.286.983.082.417-.075.988-.22 1.52-.215.782-.406 1.48.22 1.48 1.5-.5 3.798-3.186 4-5 .138-1.243-2-2-3.5-2.5-.478-.16-.755.081-.99.284-.172.15-.322.279-.51.216-.445-.148-2.5-2-1.5-2.5.78-.39.952-.171 1.227.182.078.099.163.208.273.318.609.304.662-.132.723-.633.039-.322.081-.671.277-.867.434-.434 1.265-.791 2.028-1.12.712-.306 1.365-.587 1.579-.88A7 7 0 1 1 2.04 4.327Z"/>
-                            </svg>
-                            </a><br><br>
-                            <a class="btn" style="background-color: #E0AD4B" th:href="@{/analistaDespliegue/comentarios}">Comentarios</a>
-                            <a class="btn btn-danger" th:href="@{/analistaDespliegue/ticket}">Regresar</a></center>
+                        <div class="d-flex justify-content-end" th:if="${ticket.estado != 7}">
+                            <a type="button" class="btn btn-outline-warning" th:href="@{'/analistaDespliegue/comentarios?id=' + ${ticket.idTickets}}" style="margin-right: 25px;">Comentarios</a>
+                        </div>
+                        <div th:if="${ticket.estado == 7}">
+                            <form th:action="@{/analistaDespliegue/actualizarEstado}" class="search-form" method="POST">
+                                <input th:value="${ticket.idTickets}" name="idTickets" type="hidden" />
+
+                                <div class="row" th:if="${ticket.estado==7}">
+                                    <div class="col-lg-4 col-md-5 label">Estado:</div>
+                                    <div class="col-lg-4 col-md-5 label">
+                                        <select class="form-select small select" aria-label="Default select example" name="cambioEstado">
+                                            <option value="Cerrado">Cerrado</option>
+                                            <option value="Finalizado">Finalizado</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <center><br>
+                                    <a type="button" class="btn btn-outline-success" th:href="@{'/analistaDespliegue/formulario?id=' + ${ticket.idTickets}}">Formulario</a>
+                                    <a type="button" class="btn btn-outline-warning" th:href="@{'/analistaDespliegue/comentarios?id=' + ${ticket.idTickets}}">comentarios</a>
+                                    <button type="submit" class="btn btn-outline-danger" th:if="${ticket.estado==7}">Guardar</button>
+                                </center>
+                            </form>
+                        </div>
                     </div>
                 </div>
-
             </div>
             <div class="col-xl-6">
                 <div class="card">
                     <div class="card-body pt-3">
                         <div class="col-md-8 col-lg-9">
-                            <h5 class="card-title" style="color: #095444">Formulario:</h5>
-                            <img th:src="@{https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg}" alt="Profile" style="max-height:14rem">
+                            <h5 class="card-title" style="color: #095444">Foto del Sitio:</h5>
+                            <img th:src="@{https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg}" alt="Profile" style="max-width: 100%; height: auto; display: block; margin: 0 auto; max-height: 70vh;">
                         </div>
-
                         <div class="tab-content pt-2">
 
                             <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                <h5 class="card-title" style="color: #095444">Comentario:</h5>
-                                <p class="small fst-italic">Se completó con éxito la instalación de los gabinetes. Al finalizar la instalación se realizó la prueba de conexión correspondiente. Funciona. Cliente satisfecho.
-                                </p>
-
+                                <br><br>
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">Líder Técnico:</div>
-                                    <div class="col-lg-9 col-md-8">Tec. Santiago Salas</div>
+                                    <div class="col-lg-3 col-md-4 label">Descripcion:</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${ticket.descripcion}"></div>
                                 </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Nº Cuadrilla:</div>
-                                    <div class="col-lg-9 col-md-8">8</div>
-                                </div>
-
+                                <br>
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Tiempo Transcurrido:</div>
                                     <div class="col-lg-9 col-md-8">2hrs : 26 min : 50 seg</div>
                                 </div>
-
                             </div>
-
                         </div><!-- End Bordered Tabs -->
-
                     </div>
                 </div>
-
             </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body pt-3">
+                    <h5 class="card-title" style="color: #095444; text-align: center; ">Ubicacion</h5>
+                    <div id="map" ></div>
+                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                    <script th:inline="javascript">
+                        var latitud = [[${ticket.idSitios.latitud}]];
+                        var longitud = [[${ticket.idSitios.longitud}]];
+                        let map = L.map('map').setView([latitud,longitud],18)
+                        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        }).addTo(map);
+                        L.marker([latitud,longitud]).addTo(map).bindPopup('Sitio').openPopup();
+                    </script>
+
+                    <script>
+                        function centrarMapaEnCoordenadasIniciales() {
+                            map.setView([latitud, longitud], 18);
+                        }
+
+                        // Agrega el botón como un control personalizado en Leaflet
+                        var botonCentrar = L.control({ position: 'bottomright' });
+
+                        botonCentrar.onAdd = function (map) {
+                            var container = L.DomUtil.create('div', 'boton-centrar');
+                            var button = L.DomUtil.create('button', 'btn btn-primary', container);
+                            button.type = 'button';
+
+                            // Crea el icono bx-current-location y agrégalo al botón
+                            var icono = L.DomUtil.create('i', 'bx bx-collapse', button);
+
+                            // Agrega el evento de clic para centrar el mapa
+                            L.DomEvent.on(button, 'click', centrarMapaEnCoordenadasIniciales);
+                            return container;
+                        };
+                        botonCentrar.addTo(map);
+                    </script>
+
+                    <div class="mb-3" style="margin-top: 25px;"> <!-- Agrega un margen en la parte superior -->
+                        <input type="text" class="form-control" th:value="'Direccion: ' + ${ticket.idSitios.departamento} +', '+ ${ticket.idSitios.provincia} +', '+ ${ticket.idSitios.distrito}" disabled>
+                    </div>
+                    <!-- MAPA -->
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
         </div>
     </section>
 
 </main><!-- End #main -->
 
+
+<!-- ======= Footer ======= -->
 <footer th:replace="Fragmentos/footer :: footer"></footer>
 <!-- End Footer -->
 

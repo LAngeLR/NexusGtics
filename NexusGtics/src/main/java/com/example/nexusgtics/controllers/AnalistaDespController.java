@@ -21,8 +21,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
 
@@ -33,10 +35,13 @@ public class AnalistaDespController {
     @Autowired
     private HttpSession session;
     final TicketRepository ticketRepository;
+    final  ComentarioRepository comentarioRepository;
     final SitioRepository sitioRepository;
     final UsuarioRepository usuarioRepository;
     final EmpresaRepository empresaRepository;
     final EquipoRepository equipoRepository;
+    final HistorialTicketRepository historialTicketRepository;
+
     final ArchivoRepository archivoRepository;
     final SitiosHasEquiposRepository sitiosHasEquiposRepository;
     final CargoRepository cargoRepository;
@@ -44,12 +49,14 @@ public class AnalistaDespController {
     private final PasswordEncoder passwordEncoder;
 
 
-    public AnalistaDespController(TicketRepository ticketRepository, SitioRepository sitioRepository, UsuarioRepository usuarioRepository, EmpresaRepository empresaRepository, EquipoRepository equipoRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository, PasswordEncoder passwordEncoder){
+    public AnalistaDespController(TicketRepository ticketRepository, ComentarioRepository comentarioRepository, SitioRepository sitioRepository, UsuarioRepository usuarioRepository, EmpresaRepository empresaRepository, EquipoRepository equipoRepository, HistorialTicketRepository historialTicketRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository, PasswordEncoder passwordEncoder){
         this.ticketRepository = ticketRepository;
+        this.comentarioRepository = comentarioRepository;
         this.sitioRepository = sitioRepository;
         this.usuarioRepository = usuarioRepository;
         this.empresaRepository = empresaRepository;
         this.equipoRepository = equipoRepository;
+        this.historialTicketRepository = historialTicketRepository;
 
         this.archivoRepository = archivoRepository;
 
@@ -620,34 +627,140 @@ public class AnalistaDespController {
         return "AnalistaDespliegue/despliegueMapaSitios";
     }
     @GetMapping("/mapaTickets")
-    public String mapaTickets(){
+    public String mapaTickets(Model model){
+
+        List<Ticket> listaT= ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+        List<Sitio> sitioList = sitioRepository.findAll();
+        model.addAttribute("sitioList", sitioList);
+
         return "AnalistaDespliegue/despliegueMapaTickets";
     }
 
     @GetMapping("/ticket")
-    public String listaTicket(Model model){
-        //'listar'
-        List<Ticket> listaTicket = ticketRepository.findAll();
-        model.addAttribute("listaTicket", listaTicket);
+    public String listaTicket(Model model, HttpSession httpSession){
+
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idAnalista = u.getId();
+        List<Ticket> listaTickets = ticketRepository.listaTicketsModificados(idAnalista);
+
+        model.addAttribute("listaTicket",listaTickets);
         return "AnalistaDespliegue/despliegueListaTickets";
     }
 
 
 
     @GetMapping("/crearTicket")
-    public String crearTicket(Model model) {
-        model.addAttribute("listaEmpresa", empresaRepository.findAll());
+    public String crearTicket(Model model,
+                              @ModelAttribute("ticket") Ticket ticket, Ticket ticket2) {
+        model.addAttribute("listaEmpresa", empresaRepository.noNexus());
         model.addAttribute("listaSitios", sitioRepository.findAll());
+
+        Empresa empresaSeleccionada = ticket.getIdEmpresaAsignada();
+        if (empresaSeleccionada == null) {
+            empresaSeleccionada = new Empresa();
+            empresaSeleccionada.setIdEmpresas(-1);
+        }
+        model.addAttribute("empresaSeleccionada", empresaSeleccionada);
+
+        Sitio sitioSeleccionada = ticket.getIdSitios();
+        if (sitioSeleccionada == null) {
+            sitioSeleccionada = new Sitio();
+            sitioSeleccionada.setIdSitios(-1);
+        }
+        model.addAttribute("sitioSeleccionada", sitioSeleccionada);
+
+        //para mandar las pripridades como una lista y no como 1 a 1 en HTML
+        List<String> listaPrioridad = new ArrayList<>();
+        listaPrioridad.add("Baja prioridad");
+        listaPrioridad.add("Hacer");
+        listaPrioridad.add("No crítico");
+        listaPrioridad.add("Urgente");
+        model.addAttribute("listaPrioridad", listaPrioridad);
+
+        if(ticket2 == null) {
+            ticket2 = new Ticket();
+            ticket2.setPrioridad("");
+        }
+        model.addAttribute("ticket2",ticket2);
 
         return "AnalistaDespliegue/despliegueCrearTicket";
     }
-
+    /*CREAR NUEVO TICKET*/
     @PostMapping("/saveTicket")
-    public String saveTicket( Ticket ticket,
-                              RedirectAttributes attr){
+    public String saveTicket(@ModelAttribute("ticket") @Valid Ticket ticket,
+                             BindingResult bindingResult,
+                             Model model, HttpSession httpSession, Ticket ticket2,
+                             RedirectAttributes attr){
 
-        ticketRepository.save(ticket);
-        return "redirect:/analistaDespliegue/ticket";
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+
+        ticket.setEstado(1);
+        //ticket.setIdTipoTicket(1);
+        ZoneId zonaHoraria = ZoneId.of("GMT-5");
+        LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+        ticket.setFechaCreacion(fechaActual);
+
+        Empresa empresaSeleccionada = ticket.getIdEmpresaAsignada();
+        model.addAttribute("empresaSeleccionada", empresaSeleccionada);
+
+        Sitio sitioSeleccionada = ticket.getIdSitios();
+        model.addAttribute("sitioSeleccionada", sitioSeleccionada);
+
+        ticket2.setPrioridad(ticket.getPrioridad());
+        model.addAttribute("ticket2", ticket2);
+
+
+
+        if (ticket.getFechaCierre() == null) {
+            //bindingResult.rejectValue("fechaCierre", "error.ticket", "La fecha de cierre es obligatoria.");
+            model.addAttribute("fechaCierre", "La fecha de cierre es obligatoria");
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+            model.addAttribute("listaSitios", sitioRepository.findAll());
+            return "AnalistaDespliegue/despliegueCrearTicket";
+        }
+
+        if(ticket.getIdEmpresaAsignada() == null || ticket.getIdEmpresaAsignada().getIdEmpresas() == null || ticket.getIdEmpresaAsignada().getIdEmpresas() == -1){
+            model.addAttribute("msgEmpresa", "Escoger una empresa");
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+            model.addAttribute("listaSitios", sitioRepository.findAll());
+            return "AnalistaDespliegue/despliegueCrearTicket";
+        }
+
+        if(ticket.getIdSitios() == null || ticket.getIdSitios().getIdSitios() == null || ticket.getIdSitios().getIdSitios() == -1){
+            model.addAttribute("msgSitio", "Escoger una sitio");
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+            model.addAttribute("listaSitios", sitioRepository.findAll());
+            return "AnalistaDespliegue/despliegueCrearTicket";
+        }
+
+        if(ticket.getPrioridad() == null || ticket.getPrioridad().equals("-1")){
+            model.addAttribute("msgPrioridad", "Seleccionar prioridad");
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+            model.addAttribute("listaSitios", sitioRepository.findAll());
+            return "AnalistaDespliegue/despliegueCrearTicket";
+
+        }
+
+        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+
+            Random random = new Random();
+            int numeroRandom = random.nextInt(7) + 1;
+
+            ticket.setIdUsuarioCreador(u);
+            ticket.setIdsitioCerrado(numeroRandom);
+            ticket.setReasignado(0);
+            ticketRepository.save(ticket);
+            attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente por el usuario: " + ticket.getUsuarioSolicitante());
+
+            return "redirect:/analistaDespliegue/ticket";
+        } else { //hay al menos 1 error
+            System.out.println("error binding");
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+            model.addAttribute("listaSitios", sitioRepository.findAll());
+            return "AnalistaDespliegue/despliegueCrearTicket";
+        }
+
     }
 
 
@@ -657,6 +770,12 @@ public class AnalistaDespController {
         Optional<Ticket> optTicket = ticketRepository.findById(id);
         if(optTicket.isPresent()){
             Ticket ticket = optTicket.get();
+
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String fechaCierreFormateada = ticket.getFechaCierre().format(formatter);
+
+            model.addAttribute("fechaCierreFormateada", fechaCierreFormateada);
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaSitios", sitioRepository.findAll());
@@ -670,17 +789,47 @@ public class AnalistaDespController {
 
 
     @GetMapping("/verTicket")
-    public String verticket(Model model, @RequestParam("id") int id){
-        Optional<Ticket> optionalTicket = ticketRepository.findById(id);
-        if(optionalTicket.isPresent()){
-            Ticket ticket = optionalTicket.get();
-            model.addAttribute("ticket", ticket);
-            return "AnalistaDespliegue/despliegueVistaTicket";
-        }else{
+    public String verticket(Model model, @RequestParam("id") String idStr){
+
+        try{
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/analistaDespliegue/ticket";
+            }
+            Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
+            if (ticketBuscado.isPresent()) {
+                Ticket ticket = ticketBuscado.get();
+                model.addAttribute("ticket", ticket);
+                return "AnalistaDespliegue/despliegueVistaTicket";
+            } else {
+                return "redirect:/analistaDespliegue/ticket";
+            }
+        } catch (NumberFormatException e) {
             return "redirect:/analistaDespliegue/ticket";
         }
     }
+    //método para pasar el ticket en estado 7 a estado 8
+    @PostMapping("/actualizarEstado")
+    public String actualizarEstado(@RequestParam("idTickets") int id, @RequestParam("cambioEstado") String cambioEstado, RedirectAttributes redirectAttributes, HttpSession httpSession) {
 
+        int estadoUtilizar;
+        redirectAttributes.addAttribute("id",id);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idAnalista = u.getId();
+        System.out.println(cambioEstado);
+        if (cambioEstado.equals("Finalizado")) {
+            estadoUtilizar = 8;
+            Date fechaCambioEstado = new Date();
+            historialTicketRepository.crearHistorial(7,fechaCambioEstado,id,idAnalista,"Aprobación y finalización del ticket.");
+            ticketRepository.actualizarEstado(id,estadoUtilizar);
+            redirectAttributes.addFlashAttribute("yum","El ticket ha sido finalizado correctamente");
+            System.out.println("711");
+            return "redirect:/analistaDespliegue/ticket";
+        } else{
+            System.out.println("714");
+            return "redirect:/analistaDespliegue/verTicket?id=" + id;
+        }
+    }
     @GetMapping("/dashboard")
     public String dashboard(Model model, HttpSession httpSession){
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
@@ -699,32 +848,60 @@ public class AnalistaDespController {
         model.addAttribute("CantporMes", ticketRepository.CantporMes());
         model.addAttribute("CantporMesAnterior", ticketRepository.CantporMesAnterior());
         model.addAttribute("CantHaceDosMeses", ticketRepository.CantHaceDosMeses());
-        model.addAttribute("TicketXMes11", ticketRepository.TicketXMes(1,1));
-        model.addAttribute("TicketXMes12", ticketRepository.TicketXMes(1,2));
-        model.addAttribute("TicketXMes13", ticketRepository.TicketXMes(1,3));
-        model.addAttribute("TicketXMes14", ticketRepository.TicketXMes(1,4));
-        model.addAttribute("TicketXMes15", ticketRepository.TicketXMes(1,5));
-        model.addAttribute("TicketXMes16", ticketRepository.TicketXMes(1,6));
-        model.addAttribute("TicketXMes17", ticketRepository.TicketXMes(1,7));
-        model.addAttribute("TicketXMes21", ticketRepository.TicketXMes(2,1));
-        model.addAttribute("TicketXMes22", ticketRepository.TicketXMes(2,2));
-        model.addAttribute("TicketXMes23", ticketRepository.TicketXMes(2,3));
-        model.addAttribute("TicketXMes24", ticketRepository.TicketXMes(2,4));
-        model.addAttribute("TicketXMes25", ticketRepository.TicketXMes(2,5));
-        model.addAttribute("TicketXMes26", ticketRepository.TicketXMes(2,6));
-        model.addAttribute("TicketXMes27", ticketRepository.TicketXMes(2,7));
-        model.addAttribute("TicketXMes31", ticketRepository.TicketXMes(3,1));
-        model.addAttribute("TicketXMes32", ticketRepository.TicketXMes(3,2));
-        model.addAttribute("TicketXMes33", ticketRepository.TicketXMes(3,3));
-        model.addAttribute("TicketXMes34", ticketRepository.TicketXMes(3,4));
-        model.addAttribute("TicketXMes35", ticketRepository.TicketXMes(3,5));
-        model.addAttribute("TicketXMes36", ticketRepository.TicketXMes(3,6));
-        model.addAttribute("TicketXMes37", ticketRepository.TicketXMes(3,7));
+        for (int i : new int[]{4, 2, 3}) {
+            for (int j = 0; j <= 6; j++) {
+                String attributeName = String.format("TicketXMes%d%d", i, j);
+                model.addAttribute(attributeName, ticketRepository.TicketXMes(i, j));
+            }
+        }
+
         return "AnalistaDespliegue/despliegueDashboard";
     }
     @GetMapping("/comentarios")
-    public String comentarios(){
-        return "AnalistaDespliegue/despliegueComentarios";
+    public String comentarioTickets(Model model, @RequestParam("id") String idStr){
+
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/analistaDespliegue/ticket";
+            }
+            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
+            List<Comentario> listaComentarios = comentarioRepository.listarComentarios(id);
+            if (ticketOptional.isPresent()) {
+                Ticket ticket = ticketOptional.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("listaComentarios", listaComentarios);
+                return "AnalistaDespliegue/despliegueComentarios";
+            } else {
+                return "redirect:/analistaDespliegue/ticket";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/analistaDespliegue/ticket";
+        }
+
+    }
+
+    @PostMapping("/escribirComentario")
+    public String escribirComentarios(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes){
+
+        try{
+            int idTicket = Integer.parseInt(idTicketStr);
+            if (idTicket <= 0 || !ticketRepository.existsById(idTicket)) {
+                return "redirect:/analistaDespliegue/ticket";
+            }
+            Optional<Ticket> optionalTicket = ticketRepository.findById(idTicket);
+            if (optionalTicket.isPresent()) {
+                Date fechaCreacion = new Date();
+                comentarioRepository.ingresarComentario(id,idTicket,comentario,fechaCreacion);
+                redirectAttributes.addFlashAttribute("error","Comentario Añadido");
+
+                return "redirect:/analistaDespliegue/comentarios?id="+idTicketStr;
+            } else {
+                return "redirect:/analistaDespliegue/ticket";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/analistaDespliegue/ticket";
+        }
     }
 
     /*PARA VISUALIZAR FOTOS*/
