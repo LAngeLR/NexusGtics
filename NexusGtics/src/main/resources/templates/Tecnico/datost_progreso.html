@@ -137,7 +137,7 @@
                   <td><a class="btn btn-outline-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" type="submit"><b>Guardar</b></a></td>
               </tr>
           </table> -->
-                        <form th:action="@{/tecnico/actualizarEstado}" class="search-form" method="POST">
+                        <form th:action="@{/tecnico/guardarEstado}" class="search-form" method="POST">
                             <input th:value="${ticket.idTickets}" name="idTickets" type="hidden" />
                             <div class="row" th:if="${ticket.estado==5}">
                                 <div class="col-sm-4 label">Estado:</div>
