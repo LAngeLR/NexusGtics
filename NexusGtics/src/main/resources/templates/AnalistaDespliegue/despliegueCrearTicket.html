@@ -1,17 +1,52 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 
-<head th:include="Fragmentos/head :: head('Analista de Despliegue')"></head>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
+    <title>Nexus</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link th:href="@{/assets/img/favicon.png}" rel="icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
+    <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+
+
+    <!-- =======================================================
+    * Template Name: NiceAdmin
+    * Updated: Aug 30 2023 with Bootstrap v5.3.1
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
 
 <body>
 
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('analistaDespliegue')"><!-- End Header --></header><!-- End Header -->
-
+<header th:replace="Fragmentos/header :: header('analistaDespliegue')"><!-- End Header --></header>
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuDespliegue :: menu('crearTicket')">
 </aside><!-- End Sidebar-->
+
 <main id="main" class="main">
     <div class="container">
 
@@ -19,7 +54,7 @@
         <div class="pagetitle">
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/analistaOYM/ticket}">Lista de tickets</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/ticket}">Lista de tickets</a></li>
                     <li class="breadcrumb-item active">Crear Ticket</li>
                 </ol>
             </nav>
@@ -31,86 +66,92 @@
                     <div class="pagetitle">
                         <h1 class="card-title">Crear ticket</h1>
                     </div>
-                    <form method="POST" th:action="@{/analistaDespliegue/saveTicket}" enctype="multipart/form-data">
+                    <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}">
+                        A simple success alert—check it out!
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msgPrioridad != null}" th:text="${msgPrioridad}">
+                        A simple success alert—check it out!
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msgSitio != null}" th:text="${msgSitio}">
+                        A simple success alert—check it out!
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msgFechaCierre != null}" th:text="${msgFechaCierre}">
+                        A simple success alert—check it out!
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msg1 != null}" th:text="${msg1}">
+                        A simple success alert—check it out!
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${fechaCierre != null}" th:text="${fechaCierre}">
+                        A simple success alert—check it out!
+                    </div>
+
+                    <form method="POST" th:action="@{/analistaDespliegue/saveTicket}" th:object="${ticket}" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6">
+                                <input type="hidden" class="form-control" th:field="*{idTickets}">
 
                                 <div class="mb-3">
-                                    <label for="idEmpresaAsignada" class="form-label">Empresa</label>
+                                    <label for="idEmpresaAsignada">Empresa</label>
                                     <select class="form-select" name="idEmpresaAsignada" id="idEmpresaAsignada">
-                                        <option value="-1">--Seleccione una empresa--</option>
+                                        <option value="">--Seleccione una empresa--</option>
                                         <option th:each="empresa: ${listaEmpresa}"
-                                                th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}">Open this select menu</option>
+                                                th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
+                                                th:selected="${empresaSeleccionada != null && empresaSeleccionada.idEmpresas == empresa.idEmpresas}"
+                                        >Open this select menu</option>
                                     </select>
                                 </div>
 
-
-
-                                <input type="hidden" name="estado" id="estado" value="1">
-
-                                <input type="hidden" name="fechaCreacion" id="fechaCreacion" th:value="${fechaActual}">
-
-
-                                <!-- id usuario creador -->
-                                <input type="hidden" name="idUsuarioCreador" id="idUsuarioCreador" value="4">
-
-
                                 <input type="hidden" name="idTipoTicket" id="idTipoTicket" value="1">
 
-
-                                <div class="input-group mb-3">
+                                <div class="mb-3">
                                     <label for="idSitios">Sitio de despliegue:</label>
-                                    <div class="col-12">
-                                        <select name="idSitios" id="idSitios" class="form-control">
-                                            <option value="-1">--Seleccione el sitio--</option>
-                                            <option th:each="sitio: ${listaSitios}"
-                                                    th:text="${sitio.distrito}" th:value="${sitio.idSitios}">Sitio de Tipo</option>
-                                        </select>
-                                    </div>
+                                    <select name="idSitios" id="idSitios" class="form-select">
+                                        <option value="">--Seleccione el sitio--</option>
+                                        <option th:each="sitio: ${listaSitios}"
+                                                th:text="${sitio.nombre}" th:value="${sitio.idSitios}"
+                                                th:selected="${sitioSeleccionada != null && sitioSeleccionada.idSitios == sitio.idSitios}"
+                                        >Sitio de Tipo</option>
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="fechaCierre">Fecha de Cierre</label>
+                                    <label for="fechaCierre">Fecha de vencimiento:</label>
                                     <input type="date" class="form-control" name="fechaCierre" id="fechaCierre" >
                                 </div>
-
-
-
-
-
 
                             </div>
 
                             <div class="col-md-6">
 
                                 <div class="mb-3">
-                                    <label for="usuarioSolicitante">Usuario Solicitante</label>
-                                    <input type="text" class="form-control" name="usuarioSolicitante" id="usuarioSolicitante" >
+                                    <label class="form-label">Usuario solicitante:</label>
+                                    <input th:field="*{usuarioSolicitante}" type="text" th:class="${#fields.hasErrors('usuarioSolicitante')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('usuarioSolicitante')}" th:errors="*{usuarioSolicitante}">
+                                        Mensaje de error de usuarioSolicitante
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="prioridad" class="form-label">Selector de Prioridad</label>
-                                    <select class="form-select" name="prioridad" id="prioridad">
+                                    <select class="form-select" name="prioridad" id="prioridad"
+                                            th:if="${ticket2 != null}" th:field="*{prioridad}">
                                         <option value="-1">--Seleccione una Prioridad--</option>
                                         <option value="Baja prioridad">Baja prioridad</option>
                                         <option value="Hacer">Hacer</option>
                                         <option value="No critico">No critico</option>
                                         <option value="Urgente">Urgente</option>
                                     </select>
+
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="descripcion">Descripcion</label>
-                                    <input type="text" class="form-control" name="descripcion" id="descripcion" >
-                                </div>
-                                <div>
-
-
-
-
-
-
-
+                                    <label class="form-label">Descripción:</label>
+                                    <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
+                                        Mensaje de error de descripcion
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -121,9 +162,6 @@
 
                             </div>
                         </div>
-
-
-
                     </form>
                 </div>
                 <br><br>
@@ -138,7 +176,7 @@
 
 <!-- ======= Footer ======= -->
 <footer th:replace="Fragmentos/footer :: footer"></footer>
-
+<!-- End Footer -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
@@ -155,6 +193,17 @@
 <!-- Template Main JS File -->
 <script th:src="@{/assets/js/main.js}"></script>
 
+<!-- Para FECHA -->
+<script>
+    // Obtener el campo de fecha por su ID
+    var fechaRegistro2Input = document.getElementById("fechaCreacion");
+
+    // Obtener la fecha actual en el formato deseado ('yyyy-MM-dd')
+    var fechaActual = new Date().toISOString().split("T")[0];
+
+    // Establecer la fecha actual como valor del campo
+    fechaRegistro2Input.value = fechaActual;
+</script>
 </body>
 
 </html>

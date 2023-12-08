@@ -1,14 +1,48 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 
-<head th:include="Fragmentos/head :: head('Analista de Despliegue')"></head>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
+    <title>Nexus</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link th:href="@{/assets/img/favicon.png}" rel="icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
+    <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+
+
+    <!-- =======================================================
+    * Template Name: NiceAdmin
+    * Updated: Aug 30 2023 with Bootstrap v5.3.1
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
 
 <body>
 
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('analistaDespliegue')"><!-- End Header --></header><!-- End Header -->
-
+<header th:replace="Fragmentos/header :: header('analistaDespliegue')"><!-- End Header --></header>
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuDespliegue :: menu('editarTicket')">
 </aside><!-- End Sidebar-->
@@ -20,7 +54,7 @@
         <div class="pagetitle">
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/analistaOYM/listaSitio}">Lista de sitios</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/listaSitio}">Lista de sitios</a></li>
                     <li class="breadcrumb-item active">Editar sitio</li>
                 </ol>
             </nav>
@@ -28,93 +62,97 @@
 
         <section class="section dashboard">
             <div class="row">
-                <div class="rounded p-5" style="background-color: #FFFFFF;">
-                    <div class="pagetitle">
-                        <h1 class="card-title">Editar ticket</h1>
-                    </div>
-                    <form method="POST" th:action="@{/analistaDespliegue/saveTicket}" th:object="${ticket}" enctype="multipart/form-data">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <input type="hidden" class="form-control" th:field="*{idTickets}">
-                                <input type="hidden" name="estado" id="estado" th:field="*{estado}">
-                                <input type="hidden" name="fechaCreacion" id="fechaCreacion" th:field="*{fechaCreacion}">
-                                <input type="hidden" name="idTipoTicket" id="idTipoTicket" value="1">
-                                <input type="hidden" name="idUsuarioCreador" id="idUsuarioCreador" value="4">
 
-                                <div class="mb-3">
-                                    <label class="form-label">Empresa</label>
-                                    <select class="form-select" name="idEmpresaAsignada" id="idEmpresaAsignada">
-                                        <option th:each="empresa: ${listaEmpresa}"
-                                                th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
-                                                th:selected="${ticket.idEmpresaAsignada == empresa.idEmpresas}">Open this select menu</option>
-                                    </select>
-                                </div>
+                <div class="pagetitle">
+                    <h1 class="card-title">Editar ticket</h1>
+                </div>
+                <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
+                    A simple success alert—check it out!
+                </div>
+                <form method="POST" th:action="@{/analistaDespliegue/saveTicket}" th:object="${ticket}" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="hidden" class="form-control" th:field="*{idTickets}">
+                            <input type="hidden" name="estado" id="estado" th:field="*{estado}">
+                            <input type="hidden" name="fechaCreacion" id="fechaCreacion" th:field="*{fechaCreacion}">
+                            <input type="hidden" name="idTipoTicket" id="idTipoTicket" value="1">
+                            <input type="hidden" name="idUsuarioCreador" id="idUsuarioCreador" value="4">
 
-                                <div class="input-group mb-3">
-                                    <label class="form-label">Sitio de despliegue:</label>
-                                    <div class="col-12">
-                                        <select name="idSitios" id="idSitios" class="form-select">
-                                            <option th:each="sitio: ${listaSitios}"
-                                                    th:text="${sitio.distrito}" th:value="${sitio.idSitios}"
-                                                    th:selected="${ticket.idSitios == sitio.idSitios}">Sitio de Tipo</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-
-
-                                <div class="mb-3">
-                                    <label class="form-label">Fecha de Cierre</label>
-                                    <input th:field="*{fechaCierre}" type="date" th:class="${#fields.hasErrors('fechaCierre')?'form-control is-invalid':'form-control'}"/>
-                                    <div class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('fechaCierre')}" th:errors="*{fechaCierre}">
-                                        Mensaje de error de correo
-                                    </div>
-                                </div>
-
-
+                            <div class="mb-3">
+                                <label class="form-label">Empresa</label>
+                                <select class="form-select" name="idEmpresaAsignada" id="idEmpresaAsignada">
+                                    <option th:each="empresa: ${listaEmpresa}"
+                                            th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
+                                            th:selected="${ticket.idEmpresaAsignada.idEmpresas == empresa.idEmpresas}">Open this select menu</option>
+                                </select>
                             </div>
-                            <br><br>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Usuario Solicitante</label>
-                                    <input th:field="*{usuarioSolicitante}" type="text" th:class="${#fields.hasErrors('usuarioSolicitante')?'form-control is-invalid':'form-control'}"/>
-                                    <div class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('usuarioSolicitante')}" th:errors="*{usuarioSolicitante}">
-                                        Mensaje de error de correo
-                                    </div>                                </div>
 
-                                <div class="mb-3">
-                                    <label for="prioridad" class="form-label">Selector de Prioridad</label>
-                                    <select class="form-select" name="prioridad" id="prioridad">
-                                        <option value="Baja prioridad">Baja prioridad</option>
-                                        <option value="Hacer">Hacer</option>
-                                        <option value="No critico">No critico</option>
-                                        <option value="Urgente">Urgente</option>
+                            <div class="input-group mb-3">
+                                <label class="form-label">Sitio de despliegue:</label>
+                                <div class="col-12">
+                                    <select name="idSitios" id="idSitios" class="form-select">
+                                        <option th:each="sitio: ${listaSitios}"
+                                                th:text="${sitio.distrito}" th:value="${sitio.idSitios}"
+                                                th:selected="${ticket.idSitios.idSitios == sitio.idSitios}">Sitio de Tipo</option>
                                     </select>
                                 </div>
+                            </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Descripción:</label>
-                                    <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
-                                    <div class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
-                                        Mensaje de error de descripcion
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <label class="form-label">Fecha de Cierre: </label>
+                                <!-- Muestra la fecha formateada en el label -->
+                                <label th:text="${fechaCierreFormateada}" class="form-label"></label>
 
+                                <!-- Mantén el campo de entrada de fecha si es necesario -->
+                                <input th:value="${fechaCierreFormateada}" th:field="*{fechaCierre}" type="date" th:class="${#fields.hasErrors('fechaCierre')?'form-control is-invalid':'form-control'}"/>
 
-
+                                <!-- Nuevo elemento para mostrar la fecha formateada -->
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('fechaCierre')}" th:errors="*{fechaCierre}"></div>
                             </div>
 
                         </div>
-                        <button type="submit" class="btn btn-outline-primary float-end">Aceptar</button>
-                    </form>
-                </div>
-                <br><br>
+
+                        <br><br>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Usuario Solicitante</label>
+                                <input th:field="*{usuarioSolicitante}" type="text" th:class="${#fields.hasErrors('usuarioSolicitante')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('usuarioSolicitante')}" th:errors="*{usuarioSolicitante}">
+                                    Mensaje de error de correo
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="prioridad" class="form-label">Selector de Prioridad</label>
+                                <select th:field="*{prioridad}" type="text" th:class="${#fields.hasErrors('prioridad')?'form-control is-invalid':'form-control'}" class="form-select" name="prioridad" id="prioridad">
+                                    <option value="Baja prioridad">Baja prioridad</option>
+                                    <option value="Hacer">Hacer</option>
+                                    <option value="No critico">No critico</option>
+                                    <option value="Urgente">Urgente</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Descripción:</label>
+                                <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
+                                    Mensaje de error de descripcion
+                                </div>
+                            </div>
 
 
+
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary float-end">Aceptar</button>
+                </form>
             </div>
+            <br><br>
+
         </section>
         <br>
 
