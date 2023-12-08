@@ -525,11 +525,12 @@ public class TecnicoController {
 
     //------------------- DATOS DE PROGRESO---------------------------------//
     @GetMapping({"/verTicketProgreso", "/verticketprogreso"})
-    public String pagdatostickProgreso(Model model, @RequestParam("id") int id,
+    public String pagdatostickProgreso(Model model, @RequestParam("id") String idStr,
                                        RedirectAttributes attr) {
         List<Ticket> listaT1 = ticketRepository.listarEstado();
         model.addAttribute("listaTicket", listaT1);
         try {
+            int id = Integer.parseInt(idStr);
             if (id <= 0 || !ticketRepository.existsById(id)) {
                 return "redirect:/tecnico/ticketasignado";
             }
@@ -634,7 +635,7 @@ public class TecnicoController {
                 redirectAttributes.addFlashAttribute("yum", "El ticket ha sido cerrado correctamente");
                 return "redirect:/tecnico/ticketasignado";
             } else {
-                return "redirect:/tecnico/verTicketProgreso";
+                return "redirect:/tecnico/verTicketProgreso?id=" + ticket.getIdTickets();
             }
         }
         catch (Exception e) {
