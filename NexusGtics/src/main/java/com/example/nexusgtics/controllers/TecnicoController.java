@@ -473,6 +473,35 @@ public class TecnicoController {
 
     }
 
+    //-----------------PROBANDO HISTORIAL
+
+    @GetMapping("/historialticket")
+    public String historialTicket(Model model,
+                          RedirectAttributes attr,HttpSession httpSession){
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+
+        List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado();
+        model.addAttribute("ticketAsignados",ticketAsignados);
+
+        return "Tecnico/historial_ticket";
+
+    }
+
+    //--------------------------------------------------
+    @GetMapping("/historialticket2")
+    public String historialTicket2(Model model,
+                                  RedirectAttributes attr,HttpSession httpSession){
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+
+        List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado();
+        model.addAttribute("ticketAsignados",ticketAsignados);
+
+        return "Tecnico/historial_ticket2";
+
+    }
+
     //-----------------------------------------------------------------------
     @GetMapping({"/verTicket", "/verticket"})
     public String pagdatostick(Model model, @RequestParam("id") String idStr,
