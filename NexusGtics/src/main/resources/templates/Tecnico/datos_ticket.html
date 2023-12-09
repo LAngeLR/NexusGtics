@@ -141,7 +141,9 @@
                         </div>
                         <div class="mb-3 row">
                             <div class="col-lg-3 col-md-4 label">Tiempo Transcurrido:</div>
-                            <div class="col-lg-9 col-md-8" th:text="${ticket.fechaCreacion}"></div>
+                            <p class="col-lg-9 col-md-8">
+                                <span th:text="${dias}"></span> días <span th:text="${horas}"></span> horas con <span th:text="${minutos}"></span> minutos
+                            </p>
                         </div>
                     </div>
                 </div>

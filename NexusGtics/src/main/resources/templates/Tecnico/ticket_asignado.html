@@ -68,7 +68,6 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Usuario</th>
                                 <th scope="col">Fecha de apertura</th>
-                                <th scope="col">Fecha de vencimiento</th>
                                 <th scope="col">Prioridad</th>
                                 <th scope="col">Estado</th>
                                 <th scope="col">Ver más</th>
@@ -79,7 +78,6 @@
                                     <th th:text="${info.index + 1}" scope="row"></th>
                                     <td th:text="${ticket.usuarioSolicitante}"></td>
                                     <td th:text="${ticket.fechaCreacion}"></td>
-                                    <td th:text="${ticket.fechaCierre}"></td>
                                     <td>
                                         <div th:if="${ticket.prioridad == 'Baja prioridad'}">
                                             <span class="badge text-bg-info" th:text="${ticket.prioridad}">Baja Prioridad</span>
