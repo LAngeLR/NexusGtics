@@ -145,11 +145,6 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-lg-4 col-md-5 label">Fecha de vencimiento:</div>
-                                    <div class="col-lg-8 col-md-7" th:text="${ticket.fechaCierre}"></div>
-                                </div>
-
-                                <div class="row">
                                     <div class="col-lg-4 col-md-5 label">Servicio Relacionado:</div>
                                     <div class="col-lg-8 col-md-7" th:text="${ticket.idTipoTicket.nombreTipoTicket}"></div>
                                 </div>
@@ -187,6 +182,13 @@
                                         <div class="col-lg-4 col-md-5 label">Descripcion:</div>
                                         <div class="col-lg-8 col-md-7" th:text="${ticket.descripcion}"></div>
                                     </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Tiempo Transcurrido:</div>
+                                    <p class="col-lg-9 col-md-8">
+                                        <span th:text="${dias}"></span> días <span th:text="${horas}"></span> horas con <span th:text="${minutos}"></span> minutos
+                                    </p>
                                 </div>
                             </div>
 

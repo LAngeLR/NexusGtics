@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.time.Instant;
+import java.time.*;
 import java.util.*;
 
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
@@ -399,6 +399,37 @@ public class SupervisorController {
                 model.addAttribute("listaSupervisores",listaSupervisor);
                 model.addAttribute("listaCuadrillas",listaCuadrillas);
 
+                //---mandar tiempo transcurrido---
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria);
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                LocalDate fechaVariable = ticket.getFechaCreacion();
+                LocalTime horaVariable = ticket.getHoraCreacion();
+                Period diferencia = fechaVariable.until(fechaActual);
+                int difDia = diferencia.getDays(), hor, min;
+                float difTiempo= Duration.between(horaVariable,horaActual ).getSeconds(); //hv-ha
+                if(difDia==0){
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)(-difTiempo/3600);
+                        min = (int)((-difTiempo/3600-hor)*60);
+                    }
+                }else {
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)((24*3600+difTiempo)/3600);
+                        min = (int)(((24*3600+difTiempo)/3600 -hor)*60);
+                        difDia--;
+                    }
+                }
+                model.addAttribute("dias",difDia);
+                model.addAttribute("horas",hor);
+                model.addAttribute("minutos",min);
+
                 return "Supervisor/ticketNuevo";
             } else {
                 return "redirect:/supervisor/listaTickets";
@@ -450,6 +481,37 @@ public class SupervisorController {
                 model.addAttribute("tickets", ticket);
                 model.addAttribute("tecnicoLider",user);
 
+
+                //---mandar tiempo transcurrido---
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria);
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                LocalDate fechaVariable = ticket.getFechaCreacion();
+                LocalTime horaVariable = ticket.getHoraCreacion();
+                Period diferencia = fechaVariable.until(fechaActual);
+                int difDia = diferencia.getDays(), hor, min;
+                float difTiempo= Duration.between(horaVariable,horaActual ).getSeconds(); //hv-ha
+                if(difDia==0){
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)(-difTiempo/3600);
+                        min = (int)((-difTiempo/3600-hor)*60);
+                    }
+                }else {
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)((24*3600+difTiempo)/3600);
+                        min = (int)(((24*3600+difTiempo)/3600 -hor)*60);
+                        difDia--;
+                    }
+                }
+                model.addAttribute("dias",difDia);
+                model.addAttribute("horas",hor);
+                model.addAttribute("minutos",min);
                 return "Supervisor/ticketProceso";
             } else {
                 return "redirect:/supervisor/listaTickets";
@@ -477,6 +539,38 @@ public class SupervisorController {
                 model.addAttribute("comentario",comentarioRepository.obtenerUltimoComentario(ticket.getIdTickets()));
                 model.addAttribute("tecnicoLider",user);
                 model.addAttribute("tiempoTranscurrido",historialTicketRepository.tiempoTranscurrido(id));
+
+                //---mandar tiempo transcurrido---
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria);
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                LocalDate fechaVariable = ticket.getFechaCreacion();
+                LocalTime horaVariable = ticket.getHoraCreacion();
+                Period diferencia = fechaVariable.until(fechaActual);
+                int difDia = diferencia.getDays(), hor, min;
+                float difTiempo= Duration.between(horaVariable,horaActual ).getSeconds(); //hv-ha
+                if(difDia==0){
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)(-difTiempo/3600);
+                        min = (int)((-difTiempo/3600-hor)*60);
+                    }
+                }else {
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)((24*3600+difTiempo)/3600);
+                        min = (int)(((24*3600+difTiempo)/3600 -hor)*60);
+                        difDia--;
+                    }
+                }
+                model.addAttribute("dias",difDia);
+                model.addAttribute("horas",hor);
+                model.addAttribute("minutos",min);
+
                 return "Supervisor/ticketCerrado";
             } else {
                 return "redirect:/supervisor/listaTickets";
