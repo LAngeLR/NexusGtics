@@ -686,7 +686,7 @@ public class AnalistaOYMController {
                 model.addAttribute("ticket", ticket);
                 return "AnalistaOYM/oymVistaTicket";
             } else {
-                return "redirect:/analistaOYM/ticket";
+                return "redirect:/analistaOYM/oymListaTickets";
             }
         } catch (NumberFormatException e) {
             return "redirect:/analistaOYM/ticket";
