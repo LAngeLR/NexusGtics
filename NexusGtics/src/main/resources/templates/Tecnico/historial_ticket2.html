@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Mapa</title>
+  <title>Historial</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -32,6 +32,8 @@
 
       body {
         margin:0;
+        background-color: #21d4fd;
+        background-image: linear-gradient(19deg, #b9dcf6 0%, #ffffff 100%);
       }
 
 
@@ -223,7 +225,7 @@
 
 <main id="main" class="main">
   <div class="pagetitle">
-    <h1>Historial de ticket cerrado</h1>
+    <h1>Historial del ticket</h1>
   </div><!-- End Page Title -->
 
   <section class="section dashboard">
@@ -231,19 +233,19 @@
       <div id="progress-bar-container">
         <ul>
           <li class="step step01 active"><div class="step-inner">Analista</div></li>
-          <li class="step step02"><div class="step-inner">Supervisor</div></li>
-          <li class="step step03"><div class="step-inner">Técnico</div></li>
+          <li class="step step02 active"><div class="step-inner">Supervisor</div></li>
+          <li class="step step03 active"><div class="step-inner">Técnico</div></li>
           <li class="step step04"><div class="step-inner">Supervisor</div></li>
           <li class="step step05"><div class="step-inner">Analista</div></li>
         </ul>
 
         <div id="line">
-          <div id="line-progress"></div>
+          <div id="line-progress" style="width: 50%;"></div>
         </div>
       </div>
 
-      <div id="progress-content-section">
-        <div class="section-content discovery active">
+      <div id="progress-content-section" class="text-box">
+        <div class="section-content discovery">
           <h2>ANALISTA</h2>
           <p>colocar</p>
         </div>
@@ -253,7 +255,7 @@
           <p>colocar</p>
         </div>
 
-        <div class="section-content creative">
+        <div class="section-content creative active">
           <h2>TÉCNICO</h2>
           <p>colocar</p>
         </div>
@@ -299,7 +301,7 @@
       });
 
       $(".step05").click( function() {
-        $("#line-progress").css("width", "100%");
+        $("#line").css("width", "100%");
         $(".analysis").addClass("active").siblings().removeClass("active");
       });
 
