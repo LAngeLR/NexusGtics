@@ -789,6 +789,31 @@ public class TecnicoController {
         }
     }
 
+    /*Formulario Mantenimiento*/
+    @GetMapping({"/formularioMantenimiento","formularioMantenimiento"})
+    public String pagformularioMantenimiento(Model model, @RequestParam("id") String idStr,
+                                @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult) {
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !formularioRepository.existsById(id)) {
+                return "redirect:/tecnico/verTicket";
+            }
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            if (optionalFormulario.isPresent()) {
+                formulario = optionalFormulario.get();
+                model.addAttribute("formulario", formulario);
+                model.addAttribute("idTick", formularioRepository.obtenerid(id));
+                return "Tecnico/formulario_mantenimiento";
+            } else {
+                return "redirect:/tecnico/verTicket";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/tecnico/verTicket";
+        }
+    }
+
     //------FORMULARIO1 ----
     @GetMapping({"/formulario1", "formulario1"})
     public String pagformulario1(Model model, @RequestParam("id") String idStr,
@@ -1070,6 +1095,43 @@ public class TecnicoController {
             } else {
                 return "Tecnico/formulario2";
             }
+        }
+
+    }
+
+    //Formulario mantenimiento 2 y 3
+    @GetMapping({"/formulario2mantenimiento", "formulario2mantenimiento"})
+    public String pagformulario2y3(Model model, @RequestParam("id") String idStr,
+                                 @ModelAttribute("formulario2") @Valid Formulario formulario2, BindingResult bindingResult
+            ,HttpSession httpSession
+    ) {
+
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+        List<Formulario> formularioList = formularioRepository.findAll();
+        model.addAttribute("formularioList",formularioList);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        int id = u.getId();
+        try{
+            //int id = Integer.parseInt(idStr);
+            if (id <= 0 || !usuarioRepository.existsById(id)) {
+                return "redirect:/tecnico/formulario";
+            }
+            Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            Optional<Sitio> sitioOptional = sitioRepository.findById(id);
+            if (optionalFormulario.isPresent() && sitioOptional.isPresent()) {
+                formulario2 = optionalFormulario.get();
+                Sitio sitio = sitioOptional.get();
+                model.addAttribute("sitio", sitio);
+                model.addAttribute("formulario2", formulario2);
+                model.addAttribute("listaFormulario", formularioRepository.findAll());
+                return "Tecnico/formulario2";
+            } else {
+                return "redirect:/tecnico/formulario";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/tecnico/formulario";
         }
 
     }
