@@ -1,22 +1,17 @@
 package com.example.nexusgtics.controllers;
 
-import ch.qos.logback.core.model.Model;
 import com.example.nexusgtics.entity.Archivo;
-import com.example.nexusgtics.entity.Usuario;
+import com.example.nexusgtics.entity.Archivossitio;
 import com.example.nexusgtics.repository.ArchivoRepository;
+import com.example.nexusgtics.repository.ArchivoSitioRepository;
 import com.google.cloud.ReadChannel;
 import com.google.cloud.storage.*;
-import org.apache.commons.io.FileUtils;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Optional;
@@ -25,9 +20,10 @@ import java.util.Optional;
 public class GcsController {
 
     private final ArchivoRepository archivoRepository;
-
-    public GcsController(ArchivoRepository archivoRepository) {
+    private final ArchivoSitioRepository archivoSitioRepository;
+    public GcsController(ArchivoRepository archivoRepository, ArchivoSitioRepository archivoSitioRepository) {
         this.archivoRepository = archivoRepository;
+        this.archivoSitioRepository = archivoSitioRepository;
     }
 
     /* Descargar la imagen del repositorio */
@@ -45,8 +41,25 @@ public class GcsController {
             byte[] image = bytes.array();
             return image;
         }
+    }
+
+    public static byte[] downloadObjectArchivo
+            (String projectId, String bucketName, String blobName) throws IOException {
+        Storage storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
+        BlobId blobId = BlobId.of(bucketName, blobName);
+
+        try (ReadChannel reader = storage.reader(blobId)) {
+            ByteBuffer bytes = ByteBuffer.allocate(64 * 64 * 1024);
+            while (reader.read(bytes) > 0) {
+                bytes.flip();
+                bytes.clear();
+            }
+            byte[] image = bytes.array();
+            return image;
+        }
 
     }
+
 
     /* Subir la imagen al repositorio (ARCHIVO) */
     public static void uploadObject
@@ -68,6 +81,26 @@ public class GcsController {
         }
     }
 
+    /* PARA SUBIR ARCHIVOS EN GENERAL */
+    public static void uploadObjectArchivo
+    (Archivossitio archivossitio) {
+        try {
+            Storage storage = StorageOptions.newBuilder().setProjectId("labgcp-401300").build().getService();
+            Bucket bucket = storage.get("proyecto-archivos-gtics", Storage.BucketGetOption.fields());
+//            RandomString id = new RandomString(6, ThreadLocalRandom.current());
+            Blob blob = bucket.create(archivossitio.getNombreArchivo(), archivossitio.getArchivo(),archivossitio.getContentType());
+
+            if (blob != null) {
+                System.out.println("Se guardo exitosamente");
+
+            }
+        } catch (Exception e) {
+//            LOGGER.error("An error occurred while uploading data. Exception: ", e);
+            throw new RuntimeException("An error occurred while storing data to GCS");
+        }
+    }
+
+
 
 
     /* Obtener un archivo del Storage */
@@ -85,9 +118,59 @@ public class GcsController {
 //                    System.out.println(archivo1.getIdArchivos());
 //                    System.out.println(archivo1.getNombre());
                     String nombreArchivo = "archivo-"+archivo1.getIdArchivos();
+                    System.out.println("NombreArchivoFOTO: " + nombreArchivo);
+                    System.out.println("NombreArchivoByteFFOTO: " + archivo1.getNombre());
                     byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", archivo1.getNombre());
                     HttpHeaders headers = new HttpHeaders();
                     headers.setContentType(MediaType.parseMediaType(archivo1.getContentType()));
+                    //headers.setContentType(MediaType.parseMediaType(MediaType.IMAGE_JPEG_VALUE));
+
+                    return new ResponseEntity<>(image, headers, HttpStatus.OK);
+                } else {
+                    HttpHeaders httpHeaders = new HttpHeaders();
+                    return new ResponseEntity<>(null, httpHeaders, HttpStatus.NOT_FOUND);
+                }
+
+            }
+        }catch (NumberFormatException e){
+            HttpHeaders httpHeaders = new HttpHeaders();
+            return new ResponseEntity<>(null, httpHeaders, HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+
+
+
+    /* Obtener un archivo del Storage */
+    @GetMapping("/fileArchivo/{idSitio}/{idArchivo}")
+    public ResponseEntity<byte[]> displayItemArchivo(@PathVariable("idSitio") String idSitioStr,
+                                                     @PathVariable("idArchivo") String idArchivoStr) throws IOException {
+        try {
+            int idSitio = Integer.parseInt(idSitioStr);
+            int idArchivo = Integer.parseInt(idArchivoStr);
+            System.out.println("Id sitio: " + idSitio);
+            System.out.println("Id Archivo: "+ idArchivo);
+            if (idSitio <= 0 || idArchivo <= 0 || !archivoSitioRepository.existsById(idArchivo)) {
+                HttpHeaders httpHeaders = new HttpHeaders();
+                return new ResponseEntity<>(null, httpHeaders, HttpStatus.NOT_FOUND);
+            }else {
+                Optional<Archivossitio> optionalArchivossitio = archivoSitioRepository.findById(idArchivo);
+                if(optionalArchivossitio.isPresent()){
+                    Archivossitio archivossitio = optionalArchivossitio.get();
+//                    System.out.println(archivo1.getIdArchivos());
+//                    System.out.println(archivo1.getNombre());
+                    String nombreArchivo = "archivo-"+archivossitio.getIdSitioSitio().getIdSitios()+"-"+archivossitio.getId();
+                    System.out.println("NombreArchivo: " + nombreArchivo);
+                    System.out.println("NombreArchivoByte: " + archivossitio.getNombreArchivo());
+                    byte[] image = downloadObjectArchivo("labgcp-401300", "proyecto-archivos-gtics", archivossitio.getNombreArchivo());
+                    System.out.println("NombreArchivoByte: " + archivossitio.getNombreArchivo());
+
+
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(MediaType.parseMediaType(archivossitio.getContentType()));
+                    headers.setContentDisposition(ContentDisposition.builder("attachment").filename(archivossitio.getNombreArchivo()).build());
+
                     //headers.setContentType(MediaType.parseMediaType(MediaType.IMAGE_JPEG_VALUE));
 
                     return new ResponseEntity<>(image, headers, HttpStatus.OK);
