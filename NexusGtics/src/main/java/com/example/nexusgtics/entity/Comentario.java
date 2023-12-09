@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -19,7 +21,7 @@ public class Comentario {
     @Column(name = "comentario", length = 250)
     private String comentario;
 
-    @Column(name = "fechaPublicacion", nullable = false)
+    @Column(name = "fechaPublicacion")
     private Instant fechaPublicacion;
 
     @ManyToOne
@@ -29,5 +31,11 @@ public class Comentario {
     @ManyToOne
     @JoinColumn(name = "idComentarista", nullable = false)
     private Usuario comentarista;
+
+    @Column(name = "fechaCreacion")
+    private LocalDate fechaCreacion;
+
+    @Column(name = "horaCreacion")
+    private LocalTime horaCreacion;
 
 }

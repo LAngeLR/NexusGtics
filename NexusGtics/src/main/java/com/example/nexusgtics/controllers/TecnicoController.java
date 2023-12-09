@@ -418,8 +418,10 @@ public class TecnicoController {
             }
             Optional<Ticket> optionalTicket = ticketRepository.findById(idTicket);
             if(optionalTicket.isPresent()){
-                Date fechaCreacion = new Date();
-                comentarioRepository.ingresarComentario(id,idTicket,comentario,fechaCreacion);
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                comentarioRepository.ingresarComentario1(id,idTicket,comentario,fechaActual,horaActual);
                 redirectAttributes.addFlashAttribute("error","Comentario Añadido");
                 return "redirect:/tecnico/comentarios?id="+idTicketStr;
             }else{

@@ -99,7 +99,7 @@
                                             </td>
                                             <td style="color: rgba(0,0,0,0)">__________</td>
                                             <td style="align-items: end">
-                                                <p th:utext="${#dates.format(comentarios.fechaPublicacion, 'yyyy-MM-dd HH:mm:ss')}" style="color: rgba(0,0,0,0.45); font-size: smaller;"></p>
+                                                <span th:text="${comentarios.fechaCreacion}"></span>   <span th:text="${comentarios.horaCreacion}"></span>
                                             </td>
                                         </tr>
                                     </table>
