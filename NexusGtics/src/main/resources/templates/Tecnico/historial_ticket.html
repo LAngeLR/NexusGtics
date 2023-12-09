@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Historial</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
+  <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .step-wizard {
+      background-color: #21d4fd;
+      background-image: linear-gradient(19deg, #b9dcf6 0%, #ffffff 100%);
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+    }
+    .text-box {
+      background-color: #FFFFFF;
+      border: 1px solid #FFFFFF;
+      padding: 20px;
+      margin-top: 20px; /* Ajusta según sea necesario */
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .step-wizard-list{
+      background: #fff;
+      box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+      color: #333;
+      list-style-type: none;
+      border-radius: 10px;
+      display: flex;
+      padding: 20px 10px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .step-wizard-item{
+      padding: 0 20px;
+      flex-basis: 0;
+      -webkit-box-flex: 1;
+      -ms-flex-positive:1;
+      flex-grow: 1;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      min-width: 170px;
+      position: relative;
+    }
+    .step-wizard-item + .step-wizard-item:after{
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 19px;
+      background: #21d4fd;
+      width: 100%;
+      height: 2px;
+      transform: translateX(-50%);
+      z-index: -10;
+    }
+    .progress-count{
+      height: 40px;
+      width:40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: 600;
+      margin: 0 auto;
+      position: relative;
+      z-index:10;
+      color: transparent;
+    }
+    .progress-count:after{
+      content: "";
+      height: 40px;
+      width: 40px;
+      background: #21d4fd;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      z-index: -10;
+    }
+    .progress-count:before{
+      content: "";
+      height: 10px;
+      width: 20px;
+      border-left: 3px solid #fff;
+      border-bottom: 3px solid #fff;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -60%) rotate(-45deg);
+      transform-origin: center center;
+    }
+    .progress-label{
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .current-item ~ .step-wizard-item .progress-count:after{
+      height:10px;
+      width:10px;
+    }
+    .current-item ~ .step-wizard-item .progress-label{
+      opacity: 0.5;
+    }
+    .current-item .progress-count:after{
+      background: #fff;
+      border: 2px solid #21d4fd;
+    }
+    .current-item .progress-count{
+      color: #21d4fd;
+    }
+  </style>
+</head>
+<body>
+<!-- ======= Header =======
+<header th:replace="Fragmentos/header :: header('Técnico')"></header> -->
+<header th:replace="Fragmentos/headerDos :: header('tecnico',${listaTicket})"></header>
+<!-- End Header -->
+<!-- ======= Sidebar ======= -->
+<aside th:replace="Fragmentos/menuTecnico :: menu(currentPage='historial_ticket')"></aside><!-- End Sidebar-->
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Historial de ticket cerrado</h1>
+  </div><!-- End Page Title -->
+  <section class="step-wizard">
+    <ul class="step-wizard-list">
+      <li class="step-wizard-item">
+        <span class="progress-count">1</span>
+        <span class="progress-label">Analista - crear</span>
+      </li>
+      <li class="step-wizard-item">
+        <span class="progress-count">2</span>
+        <span class="progress-label">Supervisor - asigna</span>
+      </li>
+      <li class="step-wizard-item">
+        <span class="progress-count">3</span>
+        <span class="progress-label">Técnico - tus movimientos</span>
+      </li>
+      <li class="step-wizard-item">
+        <span class="progress-count">4</span>
+        <span class="progress-label">Supervisor - supervisa</span>
+      </li>
+      <li class="step-wizard-item">
+        <span class="progress-count">5</span>
+        <span class="progress-label">Analista - cierra</span>
+      </li>
+    </ul>
+    <br>
+    <div class="text-box">
+      <p>Información del Ticket cerrado :D</p>
+    </div>
+  </section>
+</main>
+
+<footer id="footer" class="footer">
+  <div class="credits" style="font-size: x-small;color:#5e5d5d">
+    Contacto: ☎ | 2758403  ✉ | <a href="mailto:nexus.empresatcom@gmail.com" style="color:#5e5d5d"> nexus.empresatcom@gmail.com</a>
+  </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+
+</body>
+</html>

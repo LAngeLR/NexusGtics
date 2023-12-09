@@ -4,40 +4,51 @@ import com.example.nexusgtics.controllers.Email.Authenticate;
 import com.example.nexusgtics.controllers.Email.LoginRequest;
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
+import jakarta.activation.DataSource;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.math.RoundingMode;
 
 import static com.example.nexusgtics.controllers.GcsController.downloadObject;
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
 import static java.lang.Integer.parseInt;
+import static java.sql.DriverManager.getConnection;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final HttpSession session;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
+//    @Autowired
+//    private DataSource dataSource;
+
+    private final HttpSession session;
     final EmpresaRepository empresaRepository;
     final SitioRepository sitioRepository;
     final EquipoRepository equipoRepository;
@@ -81,6 +92,7 @@ public class AdminController {
     public String perfilAdmin() {
         return "Administrador/perfilAdmin";
     }
+
 
 //---------------------------- GESTION DE USUARIOS -------------------------------------------
 
@@ -1274,4 +1286,46 @@ public class AdminController {
                     .body("HOLA...");
         }
     }
+
+
+
+    /* CAMPOS DINAMICOS */
+    @PostMapping("/campoDinamico")
+    public String manejarFormulario(@RequestParam("campo") String campo,
+                                    @RequestParam("tipoDato") int tipoDato) {
+        System.out.println("nada xd");
+
+        String sql = "ALTER TABLE nexus.sitios ADD COLUMN " + campo + " " +
+                (tipoDato == 1 ? "DOUBLE" : tipoDato == 2 ? "INT" : "VARCHAR(255)");
+        jdbcTemplate.execute(sql);
+
+        return "redirect:/admin/listaSitio";
+    }
+
+//    public String createDynamicField(@RequestBody Map<String, String> requestBody) {
+//        String dataType = requestBody.get("tipoDato");
+//        String fieldName = requestBody.get("campo");
+//
+//        String createFieldStatement = "ALTER TABLE nexus.sitios ADD COLUMN " + fieldName + " " +
+//                (dataType.equals("1") ? "DOUBLE" : dataType.equals("2") ? "INT" : "VARCHAR(255)") + "";
+//
+//        try (Connection connection = getConnection()) {
+//            PreparedStatement statement = connection.prepareStatement(createFieldStatement);
+//            statement.executeUpdate();
+//            System.out.println("Se añadió el nuevo campo");
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return "Error al añadir el campo";
+//        }
+//
+//        return "Campo creado exitosamente";
+//    }
+
+
+
+
+
+
+
+
 }

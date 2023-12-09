@@ -38,7 +38,9 @@
 <aside th:replace="Fragmentos/menuTecnico :: menu(currentPage='ticketAsignado')"></aside><!-- End Sidebar-->
 
 <main id="main" class="main">
-
+    <div class="alert alert-success" role="alert" th:if="${yum!=null}" th:text="${yum}">
+        yum
+    </div>
     <div class="pagetitle">
         <h1>Tabla de Tickets</h1>
         <nav>

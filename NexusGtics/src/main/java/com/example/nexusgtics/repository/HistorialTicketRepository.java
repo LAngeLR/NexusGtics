@@ -39,9 +39,10 @@ public interface HistorialTicketRepository extends JpaRepository<HistorialTicket
             "LIMIT 1;\n")
     Time tiempoTranscurrido(int idTickets);
 
-    @Query(nativeQuery = true, value = "SELECT \n" +
-            "\tht.descripcion,\n" +
-            "\tht.idUsuariosReasignados AS idReasignado, ht.idUsuarios,\n" +
+    @Query(nativeQuery = true, value = "SELECT\n" +
+            "    ht.descripcion,\n" +
+            "    ht.idUsuariosReasignados AS idReasignado,\n" +
+            "    ht.idUsuarios,\n" +
             "    CONCAT(u.nombre, ' ', u.apellido) AS Reasignado,\n" +
             "    CONCAT(a.nombre, ' ', a.apellido) AS usuario,\n" +
             "    t.estado,\n" +
@@ -49,7 +50,7 @@ public interface HistorialTicketRepository extends JpaRepository<HistorialTicket
             "    CONCAT(o.nombre, ' ', o.apellido) AS Supervisor,\n" +
             "    c.idCuadrillas,\n" +
             "    TIMEDIFF(NOW(), ht.fechaCambioEstado) AS transcurso\n" +
-            "FROM \n" +
+            "FROM\n" +
             "    historialtickets ht\n" +
             "    LEFT JOIN usuarios u ON ht.idUsuariosReasignados = u.idUsuarios\n" +
             "    LEFT JOIN usuarios a ON ht.idUsuarios = a.idUsuarios\n" +
@@ -57,10 +58,11 @@ public interface HistorialTicketRepository extends JpaRepository<HistorialTicket
             "    LEFT JOIN usuarios f ON t.idUsuarioCreador = f.idUsuarios\n" +
             "    LEFT JOIN usuarios o ON t.idSupervisorEncargado = o.idUsuarios\n" +
             "    LEFT JOIN cuadrillas c ON t.idCuadrilla = c.idCuadrillas\n" +
-            "WHERE \n" +
+            "WHERE\n" +
             "    (ht.idUsuarios = ?1 OR ht.idUsuariosReasignados = ?1)\n" +
             "    AND ht.fechaCambioEstado >= DATE_SUB(NOW(), INTERVAL 2 DAY)\n" +
-            "ORDER BY \n" +
+            "    AND TIMEDIFF(NOW(), ht.fechaCambioEstado) <= '24:00:00'\n" +
+            "ORDER BY\n" +
             "    ht.fechaCambioEstado DESC\n" +
             "LIMIT 6;\n")
     List<ActividadDto> actividadReciente(int idSession);

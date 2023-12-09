@@ -90,11 +90,16 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM nexus.tickets where estado not IN (1,2,7)")
     List<Ticket> listarmapa();
-
+    /*
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "insert into ticket (estado) values (?1)")
     void guardarEstado(int estado);
+     */
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE tickets SET estado = ?2 WHERE idTickets = ?1")
+    void guardarEstado(int ticketId, int estado);
 
     @Query(value ="select * from nexus.tickets where estado not IN (1,2,7)", nativeQuery = true )
     List<Ticket> listarEstado();

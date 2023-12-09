@@ -39,6 +39,7 @@ public class TecnicoController {
     final SitioCerradoRepository sitioCerradoRepository;
     final ComentarioRepository comentarioRepository;
     final ArchivoRepository archivoRepository;
+    final HistorialTicketRepository historialTicketRepository;
 
     final EmpresaRepository empresaRepository;
 
@@ -58,7 +59,7 @@ public class TecnicoController {
                              CuadrillaRepository cuadrillaRepository, ArchivoRepository archivoRepository,
                              FormularioRepository formularioRepository,
                              EquipoRepository equipoRepository, SitioCerradoRepository sitioCerradoRepository, TecInstaladaRepository tecInstaladaRepository ,
-                             EmpresaRepository empresaRepository, CargoRepository cargoRepository, TecnologiainstaladaFormularioRepository tecnologiainstaladaRepository, PasswordEncoder passwordEncoder) {
+                             EmpresaRepository empresaRepository, CargoRepository cargoRepository, TecnologiainstaladaFormularioRepository tecnologiainstaladaRepository, PasswordEncoder passwordEncoder, HistorialTicketRepository historialTicketRepository) {
         this.ticketRepository = ticketRepository;
         this.usuarioRepository = usuarioRepository;
         this.tipoticketRepository = tipoticketRepository;
@@ -72,6 +73,7 @@ public class TecnicoController {
         this.tecnologiainstaladaRepository = tecnologiainstaladaRepository;
         this.tecInstaladaRepository = tecInstaladaRepository;
         this.passwordEncoder = passwordEncoder;
+        this.historialTicketRepository=historialTicketRepository;
     }
 
     //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -471,6 +473,35 @@ public class TecnicoController {
 
     }
 
+    //-----------------PROBANDO HISTORIAL
+
+    @GetMapping("/historialticket")
+    public String historialTicket(Model model,
+                          RedirectAttributes attr,HttpSession httpSession){
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+
+        List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado();
+        model.addAttribute("ticketAsignados",ticketAsignados);
+
+        return "Tecnico/historial_ticket";
+
+    }
+
+    //--------------------------------------------------
+    @GetMapping("/historialticket2")
+    public String historialTicket2(Model model,
+                                  RedirectAttributes attr,HttpSession httpSession){
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+
+        List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado();
+        model.addAttribute("ticketAsignados",ticketAsignados);
+
+        return "Tecnico/historial_ticket2";
+
+    }
+
     //-----------------------------------------------------------------------
     @GetMapping({"/verTicket", "/verticket"})
     public String pagdatostick(Model model, @RequestParam("id") String idStr,
@@ -523,11 +554,12 @@ public class TecnicoController {
 
     //------------------- DATOS DE PROGRESO---------------------------------//
     @GetMapping({"/verTicketProgreso", "/verticketprogreso"})
-    public String pagdatostickProgreso(Model model, @RequestParam("id") int id,
+    public String pagdatostickProgreso(Model model, @RequestParam("id") String idStr,
                                        RedirectAttributes attr) {
         List<Ticket> listaT1 = ticketRepository.listarEstado();
         model.addAttribute("listaTicket", listaT1);
         try {
+            int id = Integer.parseInt(idStr);
             if (id <= 0 || !ticketRepository.existsById(id)) {
                 return "redirect:/tecnico/ticketasignado";
             }
@@ -619,18 +651,31 @@ public class TecnicoController {
 
     @PostMapping("/guardarEstado")
     public String guardarEstado(Ticket ticket,
-                                @RequestParam("estado") int estado,
-                                RedirectAttributes attributes) {
+                                @RequestParam("cambioEstado") int estado,
+                                RedirectAttributes redirectAttributes, HttpSession httpSession) {
+        
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idTecnico = u.getId();
         try {
-            ticketRepository.guardarEstado(estado);
-            return "redirect:/tecnico/ticketasignado";
-        } catch (Exception e) {
+            if (estado==6) {
+                Date fechaCambioEstado = new Date();
+                ticketRepository.guardarEstado(ticket.getIdTickets(),estado);
+                historialTicketRepository.crearHistorial(5, fechaCambioEstado, ticket.getIdTickets(), idTecnico, "Pasando a Supervisor");
+                redirectAttributes.addFlashAttribute("yum", "El ticket ha sido cerrado correctamente");
+                return "redirect:/tecnico/ticketasignado";
+            } else {
+                return "redirect:/tecnico/verTicketProgreso?id=" + ticket.getIdTickets();
+            }
+        }
+        catch (Exception e) {
             throw new RuntimeException(e);
         }
+
     }
 
 
     //-----------------------------------------------------------------------
+    /*
     @PostMapping("/actualizarEstado")
     public String actualizarEstado(@ModelAttribute("ticket") @Valid Ticket ticket, BindingResult bindingResult,
                                    Model model, RedirectAttributes attr) {
@@ -656,6 +701,7 @@ public class TecnicoController {
             return "Tecnico/ticket_asignado";
         }
     }
+    */
 
     //-----------------------------------------------------------------------
 

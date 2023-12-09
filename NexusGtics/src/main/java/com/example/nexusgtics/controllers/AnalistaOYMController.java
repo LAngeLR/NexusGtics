@@ -734,27 +734,12 @@ public class AnalistaOYMController {
         model.addAttribute("CantporMes", ticketRepository.CantporMes());
         model.addAttribute("CantporMesAnterior", ticketRepository.CantporMesAnterior());
         model.addAttribute("CantHaceDosMeses", ticketRepository.CantHaceDosMeses());
-        model.addAttribute("TicketXMes11", ticketRepository.TicketXMes(1,1));
-        model.addAttribute("TicketXMes12", ticketRepository.TicketXMes(1,2));
-        model.addAttribute("TicketXMes13", ticketRepository.TicketXMes(1,3));
-        model.addAttribute("TicketXMes14", ticketRepository.TicketXMes(1,4));
-        model.addAttribute("TicketXMes15", ticketRepository.TicketXMes(1,5));
-        model.addAttribute("TicketXMes16", ticketRepository.TicketXMes(1,6));
-        model.addAttribute("TicketXMes17", ticketRepository.TicketXMes(1,7));
-        model.addAttribute("TicketXMes21", ticketRepository.TicketXMes(2,1));
-        model.addAttribute("TicketXMes22", ticketRepository.TicketXMes(2,2));
-        model.addAttribute("TicketXMes23", ticketRepository.TicketXMes(2,3));
-        model.addAttribute("TicketXMes24", ticketRepository.TicketXMes(2,4));
-        model.addAttribute("TicketXMes25", ticketRepository.TicketXMes(2,5));
-        model.addAttribute("TicketXMes26", ticketRepository.TicketXMes(2,6));
-        model.addAttribute("TicketXMes27", ticketRepository.TicketXMes(2,7));
-        model.addAttribute("TicketXMes31", ticketRepository.TicketXMes(3,1));
-        model.addAttribute("TicketXMes32", ticketRepository.TicketXMes(3,2));
-        model.addAttribute("TicketXMes33", ticketRepository.TicketXMes(3,3));
-        model.addAttribute("TicketXMes34", ticketRepository.TicketXMes(3,4));
-        model.addAttribute("TicketXMes35", ticketRepository.TicketXMes(3,5));
-        model.addAttribute("TicketXMes36", ticketRepository.TicketXMes(3,6));
-        model.addAttribute("TicketXMes37", ticketRepository.TicketXMes(3,7));
+        for (int i : new int[]{4, 2, 3}) {
+            for (int j = 0; j <= 6; j++) {
+                String attributeName = String.format("TicketXMes%d%d", i, j);
+                model.addAttribute(attributeName, ticketRepository.TicketXMes(i, j));
+            }
+        }
         return "AnalistaOYM/oymDashboard";
     }
 
