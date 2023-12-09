@@ -24,4 +24,19 @@ public interface SitioRepository extends JpaRepository<Sitio, Integer> {
     @Query(value ="update nexus.sitios set habilitado = false where idSitios = ?1", nativeQuery = true )
     void eliminarEmpresa(int id);
 
+    @Modifying
+    @Transactional
+    @Query(value ="ALTER TABLE nexus.sitios ADD COLUMN ?1 ?2", nativeQuery = true )
+    void dinamicoDouble(String campo, String variable);
+
+    @Modifying
+    @Transactional
+    @Query(value ="ALTER TABLE nexus.sitios ADD COLUMN ?1 ?2", nativeQuery = true )
+    void dinamicoInt(String campo, String variable);
+
+    @Modifying
+    @Transactional
+    @Query(value ="ALTER TABLE nexus.sitios ADD COLUMN ?1 ?2", nativeQuery = true )
+    void dinamicoVarchar(String campo, String variable);
+
 }

@@ -36,6 +36,47 @@
 
                   <a th:href="@{/admin/crearSitio}" class="btn btn-outline-primary me-2 mt-3 float-end">Agregar sitio</a>
                   <!--a th:href="@{/admin/crearCampo}" class="btn btn-outline-dark me-2 mt-3 float-end">Añadir campo</a-->
+<!--                  <a th:href="@{/campoDinamico}" class="btn btn-outline-primary me-2 mt-3 float-end"-->
+<!--                     data-bs-toggle="modal" data-bs-target="#exampleModal">Campo dinamico</a>-->
+                  <a class="btn btn-outline-primary me-2 mt-3 float-end"
+                     data-bs-toggle="modal" data-bs-target="#exampleModal">Campo dinamico</a>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">Campo dinámico</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form th:action="@{/admin/campoDinamico}" method="post">
+                            <div class="mb-3">
+                              <label for="tipoDato" class="form-label">Tipo de dato</label>
+                              <select class="form-select" aria-label="Default select example" name="tipoDato">
+                                <option selected></option>
+                                <option value="1">Numerico (DOUBLE)</option>
+                                <option value="2">Numerico (INT)</option>
+                                <option value="3">Cadena (VARCHAR)</option>
+                              </select>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Nombre del campo</label>
+                              <input type="text" class="form-control" id="campo" name="campo">
+                            </div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <input type="submit" value="Añadir" class="btn btn-primary">
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+
+
 
 
                   <h5 class="card-title">Lista de sitios</h5>
