@@ -297,7 +297,8 @@ public class AdminController {
 
     @PutMapping("/updateUsuario")
     public String updateUsuario(/*@RequestParam("imagenSubida") MultipartFile file,*/
-                                @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
+                                @ModelAttribute("usuario") @Valid Usuario usuario,
+                                BindingResult bindingResult,
                                 Model model,
                                 RedirectAttributes attr) {
 //        Usuario u = (Usuario) httpSession.getAttribute("usuario");
@@ -310,35 +311,36 @@ public class AdminController {
             if (id <= 0 || !usuarioRepository.existsById(id)) {
                 return "redirect:/admin/listaUsuario";
             }
+
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+
             if (optionalUsuario.isPresent()) {
+                System.out.println(" SI INGRESA AQUIIII");
                 Usuario usuarioDb = optionalUsuario.get();    //se crea un usuarioDb al que se le pasarán los campos del form que fueron a usuario
                 usuario.setArchivo(optionalUsuario.get().getArchivo());
                 //validar que no se repitan los emails
                 Integer id1 = usuario.getId();
 
-                List<String> correos = usuarioRepository.listaCorreos2(id1);
-                for (String correo : correos) {
-                    if (correo.equals(usuario.getCorreo())) {
-                        model.addAttribute("msgEmail", "El correo electrónico ya existe");
-                        model.addAttribute("listaEmpresa", empresaRepository.findAll());
-                        model.addAttribute("listaCargo", cargoRepository.findAll());
-                        return "Administrador/editarUsuario";
-                    }
-                }
+//                List<String> correos = usuarioRepository.listaCorreos2(id1);
+//                for (String correo : correos) {
+//                    if (correo.equals(usuario.getCorreo())) {
+//                        model.addAttribute("msgEmail", "El correo electrónico ya existe");
+//                        model.addAttribute("listaEmpresa", empresaRepository.findAll());
+//                        model.addAttribute("listaCargo", cargoRepository.findAll());
+//                        return "Administrador/editarUsuario";
+//                    }
+//                }
 
                 if (usuario.getCargo() == null || usuario.getCargo().getIdCargos() == null || usuario.getCargo().getIdCargos() == -1) {
                     model.addAttribute("msgCargo", "Escoger un cargo");
                     model.addAttribute("listaEmpresa", empresaRepository.findAll());
                     model.addAttribute("listaCargo", cargoRepository.findAll());
-
                     return "Administrador/editarUsuario";
                 }
                 if (usuario.getEmpresa() == null || usuario.getEmpresa().getIdEmpresas() == null || usuario.getEmpresa().getIdEmpresas() == -1) {
                     model.addAttribute("msgEmpresa", "Escoger una empresa");
                     model.addAttribute("listaEmpresa", empresaRepository.findAll());
                     model.addAttribute("listaCargo", cargoRepository.findAll());
-
                     return "Administrador/editarUsuario";
                 }
                 //validar que analistas->nexus supervisor y técnicos->otras empresas
@@ -361,7 +363,6 @@ public class AdminController {
                         usuarioDb.setArchivo(usuario.getArchivo());
                     }
                     try {
-                        attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
                         //pasar del intermdio al db
                         usuarioDb.setNombre(usuario.getNombre());
                         usuarioDb.setApellido(usuario.getApellido());
@@ -371,6 +372,7 @@ public class AdminController {
                         usuarioDb.setCargo(usuario.getCargo());
                         usuarioDb.setEmpresa(usuario.getEmpresa());
                         usuarioRepository.save(usuarioDb);
+                        attr.addFlashAttribute("msg", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se ha actualizado exitosamente");
 
                         return "redirect:/admin/listaUsuario";
                     } catch (Exception e) {
@@ -742,6 +744,23 @@ public class AdminController {
                     return "Administrador/editarSitio";
                 }
 
+                if(file.getSize()>1){
+                    /*VALIDACIÓN PARA QUE EL NOMBRE DEL ARHCIVO SEA MENOR A 40*/
+                    if (file.getOriginalFilename().length() > 40) {
+                        model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 carácteres");
+                        return "Administrador/editarSitio";
+                    }
+
+                    /*VALIDACION DE EXTENSIÓN*/
+                    String extensionValida = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+                    if (!extensionValida.equals("png") && !extensionValida.equals("jpg") && !extensionValida.equals("jpeg")) {
+                        model.addAttribute("msgExtension", "Solo se permiten archivos con extensión png, jpg y jpeg");
+                        return "Administrador/editarSitio";
+
+                    }
+
+                }
+
                 if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
                     model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
                     return "Administrador/editarSitio";
@@ -892,6 +911,33 @@ public class AdminController {
                 return "Administrador/editarEquipo";
             }
         }
+
+        if(file.getSize()>1){
+            /*VALIDACIÓN PARA QUE EL NOMBRE DEL ARHCIVO SEA MENOR A 40*/
+            if (file.getOriginalFilename().length() > 40) {
+                model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 carácteres");
+
+                if (equipo.getIdEquipos() == null) {
+                    return "Administrador/crearEquipo";
+                } else {
+                    return "Administrador/editarEquipo";
+                }
+            }
+
+            /*VALIDACION DE EXTENSIÓN*/
+            String extensionValida = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+            if (!extensionValida.equals("png") && !extensionValida.equals("jpg") && !extensionValida.equals("jpeg")) {
+                model.addAttribute("msgExtension", "Solo se permiten archivos con extensión png, jpg y jpeg");
+                if (equipo.getIdEquipos() == null) {
+                    return "Administrador/crearEquipo";
+                } else {
+                    return "Administrador/editarEquipo";
+                }
+            }
+
+        }
+
+
         if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
             if (equipo.getIdEquipos() == null) {
@@ -983,6 +1029,22 @@ public class AdminController {
                     model.addAttribute("msgTipoEquipo", "Escoger un tipo de Equipo");
                     model.addAttribute("listaTipoEquipos", tipoEquipoRepository.findAll());
                     return "Administrador/editarEquipo";
+                }
+
+                if(file.getSize()>1){
+
+                    /*VALIDACIÓN PARA QUE EL NOMBRE DEL ARHCIVO SEA MENOR A 40*/
+                    if (file.getOriginalFilename().length() > 40) {
+                        model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 carácteres");
+                        return "Administrador/editarEquipo";
+                    }
+
+                    /*VALIDACION DE EXTENSIÓN*/
+                    String extensionValida = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+                    if (!extensionValida.equals("png") && !extensionValida.equals("jpg") && !extensionValida.equals("jpeg")) {
+                        model.addAttribute("msgExtension", "Solo se permiten archivos con extensión png, jpg y jpeg");
+                        return "Administrador/editarEquipo";
+                    }
                 }
 
                 if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
