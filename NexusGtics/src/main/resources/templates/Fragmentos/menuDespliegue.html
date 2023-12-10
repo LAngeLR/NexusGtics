@@ -21,6 +21,11 @@
                     </a>
                 </li>
                 <li>
+                    <a th:classappend="${currentPage == 'archivoSitio' ? 'active' : ''}" th:href="@{/analistaDespliegue/archivosSitios}">
+                        <i class="bi bi-circle"></i><span>Archivos de sitios</span>
+                    </a>
+                </li>
+                <li>
                     <a th:classappend="${currentPage == 'mapaSitio' ? 'active' : ''}" th:href="@{/analistaDespliegue/mapaSitios}">
                         <i class="bi bi-circle"></i><span>Mapa de sitios</span>
                     </a>

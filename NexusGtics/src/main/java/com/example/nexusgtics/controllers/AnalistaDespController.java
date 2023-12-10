@@ -27,7 +27,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static com.example.nexusgtics.controllers.GcsController.uploadObject;
+import static com.example.nexusgtics.controllers.GcsController.*;
 
 @Controller
 @RequestMapping("/analistaDespliegue")
@@ -47,10 +47,17 @@ public class AnalistaDespController {
     final SitiosHasEquiposRepository sitiosHasEquiposRepository;
     final CargoRepository cargoRepository;
 
+    final ArchivoSitioRepository archivoSitioRepository;
+
     private final PasswordEncoder passwordEncoder;
 
 
-    public AnalistaDespController(TicketRepository ticketRepository, ComentarioRepository comentarioRepository, SitioRepository sitioRepository, UsuarioRepository usuarioRepository, EmpresaRepository empresaRepository, EquipoRepository equipoRepository, HistorialTicketRepository historialTicketRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository, PasswordEncoder passwordEncoder){
+    public AnalistaDespController(TicketRepository ticketRepository, ComentarioRepository comentarioRepository,
+                                  SitioRepository sitioRepository, UsuarioRepository usuarioRepository,
+                                  EmpresaRepository empresaRepository, EquipoRepository equipoRepository,
+                                  HistorialTicketRepository historialTicketRepository, ArchivoRepository archivoRepository,
+                                  SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository,
+                                  ArchivoSitioRepository archivoSitioRepository, PasswordEncoder passwordEncoder){
         this.ticketRepository = ticketRepository;
         this.comentarioRepository = comentarioRepository;
         this.sitioRepository = sitioRepository;
@@ -58,11 +65,10 @@ public class AnalistaDespController {
         this.empresaRepository = empresaRepository;
         this.equipoRepository = equipoRepository;
         this.historialTicketRepository = historialTicketRepository;
-
         this.archivoRepository = archivoRepository;
-
         this.sitiosHasEquiposRepository = sitiosHasEquiposRepository;
         this.cargoRepository = cargoRepository;
+        this.archivoSitioRepository = archivoSitioRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -354,9 +360,11 @@ public class AnalistaDespController {
 
 
     @GetMapping("/listaSitio")
-    public String listaSitio(Model model){
+    public String listaSitio(Model model, @ModelAttribute("sitio") Sitio sitio){
         List<Sitio>  listaSitio = sitioRepository.findAll();
         model.addAttribute("listaSitio",listaSitio);
+        model.addAttribute("listaSitios", sitioRepository.findAll());
+
         return "AnalistaDespliegue/despliegueListaSitio";
     }
 
@@ -934,6 +942,99 @@ public class AnalistaDespController {
         } else {
             return  null;
         }
+    }
+
+
+    @GetMapping("/archivosSitios")
+    public String archivosSitios(Model model, @ModelAttribute("sitio") Sitio sitio){
+        List<Sitio>  listaSitio = sitioRepository.findAll();
+        model.addAttribute("listaSitio",listaSitio);
+        model.addAttribute("listaSitios", sitioRepository.findAll());
+//        model.addAttribute("nombreSitios", archivoSitioRepository.nombreSitios());
+        System.out.println();
+        model.addAttribute("listaArchivos", archivoSitioRepository.findAll());
+        return "AnalistaDespliegue/despliegueArchivosSitios";
+    }
+
+
+    /* SUBIR ARCHIVOS*/
+    @PostMapping("/subirArchivo")
+    public String subirArchivo(@RequestParam("imagenSubida") MultipartFile file,
+                               @RequestParam("idSitios") int idSitios,
+                               Model model,
+                               RedirectAttributes attr) {
+        System.out.println(idSitios);
+        System.out.println(file.getContentType());
+        System.out.println(file.getSize());
+        System.out.println(file.getName());
+
+        System.out.println("Maximo tamaño permitido - 1048576 bytes");
+
+        try {
+            /*OBTENGO EL SITIO DE MANERA OPCIONAL*/
+            Optional<Sitio> optionalSitio = sitioRepository.findById(idSitios);
+            Integer idSitioNombre = idSitios;
+
+            if (optionalSitio.isPresent()) {
+                /*pregunto si el sitio existe en al BD*/
+                Sitio sitioBD = optionalSitio.get();
+
+                if(file.getSize()>1){
+                    // Obtenemos el nombre del archivo
+                    String fileName = file.getOriginalFilename();
+                    String nombreFront = fileName.substring(0, fileName.lastIndexOf('.'));
+                    String extension = "";
+                    int i = fileName.lastIndexOf('.');
+                    if (i > 0) {
+                        extension = fileName.substring(i+1);
+                    }
+                    Archivossitio archivossitio = new Archivossitio();
+                    archivossitio.setNombreArchivo(fileName);
+                    archivossitio.setTipo(2);
+                    archivossitio.setArchivo(file.getBytes());
+                    archivossitio.setContentType(file.getContentType());
+                    archivossitio.setIdSitioSitio(optionalSitio.get());
+                    archivossitio.setNombreSitio(optionalSitio.get().getNombre());
+                    archivossitio.setNombreFront(nombreFront);
+                    Archivossitio archivossitio1 = archivoSitioRepository.save(archivossitio);
+                    String nombreArchivo = "archivo-"+archivossitio1.getIdSitioSitio().getIdSitios()+"-"+archivossitio1.getId()+"."+extension;
+                    archivossitio1.setNombreArchivo(nombreArchivo);
+                    System.out.println("El nombre del archivo essss: ");
+                    System.out.println(archivossitio1.getNombreArchivo());
+                    archivoSitioRepository.save(archivossitio1);
+                    uploadObjectArchivo(archivossitio1);
+                    archivossitio1.setArchivo(null);
+                }
+
+
+            } else {
+                return "redirect:/analistaDespliegue";
+            }
+
+
+
+//            else {
+//                Archivo archivo = sitio.getArchivo();
+//                archivo.setNombre("fotoSitio");
+//                archivo.setTipo(1);
+//                byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "siteDefault.png");
+//                archivo.setArchivo(image);
+//                archivo.setContentType("image/png");
+//                Archivo archivo1 = archivoRepository.save(archivo);
+//                String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";
+//                archivo1.setNombre(nombreArchivo);
+//                archivoRepository.save(archivo1);
+//                uploadObject(archivo1);
+//                archivo1.setArchivo(null);
+//            }
+
+            return "redirect:/analistaDespliegue/archivosSitios";
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
 

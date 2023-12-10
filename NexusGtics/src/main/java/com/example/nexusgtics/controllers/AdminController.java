@@ -1292,13 +1292,12 @@ public class AdminController {
     /* CAMPOS DINAMICOS */
     @PostMapping("/campoDinamico")
     public String manejarFormulario(@RequestParam("campo") String campo,
-                                    @RequestParam("tipoDato") int tipoDato) {
-        System.out.println("nada xd");
+                                    @RequestParam("tipoDato") int tipoDato,RedirectAttributes redirectAttributes) {
 
         String sql = "ALTER TABLE nexus.sitios ADD COLUMN " + campo + " " +
                 (tipoDato == 1 ? "DOUBLE" : tipoDato == 2 ? "INT" : "VARCHAR(255)");
         jdbcTemplate.execute(sql);
-
+        redirectAttributes.addFlashAttribute("msg3", "Se ha creado exitosamente el campo '" + campo +"' ");
         return "redirect:/admin/listaSitio";
     }
 

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:include="Fragmentos/head :: head('Analista de Despliegue')"></head>
+
+
+<body>
+
+<!-- ======= Header ======= -->
+<header th:replace="Fragmentos/header :: header('analistaDespliegue')"><!-- End Header --></header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+<!-- ======= Sidebar ======= -->
+<aside th:replace="Fragmentos/menuDespliegue :: menu('archivoSitio')">
+</aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+    <div class="container">
+
+      <div class="pagetitle">
+        <nav>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Sitios</a></li>
+            <li class="breadcrumb-item active">Archivos de sitio</li>
+          </ol>
+        </nav>
+      </div><!-- End Page Title -->
+
+      <section class="section">
+        <div class="row">
+          <div class="col-lg-10">
+            <form th:action="@{/analistaDespliegue/subirArchivo}" method="post" th:object="${sitio}" enctype="multipart/form-data" >
+
+              <div class="mb-3">
+                <label for="idSitios">Sitio de despliegue:</label>
+                <select name="idSitios" id="idSitios" class="form-select">
+                  <option value="">--Seleccione el sitio--</option>
+                  <option th:each="sitio: ${listaSitios}"
+                          th:text="${sitio.nombre}" th:value="${sitio.idSitios}"></option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Archivo </label>
+                <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                       accept=".pdf, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+              </div>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <input type="submit" value="Añadir" class="btn btn-primary">
+            </form>
+          </div>
+        </div>
+          <br><br><br>
+        <div class="row">
+          <div class="col-lg-10">
+            <table class="table datatable">
+              <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Sitio</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Extensión</th>
+                <th scope="col">Opciones</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="lista, info : ${listaArchivos}">
+                <td th:text = "${info.index + 1}"></td>
+                <td th:text="${lista.nombreSitio}"></td>
+                <td th:text="${lista.nombreFront}"></td>
+                <td>
+                    <div th:if="${lista.contentType == 'application/pdf'}" class="red">
+                      <i class="bi bi-filetype-pdf"></i> pdf
+                    </div>
+                    <div th:if="${lista.contentType == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'}">
+                      <i class="bi bi-filetype-docx"></i> docx
+                    </div>
+                    <div th:if="${lista.contentType == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}">
+                      <i class="bi bi-filetype-xlsx"></i> xlsx
+                    </div>
+                </td>
+                <td>
+                  <div>
+                    <a class="btn btn-primary" th:href="@{|/fileArchivo/${lista.idSitioSitio.idSitios}/${lista.id}|}"><i class="bi bi-file-earmark-arrow-down-fill"></i></a>
+                    <a class="btn btn-danger" th:href="@{'/shipper/edit?id=' + ${lista.archivo}}"><i class="bi bi-trash3-fill"></i></a>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer th:replace="Fragmentos/footer :: footer"></footer>
+  <!-- End Footer -->>
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+  <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+  <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+  <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+  <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+  <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+  <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+  <script th:src="@{/assets/vendor/jquery/jquery.min.js}" defer></script>
+  <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}" defer></script>
+  <script th:src="@{/assets/vendor/jquery/jquery.min.js}" defer></script>
+  <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}" defer></script>
+
+
+<!-- Template Main JS File -->
+  <script th:src="@{/assets/js/main.js}"></script>
+
+</body>
+
+</html>

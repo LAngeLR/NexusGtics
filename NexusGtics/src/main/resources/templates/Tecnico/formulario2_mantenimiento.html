@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Validación de equipos -Form</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link th:href="@{/assets/img/favicon.png}" rel="icon">
+    <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
+    <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+    <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+        #map{ height: 38vh; width:40hw; }
+        select {
+            width: 30%;
+            font-size: 0.8rem
+        }
+    </style>
+</head>
+
+<body>
+<!-- ======= Header ======= -->
+<header th:replace="Fragmentos/headerDos :: header('tecnico',${listaTicket})"></header>
+<!-- ======= Sidebar ======= -->
+<aside th:replace="Fragmentos/menuTecnico :: menu('formulario2')"></aside><!-- End Sidebar-->
+<main id="main" class="main">
+    <div class="container">
+        <div class="pagetitle">
+            <h1>Formulario 2 y 3</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/tecnico/tecnico}">Home</a></li>
+                    <li class="breadcrumb-item active">Tickets Asignados</li>
+                    <li class="breadcrumb-item active">Datos del ticket</li>
+                    <li class="breadcrumb-item active">Formulario 2 y 3</li>
+                </ol>
+            </nav>
+        </div>
+        <section class="section dashboard">
+            <div class="row">
+                <div class="rounded p-5" style="background-color: #FFFFFF;">
+                    <div class="pagetitle">
+                        <h1 class="card-title">Formulario 2</h1>
+                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${msgFormulario2 != null}" th:text="${msgFormulario2}">
+                        A simple success alert—check it out!
+                    </div>
+                    <form method="POST" th:action="@{/tecnico/saveFormulario2}" th:object="${formulario2}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Nombres del arrendatario:</label>
+                                    <input th:field="*{nomredantario}" type="text" th:class="${#fields.hasErrors('nomredantario')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('nomredantario')}" th:errors="*{nomredantario}">
+                                        Mensaje de error de nomredantario
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">DNI:</label>
+                                    <input th:field="*{dni}" type="number" th:class="${#fields.hasErrors('dni')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">
+                                        Mensaje de error de dni
+                                    </div>
+                                </div>
+
+                                <div class="form-check form-switch" th:if="${formulario2.conexion==0}">
+                                    <label class="form-label">¿Conexión de energia?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="conexion"><br>
+                                    <label class="form-check-label" for="conexion" style="font-size: xx-small">No hay conexión</label>
+                                </div>
+                                <div class="form-check form-switch" th:if="${formulario2.conexion==1}">
+                                    <label class="form-label">¿Conexión de energia?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="conexion1" checked=""><br>
+                                    <label class="form-check-label" for="conexion1" style="font-size: xx-small">Sí hay conexión</label>
+                                </div>
+                                <br>
+                                <div class="form-check form-switch" th:if="${formulario2.movilidad==0}">
+                                    <label class="form-label">¿La movilidad llega al sitio?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"><br>
+                                    <label class="form-check-label" for="flexSwitchCheckDefault" style="font-size: xx-small">No llega movilidad</label>
+                                </div>
+                                <div class="form-check form-switch" th:if="${formulario2.movilidad==1}">
+                                    <label class="form-label">¿La movilidad llega al sitio?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked=""><br>
+                                    <label class="form-check-label" for="flexSwitchCheckChecked" style="font-size: xx-small">Sí llega movilidad</label>
+                                </div>
+
+                                <br>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Área del sitio:</label>
+                                    <input th:field="*{area}" type="number" th:class="${#fields.hasErrors('area')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('area')}" th:errors="*{area}">
+                                        Mensaje de error de area
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Observaciones:</label>
+                                    <input th:field="*{observaciones}" type="text" th:class="${#fields.hasErrors('observaciones')?'form-control is-invalid':'form-control'}"/>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('observaciones')}" th:errors="*{observaciones}">
+                                        Mensaje de error de observaciones
+                                    </div>
+                                </div>
+
+                            </div>
+                            <br><br>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                                    <div id="map"></div>
+                                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                                    <script>
+                                        var latitud = [[${sitio.latitud}]];
+                                        var longitud = [[${sitio.longitud}]];
+                                        let map = L.map('map').setView([latitud,longitud],18)
+                                        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                                            attribution:
+                                                'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                                        }).addTo(map);
+                                        L.marker([latitud,longitud]).addTo(map).bindPopup('Lugar').openPopup();
+                                    </script>
+
+                                    <script>
+                                        function centrarMapaEnCoordenadasIniciales() {
+                                            map.setView([latitud, longitud], 18);
+                                        }
+                                        var botonCentrar = L.control({ position: 'bottomright' });
+
+                                        botonCentrar.onAdd = function (map) {
+                                            var container = L.DomUtil.create('div', 'boton-centrar');
+                                            var button = L.DomUtil.create('button', 'btn btn-primary', container);
+                                            button.type = 'button';
+                                            var icono = L.DomUtil.create('i', 'bx bx-collapse', button);
+                                            L.DomEvent.on(button, 'click', centrarMapaEnCoordenadasIniciales);
+                                            return container;
+                                        };
+                                        botonCentrar.addTo(map);
+                                    </script>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="imagenSubida1" class="form-label">Fotos del sitio:</label>
+                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                        <img id="imgPreview2" th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile" class="rounded-circle"
+                                             onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
+                                    </div>
+                                    <input class="form-control" type="file" name="imagenSubida1" id="imagenSubida1"
+                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+
+                                </div>
+
+                                <button type="submit" class="btn btn-outline-primary float-end">Guardar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br><br>
+
+
+            </div>
+        </section>
+        <br>
+        <a th:href="@{'/tecnico/formulario?id='+${formulario2.ticket.idTickets}}" class="btn btn-outline-danger">Regresar</a>
+    </div>
+</main>
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+    <div class="credits" style="font-size: x-small;color:#5e5d5d">
+        Contacto: ☎ | 2758403  ✉ | <a href="mailto:nexus.empresatcom@gmail.com" style="color:#5e5d5d"> nexus.empresatcom@gmail.com</a>
+    </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/assets/js/foto.js}"></script>
+
+</body>
+
+</html>
