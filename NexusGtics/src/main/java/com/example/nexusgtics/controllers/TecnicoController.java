@@ -80,10 +80,11 @@ public class TecnicoController {
 
     @GetMapping({"/", "","tecnico"})
     public String paginaPrincipal(Model model, HttpSession httpSession) {
-        //Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         List<Ticket> listaT = ticketRepository.findAll();
-        //Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
-        //model.addAttribute("cuadrilla",idCuadrilla);
+
         model.addAttribute("listaTicket", listaT);
         model.addAttribute("currentPage", "Inicio");
         //Usuario user = (Usuario) httpSession.getAttribute("usuario");
@@ -105,6 +106,8 @@ public class TecnicoController {
                                 @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         model.addAttribute("usuario", u);
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
         return "Tecnico/perfilTecnico";
@@ -306,8 +309,10 @@ public class TecnicoController {
     public String perfilEditar(Model model,
                                @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession httpSession){
         List<Ticket> listaT = ticketRepository.findAll();
-        model.addAttribute("listaTicket", listaT);
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
+        model.addAttribute("listaTicket", listaT);
         model.addAttribute("usuario", u);
         int id = u.getId();
         try{
@@ -338,6 +343,8 @@ public class TecnicoController {
         model.addAttribute("listaTicket", listaT);
 
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         int id = u.getId();
         try{
             if (id <= 0 || !usuarioRepository.existsById(id)) {
@@ -385,7 +392,7 @@ public class TecnicoController {
 
 
     @GetMapping("/comentarios")
-    public String pagcomentarios(Model model, @RequestParam("id") String idStr) {
+    public String pagcomentarios(Model model, @RequestParam("id") String idStr, HttpSession httpSession) {
 
         try {
             int id = Integer.parseInt(idStr);
@@ -398,6 +405,9 @@ public class TecnicoController {
             if (ticketOptional.isPresent() && optionalFormulario.isPresent()) {
                 Ticket ticket = ticketOptional.get();
                 Formulario formulario = optionalFormulario.get();
+                Usuario u = (Usuario) httpSession.getAttribute("usuario");
+                Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+                model.addAttribute("cuadrilla",idCuadrilla);
                 model.addAttribute("formulario", formulario);
                 model.addAttribute("ticket", ticket);
                 model.addAttribute("listComentarios", listaComentarios);
@@ -449,6 +459,8 @@ public class TecnicoController {
         model.addAttribute("listaTicket", listaT);
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         model.addAttribute("usuario", u);
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
 
         //Ticket u = (Ticket) httpSession.getAttribute("ticket");
         //Integer idTickets = u.getIdTickets();
@@ -473,6 +485,9 @@ public class TecnicoController {
     @GetMapping("/ticketasignado")
     public String Tickets(Model model,
                           RedirectAttributes attr,HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
 
@@ -488,6 +503,9 @@ public class TecnicoController {
     @GetMapping("/historialticket")
     public String historialTicket(Model model,
                           RedirectAttributes attr,HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
 
@@ -502,6 +520,9 @@ public class TecnicoController {
     @GetMapping("/historialticket2")
     public String historialTicket2(Model model,
                                   RedirectAttributes attr,HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
 
@@ -520,8 +541,10 @@ public class TecnicoController {
 
         List<Ticket> listaT = ticketRepository.listarEstado();
         model.addAttribute("listaTicket", listaT);
-
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
+
         Integer idTecnico = u.getId();
 
         try {
@@ -597,9 +620,12 @@ public class TecnicoController {
     //------------------- DATOS DE PROGRESO---------------------------------//
     @GetMapping({"/verTicketProgreso", "/verticketprogreso"})
     public String pagdatostickProgreso(Model model, @RequestParam("id") String idStr,
-                                       RedirectAttributes attr) {
+                                       RedirectAttributes attr, HttpSession httpSession) {
         List<Ticket> listaT1 = ticketRepository.listarEstado();
         model.addAttribute("listaTicket", listaT1);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         try {
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !ticketRepository.existsById(id)) {
@@ -657,9 +683,12 @@ public class TecnicoController {
     //------------------- DATOS NUEVO ---------------------------------//
     @GetMapping({"/verTicketNuevo", "/verticketnuevo"})
     public String pagdatostickNuevo(Model model, @RequestParam("id") int id,
-                                    RedirectAttributes attr) {
+                                    RedirectAttributes attr, HttpSession httpSession) {
         List<Ticket> listaT = ticketRepository.listarEstado();
         model.addAttribute("listaTicket", listaT);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         try {
             if (id <= 0 || !ticketRepository.existsById(id)) {
                 return "redirect:/tecnico/ticketasignado";
@@ -717,9 +746,12 @@ public class TecnicoController {
     //------------------- DATOS DE CERRADO---------------------------------//
     @GetMapping({"/verTicketCerrado", "/verticketcerrado"})
     public String pagdatostickCerrado(Model model, @RequestParam("id") int id,
-                                      RedirectAttributes attr) {
+                                      RedirectAttributes attr, HttpSession httpSession) {
         List<Ticket> listaT = ticketRepository.listarEstado();
         model.addAttribute("listaTicket", listaT);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         try {
             if (id <= 0 || !ticketRepository.existsById(id)) {
                 return "redirect:/ticket/ticketasignado";
@@ -846,9 +878,12 @@ public class TecnicoController {
 
     @GetMapping("/desplazamiento")
     public String pagdesplazamiento(Model model, @RequestParam("id") int id,
-                                    RedirectAttributes attr) {
+                                    RedirectAttributes attr, HttpSession httpSession) {
         List<Ticket> lista = ticketRepository.listarEstado();
         model.addAttribute("ticketList", lista);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if (optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();
@@ -863,9 +898,12 @@ public class TecnicoController {
     //Desplazamiento en progreso para cerrado
     @GetMapping("/desplazamientoProgreso")
     public String desplazamientoProgreso(Model model, @RequestParam("id") int id,
-                                         RedirectAttributes attr) {
+                                         RedirectAttributes attr, HttpSession httpSession) {
         List<Ticket> lista = ticketRepository.listarEstado();
         model.addAttribute("ticketList", lista);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if (optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();
@@ -881,12 +919,15 @@ public class TecnicoController {
     //Desplazamiento cerrado, sin datos por modificar - Listar
     @GetMapping("/desplazamientoCerrado")
     public String desplazamientoCerrado(Model model, @RequestParam("id") int id,
-                                        RedirectAttributes attr) {
+                                        RedirectAttributes attr, HttpSession httpSession) {
         //'listar'
         List<Ticket> lista = ticketRepository.listarEstado();
         model.addAttribute("ticketList", lista);
         List<Sitio> sitio = sitioRepository.findAll();
         model.addAttribute("sitioListC", sitio);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         Optional<Sitio> optionalSitio = sitioRepository.findById(id);
         if (optionalTicket.isPresent() && optionalSitio.isPresent()) {
@@ -905,9 +946,12 @@ public class TecnicoController {
     /*Formulario*/
     @GetMapping({"/formulario","formulario"})
     public String pagformulario(Model model, @RequestParam("id") String idStr,
-                                @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult) {
+                                @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult, HttpSession httpSession) {
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         try {
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !formularioRepository.existsById(id)) {
@@ -930,9 +974,12 @@ public class TecnicoController {
     /*Formulario Mantenimiento*/
     @GetMapping({"/formularioMantenimiento","formularioMantenimiento"})
     public String pagformularioMantenimiento(Model model, @RequestParam("id") String idStr,
-                                @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult) {
+                                @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult, HttpSession httpSession) {
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         try {
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !formularioRepository.existsById(id)) {
@@ -963,6 +1010,8 @@ public class TecnicoController {
         List<Formulario> formularioList = formularioRepository.findAll();
         model.addAttribute("formularioList",formularioList);
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         int id = u.getId();
         try{
             //int id = Integer.parseInt(idStr);
@@ -1130,6 +1179,8 @@ public class TecnicoController {
                 model.addAttribute("sitio", sitio);
                 model.addAttribute("formulario2", formulario2);
                 model.addAttribute("listaFormulario", formularioRepository.findAll());
+                Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+                model.addAttribute("cuadrilla",idCuadrilla);
                 return "Tecnico/formulario2";
             } else {
                 return "redirect:/tecnico/formulario";
@@ -1261,6 +1312,8 @@ public class TecnicoController {
             if (optionalFormulario.isPresent() && sitioOptional.isPresent()) {
                 formulario2 = optionalFormulario.get();
                 Sitio sitio = sitioOptional.get();
+                Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+                model.addAttribute("cuadrilla",idCuadrilla);
                 model.addAttribute("sitio", sitio);
                 model.addAttribute("formulario2", formulario2);
                 model.addAttribute("listaFormulario", formularioRepository.findAll());
@@ -1296,6 +1349,9 @@ public class TecnicoController {
                 model.addAttribute("formulario3", formulario3);
                 model.addAttribute("tecFormList", list);
                 model.addAttribute("tecInsList", listInst);
+                Usuario u = (Usuario) httpSession.getAttribute("usuario");
+                Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+                model.addAttribute("cuadrilla",idCuadrilla);
                 return "Tecnico/formulario3";
             }else{
                 return "redirect:/tecnico";
@@ -1395,7 +1451,10 @@ public class TecnicoController {
 
     //-----------------------------------------------------------------------
     @GetMapping("/mapa")
-    public String pagmapa(Model model) {
+    public String pagmapa(Model model, HttpSession httpSession) {
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
         List<Ticket> listaMp = ticketRepository.listarmapa();
@@ -1407,7 +1466,7 @@ public class TecnicoController {
 
     @GetMapping("/formularioCerrado")
     public String formularioCerrado(Model model, @RequestParam("id") String idStr,
-                                    @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult) {
+                                    @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult, HttpSession httpSession) {
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
 
@@ -1421,6 +1480,9 @@ public class TecnicoController {
             if (optionalFormulario.isPresent() && sitioOptional.isPresent()) {
                 formulario = optionalFormulario.get();
                 Sitio sitio = sitioOptional.get();
+                Usuario u = (Usuario) httpSession.getAttribute("usuario");
+                Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+                model.addAttribute("cuadrilla",idCuadrilla);
                 model.addAttribute("formulario", formulario);
                 model.addAttribute("sitio", sitio);
                 model.addAttribute("idTick", formularioRepository.obtenerid(id));
