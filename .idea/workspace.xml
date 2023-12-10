@@ -7,12 +7,6 @@
     <list default="true" id="f646692a-d729-46f1-8cbf-604bcf613df0" name="Changes" comment="idk">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AnalistaDespController.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AnalistaDespController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AnalistaOYMController.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AnalistaOYMController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/repository/TicketRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/repository/TicketRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueDashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueDashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueEditarTicket.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueEditarTicket.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaOYM/oymDashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaOYM/oymDashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaOYM/oymEditarTicket.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaOYM/oymEditarTicket.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +116,7 @@
       <workItem from="1700872057406" duration="62000" />
       <workItem from="1701904153842" duration="10005000" />
       <workItem from="1701978174092" duration="17390000" />
-      <workItem from="1702170351903" duration="3067000" />
+      <workItem from="1702170351903" duration="10618000" />
     </task>
     <task id="LOCAL-00001" summary="detalles sadmin 2">
       <created>1696643792919</created>

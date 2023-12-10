@@ -580,6 +580,11 @@ public class AnalistaDespController {
     }
     @GetMapping("/listaEquiposPerteneciente")
     public String listaEquipoP(Model model, @RequestParam("id") int id){
+        List<Equipo> leq = equipoRepository.listaEquiposHabilitados();
+        for (Equipo equipo : leq) {
+            sitiosHasEquiposRepository.agregarEquipo(0,equipo.getIdEquipos());
+        }
+
         List<SitiosHasEquipo> listaEquipos = sitiosHasEquiposRepository.listaEquiposPorSitio(id);
         model.addAttribute("listaEquipo",listaEquipos);
         model.addAttribute("idSitios", id); // Agregar el valor de "id" al modelo
