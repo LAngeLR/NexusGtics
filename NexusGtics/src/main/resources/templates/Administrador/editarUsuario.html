@@ -35,6 +35,21 @@
           <div class="alert alert-danger" role="alert" th:if="${msgCargo != null}" th:text="${msgCargo}"></div>
           <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}"></div>
           <div class="alert alert-danger" role="alert" th:if="${msgEmail != null}" th:text="${msgEmail}"></div>
+          <div class="alert alert-danger" role="alert" th:if="${msgCargo != null}" th:text="${msgCargo}">
+            A simple success alert—check it out!
+          </div>
+          <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}">
+            A simple success alert—check it out!
+          </div>
+          <div class="alert alert-danger" role="alert" th:if="${msgEmail != null}" th:text="${msgEmail}">
+            A simple success alert—check it out!
+          </div>
+          <div class="alert alert-danger" role="alert" th:if="${msgNexus1 != null}" th:text="${msgNexus1}">
+            A simple success alert—check it out!
+          </div>
+          <div class="alert alert-danger" role="alert" th:if="${msgNexus2 != null}" th:text="${msgNexus2}">
+            A simple success alert—check it out!
+          </div>
 
           <form method="POST" th:action="@{/admin/updateUsuario}" th:object="${usuario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
             <input type="hidden" name="_method" value="PUT">
@@ -94,7 +109,7 @@
                   <label class="form-label">Cargo</label>
                   <select class="form-select" name="cargo" id="cargo">
                     <option th:each="cargo: ${listaCargo}"
-                            th:unless="${cargo.nombreCargo == 'Superadmin' || cargo.nombreCargo == 'Administrador'}"
+                            th:unless="${cargo.nombreCargo == 'Super administrador' || cargo.nombreCargo == 'Administrador'}"
                             th:text="${cargo.nombreCargo}" th:value="${cargo.idCargos}"
                             th:selected="${usuario.cargo.idCargos == cargo.idCargos}">Open this select menu</option>
                   </select>
