@@ -68,7 +68,6 @@
                     <form method="POST" th:action="@{/tecnico/saveFormulario2}" th:object="${formulario2}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row">
                             <div class="col-md-6">
-
                                 <div class="mb-3">
                                     <label class="form-label">Nombres del arrendatario:</label>
                                     <input th:field="*{nomredantario}" type="text" th:class="${#fields.hasErrors('nomredantario')?'form-control is-invalid':'form-control'}"/>
@@ -77,16 +76,6 @@
                                         Mensaje de error de nomredantario
                                     </div>
                                 </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">DNI:</label>
-                                    <input th:field="*{dni}" type="number" th:class="${#fields.hasErrors('dni')?'form-control is-invalid':'form-control'}"/>
-                                    <div class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">
-                                        Mensaje de error de dni
-                                    </div>
-                                </div>
-
                                 <div class="form-check form-switch" th:if="${formulario2.conexion==0}">
                                     <label class="form-label">¿Conexión de energia?:</label>
                                     <input class="form-check-input" type="checkbox" role="switch" id="conexion"><br>

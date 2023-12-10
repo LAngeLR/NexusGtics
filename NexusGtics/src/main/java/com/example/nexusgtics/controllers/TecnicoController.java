@@ -1115,7 +1115,7 @@ public class TecnicoController {
         try{
             //int id = Integer.parseInt(idStr);
             if (id <= 0 || !usuarioRepository.existsById(id)) {
-                return "redirect:/tecnico/formulario";
+                return "redirect:/tecnico/formularioMantenimiento";
             }
             Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
             Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
@@ -1126,12 +1126,12 @@ public class TecnicoController {
                 model.addAttribute("sitio", sitio);
                 model.addAttribute("formulario2", formulario2);
                 model.addAttribute("listaFormulario", formularioRepository.findAll());
-                return "Tecnico/formulario2";
+                return "Tecnico/formulario2_mantenimiento";
             } else {
-                return "redirect:/tecnico/formulario";
+                return "redirect:/tecnico/formularioMantenimiento";
             }
         } catch (NumberFormatException e) {
-            return "redirect:/tecnico/formulario";
+            return "redirect:/tecnico/formularioMantenimiento";
         }
 
     }
