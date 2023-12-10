@@ -123,6 +123,11 @@ public class Formulario implements Serializable {
     @Column(name = "bateriasestado", nullable = false)
     private Byte bateriasestado;
 
+    @Size(max = 45)
+    @NotNull
+    @Column(name = "averia", nullable = false, length = 45)
+    private String averia;
+
     /* Analizar estas dos
 
     @Size(max = 45)
