@@ -152,7 +152,7 @@
 <body>
 <!-- ======= Header =======
 <header th:replace="Fragmentos/header :: header('Técnico')"></header> -->
-<header th:replace="Fragmentos/headerDos :: header('tecnico',${listaTicket})"></header>
+<header th:replace="Fragmentos/headerDos :: header('tecnico',${listaTicket}, ${cuadrilla})"></header>
 <!-- End Header -->
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuTecnico :: menu(currentPage='historial_ticket')"></aside><!-- End Sidebar-->

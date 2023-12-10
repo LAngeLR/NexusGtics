@@ -58,7 +58,7 @@
 <body>
 <!-- ======= Header ======= -->
 
-<header th:replace="Fragmentos/headerDos :: header('tecnico',${listaTicket})"></header>
+<header th:replace="Fragmentos/headerDos :: header('tecnico',${listaTicket}, ${cuadrilla})"></header>
 
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuTecnico :: menu('comentarios')"></aside>
