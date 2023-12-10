@@ -648,6 +648,8 @@ public class AnalistaOYMController {
         ticketRepository.save(ticket);
         attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente por el usuario: " + ticket.getUsuarioSolicitante());
 
+        //guardar también en historialTicket
+        historialTicketRepository.crearHistorial1(1,fechaActual,horaActual,ticket.getIdTickets(),u.getId(),"Ticket creado");
         return "redirect:/analistaOYM/ticket";
 //        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
 //
@@ -766,8 +768,10 @@ public class AnalistaOYMController {
             }
 
             estadoUtilizar = 8;
-            Date fechaCambioEstado = new Date();
-            historialTicketRepository.crearHistorial(7,fechaCambioEstado,id,idAnalista,"Aprobación y finalización del ticket.");
+            ZoneId zonaHoraria = ZoneId.of("GMT-5");
+            LocalDate fechaCambio = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+            LocalTime horaCambio = LocalTime.now(zonaHoraria);
+            historialTicketRepository.crearHistorial1(7,fechaCambio,horaCambio,id,idAnalista,"Aprobación y finalización del ticket.");
             ticketRepository.actualizarEstado(id,estadoUtilizar);
             redirectAttributes.addFlashAttribute("yum","El ticket ha sido finalizado correctamente");
             System.out.println("711");
@@ -832,7 +836,8 @@ public class AnalistaOYMController {
     }
 
     @PostMapping("/escribirComentario")
-    public String escribirComentarios(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes){
+    public String escribirComentarios(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
 
         try{
             int idTicket = Integer.parseInt(idTicketStr);
@@ -841,11 +846,15 @@ public class AnalistaOYMController {
             }
             Optional<Ticket> optionalTicket = ticketRepository.findById(idTicket);
             if (optionalTicket.isPresent()) {
+                Ticket ticket = optionalTicket.get();
                 ZoneId zonaHoraria = ZoneId.of("GMT-5");
                 LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
                 LocalTime horaActual = LocalTime.now(zonaHoraria);
                 comentarioRepository.ingresarComentario1(id,idTicket,comentario,fechaActual,horaActual);
                 redirectAttributes.addFlashAttribute("error","Comentario Añadido");
+
+                //guardar también en historialTicket
+                historialTicketRepository.crearHistorial1(ticket.getEstado(),fechaActual,horaActual,ticket.getIdTickets(),u.getId(),"Comentario agregado");
 
                 return "redirect:/analistaOYM/comentarios?id="+idTicketStr;
             } else {

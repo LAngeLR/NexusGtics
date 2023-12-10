@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -19,7 +21,7 @@ public class HistorialTicket {
     @Column(name = "estado", nullable = false)
     private Integer estado;
 
-    @Column(name = "fechaCambioEstado", nullable = false)
+    @Column(name = "fechaCambioEstado")
     private Instant fechaCambioEstado;
 
     @ManyToOne
@@ -36,5 +38,11 @@ public class HistorialTicket {
     @ManyToOne
     @JoinColumn(name = "idUsuariosReasignados")
     private Usuario usuarioReasignado;
+
+    @Column(name = "fechaCambio")
+    private LocalDate fechaCambio;
+
+    @Column(name = "horaCambio")
+    private LocalTime horaCambio;
 
 }

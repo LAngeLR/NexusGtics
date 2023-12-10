@@ -874,7 +874,9 @@ public class SupervisorController {
 
 
     @PostMapping("/escribirComentario")
-    public String escribirComentario(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes){
+    public String escribirComentario(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+
 
         try{
             int idTicket = Integer.parseInt(idTicketStr);
@@ -883,11 +885,15 @@ public class SupervisorController {
             }
             Optional<Ticket> optionalTicket = ticketRepository.findById(idTicket);
             if (optionalTicket.isPresent()) {
+                Ticket ticket = optionalTicket.get();
                 ZoneId zonaHoraria = ZoneId.of("GMT-5");
                 LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
                 LocalTime horaActual = LocalTime.now(zonaHoraria);
                 comentarioRepository.ingresarComentario1(id,idTicket,comentario,fechaActual,horaActual);
                 redirectAttributes.addFlashAttribute("error","Comentario Añadido");
+
+                //guardar también en historialTicket
+                historialTicketRepository.crearHistorial1(ticket.getEstado(),fechaActual,horaActual,ticket.getIdTickets(),u.getId(),"Comentario agregado");
 
                 return "redirect:/supervisor/comentarios?id="+idTicketStr;
             } else {
