@@ -16,9 +16,7 @@
 
     <div class="container">
 
-        <div class="alert alert-success" role="alert" th:if="${msg!=null}" th:text="${msg}">
-            abc
-        </div>
+        <div class="alert alert-success" role="alert" th:if="${msg!=null}" th:text="${msg}"></div>
 
 
         <div class="pagetitle">
@@ -38,7 +36,8 @@
                     </div>
 
                     <div class="pagetitle" th:if="${valor != -1}">
-                        <h1 class="card-title">Asignacion de Tecnicos a Cuadrilla</h1>
+                        <h1 class="card-title">Asignación de Técnicos a Cuadrilla</h1>
+                        <p class="text-muted float-right">(Las cuadrillas deben contener 5 técnicos)</p>
                     </div>
 
                     <form method="post" th:action="@{/supervisor/guardarCuadrilla}" th:if="${valor == -1}">
