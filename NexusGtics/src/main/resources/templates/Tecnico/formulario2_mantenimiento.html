@@ -87,75 +87,72 @@
                                     <label class="form-check-label" for="conexion1" style="font-size: xx-small">Sí hay conexión</label>
                                 </div>
                                 <br>
-                                <div class="form-check form-switch" th:if="${formulario2.movilidad==0}">
-                                    <label class="form-label">¿La movilidad llega al sitio?:</label>
+                                <div class="form-check form-switch" th:if="${formulario2.equipoencendido==0}">
+                                    <label class="form-label">¿El equipo está encendido?:</label>
                                     <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"><br>
-                                    <label class="form-check-label" for="flexSwitchCheckDefault" style="font-size: xx-small">No llega movilidad</label>
+                                    <label class="form-check-label" for="flexSwitchCheckDefault" style="font-size: xx-small">No está encendido</label>
                                 </div>
-                                <div class="form-check form-switch" th:if="${formulario2.movilidad==1}">
-                                    <label class="form-label">¿La movilidad llega al sitio?:</label>
+                                <div class="form-check form-switch" th:if="${formulario2.equipoencendido==1}">
+                                    <label class="form-label">¿El equipo está encendido?:</label>
                                     <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked=""><br>
-                                    <label class="form-check-label" for="flexSwitchCheckChecked" style="font-size: xx-small">Sí llega movilidad</label>
+                                    <label class="form-check-label" for="flexSwitchCheckChecked" style="font-size: xx-small">Sí está encendido</label>
                                 </div>
-
+                                <div class="form-check form-switch" th:if="${formulario2.equipoconectado==0}">
+                                    <label class="form-label">¿El equipo está conectado?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="conectado"><br>
+                                    <label class="form-check-label" for="conectado" style="font-size: xx-small">No está conectado</label>
+                                </div>
+                                <div class="form-check form-switch" th:if="${formulario2.equipoconectado==1}">
+                                    <label class="form-label">¿El equipo está conectado?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="conectado2" checked=""><br>
+                                    <label class="form-check-label" for="conectado2" style="font-size: xx-small">Sí está conectado</label>
+                                </div>
+                                <div class="form-check form-switch" th:if="${formulario2.bateriasestado==0}">
+                                    <label class="form-label">¿Correcto estado de baterias?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="bateriaestado"><br>
+                                    <label class="form-check-label" for="bateriaestado" style="font-size: xx-small">Mal estado</label>
+                                </div>
+                                <div class="form-check form-switch" th:if="${formulario2.bateriasestado==1}">
+                                    <label class="form-label">¿Correcto estado de baterias?:</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="bateriaestado2" checked=""><br>
+                                    <label class="form-check-label" for="bateriaestado2" style="font-size: xx-small">Correcto estado</label>
+                                </div>
                                 <br>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Área del sitio:</label>
-                                    <input th:field="*{area}" type="number" th:class="${#fields.hasErrors('area')?'form-control is-invalid':'form-control'}"/>
+                                    <label class="form-label">Situación encontrada:</label>
+                                    <textarea th:field="*{situacion}" rows="3" th:class="${#fields.hasErrors('situacion')?'form-control is-invalid':'form-control'}"></textarea>
                                     <div class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('area')}" th:errors="*{area}">
-                                        Mensaje de error de area
+                                         th:if="${#fields.hasErrors('situacion')}" th:errors="*{situacion}">
+                                        Mensaje de error de situacion
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Observaciones:</label>
-                                    <input th:field="*{observaciones}" type="text" th:class="${#fields.hasErrors('observaciones')?'form-control is-invalid':'form-control'}"/>
-                                    <div class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('observaciones')}" th:errors="*{observaciones}">
-                                        Mensaje de error de observaciones
+                                    <label for="imagenSubida1" class="form-label">Fotos de situación:</label>
+                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                        <img id="imgPreview1" th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile" class="rounded-circle"
+                                             onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
                                     </div>
+                                    <input class="form-control" type="file" name="imagenSubida2" id="imagenSubida2"
+                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+
                                 </div>
 
                             </div>
                             <br><br>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                                    <div id="map"></div>
-                                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                                    <script>
-                                        var latitud = [[${sitio.latitud}]];
-                                        var longitud = [[${sitio.longitud}]];
-                                        let map = L.map('map').setView([latitud,longitud],18)
-                                        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                                            attribution:
-                                                'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-                                        }).addTo(map);
-                                        L.marker([latitud,longitud]).addTo(map).bindPopup('Lugar').openPopup();
-                                    </script>
-
-                                    <script>
-                                        function centrarMapaEnCoordenadasIniciales() {
-                                            map.setView([latitud, longitud], 18);
-                                        }
-                                        var botonCentrar = L.control({ position: 'bottomright' });
-
-                                        botonCentrar.onAdd = function (map) {
-                                            var container = L.DomUtil.create('div', 'boton-centrar');
-                                            var button = L.DomUtil.create('button', 'btn btn-primary', container);
-                                            button.type = 'button';
-                                            var icono = L.DomUtil.create('i', 'bx bx-collapse', button);
-                                            L.DomEvent.on(button, 'click', centrarMapaEnCoordenadasIniciales);
-                                            return container;
-                                        };
-                                        botonCentrar.addTo(map);
-                                    </script>
+                                    <label class="form-label">Acciones ejecutadas:</label>
+                                    <textarea th:field="*{acciones}" rows="5" th:class="${#fields.hasErrors('acciones')?'form-control is-invalid':'form-control'}"></textarea>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('acciones')}" th:errors="*{acciones}">
+                                        Mensaje de error de acciones
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="imagenSubida1" class="form-label">Fotos del sitio:</label>
+                                    <label for="imagenSubida1" class="form-label">Fotos de baterias:</label>
                                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
                                         <img id="imgPreview2" th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile" class="rounded-circle"
                                              onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
@@ -165,6 +162,23 @@
 
                                 </div>
 
+                                <div class="mb-3">
+                                    <label class="form-label"> Especialidad de avería </label>
+                                    <select class="form-select">
+                                        <option value="-1">--Selecciona un tipo--</option>
+                                        <option value="Energia">Energía</option>
+                                        <option value="Transporte">Transporte</option>
+                                        <option value="Acceso">Acceso</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Observaciones:</label>
+                                    <textarea th:field="*{observaciones}" rows="5" th:class="${#fields.hasErrors('observaciones')?'form-control is-invalid':'form-control'}"></textarea>
+                                    <div class="invalid-feedback"
+                                         th:if="${#fields.hasErrors('observaciones')}" th:errors="*{observaciones}">
+                                        Mensaje de error de observaciones
+                                    </div>
+                                </div>
                                 <button type="submit" class="btn btn-outline-primary float-end">Guardar</button>
                             </div>
                         </div>
@@ -176,7 +190,7 @@
             </div>
         </section>
         <br>
-        <a th:href="@{'/tecnico/formulario?id='+${formulario2.ticket.idTickets}}" class="btn btn-outline-danger">Regresar</a>
+        <a th:href="@{'/tecnico/formularioMantenimiento?id='+${formulario2.ticket.idTickets}}" class="btn btn-outline-danger">Regresar</a>
     </div>
 </main>
 <!-- ======= Footer ======= -->

@@ -117,7 +117,8 @@
         </div>
     </section>
     <br>
-    <a th:href="@{'/tecnico/formulario?id='+${formulario1.idFormularios}}" class="btn btn-outline-danger">Regresar</a>
+    <a th:if="${formulario1.ticket.idTipoTicket.idTipoTicket == 2}" th:href="@{'/tecnico/formulario?id='+${formulario1.idFormularios}}" class="btn btn-outline-danger">Regresar</a>
+    <a th:if="${formulario1.ticket.idTipoTicket.idTipoTicket == 1}" th:href="@{'/tecnico/formularioMantenimiento?id='+${formulario1.ticket.idTickets}}" class="btn btn-outline-danger">Regresar</a>
 </main>
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
