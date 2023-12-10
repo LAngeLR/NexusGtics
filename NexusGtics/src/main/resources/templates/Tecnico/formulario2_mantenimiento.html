@@ -40,7 +40,7 @@
 
 <body>
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/headerDos :: header('tecnico',${listaTicket})"></header>
+<header th:replace="Fragmentos/headerDos :: header('tecnico',${listaTicket}, ${cuadrilla})"></header>
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuTecnico :: menu('formulario2')"></aside><!-- End Sidebar-->
 <main id="main" class="main">
@@ -68,14 +68,6 @@
                     <form method="POST" th:action="@{/tecnico/saveFormulario2}" th:object="${formulario2}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Nombres del arrendatario:</label>
-                                    <input th:field="*{nomredantario}" type="text" th:class="${#fields.hasErrors('nomredantario')?'form-control is-invalid':'form-control'}"/>
-                                    <div class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('nomredantario')}" th:errors="*{nomredantario}">
-                                        Mensaje de error de nomredantario
-                                    </div>
-                                </div>
                                 <div class="form-check form-switch" th:if="${formulario2.conexion==0}">
                                     <label class="form-label">¿Conexión de energia?:</label>
                                     <input class="form-check-input" type="checkbox" role="switch" id="conexion"><br>
@@ -129,12 +121,12 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="imagenSubida1" class="form-label">Fotos de situación:</label>
+                                    <label for="imagenSubida" class="form-label">Fotos de situación:</label>
                                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img id="imgPreview1" th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile" class="rounded-circle"
+                                        <img id="imgPreview" th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile"
                                              onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
                                     </div>
-                                    <input class="form-control" type="file" name="imagenSubida2" id="imagenSubida2"
+                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
                                            accept="image/*" onchange="previewImage(event, '#imgPreview')">
 
                                 </div>
@@ -152,13 +144,13 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="imagenSubida1" class="form-label">Fotos de baterias:</label>
+                                    <label for="imagenSubida2" class="form-label">Fotos de baterias:</label>
                                     <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img id="imgPreview2" th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile" class="rounded-circle"
+                                        <img id="imgPreview2" th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile"
                                              onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
                                     </div>
-                                    <input class="form-control" type="file" name="imagenSubida1" id="imagenSubida1"
-                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                                    <input class="form-control" type="file" name="imagenSubida2" id="imagenSubida2"
+                                           accept="image/*" onchange="previewImage(event, '#imgPreview2')">
 
                                 </div>
 
