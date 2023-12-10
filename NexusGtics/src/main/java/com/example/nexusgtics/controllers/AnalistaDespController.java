@@ -649,7 +649,8 @@ public class AnalistaDespController {
 
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idAnalista = u.getId();
-        List<Ticket> listaTickets = ticketRepository.listaTicketsModificados(idAnalista);
+        List<Ticket> listaTickets = ticketRepository.listaTicketsModificados(idAnalista,2);
+        System.out.println("el id es" + idAnalista);
 
         model.addAttribute("listaTicket",listaTickets);
         return "AnalistaDespliegue/despliegueListaTickets";

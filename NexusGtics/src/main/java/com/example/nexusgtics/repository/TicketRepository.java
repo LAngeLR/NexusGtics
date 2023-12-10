@@ -122,8 +122,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
             "    (SELECT COUNT(*) FROM tickets WHERE idUsuarioCreador = ?1 AND estado = ?2) AS culminados;", nativeQuery = true )
     List<TicketsCreadosCulminadosDto> creadosCulminados(int id, int estado);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE idUsuarioCreador = ?1 and idTipoTicket=1")
-    List<Ticket> listaTicketsModificados(int idAnalista);
+    @Query(nativeQuery = true, value = "SELECT * FROM tickets WHERE idUsuarioCreador = ?1 and idTipoTicket=?2")
+    List<Ticket> listaTicketsModificados(int idAnalista,int tipoticket);
 
     @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM usuarios WHERE idEmpresas != 1 AND MONTH(fechaRegistro) = MONTH(NOW());")
     int numeroClientesActual();
