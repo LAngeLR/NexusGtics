@@ -238,7 +238,7 @@ public class AnalistaOYMController {
 
     @GetMapping("/listaSitio")
     public String listaSitio(Model model){
-        List<Sitio>  listaSitio = sitioRepository.findAll();
+        List<Sitio>  listaSitio = sitioRepository.listaDeSitios();
         model.addAttribute("listaSitio",listaSitio);
         return "AnalistaOYM/oymListaSitio";
     }
@@ -506,7 +506,7 @@ public class AnalistaOYMController {
 
     @GetMapping("/mapaSitios")
     public String mapaSitios(Model model){
-        List<Sitio> sitioList = sitioRepository.findAll();
+        List<Sitio> sitioList = sitioRepository.listaDeSitios();
         model.addAttribute("sitioList", sitioList);
         return "AnalistaOYM/oymMapaSitios";
     }
