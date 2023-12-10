@@ -800,9 +800,9 @@ public class AnalistaOYMController {
         model.addAttribute("CantporMesAnterior", ticketRepository.CantporMesAnterior());
         model.addAttribute("CantHaceDosMeses", ticketRepository.CantHaceDosMeses());
         for (int i : new int[]{4, 2, 3}) {
-            for (int j = 0; j <= 6; j++) {
+            for (int j = 0; j <= 7; j++) {
                 String attributeName = String.format("TicketXMes%d%d", i, j);
-                model.addAttribute(attributeName, ticketRepository.TicketXMes(i, j));
+                model.addAttribute(attributeName, ticketRepository.TicketXMesMantenimiento(i, j));
             }
         }
         return "AnalistaOYM/oymDashboard";
