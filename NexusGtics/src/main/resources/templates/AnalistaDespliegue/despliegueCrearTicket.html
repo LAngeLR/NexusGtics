@@ -81,9 +81,6 @@
                     <div class="alert alert-danger" role="alert" th:if="${msg1 != null}" th:text="${msg1}">
                         A simple success alert—check it out!
                     </div>
-                    <div class="alert alert-danger" role="alert" th:if="${fechaCierre != null}" th:text="${fechaCierre}">
-                        A simple success alert—check it out!
-                    </div>
 
                     <form method="POST" th:action="@{/analistaDespliegue/saveTicket}" th:object="${ticket}" enctype="multipart/form-data">
                         <div class="row">
@@ -114,10 +111,6 @@
                                     </select>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="fechaCierre">Fecha de vencimiento:</label>
-                                    <input type="date" class="form-control" name="fechaCierre" id="fechaCierre" >
-                                </div>
 
                             </div>
 
@@ -125,11 +118,7 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">Usuario solicitante:</label>
-                                    <input th:field="*{usuarioSolicitante}" type="text" th:class="${#fields.hasErrors('usuarioSolicitante')?'form-control is-invalid':'form-control'}"/>
-                                    <div class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('usuarioSolicitante')}" th:errors="*{usuarioSolicitante}">
-                                        Mensaje de error de usuarioSolicitante
-                                    </div>
+                                    <input th:field="*{usuarioSolicitante}" type="text" >
                                 </div>
 
                                 <div class="mb-3">
@@ -147,11 +136,7 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">Descripción:</label>
-                                    <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
-                                    <div class="invalid-feedback"
-                                         th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">
-                                        Mensaje de error de descripcion
-                                    </div>
+                                    <input th:field="*{descripcion}" type="text">
                                 </div>
                             </div>
                         </div>

@@ -526,8 +526,7 @@ public class AnalistaOYMController {
 
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idAnalista = u.getId();
-        List<Ticket> listaTickets = ticketRepository.listaTicketsModificados(idAnalista);
-
+        List<Ticket> listaTickets = ticketRepository.listaTicketsModificados(idAnalista,1);
         model.addAttribute("listaTicket",listaTickets);
         return "AnalistaOYM/oymListaTickets";
     }
