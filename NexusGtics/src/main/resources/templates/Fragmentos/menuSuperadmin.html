@@ -19,17 +19,17 @@
             <ul id="charts-nav" th:classappend="${currentPage == 'crearAdministrador' or currentPage == 'listaUsuario' or currentPage == 'listaBaneados' ? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">
                 <li>
                     <a th:classappend="${currentPage == 'crearAdministrador' ? 'active' : ''}" th:href="@{/superadmin/crearusuario}">
-                        <i class="bi bi-circle"></i><span>Crear Administrador</span>
+                        <i class="bi bi-circle"></i><span>Crear administrador</span>
                     </a>
                 </li>
                 <li>
                     <a th:classappend="${currentPage == 'listaUsuario' ? 'active' : ''}" th:href="@{/superadmin/listausuarios}">
-                        <i class="bi bi-circle"></i><span>Lista de Usuarios</span>
+                        <i class="bi bi-circle"></i><span>Lista de usuarios</span>
                     </a>
                 </li>
                 <li>
                     <a th:classappend="${currentPage == 'listaBaneados' ? 'active' : ''}" th:href="@{/superadmin/listaBaneados}">
-                        <i class="bi bi-circle"></i><span>Lista de Desactivados</span>
+                        <i class="bi bi-circle"></i><span>Lista de desactivados</span>
                     </a>
                 </li>
             </ul>

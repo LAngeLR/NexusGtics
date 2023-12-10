@@ -580,6 +580,26 @@ public class AnalistaDespController {
     }
     @GetMapping("/listaEquiposPerteneciente")
     public String listaEquipoP(Model model, @RequestParam("id") int id){
+        List<Equipo> leq = equipoRepository.listaEquiposHabilitados();
+        int idSitios = 0;
+
+        for (Equipo equipo : leq) {
+            // Verificar si ya existe un registro con la combinación idSitios y idEquipos
+            List<SitiosHasEquipo> existentes = sitiosHasEquiposRepository.listaEquiposPorSitioYEquipo(idSitios, equipo.getIdEquipos());
+
+            if (existentes.isEmpty()) {
+                // No hay registros existentes, podemos agregar el equipo
+                sitiosHasEquiposRepository.agregarEquipo(0, equipo.getIdEquipos());
+                System.out.println(equipo.getIdEquipos());
+            } else {
+                // Ya existe un registro, puedes manejarlo de alguna manera si es necesario
+                // Por ejemplo, puedes registrar un mensaje de registro, omitirlo, etc.
+                System.out.println("Ya existe un registro para idSitios=" + idSitios + " e idEquipos=" + equipo.getIdEquipos());
+            }
+        }
+
+
+
         List<SitiosHasEquipo> listaEquipos = sitiosHasEquiposRepository.listaEquiposPorSitio(id);
         model.addAttribute("listaEquipo",listaEquipos);
         model.addAttribute("idSitios", id); // Agregar el valor de "id" al modelo
@@ -909,9 +929,10 @@ public class AnalistaDespController {
         model.addAttribute("CantporMesAnterior", ticketRepository.CantporMesAnterior());
         model.addAttribute("CantHaceDosMeses", ticketRepository.CantHaceDosMeses());
         for (int i : new int[]{4, 2, 3}) {
-            for (int j = 0; j <= 6; j++) {
+            for (int j = 0; j <= 7; j++) {
                 String attributeName = String.format("TicketXMes%d%d", i, j);
-                model.addAttribute(attributeName, ticketRepository.TicketXMes(i, j));
+                model.addAttribute(attributeName, ticketRepository.TicketXMesDespliegye(i, j));
+
             }
         }
 

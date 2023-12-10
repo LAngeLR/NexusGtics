@@ -3,9 +3,9 @@
 
 }
 
-.datatable-wrapper.no-footer .datatable-container {
-	border-bottom: 1px solid #d9d9d9;
-}
+/*.datatable-wrapper.no-footer .datatable-container {*/
+/*	border-bottom: 1px solid #d9d9d9;*/
+/*}*/
 
 .datatable-top,
 .datatable-bottom {
@@ -29,6 +29,7 @@
 .datatable-selector {
 	padding: 6px;
 	border-radius: 6px;
+	width: 50px;
 }
 
 .datatable-input {

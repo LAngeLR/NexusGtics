@@ -10,4 +10,5 @@ public interface ListaTicketsDto {
     Date getFechaCierre();
     String getPrioridad();
     int getEstado();
+    String getIdCuadrillas();
 }
