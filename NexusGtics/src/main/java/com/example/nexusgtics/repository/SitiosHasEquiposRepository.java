@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,4 +25,10 @@ public interface SitiosHasEquiposRepository extends JpaRepository<SitiosHasEquip
         @org.springframework.transaction.annotation.Transactional
         @Query(value = "INSERT INTO sitios_has_equipos (idSitios, idEquipos) VALUES (?1, ?2)", nativeQuery = true)
         void agregarEquipo(int idSitios, int idEquipos);
+
+    // En la interfaz SitiosHasEquiposRepository
+    @Query(value = "SELECT * FROM sitios_has_equipos WHERE idSitios = ?1 AND idEquipos = ?2", nativeQuery = true)
+    List<SitiosHasEquipo> listaEquiposPorSitioYEquipo(int idSitios, int idEquipos);
+
+
 }

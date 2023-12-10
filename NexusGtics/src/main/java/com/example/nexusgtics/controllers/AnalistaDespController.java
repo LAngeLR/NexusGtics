@@ -581,9 +581,24 @@ public class AnalistaDespController {
     @GetMapping("/listaEquiposPerteneciente")
     public String listaEquipoP(Model model, @RequestParam("id") int id){
         List<Equipo> leq = equipoRepository.listaEquiposHabilitados();
+        int idSitios = 0;
+
         for (Equipo equipo : leq) {
-            sitiosHasEquiposRepository.agregarEquipo(0,equipo.getIdEquipos());
+            // Verificar si ya existe un registro con la combinación idSitios y idEquipos
+            List<SitiosHasEquipo> existentes = sitiosHasEquiposRepository.listaEquiposPorSitioYEquipo(idSitios, equipo.getIdEquipos());
+
+            if (existentes.isEmpty()) {
+                // No hay registros existentes, podemos agregar el equipo
+                sitiosHasEquiposRepository.agregarEquipo(idSitios, equipo.getIdEquipos());
+                System.out.println(equipo.getIdEquipos());
+            } else {
+                // Ya existe un registro, puedes manejarlo de alguna manera si es necesario
+                // Por ejemplo, puedes registrar un mensaje de registro, omitirlo, etc.
+                System.out.println("Ya existe un registro para idSitios=" + idSitios + " e idEquipos=" + equipo.getIdEquipos());
+            }
         }
+
+
 
         List<SitiosHasEquipo> listaEquipos = sitiosHasEquiposRepository.listaEquiposPorSitio(id);
         model.addAttribute("listaEquipo",listaEquipos);
