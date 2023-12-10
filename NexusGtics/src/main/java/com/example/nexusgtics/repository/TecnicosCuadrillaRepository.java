@@ -47,4 +47,7 @@ public interface TecnicosCuadrillaRepository extends JpaRepository<Tecnicoscuadr
             "WHERE (t.estado IN (2, 3, 4, 5, 6, 7, 8) OR t.estado IS NULL) AND tc.liderTecnico = 1 AND c.idCuadrillas = ?1\n" +
             "GROUP BY c.idCuadrillas, u.idUsuarios\n")
     Optional<DetalleCuadrillaDto> detalleCuadrilla(int idCuadrilla);
+
+    @Query(value ="SELECT idCuadrilla FROM tecnicoscuadrillas where idTecnico=?1", nativeQuery = true )
+    Integer obtenerCuadrillaId(int idUsuario);
 }

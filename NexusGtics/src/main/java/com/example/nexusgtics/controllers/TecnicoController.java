@@ -80,7 +80,10 @@ public class TecnicoController {
 
     @GetMapping({"/", "","tecnico"})
     public String paginaPrincipal(Model model, HttpSession httpSession) {
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
         List<Ticket> listaT = ticketRepository.findAll();
+        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        model.addAttribute("cuadrilla",idCuadrilla);
         model.addAttribute("listaTicket", listaT);
         model.addAttribute("currentPage", "Inicio");
         //Usuario user = (Usuario) httpSession.getAttribute("usuario");
