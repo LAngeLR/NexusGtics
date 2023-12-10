@@ -589,7 +589,7 @@ public class AnalistaDespController {
 
             if (existentes.isEmpty()) {
                 // No hay registros existentes, podemos agregar el equipo
-                sitiosHasEquiposRepository.agregarEquipo(idSitios, equipo.getIdEquipos());
+                sitiosHasEquiposRepository.agregarEquipo(0, equipo.getIdEquipos());
                 System.out.println(equipo.getIdEquipos());
             } else {
                 // Ya existe un registro, puedes manejarlo de alguna manera si es necesario

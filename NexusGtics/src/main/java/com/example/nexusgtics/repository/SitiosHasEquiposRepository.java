@@ -17,7 +17,10 @@ public interface SitiosHasEquiposRepository extends JpaRepository<SitiosHasEquip
     @Query(value ="select * from sitios_has_equipos where  idSitios = ?1", nativeQuery = true )
     List<SitiosHasEquipo> listaEquiposPorSitio(int idSitios);
 
-    @Query(value ="SELECT DISTINCT * FROM sitios_has_equipos WHERE idEquipos NOT IN (SELECT idEquipos FROM sitios_has_equipos WHERE idSitios = ?1)", nativeQuery = true )
+    @Query(value ="SELECT MIN(idSitios) AS idSitios, idEquipos\n" +
+            "FROM sitios_has_equipos\n" +
+            "WHERE idEquipos NOT IN (SELECT idEquipos FROM sitios_has_equipos WHERE idSitios = ?1)\n" +
+            "GROUP BY idEquipos;", nativeQuery = true )
     List<SitiosHasEquipo> listaEquiposNoSitio(int idSitios);
 
         @Transactional
