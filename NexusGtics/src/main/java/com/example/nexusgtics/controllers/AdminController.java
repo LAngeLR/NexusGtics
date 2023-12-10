@@ -36,6 +36,7 @@ import java.math.RoundingMode;
 import static com.example.nexusgtics.controllers.GcsController.downloadObject;
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
 import static java.lang.Integer.parseInt;
+import static java.lang.Integer.valueOf;
 import static java.sql.DriverManager.getConnection;
 
 @Controller
@@ -592,6 +593,17 @@ public class AdminController {
                 return "Administrador/editarSitio";
             }
         }
+
+        if (file.getOriginalFilename().length() > 40) {
+            model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 carácteres");
+
+            if (sitio.getIdSitios() == null) {
+                return "Administrador/crearSitio";
+            } else {
+                return "Administrador/editarSitio";
+            }
+        }
+
         if (sitio.getTipoZona() == null || sitio.getTipoZona().equals("-1")) {
             model.addAttribute("msgZona", "Escoger un tipo de zona");
             if (sitio.getIdSitios() == null) {
@@ -608,6 +620,29 @@ public class AdminController {
                 return "Administrador/editarSitio";
             }
         }
+
+        /*VALIDACION DE EXTENSIÓN*/
+        String extensionValida = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+        if (!extensionValida.equals("png") && !extensionValida.equals("jpg") && !extensionValida.equals("jpeg")) {
+            model.addAttribute("msgExtension", "Solo se permiten archivos con extensión png, jpg y jpeg");
+            if (sitio.getIdSitios() == null) {
+                return "Administrador/crearSitio";
+            } else {
+                return "Administrador/editarSitio";
+            }
+        }
+        /*VALIDACION DE PESO - NO FUNCIONA CORRECTAMENTE*/
+        long maximo = 100971520L;
+        if (file.getSize() > maximo ) {
+            model.addAttribute("msgPeso", "El archivo subido supera los 100MB");
+            if (sitio.getIdSitios() == null) {
+                return "Administrador/crearSitio";
+            } else {
+                return "Administrador/editarSitio";
+            }
+        }
+
+
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
             if (sitio.getArchivo() == null) {

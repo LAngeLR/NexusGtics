@@ -381,11 +381,16 @@ public class SuperAdminController {
                     return "Superadmin/perfilEditar";
                 }
 
-                int maxFileSize = 10485760;
-                if (file.getSize() > maxFileSize && !file.isEmpty()) {
-                    System.out.println(file.getSize());
-                    model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
-                    return "redirect:/superadmin/perfilEditar";
+                String extensionValida = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+                if (!extensionValida.equals("png") && !extensionValida.equals("jpg") && !extensionValida.equals("jpeg")) {
+                    model.addAttribute("msgExtension", "Solo se permiten archivos con extensión png, jpg y jpeg");
+                    return "Superadmin/perfilEditar";
+                }
+
+                long maximo = 100971520L;
+                if (file.getSize() > maximo ) {
+                    model.addAttribute("msgPeso", "El archivo subido supera los 100MB");
+                    return "Superadmin/perfilEditar";
                 }
 
                 if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
