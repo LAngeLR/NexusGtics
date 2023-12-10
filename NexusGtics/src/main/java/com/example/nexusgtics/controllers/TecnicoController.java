@@ -15,8 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -411,7 +410,9 @@ public class TecnicoController {
 
     @PostMapping("/subircomentarios")
     public String subirComentario(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr,
-                                  @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes){
+                                  @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+
         try{
             int idTicket = Integer.parseInt(idTicketStr);
             if(idTicket <= 0 || !ticketRepository.existsById(idTicket)){
@@ -419,9 +420,15 @@ public class TecnicoController {
             }
             Optional<Ticket> optionalTicket = ticketRepository.findById(idTicket);
             if(optionalTicket.isPresent()){
-                Date fechaCreacion = new Date();
-                comentarioRepository.ingresarComentario(id,idTicket,comentario,fechaCreacion);
+                Ticket ticket = optionalTicket.get();
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                comentarioRepository.ingresarComentario1(id,idTicket,comentario,fechaActual,horaActual);
                 redirectAttributes.addFlashAttribute("error","Comentario Añadido");
+                //guardar también en historialTicket
+                historialTicketRepository.crearHistorial1(ticket.getEstado(),fechaActual,horaActual,ticket.getIdTickets(),u.getId(),"Comentario agregado");
+
                 return "redirect:/tecnico/comentarios?id="+idTicketStr;
             }else{
                 return "redirect:/tecnico/ticketasignado";
@@ -539,6 +546,38 @@ public class TecnicoController {
                     model.addAttribute("ticket", ticket);
                     model.addAttribute("formulario", formulario);
                     model.addAttribute("listaTicket", ticketRepository.listarEstado());
+
+                    //---mandar tiempo transcurrido---
+                    ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                    LocalDate fechaActual = LocalDate.now(zonaHoraria);
+                    LocalTime horaActual = LocalTime.now(zonaHoraria);
+                    LocalDate fechaVariable = ticket.getFechaCreacion();
+                    LocalTime horaVariable = ticket.getHoraCreacion();
+                    Period diferencia = fechaVariable.until(fechaActual);
+                    int difDia = diferencia.getDays(), hor, min;
+                    float difTiempo= Duration.between(horaVariable,horaActual ).getSeconds(); //hv-ha
+                    if(difDia==0){
+                        if(difTiempo>=0){
+                            hor = (int)(difTiempo/3600);
+                            min = (int)((difTiempo/3600-hor)*60);
+                        }else{
+                            hor = (int)(-difTiempo/3600);
+                            min = (int)((-difTiempo/3600-hor)*60);
+                        }
+                    }else {
+                        if(difTiempo>=0){
+                            hor = (int)(difTiempo/3600);
+                            min = (int)((difTiempo/3600-hor)*60);
+                        }else{
+                            hor = (int)((24*3600+difTiempo)/3600);
+                            min = (int)(((24*3600+difTiempo)/3600 -hor)*60);
+                            difDia--;
+                        }
+                    }
+                    model.addAttribute("dias",difDia);
+                    model.addAttribute("horas",hor);
+                    model.addAttribute("minutos",min);
+
                     return "Tecnico/datos_ticket";
                 } else {
                     return "redirect:/tecnico/ticketasignado";
@@ -571,6 +610,38 @@ public class TecnicoController {
                 model.addAttribute("ticket", ticket);
                 model.addAttribute("formulario", formulario);
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
+
+                //---mandar tiempo transcurrido---
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria);
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                LocalDate fechaVariable = ticket.getFechaCreacion();
+                LocalTime horaVariable = ticket.getHoraCreacion();
+                Period diferencia = fechaVariable.until(fechaActual);
+                int difDia = diferencia.getDays(), hor, min;
+                float difTiempo= Duration.between(horaVariable,horaActual ).getSeconds(); //hv-ha
+                if(difDia==0){
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)(-difTiempo/3600);
+                        min = (int)((-difTiempo/3600-hor)*60);
+                    }
+                }else {
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)((24*3600+difTiempo)/3600);
+                        min = (int)(((24*3600+difTiempo)/3600 -hor)*60);
+                        difDia--;
+                    }
+                }
+                model.addAttribute("dias",difDia);
+                model.addAttribute("horas",hor);
+                model.addAttribute("minutos",min);
+
                 return "Tecnico/datost_progreso";
             } else {
                 return "redirect:/tecnico/ticketasignado";
@@ -598,6 +669,38 @@ public class TecnicoController {
                 model.addAttribute("ticket", ticket);
                 model.addAttribute("formulario", formulario);
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
+
+                //---mandar tiempo transcurrido---
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria);
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                LocalDate fechaVariable = ticket.getFechaCreacion();
+                LocalTime horaVariable = ticket.getHoraCreacion();
+                Period diferencia = fechaVariable.until(fechaActual);
+                int difDia = diferencia.getDays(), hor, min;
+                float difTiempo= Duration.between(horaVariable,horaActual ).getSeconds(); //hv-ha
+                if(difDia==0){
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)(-difTiempo/3600);
+                        min = (int)((-difTiempo/3600-hor)*60);
+                    }
+                }else {
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)((24*3600+difTiempo)/3600);
+                        min = (int)(((24*3600+difTiempo)/3600 -hor)*60);
+                        difDia--;
+                    }
+                }
+                model.addAttribute("dias",difDia);
+                model.addAttribute("horas",hor);
+                model.addAttribute("minutos",min);
+
                 return "Tecnico/datost_nuevo";
             } else {
                 return "redirect:/tecnico/ticketasignado";
@@ -640,6 +743,38 @@ public class TecnicoController {
                 model.addAttribute("formulario", formulario);
                 model.addAttribute("sitioCerrado", sitioCerrado);
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
+
+                //---mandar tiempo transcurrido---
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria);
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                LocalDate fechaVariable = ticket.getFechaCreacion();
+                LocalTime horaVariable = ticket.getHoraCreacion();
+                Period diferencia = fechaVariable.until(fechaActual);
+                int difDia = diferencia.getDays(), hor, min;
+                float difTiempo= Duration.between(horaVariable,horaActual ).getSeconds(); //hv-ha
+                if(difDia==0){
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)(-difTiempo/3600);
+                        min = (int)((-difTiempo/3600-hor)*60);
+                    }
+                }else {
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)((24*3600+difTiempo)/3600);
+                        min = (int)(((24*3600+difTiempo)/3600 -hor)*60);
+                        difDia--;
+                    }
+                }
+                model.addAttribute("dias",difDia);
+                model.addAttribute("horas",hor);
+                model.addAttribute("minutos",min);
+
                 return "Tecnico/datost_cerrado";
             } else {
                 return "redirect:/tecnico/ticketasignado";

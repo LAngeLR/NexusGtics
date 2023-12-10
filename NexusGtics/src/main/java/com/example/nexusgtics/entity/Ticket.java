@@ -1,10 +1,7 @@
 package com.example.nexusgtics.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -24,24 +22,12 @@ public class Ticket implements Serializable {
     private Integer idTickets;
 
     @Column(name = "descripcion", nullable = false, length = 45)
-    @NotBlank(message = "El campo no debe estar vacío")
-    @Size(max = 45)
     private String descripcion;
 
     @Column(name = "estado", nullable = false)
     private Integer estado;
 
-    @Column(name = "fechaCreacion", nullable = false)
-    private LocalDate fechaCreacion;
-
-    @Column(name = "fechaCierre")
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    @FutureOrPresent(message="La fecha de cierre debe ser en el presente o en el futuro")
-    private LocalDate fechaCierre;
-
     @Column(name = "usuarioSolicitante", length = 70)
-    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ. ]+$", message = "El nombre solo debe contener letras")
-    @Size(max = 70)
     private String usuarioSolicitante;
 
     @ManyToOne
@@ -76,4 +62,18 @@ public class Ticket implements Serializable {
 
     @Column(name = "reasignado")
     private Integer reasignado;
+
+    @Column(name = "fechaCreacion", nullable = false)
+    private LocalDate fechaCreacion;
+
+    @NotNull
+    @Column(name = "horaCreacion", nullable = false)
+    private LocalTime horaCreacion;
+
+    @Column(name = "fechaCierre")
+    private LocalDate fechaCierre;
+
+    @Column(name = "horaCierre")
+    private LocalTime horaCierre;
+
 }

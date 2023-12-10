@@ -4,12 +4,15 @@ import com.example.nexusgtics.dto.ActividadDto;
 import com.example.nexusgtics.dto.DashboardGraficoDto;
 import com.example.nexusgtics.entity.HistorialTicket;
 import jakarta.transaction.Transactional;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.sql.Time;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +23,11 @@ public interface HistorialTicketRepository extends JpaRepository<HistorialTicket
     @Modifying
     @Query(nativeQuery = true, value = "insert into historialtickets (estado, fechaCambioEstado, idTickets, idUsuarios, descripcion) values (?1, ?2, ?3, ?4, ?5)")
     void crearHistorial(int estado, Date fechaCambio, int idTicket, int idUser, String des);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "insert into historialtickets (estado, fechaCambio, horaCambio, idTickets, idUsuarios, descripcion) values (?1, ?2, ?3, ?4, ?5,?6)")
+    void crearHistorial1(int estado, LocalDate fechaCambio, LocalTime horaCambio, int idTicket, int idUser, String des);
 
     @Transactional
     @Modifying

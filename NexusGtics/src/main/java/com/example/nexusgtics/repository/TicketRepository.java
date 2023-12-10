@@ -6,10 +6,13 @@ import com.example.nexusgtics.dto.TicketsCreadosCulminadosDto;
 import com.example.nexusgtics.dto.TicketsDashSupDto;
 import com.example.nexusgtics.entity.Ticket;
 import jakarta.transaction.Transactional;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface TicketRepository extends JpaRepository<Ticket, Integer> {
@@ -105,6 +108,11 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     List<Ticket> listarEstado();
 
     //------------------------ Analista m --------------------//
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE tickets SET fechaCierre = ?1, horaCierre = ?2 WHERE (idTickets = ?3);\n")
+    void guardarCierre(LocalDate fechaActual, LocalTime horaActual, int id);
 
     @Query(value ="select * from tickets where estado=2 and idUsuarioCreador=?1 and idSupervisorEncargado IS NULL;", nativeQuery = true )
     List<Ticket> recienCreados(int id);

@@ -20,8 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -585,6 +584,8 @@ public class AnalistaOYMController {
         ZoneId zonaHoraria = ZoneId.of("GMT-5");
         LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
         ticket.setFechaCreacion(fechaActual);
+        LocalTime horaActual = LocalTime.now(zonaHoraria);
+        ticket.setHoraCreacion(horaActual);
 
         Empresa empresaSeleccionada = ticket.getIdEmpresaAsignada();
         model.addAttribute("empresaSeleccionada", empresaSeleccionada);
@@ -595,15 +596,10 @@ public class AnalistaOYMController {
         ticket2.setPrioridad(ticket.getPrioridad());
         model.addAttribute("ticket2", ticket2);
 
-
-
-        if (ticket.getFechaCierre() == null) {
-            //bindingResult.rejectValue("fechaCierre", "error.ticket", "La fecha de cierre es obligatoria.");
-            model.addAttribute("fechaCierre", "La fecha de cierre es obligatoria");
-            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
-            model.addAttribute("listaSitios", sitioRepository.findAll());
-            return "AnalistaOYM/oymCrearTicket";
-        }
+        System.out.println(ticket.getUsuarioSolicitante());
+        System.out.println(ticket.getDescripcion());
+        ticket.setDescripcion(ticket2.getDescripcion());
+        ticket.setUsuarioSolicitante(ticket2.getUsuarioSolicitante());
 
         if(ticket.getIdEmpresaAsignada() == null || ticket.getIdEmpresaAsignada().getIdEmpresas() == null || ticket.getIdEmpresaAsignada().getIdEmpresas() == -1){
             model.addAttribute("msgEmpresa", "Escoger una empresa");
@@ -619,6 +615,13 @@ public class AnalistaOYMController {
             return "AnalistaOYM/oymCrearTicket";
         }
 
+        if(ticket.getUsuarioSolicitante().isEmpty() || ticket.getUsuarioSolicitante().equals(" ")){
+            model.addAttribute("msgPrioridad", "Debe seleccionar una descripción");
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+            model.addAttribute("listaSitios", sitioRepository.findAll());
+            return "AnalistaOYM/oymCrearTicket";
+        }
+
         if(ticket.getPrioridad() == null || ticket.getPrioridad().equals("-1")){
             model.addAttribute("msgPrioridad", "Seleccionar prioridad");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
@@ -627,24 +630,45 @@ public class AnalistaOYMController {
 
         }
 
-        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
-
-            Random random = new Random();
-            int numeroRandom = random.nextInt(7) + 1;
-
-            ticket.setIdUsuarioCreador(u);
-            ticket.setIdsitioCerrado(numeroRandom);
-            ticket.setReasignado(0);
-            ticketRepository.save(ticket);
-            attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente por el usuario: " + ticket.getUsuarioSolicitante());
-
-            return "redirect:/analistaOYM/ticket";
-        } else { //hay al menos 1 error
-            System.out.println("error binding");
+        if(ticket.getDescripcion().isEmpty() || ticket.getDescripcion().equals(" ")){
+            model.addAttribute("msgPrioridad", "Debe seleccionar una descripción");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
             model.addAttribute("listaSitios", sitioRepository.findAll());
             return "AnalistaOYM/oymCrearTicket";
         }
+
+
+
+        Random random = new Random();
+        int numeroRandom = random.nextInt(7) + 1;
+
+        ticket.setIdUsuarioCreador(u);
+        ticket.setIdsitioCerrado(numeroRandom);
+        ticket.setReasignado(0);
+        ticketRepository.save(ticket);
+        attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente por el usuario: " + ticket.getUsuarioSolicitante());
+
+        //guardar también en historialTicket
+        historialTicketRepository.crearHistorial1(1,fechaActual,horaActual,ticket.getIdTickets(),u.getId(),"Ticket creado");
+        return "redirect:/analistaOYM/ticket";
+//        if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
+//
+//            Random random = new Random();
+//            int numeroRandom = random.nextInt(7) + 1;
+//
+//            ticket.setIdUsuarioCreador(u);
+//            ticket.setIdsitioCerrado(numeroRandom);
+//            ticket.setReasignado(0);
+//            ticketRepository.save(ticket);
+//            attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente por el usuario: " + ticket.getUsuarioSolicitante());
+//
+//            return "redirect:/analistaOYM/ticket";
+//        } else { //hay al menos 1 error
+//            System.out.println("error binding");
+//            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+//            model.addAttribute("listaSitios", sitioRepository.findAll());
+//            return "AnalistaOYM/oymCrearTicket";
+//        }
 
     }
 
@@ -654,12 +678,6 @@ public class AnalistaOYMController {
         Optional<Ticket> optTicket = ticketRepository.findById(id);
         if(optTicket.isPresent()){
             Ticket ticket = optTicket.get();
-
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            String fechaCierreFormateada = ticket.getFechaCierre().format(formatter);
-
-            model.addAttribute("fechaCierreFormateada", fechaCierreFormateada);
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
             model.addAttribute("listaSitios", sitioRepository.findAll());
@@ -684,6 +702,39 @@ public class AnalistaOYMController {
             if (ticketBuscado.isPresent()) {
                 Ticket ticket = ticketBuscado.get();
                 model.addAttribute("ticket", ticket);
+
+                //---mandar tiempo transcurrido---
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria);
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                LocalDate fechaVariable = ticket.getFechaCreacion();
+                LocalTime horaVariable = ticket.getHoraCreacion();
+                Period diferencia = fechaVariable.until(fechaActual);
+                int difDia = diferencia.getDays(), hor, min;
+                float difTiempo= Duration.between(horaVariable,horaActual ).getSeconds(); //hv-ha
+                if(difDia==0){
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)(-difTiempo/3600);
+                        min = (int)((-difTiempo/3600-hor)*60);
+                    }
+                }else {
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)((24*3600+difTiempo)/3600);
+                        min = (int)(((24*3600+difTiempo)/3600 -hor)*60);
+                        difDia--;
+                    }
+                }
+                model.addAttribute("dias",difDia);
+                model.addAttribute("horas",hor);
+                model.addAttribute("minutos",min);
+                //--------------------------------
+
                 return "AnalistaOYM/oymVistaTicket";
             } else {
                 return "redirect:/analistaOYM/oymListaTickets";
@@ -703,9 +754,24 @@ public class AnalistaOYMController {
         Integer idAnalista = u.getId();
         System.out.println(cambioEstado);
         if (cambioEstado.equals("Finalizado")) {
+
+            Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
+            if (ticketBuscado.isPresent()) {
+                Ticket ticket = ticketBuscado.get();
+                //poner fechaCierre hora actual
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+                ticket.setFechaCreacion(fechaActual);
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                ticket.setHoraCreacion(horaActual);
+                ticketRepository.guardarCierre(fechaActual,horaActual,id);
+            }
+
             estadoUtilizar = 8;
-            Date fechaCambioEstado = new Date();
-            historialTicketRepository.crearHistorial(7,fechaCambioEstado,id,idAnalista,"Aprobación y finalización del ticket.");
+            ZoneId zonaHoraria = ZoneId.of("GMT-5");
+            LocalDate fechaCambio = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+            LocalTime horaCambio = LocalTime.now(zonaHoraria);
+            historialTicketRepository.crearHistorial1(7,fechaCambio,horaCambio,id,idAnalista,"Aprobación y finalización del ticket.");
             ticketRepository.actualizarEstado(id,estadoUtilizar);
             redirectAttributes.addFlashAttribute("yum","El ticket ha sido finalizado correctamente");
             System.out.println("711");
@@ -770,7 +836,8 @@ public class AnalistaOYMController {
     }
 
     @PostMapping("/escribirComentario")
-    public String escribirComentarios(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes){
+    public String escribirComentarios(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
 
         try{
             int idTicket = Integer.parseInt(idTicketStr);
@@ -779,9 +846,15 @@ public class AnalistaOYMController {
             }
             Optional<Ticket> optionalTicket = ticketRepository.findById(idTicket);
             if (optionalTicket.isPresent()) {
-                Date fechaCreacion = new Date();
-                comentarioRepository.ingresarComentario(id,idTicket,comentario,fechaCreacion);
+                Ticket ticket = optionalTicket.get();
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                comentarioRepository.ingresarComentario1(id,idTicket,comentario,fechaActual,horaActual);
                 redirectAttributes.addFlashAttribute("error","Comentario Añadido");
+
+                //guardar también en historialTicket
+                historialTicketRepository.crearHistorial1(ticket.getEstado(),fechaActual,horaActual,ticket.getIdTickets(),u.getId(),"Comentario agregado");
 
                 return "redirect:/analistaOYM/comentarios?id="+idTicketStr;
             } else {

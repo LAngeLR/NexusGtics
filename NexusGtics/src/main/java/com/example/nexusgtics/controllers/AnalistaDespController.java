@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -890,7 +891,8 @@ public class AnalistaDespController {
     }
 
     @PostMapping("/escribirComentario")
-    public String escribirComentarios(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes){
+    public String escribirComentarios(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes, HttpSession httpSession){
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
 
         try{
             int idTicket = Integer.parseInt(idTicketStr);
@@ -899,9 +901,16 @@ public class AnalistaDespController {
             }
             Optional<Ticket> optionalTicket = ticketRepository.findById(idTicket);
             if (optionalTicket.isPresent()) {
-                Date fechaCreacion = new Date();
-                comentarioRepository.ingresarComentario(id,idTicket,comentario,fechaCreacion);
+                Ticket ticket = optionalTicket.get();
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                comentarioRepository.ingresarComentario1(id,idTicket,comentario,fechaActual,horaActual);
                 redirectAttributes.addFlashAttribute("error","Comentario Añadido");
+
+                //guardar también en historialTicket
+                historialTicketRepository.crearHistorial1(ticket.getEstado(),fechaActual,horaActual,ticket.getIdTickets(),u.getId(),"Comentario agregado");
+
 
                 return "redirect:/analistaDespliegue/comentarios?id="+idTicketStr;
             } else {
