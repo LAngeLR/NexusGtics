@@ -48,6 +48,19 @@ UNLOCK TABLES;
 --
 -- Table structure for table `cargos`
 --
+DROP TABLE IF EXISTS `archivosSitio`;
+CREATE TABLE archivosSitio (
+  idArchivosSitio int NOT NULL AUTO_INCREMENT,
+  tipo int NOT NULL,
+  archivo longblob,
+  nombre varchar(45) DEFAULT NULL,
+  contentType varchar(45) DEFAULT NULL,
+  idSitios int NOT NULL, 
+  PRIMARY KEY (idArchivosSitio),
+  KEY fk_ArchivosSitio_Sitios1_idx (idSitios),
+  CONSTRAINT fk_ArchivosSitio_Sitios1 FOREIGN KEY (idSitios) REFERENCES sitios (idSitios)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 DROP TABLE IF EXISTS `cargos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

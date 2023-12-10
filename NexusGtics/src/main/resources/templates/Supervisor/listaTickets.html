@@ -46,7 +46,8 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Usuario Solicitante</th>
-                                    <th scope="col">Líder de cuadrilla</th>
+                                    <th scope="col">Cuadrilla Asignada</th>
+<!--                                    <th scope="col">Líder de cuadrilla</th>-->
                                     <th scope="col">Fecha de Apertura</th>
                                     <th scope="col">Prioridad</th>
                                     <th scope="col">Estado</th>
@@ -58,9 +59,10 @@
                                     <tr th:each="tickets, info: ${listaTickets}">
                                             <td th:text="${info.index + 1}"></td>
                                             <td th:text="${tickets.usuarioSolicitante}"></td>
-
-                                            <td th:if="${tickets.nombreCompleto } == null">Cuadrilla no asignada</td>
-                                            <td th:unless="${tickets.nombreCompleto} == null" th:text="${tickets.nombreCompleto}"></td>
+                                            <td th:if="${tickets.idCuadrillas } == null">Cuadrilla no asignada</td>
+                                            <td th:unless="${tickets.idCuadrillas} == null" th:text="${tickets.idCuadrillas}"></td>
+<!--                                            <td th:if="${tickets.nombreCompleto } == null">Cuadrilla no asignada</td>-->
+<!--                                            <td th:unless="${tickets.nombreCompleto} == null" th:text="${tickets.nombreCompleto}"></td>-->
 
                                             <td th:text="${tickets.fechaCreacion}"></td>
 

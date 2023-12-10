@@ -56,13 +56,15 @@ CREATE TABLE `archivossitio` (
   `idArchivosSitio` int NOT NULL AUTO_INCREMENT,
   `tipo` int NOT NULL,
   `archivo` longblob,
-  `nombre` varchar(45) DEFAULT NULL,
-  `contentType` varchar(45) DEFAULT NULL,
-  `idSitios` int NOT NULL,
+  `nombreArchivo` varchar(45) DEFAULT NULL,
+  `contentType` varchar(255) DEFAULT NULL,
+  `idSitioSitio` int NOT NULL,
+  `nombreSitio` varchar(45) DEFAULT NULL,
+  `nombreFront` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idArchivosSitio`),
-  KEY `fk_ArchivosSitio_Sitios1_idx` (`idSitios`),
-  CONSTRAINT `fk_ArchivosSitio_Sitios1` FOREIGN KEY (`idSitios`) REFERENCES `sitios` (`idSitios`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_ArchivosSitio_Sitios1_idx` (`idSitioSitio`),
+  CONSTRAINT `fk_ArchivosSitio_Sitios1` FOREIGN KEY (`idSitioSitio`) REFERENCES `sitios` (`idSitios`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,6 +73,12 @@ CREATE TABLE `archivossitio` (
 
 LOCK TABLES `archivossitio` WRITE;
 /*!40000 ALTER TABLE `archivossitio` DISABLE KEYS */;
+/*!40000 ALTER TABLE `archivossitio` ENABLE KEYS */;
+UNLOCK TABLES;
+
+LOCK TABLES `archivossitio` WRITE;
+/*!40000 ALTER TABLE `archivossitio` DISABLE KEYS */;
+INSERT INTO `archivossitio` VALUES (1,2,NULL,'archivo-1-1.pdf','application/pdf',1,'LA PUCP ','archivo1'),(2,2,NULL,'archivo-2-2.pdf','application/pdf',2,'Centro de Lima','archivo2'),(3,2,NULL,'archivo-9-3.pdf','application/pdf',9,'Plaza de Armas Cusco','archivo3'),(4,2,NULL,'archivo-10-4.pdf','application/pdf',10,'Saqsaywaman','archivo4'),(5,2,NULL,'archivo-11-5.pdf','application/pdf',11,'Parque Kennedy','archivo5'),(16,2,NULL,'archivo-12-16.docx','application/vnd.openxmlformats-officedocument.wordprocessingml.document',12,'Plaza San Miguel ','jQuery'),(21,2,NULL,'archivo-1-21.pdf','application/pdf',1,'LA PUCP ','owo');
 /*!40000 ALTER TABLE `archivossitio` ENABLE KEYS */;
 UNLOCK TABLES;
 
