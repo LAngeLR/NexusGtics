@@ -371,21 +371,34 @@ public class SuperAdminController {
             if (optionalUsuario.isPresent()) {
                 Usuario usuarioDB = optionalUsuario.get();
 
+                if(file.getSize()>1){
+                    if (file.getOriginalFilename().length() > 40) {
+                        model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 carácteres");
+                        return "Superadmin/perfilEditar";
+                    }
+                    String extensionValida = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+                    if (!extensionValida.equals("png") && !extensionValida.equals("jpg") && !extensionValida.equals("jpeg")) {
+                        model.addAttribute("msgExtension", "Solo se permiten archivos con extensión png, jpg y jpeg");
+                        return "Superadmin/perfilEditar";
+                    }
+                }
+
                 if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
                     model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
                     return "Superadmin/perfilEditar";
                 }
                 String fileName1 = file.getOriginalFilename();
                 if (fileName1.contains("..") && !file.isEmpty()) {
-                    model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
+                    model.addAttribute("msgImagen1", "No se permiten '..' en el archivo ");
                     return "Superadmin/perfilEditar";
                 }
 
-                int maxFileSize = 10485760;
-                if (file.getSize() > maxFileSize && !file.isEmpty()) {
-                    System.out.println(file.getSize());
-                    model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
-                    return "redirect:/superadmin/perfilEditar";
+
+
+                long maximo = 100971520L;
+                if (file.getSize() > maximo ) {
+                    model.addAttribute("msgPeso", "El archivo subido supera los 100MB");
+                    return "Superadmin/perfilEditar";
                 }
 
                 if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
@@ -433,8 +446,6 @@ public class SuperAdminController {
                     }
 
                 } else { //hay al menos 1 error
-                    model.addAttribute("listaEmpresa", empresaRepository.findAll());
-                    model.addAttribute("listaCargo", cargoRepository.findAll());
                     return "Superadmin/perfilEditar";
                 }
             }else {

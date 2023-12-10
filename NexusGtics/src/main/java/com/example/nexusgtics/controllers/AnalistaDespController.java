@@ -580,6 +580,26 @@ public class AnalistaDespController {
     }
     @GetMapping("/listaEquiposPerteneciente")
     public String listaEquipoP(Model model, @RequestParam("id") int id){
+        List<Equipo> leq = equipoRepository.listaEquiposHabilitados();
+        int idSitios = 0;
+
+        for (Equipo equipo : leq) {
+            // Verificar si ya existe un registro con la combinación idSitios y idEquipos
+            List<SitiosHasEquipo> existentes = sitiosHasEquiposRepository.listaEquiposPorSitioYEquipo(idSitios, equipo.getIdEquipos());
+
+            if (existentes.isEmpty()) {
+                // No hay registros existentes, podemos agregar el equipo
+                sitiosHasEquiposRepository.agregarEquipo(0, equipo.getIdEquipos());
+                System.out.println(equipo.getIdEquipos());
+            } else {
+                // Ya existe un registro, puedes manejarlo de alguna manera si es necesario
+                // Por ejemplo, puedes registrar un mensaje de registro, omitirlo, etc.
+                System.out.println("Ya existe un registro para idSitios=" + idSitios + " e idEquipos=" + equipo.getIdEquipos());
+            }
+        }
+
+
+
         List<SitiosHasEquipo> listaEquipos = sitiosHasEquiposRepository.listaEquiposPorSitio(id);
         model.addAttribute("listaEquipo",listaEquipos);
         model.addAttribute("idSitios", id); // Agregar el valor de "id" al modelo
@@ -909,9 +929,10 @@ public class AnalistaDespController {
         model.addAttribute("CantporMesAnterior", ticketRepository.CantporMesAnterior());
         model.addAttribute("CantHaceDosMeses", ticketRepository.CantHaceDosMeses());
         for (int i : new int[]{4, 2, 3}) {
-            for (int j = 0; j <= 6; j++) {
+            for (int j = 0; j <= 7; j++) {
                 String attributeName = String.format("TicketXMes%d%d", i, j);
-                model.addAttribute(attributeName, ticketRepository.TicketXMes(i, j));
+                model.addAttribute(attributeName, ticketRepository.TicketXMesDespliegye(i, j));
+
             }
         }
 
@@ -1020,6 +1041,16 @@ public class AnalistaDespController {
 
         System.out.println("Maximo tamaño permitido - 1048576 bytes");
 
+
+//        int maxFileSize = 20000000;
+        int maxFileSize = 1048576;
+
+        if (file.getSize() > maxFileSize) {
+            System.out.println(file.getSize());
+            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (1MB).");
+            return "redirect:/analistaDespliegue/archivosSitios";
+        }
+
         try {
             /*OBTENGO EL SITIO DE MANERA OPCIONAL*/
             Optional<Sitio> optionalSitio = sitioRepository.findById(idSitios);
@@ -1054,38 +1085,39 @@ public class AnalistaDespController {
                     archivoSitioRepository.save(archivossitio1);
                     uploadObjectArchivo(archivossitio1);
                     archivossitio1.setArchivo(null);
-                }
+                    attr.addFlashAttribute("archivoSubido", "El archivo '"+ archivossitio1.getNombreFront() +"' ha sido subido exitosamente al sitio '" + archivossitio1.getNombreSitio()+"'");
 
+                }
 
             } else {
                 return "redirect:/analistaDespliegue";
             }
-
-
-
-//            else {
-//                Archivo archivo = sitio.getArchivo();
-//                archivo.setNombre("fotoSitio");
-//                archivo.setTipo(1);
-//                byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", "siteDefault.png");
-//                archivo.setArchivo(image);
-//                archivo.setContentType("image/png");
-//                Archivo archivo1 = archivoRepository.save(archivo);
-//                String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+".png";
-//                archivo1.setNombre(nombreArchivo);
-//                archivoRepository.save(archivo1);
-//                uploadObject(archivo1);
-//                archivo1.setArchivo(null);
-//            }
-
             return "redirect:/analistaDespliegue/archivosSitios";
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            model.addAttribute("msgImagen1", "Error al procesar el archivo: " + e.getMessage());
+            return "redirect:/analistaDespliegue/archivosSitios";
         }
 
 
     }
+
+    @GetMapping("/borrarArchivo")
+    public String borrarArchivo(@RequestParam("id") int id,
+                                RedirectAttributes attr) {
+
+        Optional<Archivossitio> optional = archivoSitioRepository.findById(id);
+
+        if (optional.isPresent()) {
+            Archivossitio archivossitio = optional.get();
+            archivoSitioRepository.deleteById(id);
+            attr.addFlashAttribute("archivoEliminado", "El archivo '"+ archivossitio.getNombreFront() +"' ha sido eliminado exitosamente del sitio '" + archivossitio.getNombreSitio()+"'");
+
+        }
+
+        return "redirect:/analistaDespliegue/archivosSitios";
+    }
+
 
 
 }

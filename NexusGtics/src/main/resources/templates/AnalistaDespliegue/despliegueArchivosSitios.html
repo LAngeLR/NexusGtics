@@ -27,12 +27,18 @@
       </div><!-- End Page Title -->
 
       <section class="section">
-        <div class="row">
-          <div class="col-lg-10">
-            <form th:action="@{/analistaDespliegue/subirArchivo}" method="post" th:object="${sitio}" enctype="multipart/form-data" >
+        <div th:if="${archivoSubido != null}" th:text="${archivoSubido}" class="alert alert-primary" role="alert"></div>
+        <div th:if="${msgImagen1 != null}" th:text="${msgImagen1}" class="alert alert-danger" role="alert"></div>
 
+
+        <div class="row">
+          <div class="col-12">
+            <form th:action="@{/analistaDespliegue/subirArchivo}" method="post" th:object="${sitio}" enctype="multipart/form-data" >
+              <div class="pagetitle1">
+                <h1 class="card-title">Subida de archivos</h1>
+              </div>
               <div class="mb-3">
-                <label for="idSitios">Sitio de despliegue:</label>
+                <label class="form-label" for="idSitios">Sitio desplegado</label>
                 <select name="idSitios" id="idSitios" class="form-select">
                   <option value="">--Seleccione el sitio--</option>
                   <option th:each="sitio: ${listaSitios}"
@@ -41,18 +47,32 @@
               </div>
 
               <div class="mb-3">
-                <label class="form-label">Archivo </label>
+                <label class="form-label">Archivo (pdf, docx, xlsx) </label>
                 <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
                        accept=".pdf, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                <div id="emailHelp" class="form-text">El tamaño del archivo no debe de exceder los 100 MB.</div>
+
               </div>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <input type="submit" value="Añadir" class="btn btn-primary">
+              <input type="submit" value="Añadir" class="btn btn-outline-primary">
             </form>
           </div>
         </div>
-          <br><br><br>
+
+
+
+
+          <br>
+        <hr>
+
+
+
+
         <div class="row">
-          <div class="col-lg-10">
+          <div th:if="${archivoEliminado != null}" th:text="${archivoEliminado}" class="alert alert-primary" role="alert"></div>
+          <div class="col-12">
+            <div class="pagetitle2">
+              <h1 class="card-title">Registro de archivos subidos</h1>
+            </div>
             <table class="table datatable">
               <thead>
               <tr>
@@ -82,7 +102,8 @@
                 <td>
                   <div>
                     <a class="btn btn-primary" th:href="@{|/fileArchivo/${lista.idSitioSitio.idSitios}/${lista.id}|}"><i class="bi bi-file-earmark-arrow-down-fill"></i></a>
-                    <a class="btn btn-danger" th:href="@{'/shipper/edit?id=' + ${lista.archivo}}"><i class="bi bi-trash3-fill"></i></a>
+                    <a class="btn btn-danger" th:href="@{'/analistaDespliegue/borrarArchivo?id=' + ${lista.id}}"
+                       onclick="return confirm('¿Estás seguro que deseas borrar este archivo?')"><i class="bi bi-trash3-fill"></i></a>
                   </div>
                 </td>
               </tr>

@@ -27,6 +27,13 @@
     </div>
     <div class="alert alert-danger" role="alert" th:if="${msgImagen1 != null}" th:text="${msgImagen1}">
     </div>
+    <div class="alert alert-danger" role="alert" th:if="${msgExtension != null}" th:text="${msgExtension}">
+    </div>
+    <div class="alert alert-danger" role="alert" th:if="${msgPeso != null}" th:text="${msgPeso}">
+    </div>
+    <div class="alert alert-danger" role="alert" th:if="${msgCadena != null}" th:text="${msgCadena}">
+    </div>
+
 
     <section class="section profile">
       <div class="row">
@@ -64,6 +71,7 @@
                   <form method="POST" th:action="@{/superadmin/savePerfil}" th:object="${usuario}" enctype="multipart/form-data">
                     <input type="hidden" name="_method" value="PUT">
                     <input type="hidden" class="form-control" th:field="*{id}">
+                    <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
 
                     <!-- Esto es para que se previsualize la imagen -->
                     <div class="mb-3">

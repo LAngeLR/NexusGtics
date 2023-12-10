@@ -31,15 +31,13 @@
             <h1 class="card-title">Creación de equipo</h1>
 
           </div>
-          <div class="alert alert-danger" role="alert" th:if="${msgSitio != null}" th:text="${msgSitio}">
-            A simple success alert—check it out!
-          </div>
-          <div class="alert alert-danger" role="alert" th:if="${msgTipoEquipo != null}" th:text="${msgTipoEquipo}">
-            A simple success alert—check it out!
-          </div>
-          <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
-            A simple success alert—check it out!
-          </div>
+          <div class="alert alert-danger" role="alert" th:if="${msgSitio != null}" th:text="${msgSitio}"></div>
+          <div class="alert alert-danger" role="alert" th:if="${msgTipoEquipo != null}" th:text="${msgTipoEquipo}"></div>
+          <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}"></div>
+          <div class="alert alert-danger" role="alert" th:if="${msgCadena != null}" th:text="${msgCadena}"></div>
+          <div class="alert alert-danger" role="alert" th:if="${msgExtension != null}" th:text="${msgExtension}"></div>
+
+
           <form method="POST" th:action="@{/admin/saveEquipo}" th:object="${equipo}" enctype="multipart/form-data" style="margin-bottom: -35px;">
             <div class="row">
               <div class="col-md-6">
@@ -103,6 +101,8 @@
                   </div>
                   <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
                          accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                  <div id="emailHelp" class="form-text">El tamaño del archivo no debe de exceder los 100 MB.</div>
+
                 </div>
 
                 <button type="submit" class="btn btn-outline-primary float-end">Crear</button>

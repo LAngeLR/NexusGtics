@@ -33,12 +33,24 @@
           <div class="alert alert-danger" role="alert" th:if="${msgTipo != null}" th:text="${msgTipo}">
             A simple success alert—check it out!
           </div>
+          <div class="alert alert-danger" role="alert" th:if="${msgCadena != null}" th:text="${msgCadena}">
+            A simple success alert—check it out!
+          </div>
           <div class="alert alert-danger" role="alert" th:if="${msgZona != null}" th:text="${msgZona}">
             A simple success alert—check it out!
           </div>
+
           <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
             A simple success alert—check it out!
           </div>
+          <div class="alert alert-danger" role="alert" th:if="${msgExtension != null}" th:text="${msgExtension}">
+            A simple success alert—check it out!
+          </div>
+          <div class="alert alert-danger" role="alert" th:if="${msgPeso != null}" th:text="${msgPeso}">
+            A simple success alert—check it out!
+          </div>
+
+
           <form method="POST" th:action="@{/admin/saveSitio}" th:object="${sitio}" enctype="multipart/form-data" style="margin-bottom: -35px;">
             <div class="row">
               <div class="col-md-6">
@@ -138,6 +150,8 @@
                   </div>
                   <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
                          accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                  <div id="emailHelp" class="form-text">El tamaño del archivo no debe de exceder los 100 MB.</div>
+
                 </div>
 
                 <button type="submit" class="btn btn-outline-primary float-end">Crear</button>
