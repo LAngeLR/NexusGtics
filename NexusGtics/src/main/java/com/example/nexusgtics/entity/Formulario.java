@@ -101,6 +101,28 @@ public class Formulario implements Serializable {
     @Column(name = "trabarealizados", nullable = false, length = 45)
     private String trabarealizados;
 
+    @NotNull
+    @Column(name = "equipoencendido", nullable = false)
+    private Byte equipoencendido;
+
+    @NotNull
+    @Column(name = "equipoconectado", nullable = false)
+    private Byte equipoconectado;
+
+    @Size(max = 45)
+    @NotNull
+    @Column(name = "situacion", nullable = false, length = 45)
+    private String situacion;
+
+    @Size(max = 45)
+    @NotNull
+    @Column(name = "acciones", nullable = false, length = 45)
+    private String acciones;
+
+    @NotNull
+    @Column(name = "bateriasestado", nullable = false)
+    private Byte bateriasestado;
+
     /* Analizar estas dos
 
     @Size(max = 45)
