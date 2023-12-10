@@ -32,6 +32,9 @@
           <div class="pagetitle">
             <h1 class="card-title">Editar información de usuario</h1>
           </div>
+          <div class="alert alert-danger" role="alert" th:if="${msgCargo != null}" th:text="${msgCargo}"></div>
+          <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}"></div>
+          <div class="alert alert-danger" role="alert" th:if="${msgEmail != null}" th:text="${msgEmail}"></div>
           <div class="alert alert-danger" role="alert" th:if="${msgCargo != null}" th:text="${msgCargo}">
             A simple success alert—check it out!
           </div>
@@ -53,7 +56,6 @@
             <div class="row">
               <div class="col-md-6">
                 <input type="hidden" class="form-control" th:field="*{id}">
-
                 <div class="mb-3">
                   <label class="form-label">Nombres:</label>
                   <input th:field="*{nombre}" type="text" th:class="${#fields.hasErrors('nombre')?'form-control is-invalid':'form-control'}"/>
