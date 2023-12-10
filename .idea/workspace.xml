@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f646692a-d729-46f1-8cbf-604bcf613df0" name="Changes" comment="idk">
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AnalistaDespController.java" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/java/com/example/nexusgtics/controllers/AnalistaDespController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueComentarios.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueComentarios.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueCrearTicket.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueCrearTicket.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueEditarTicket.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueEditarTicket.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueListaTickets.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueListaTickets.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueVistaTicket.html" beforeDir="false" afterPath="$PROJECT_DIR$/NexusGtics/src/main/resources/templates/AnalistaDespliegue/despliegueVistaTicket.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,34 +55,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/david/Downloads/NexusGtics",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
-    "spring.configuration.checksum": "3f2e67f494e6d5fb837d4c0e6ddc61c7",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/david/Downloads/NexusGtics&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;3f2e67f494e6d5fb837d4c0e6ddc61c7&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mariadb",
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mariadb&quot;,
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.example.nexusgtics.config" />
@@ -116,7 +120,8 @@
       <workItem from="1700768065629" duration="1447000" />
       <workItem from="1700872057406" duration="62000" />
       <workItem from="1701904153842" duration="10005000" />
-      <workItem from="1701978174092" duration="17214000" />
+      <workItem from="1701978174092" duration="17390000" />
+      <workItem from="1702170351903" duration="1380000" />
     </task>
     <task id="LOCAL-00001" summary="detalles sadmin 2">
       <created>1696643792919</created>

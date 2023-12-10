@@ -62,12 +62,6 @@
                                 </div>
 
                                 <div class="row">
-
-                                    <div class="col-lg-4 col-md-5 label">Fecha de vencimiento:</div>
-                                    <div class="col-lg-8 col-md-7" th:text="${ticket.fechaCierre}"></div>
-                                </div>
-
-                                <div class="row">
                                     <div class="col-lg-4 col-md-5 label">Servicio Relacionado:</div>
                                     <div class="col-lg-8 col-md-7" th:text="${ticket.idTipoTicket.nombreTipoTicket}"></div>
                                 </div>
@@ -80,8 +74,28 @@
 
                                 <div class="row">
                                     <div class="col-lg-4 col-md-5 label">Estado:</div>
-                                    <div class="col-lg-8 col-md-7"><span class="badge text-bg-success">Progreso</span></div>
+                                    <p class="col-lg-9 col-md-8">
+                                        <span th:if="${ticket.estado==8}">
+                                        <span class="badge text-bg-danger text-end">Finalizado</span>
+                                    </span>
+                                        <span th:if="${ticket.estado==7}">
+                                        <span class="badge text-bg-danger text-end">Cerrado</span>
+                                    </span>
+                                        <span th:if="${ticket.estado==6}">
+                                        <span class="badge text-bg-warning text-end">Atendido en campo</span>
+                                    </span>
+                                        <span th:if="${ticket.estado==1}">
+                                        <span class="badge text-bg-primary text-end">Nuevo</span>
+                                    </span>
+                                        <span th:if="${ticket.estado==2}">
+                                        <span class="badge text-bg-warning text-end">En supervisión</span>
+                                    </span>
+                                        <span th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5}">
+                                        <span class="badge text-bg-success text-end">Asignado a técnico</span>
+                                    </span>
+                                    </p>
                                 </div>
+
 
                             </div>
                             <br>
@@ -118,7 +132,7 @@
                     <div class="card-body pt-3">
                         <div class="col-md-8 col-lg-9">
                             <h5 class="card-title" style="color: #095444">Foto del Sitio:</h5>
-                            <img th:src="@{https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg}" alt="Profile" style="max-width: 100%; height: auto; display: block; margin: 0 auto; max-height: 70vh;">
+                            <img id="imgPreview" th:src="@{|/file/${ticket.idSitios.archivo.idArchivos}|}" class="card-img-top" alt="Profile" style="max-width: 100%; height: auto; display: block; margin: 0 auto; max-height: 70vh;">
                         </div>
                         <div class="tab-content pt-2">
 
@@ -131,7 +145,9 @@
                                 <br>
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Tiempo Transcurrido:</div>
-                                    <div class="col-lg-9 col-md-8">2hrs : 26 min : 50 seg</div>
+                                    <p class="col-lg-9 col-md-8">
+                                        <span th:text="${dias}"></span> días <span th:text="${horas}"></span> horas con <span th:text="${minutos}"></span> minutos
+                                    </p>
                                 </div>
                             </div>
                         </div><!-- End Bordered Tabs -->
@@ -185,11 +201,6 @@
                     <!-- MAPA -->
                 </div>
             </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
         </div>
     </section>
 

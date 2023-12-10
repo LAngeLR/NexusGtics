@@ -98,18 +98,6 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">Fecha de Cierre: </label>
-                                <!-- Muestra la fecha formateada en el label -->
-                                <label th:text="${fechaCierreFormateada}" class="form-label"></label>
-
-                                <!-- Mantén el campo de entrada de fecha si es necesario -->
-                                <input th:value="${fechaCierreFormateada}" th:field="*{fechaCierre}" type="date" th:class="${#fields.hasErrors('fechaCierre')?'form-control is-invalid':'form-control'}"/>
-
-                                <!-- Nuevo elemento para mostrar la fecha formateada -->
-                                <div class="invalid-feedback" th:if="${#fields.hasErrors('fechaCierre')}" th:errors="*{fechaCierre}"></div>
-                            </div>
-
                         </div>
 
                         <br><br>
