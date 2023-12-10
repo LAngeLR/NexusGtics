@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<header id="header" class="header fixed-top d-flex align-items-center" style="background-color: #090B21" th:fragment="header(cargo, listaTicket, cuadrilla)">
+<header id="header" class="header fixed-top d-flex align-items-center" style="background-color: #090B21" th:fragment="header(cargo, listaTicket)">
 
     <div class="d-flex align-items-center justify-content-between">
         <a th:href="@{/}" class="logo d-flex align-items-center">
@@ -66,7 +66,7 @@
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
                     <img th:src="@{|/file/${session.usuario.archivo.getIdArchivos()}|}" alt="Profile" class="rounded-circle"
                          onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'" height="45rem" width="45rem">
-                    <span class="d-none d-md-block dropdown-toggle ps-2 text-light" th:text="|${session.usuario.nombre} ${session.usuario.apellido} - ${cuadrilla}|"></span>
+                    <span class="d-none d-md-block dropdown-toggle ps-2 text-light" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|"></span>
                 </a>
 
 
