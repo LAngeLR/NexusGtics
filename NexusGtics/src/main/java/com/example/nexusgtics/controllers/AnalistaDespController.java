@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.example.nexusgtics.controllers.GcsController.*;
@@ -44,9 +43,9 @@ public class AnalistaDespController {
     final ArchivoRepository archivoRepository;
     final SitiosHasEquiposRepository sitiosHasEquiposRepository;
     final CargoRepository cargoRepository;
-
+    final FormularioRepository formularioRepository;
     final ArchivoSitioRepository archivoSitioRepository;
-
+    final TecnicosCuadrillaRepository tecnicosCuadrillaRepository;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -55,7 +54,7 @@ public class AnalistaDespController {
                                   EmpresaRepository empresaRepository, EquipoRepository equipoRepository,
                                   HistorialTicketRepository historialTicketRepository, ArchivoRepository archivoRepository,
                                   SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository,
-                                  ArchivoSitioRepository archivoSitioRepository, PasswordEncoder passwordEncoder){
+                                  FormularioRepository formularioRepository, ArchivoSitioRepository archivoSitioRepository, TecnicosCuadrillaRepository tecnicosCuadrillaRepository, PasswordEncoder passwordEncoder){
         this.ticketRepository = ticketRepository;
         this.comentarioRepository = comentarioRepository;
         this.sitioRepository = sitioRepository;
@@ -66,7 +65,9 @@ public class AnalistaDespController {
         this.archivoRepository = archivoRepository;
         this.sitiosHasEquiposRepository = sitiosHasEquiposRepository;
         this.cargoRepository = cargoRepository;
+        this.formularioRepository = formularioRepository;
         this.archivoSitioRepository = archivoSitioRepository;
+        this.tecnicosCuadrillaRepository = tecnicosCuadrillaRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -758,7 +759,13 @@ public class AnalistaDespController {
         }
 
         if(ticket.getUsuarioSolicitante().isEmpty() || ticket.getUsuarioSolicitante().equals(" ")){
-            model.addAttribute("msgPrioridad", "Debe seleccionar una descripción");
+            model.addAttribute("msgPrioridad", "Debe seleccionar un usuario solicitante");
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+            return "AnalistaDespliegue/despliegueCrearTicket";
+        }
+        if (!ticket.getUsuarioSolicitante().matches("^[a-zA-Z ]+$")) {
+            model.addAttribute("msgPrioridad", "El usuario solicitante solo puede contener letras y espacios en blanco");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
             model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaDespliegue/despliegueCrearTicket";
@@ -896,6 +903,17 @@ public class AnalistaDespController {
         Integer idAnalista = u.getId();
         System.out.println(cambioEstado);
         if (cambioEstado.equals("Finalizado")) {
+
+            Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
+            if (ticketBuscado.isPresent()) {
+                Ticket ticket = ticketBuscado.get();
+                //poner fechaCierre hora actual
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                ticketRepository.guardarCierre(fechaActual,horaActual,id);
+            }
+
             estadoUtilizar = 8;
             Date fechaCambioEstado = new Date();
             ZoneId zonaHoraria = ZoneId.of("GMT-5");
@@ -1016,6 +1034,40 @@ public class AnalistaDespController {
             return "redirect:/analistaDespliegue/listaTickets";
         }
 
+    }
+
+    @GetMapping("/formulario")
+    public String formulario(Model model, @RequestParam("id") String idStr,
+                             @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult, HttpSession httpSession) {
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !formularioRepository.existsById(id)) {
+                System.out.println("error 1");
+                return "redirect:/analistaDespliegue/ticket";
+            }
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            Optional<Sitio> sitioOptional = sitioRepository.findById(id);
+            if (optionalFormulario.isPresent() && sitioOptional.isPresent()) {
+                formulario = optionalFormulario.get();
+                Sitio sitio = sitioOptional.get();
+                Usuario u = (Usuario) httpSession.getAttribute("usuario");
+                Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+                model.addAttribute("cuadrilla",idCuadrilla);
+                model.addAttribute("formulario", formulario);
+                model.addAttribute("sitio", sitio);
+                model.addAttribute("idTick", formularioRepository.obtenerid(id));
+                return "AnalistaDespliegue/despliegueFormulario";
+            } else {
+                System.out.println("error 2");
+                return "redirect:/analistaDespliegue/ticket";
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("error 3");
+            return "redirect:/analistaDespliegue/ticket";
+        }
     }
 
     /*PARA VISUALIZAR FOTOS*/
