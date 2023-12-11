@@ -33,9 +33,9 @@
     <script th:href="@{/leaflet/dist/leaflet-routing-machine.js}"></script>
 
     <style>
-        #map{
-            min-height: 35rem;
-            min-width: 20rem;
+        body {
+            margin: 0;
+            padding: 0;
         }
     </style>
 </head>
@@ -80,13 +80,13 @@
                             <div class="col-auto">
                                 <input id="fechaHora" class="form-control" name="fechahora" step="1" th:value="${ticket.fechaCreacion}" disabled>
                             </div>
-                            <!--<div class="col-auto">
+                            <div class="col-auto">
                                 <label for="lugarCierre" class="col-form-label" style="font-size: small; color:#b98462"><b>Lugar de cierre:</b></label>
                             </div>
 
                             <div class="col-auto">
-                                <input type="text" id="lugarCierre" class="form-control" aria-describedby="lugarInicio" th:field="*{idsitioCerrado.nombre}" disabled>
-                            </div>-->
+                                <input type="text" id="lugarCierre" class="form-control" aria-describedby="lugarCierre" th:object="${sitioC}" th:value="${sitioC.nombre}" disabled>
+                            </div>
 
                             <div class="col-auto">
                                 <label for="fechaHora2" class="col-form-label" style="font-size: small; color:#b98462"><b>Fecha y hora determino:</b></label></div>
@@ -101,39 +101,75 @@
                             </center>
                         </div>
                     </form>
-
                 </div>
             </div>
             <div class="col-xl-8">
                 <div class="card">
                     <div class="card-body pt-3">
-                        <div id="map"></div>
-                        <!-- MAPA -->
+                        <div id="map" style="width:100%; height: 100vh"></div>
+                        <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+                        <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
                         <script>
                             var latitud = [[${sitio.latitud}]];
                             var longitud = [[${sitio.longitud}]];
-                            var map = L.map('map').setView([latitud, longitud], 7);
+                            var latitud2 = [[${sitioC.latitud}]];
+                            var longitud2 = [[${sitioC.longitud}]];
+                            var map = L.map('map').setView([latitud, longitud], 14);
+                            mapLink = "<a href='http://openstreetmap.org'>OpenStreetMap</a>";
+                            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: 'Leaflet &copy; ' + mapLink + ', contribution', maxZoom: 18 }).addTo(map);
 
-                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            }).addTo(map);
-                            var greenIcon = new L.Icon({
-                                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-                                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                                iconSize: [25, 41],
-                                iconAnchor: [12, 41],
-                                popupAnchor: [1, -34],
-                                shadowSize: [41, 41]
+                            var taxiIcon = L.icon({
+                                iconUrl: 'https://www.dfsk.cl/dfsk/site/artic/20230317/imag/foto_0000001120230317125100/800.png',
+                                iconSize: [70, 70]
+                            })
+
+                            var marker = L.marker([latitud, longitud], { icon: taxiIcon }).addTo(map);
+
+                            map.on('click', function (e) {
+                                console.log(e)
+                                var newMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+                                L.Routing.control({
+                                    waypoints: [
+                                        L.latLng(latitud, longitud),
+                                        L.latLng(e.latlng.lat, e.latlng.lng)
+                                    ]
+                                }).on('routesfound', function (e) {
+                                    var routes = e.routes;
+                                    console.log(routes);
+
+                                    e.routes[0].coordinates.forEach(function (coord, index) {
+                                        setTimeout(function () {
+                                            marker.setLatLng([coord.lat, coord.lng]);
+                                        }, 100 * index)
+                                    })
+
+                                }).addTo(map);
                             });
-                            L.marker([latitud, longitud], {icon: greenIcon}).addTo(map)
-                                .bindPopup('Sitio Inicial')
-                                .openPopup();
+
 
                         </script>
                     </div>
                 </div>
-
             </div>
+            <!--<div class="col-xl-8">
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <div id='map'></div>
+                        <div class="formBlock">
+                            <form id="form">
+                                <input type="text" name="start" class="input" id="start" placeholder="Choose starting point" />
+                                <input type="text" name="end" class="input" id="destination" placeholder="Choose starting point" />
+                                <button style="display: none;" type="submit">Get Directions</button>
+                            </form>
+                        </div>
+
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+                        <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=S8d7L47mdyAG5nHG09dUnSPJjreUVPeC"></script>
+                        <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=S8d7L47mdyAG5nHG09dUnSPJjreUVPeC"></script>
+                        <script src="app.js"></script>
+                    </div>
+                </div>
+            </div>-->
         </div>
     </section>
 
