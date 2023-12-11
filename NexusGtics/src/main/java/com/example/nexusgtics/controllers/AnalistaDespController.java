@@ -759,7 +759,13 @@ public class AnalistaDespController {
         }
 
         if(ticket.getUsuarioSolicitante().isEmpty() || ticket.getUsuarioSolicitante().equals(" ")){
-            model.addAttribute("msgPrioridad", "Debe seleccionar una descripción");
+            model.addAttribute("msgPrioridad", "Debe seleccionar un usuario solicitante");
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+            return "AnalistaDespliegue/despliegueCrearTicket";
+        }
+        if (!ticket.getUsuarioSolicitante().matches("^[a-zA-Z ]+$")) {
+            model.addAttribute("msgPrioridad", "El usuario solicitante solo puede contener letras y espacios en blanco");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
             model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaDespliegue/despliegueCrearTicket";
