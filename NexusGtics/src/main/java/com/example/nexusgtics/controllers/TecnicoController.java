@@ -535,7 +535,7 @@ public class TecnicoController {
 
     //-----------------------------------------------------------------------
     @GetMapping({"/verTicket", "/verticket"})
-    public String pagdatostick(Model model, @RequestParam("id") String idStr,
+    public String pagdatostick(Model model, @RequestParam("id") int id,
                                RedirectAttributes attr, HttpSession httpSession) {
         /* Lo que se mando al Header */
 
@@ -545,10 +545,60 @@ public class TecnicoController {
         Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
         model.addAttribute("cuadrilla",idCuadrilla);
 
-        Integer idTecnico = u.getId();
 
+        //Integer idTecnico = u.getId();
         try {
-            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/tecnico/ticketasignado";
+            }
+            Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            if (optionalTicket1.isPresent() && optionalFormulario.isPresent()) {
+                Ticket ticket = optionalTicket1.get();
+                Formulario formulario = optionalFormulario.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("formulario", formulario);
+                model.addAttribute("listaTicket", ticketRepository.listarEstado());
+
+                //---mandar tiempo transcurrido---
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria);
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                LocalDate fechaVariable = ticket.getFechaCreacion();
+                LocalTime horaVariable = ticket.getHoraCreacion();
+                Period diferencia = fechaVariable.until(fechaActual);
+                int difDia = diferencia.getDays(), hor, min;
+                float difTiempo= Duration.between(horaVariable,horaActual ).getSeconds(); //hv-ha
+                if(difDia==0){
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)(-difTiempo/3600);
+                        min = (int)((-difTiempo/3600-hor)*60);
+                    }
+                }else {
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)((24*3600+difTiempo)/3600);
+                        min = (int)(((24*3600+difTiempo)/3600 -hor)*60);
+                        difDia--;
+                    }
+                }
+                model.addAttribute("dias",difDia);
+                model.addAttribute("horas",hor);
+                model.addAttribute("minutos",min);
+
+                return "Tecnico/datos_ticket";
+            } else {
+                return "redirect:/tecnico/ticketasignado";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/tecnico/ticketasignado";
+        }
+        /*try {
             if (idTecnico <= 0 || !ticketRepository.existsById(idTecnico)) {
                 return "redirect:/tecnico/ticketasignado";
             }
@@ -614,7 +664,7 @@ public class TecnicoController {
             }
         } catch (NumberFormatException e) {
             return "redirect:/tecnico/ticketasignado";
-        }
+        }*/
     }
 
     //------------------- DATOS DE PROGRESO---------------------------------//
