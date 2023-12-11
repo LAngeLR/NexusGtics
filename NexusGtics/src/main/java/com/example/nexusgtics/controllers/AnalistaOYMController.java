@@ -515,7 +515,7 @@ public class AnalistaOYMController {
 
         List<Ticket> listaT= ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
-        List<Sitio> sitioList = sitioRepository.findAll();
+        List<Sitio> sitioList = sitioRepository.listaDeSitios();
         model.addAttribute("sitioList", sitioList);
 
         return "AnalistaOYM/oymMapaTickets";
@@ -536,7 +536,7 @@ public class AnalistaOYMController {
     public String crearTicket(Model model,
                               @ModelAttribute("ticket") Ticket ticket, Ticket ticket2) {
         model.addAttribute("listaEmpresa", empresaRepository.noNexus());
-        model.addAttribute("listaSitios", sitioRepository.findAll());
+        model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
 
         Empresa empresaSeleccionada = ticket.getIdEmpresaAsignada();
         if (empresaSeleccionada == null) {
@@ -603,37 +603,37 @@ public class AnalistaOYMController {
         if(ticket.getIdEmpresaAsignada() == null || ticket.getIdEmpresaAsignada().getIdEmpresas() == null || ticket.getIdEmpresaAsignada().getIdEmpresas() == -1){
             model.addAttribute("msgEmpresa", "Escoger una empresa");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
-            model.addAttribute("listaSitios", sitioRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaOYM/oymCrearTicket";
         }
         if(ticket.getIdSitios() == null || ticket.getIdSitios().getIdSitios() == null || ticket.getIdSitios().getIdSitios() == -1){
             model.addAttribute("msgSitio", "Escoger una sitio");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
-            model.addAttribute("listaSitios", sitioRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaOYM/oymCrearTicket";
         }
         if(ticket.getUsuarioSolicitante().isEmpty() || ticket.getUsuarioSolicitante().equals(" ")){
             model.addAttribute("msgPrioridad", "Debe seleccionar un usuario solicitante");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
-            model.addAttribute("listaSitios", sitioRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaOYM/oymCrearTicket";
         }
         if (!ticket.getUsuarioSolicitante().matches("^[a-zA-Z ]+$")) {
             model.addAttribute("msgPrioridad", "El usuario solicitante solo puede contener letras y espacios en blanco");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
-            model.addAttribute("listaSitios", sitioRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaOYM/oymCrearTicket";
         }
         if(ticket.getPrioridad() == null || ticket.getPrioridad().equals("-1")){
             model.addAttribute("msgPrioridad", "Seleccionar prioridad");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
-            model.addAttribute("listaSitios", sitioRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaOYM/oymCrearTicket";
         }
         if(ticket.getDescripcion().isEmpty() || ticket.getDescripcion().equals(" ")){
             model.addAttribute("msgPrioridad", "Debe seleccionar una descripción");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
-            model.addAttribute("listaSitios", sitioRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaOYM/oymCrearTicket";
         }
 
@@ -678,7 +678,7 @@ public class AnalistaOYMController {
             Ticket ticket = optTicket.get();
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaSitios", sitioRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaOYM/oymEditarTicket";
 
         }else{

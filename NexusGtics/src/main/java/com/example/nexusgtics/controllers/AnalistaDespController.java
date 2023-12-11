@@ -359,10 +359,8 @@ public class AnalistaDespController {
 
     @GetMapping("/listaSitio")
     public String listaSitio(Model model, @ModelAttribute("sitio") Sitio sitio){
-        List<Sitio>  listaSitio = sitioRepository.findAll();
+        List<Sitio>  listaSitio = sitioRepository.listaDeSitios();
         model.addAttribute("listaSitio",listaSitio);
-        model.addAttribute("listaSitios", sitioRepository.findAll());
-
         return "AnalistaDespliegue/despliegueListaSitio";
     }
 
@@ -648,7 +646,7 @@ public class AnalistaDespController {
 
     @GetMapping("/mapaSitios")
     public String mapaSitios(Model model){
-        List<Sitio> sitioList = sitioRepository.findAll();
+        List<Sitio> sitioList = sitioRepository.listaDeSitios();
         model.addAttribute("sitioList", sitioList);
 
         return "AnalistaDespliegue/despliegueMapaSitios";
@@ -658,7 +656,7 @@ public class AnalistaDespController {
 
         List<Ticket> listaT= ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
-        List<Sitio> sitioList = sitioRepository.findAll();
+        List<Sitio> sitioList = sitioRepository.listaDeSitios();
         model.addAttribute("sitioList", sitioList);
 
         return "AnalistaDespliegue/despliegueMapaTickets";
@@ -682,7 +680,7 @@ public class AnalistaDespController {
     public String crearTicket(Model model,
                               @ModelAttribute("ticket") Ticket ticket, Ticket ticket2) {
         model.addAttribute("listaEmpresa", empresaRepository.noNexus());
-        model.addAttribute("listaSitios", sitioRepository.findAll());
+        model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
 
         Empresa empresaSeleccionada = ticket.getIdEmpresaAsignada();
         if (empresaSeleccionada == null) {
@@ -748,28 +746,28 @@ public class AnalistaDespController {
         if(ticket.getIdEmpresaAsignada() == null || ticket.getIdEmpresaAsignada().getIdEmpresas() == null || ticket.getIdEmpresaAsignada().getIdEmpresas() == -1){
             model.addAttribute("msgEmpresa", "Escoger una empresa");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
-            model.addAttribute("listaSitios", sitioRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaDespliegue/despliegueCrearTicket";
         }
 
         if(ticket.getIdSitios() == null || ticket.getIdSitios().getIdSitios() == null || ticket.getIdSitios().getIdSitios() == -1){
             model.addAttribute("msgSitio", "Escoger una sitio");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
-            model.addAttribute("listaSitios", sitioRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaDespliegue/despliegueCrearTicket";
         }
 
         if(ticket.getUsuarioSolicitante().isEmpty() || ticket.getUsuarioSolicitante().equals(" ")){
             model.addAttribute("msgPrioridad", "Debe seleccionar una descripción");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
-            model.addAttribute("listaSitios", sitioRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaDespliegue/despliegueCrearTicket";
         }
 
         if(ticket.getPrioridad() == null || ticket.getPrioridad().equals("-1")){
             model.addAttribute("msgPrioridad", "Seleccionar prioridad");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
-            model.addAttribute("listaSitios", sitioRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaDespliegue/despliegueCrearTicket";
 
         }
@@ -777,7 +775,7 @@ public class AnalistaDespController {
         if(ticket.getDescripcion().isEmpty() || ticket.getDescripcion().equals(" ")){
             model.addAttribute("msgPrioridad", "Debe seleccionar una descripción");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
-            model.addAttribute("listaSitios", sitioRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaDespliegue/despliegueCrearTicket";
         }
 
@@ -825,7 +823,7 @@ public class AnalistaDespController {
             Ticket ticket = optTicket.get();
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaEmpresa", empresaRepository.findAll());
-            model.addAttribute("listaSitios", sitioRepository.findAll());
+            model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaDespliegue/despliegueEditarTicket";
 
         }else{
@@ -1046,9 +1044,9 @@ public class AnalistaDespController {
 
     @GetMapping("/archivosSitios")
     public String archivosSitios(Model model, @ModelAttribute("sitio") Sitio sitio){
-        List<Sitio>  listaSitio = sitioRepository.findAll();
+        List<Sitio>  listaSitio = sitioRepository.listaDeSitios();
         model.addAttribute("listaSitio",listaSitio);
-        model.addAttribute("listaSitios", sitioRepository.findAll());
+        model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
 //        model.addAttribute("nombreSitios", archivoSitioRepository.nombreSitios());
         System.out.println();
         model.addAttribute("listaArchivos", archivoSitioRepository.findAll());
