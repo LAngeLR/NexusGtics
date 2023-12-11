@@ -12,10 +12,6 @@
 
 <main id="main" class="main">
 
-    <div class="alert alert-success" role="alert" th:if="${mensaje!=null}" th:text="${mensaje}">
-        abc
-    </div>
-
     <div class="pagetitle">
         <h1>Detalles</h1>
         <nav>
@@ -45,10 +41,10 @@
                                     </div>
                                     <div class="ps-3">
                                         <h6 th:text="${tecnicosMes} + ' +'">1892</h6>
-                                        <span class="text-success small pt-1 fw-bold" th:if="${tecnicosPasados != 0}" th:text="${((tecnicosMes - tecnicosPasados) * 100) / tecnicosPasados + '%' }"></span>
+                                        <span class="text-success small pt-1 fw-bold" th:if="${tecnicosPasados != 0}" th:text="${((tecnicosMes - tecnicosPasados) >= 0) ? ((tecnicosMes - tecnicosPasados) * 100) / tecnicosPasados + '%' : ((tecnicosPasados - tecnicosMes) * 100) / tecnicosPasados + '%' }"></span>
                                         <span class="text-muted small pt-2 ps-1" th:if="${tecnicosPasados == 0}">No se añadieron técnicos el mes pasado</span>
-                                        <span class="text-muted small pt-2 ps-1" th:if="${tecnicosPasados != 0}">más que el mes anterior</span>
-
+                                        <span class="text-muted small pt-2 ps-1" th:if="${tecnicosPasados != 0 && ((tecnicosMes - tecnicosPasados) * 100) / tecnicosPasados>0}">más que el mes anterior</span>
+                                        <span class="text-muted small pt-2 ps-1" th:if="${tecnicosPasados != 0 && ((tecnicosMes - tecnicosPasados) * 100) / tecnicosPasados<0}">menos que el mes anterior</span>
                                     </div>
                                 </div>
                             </div>

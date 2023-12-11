@@ -1,16 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-
-<head th:include="Fragmentos/head :: head('Ticket Nuevo')"></head>
+<head th:include="Fragmentos/head :: head('Ticket Asignar')"></head>
 
 <body>
 <!-- ======= Header ======= -->
@@ -25,7 +16,7 @@
 </style>
 
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuSupervisor :: menu('ticketNuevo')">
+<aside th:replace="Fragmentos/menuSupervisor :: menu('ticketAsignar')">
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main" th:object="${ticket}">
@@ -39,8 +30,8 @@
     <div class="d-flex justify-content-between align-items-center">
       <h1>Detalles</h1>
 
-      <div class="d-flex align-items-center" th:if="${ticket.idSupervisorEncargado == null}">
-        <button type="button" class="btn btn-outline-success me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">Aceptar Ticket</button>
+      <div class="d-flex align-items-center">
+        <button th:if="${ticket.idSupervisorEncargado == null}" type="button" class="btn btn-outline-success me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">Aceptar Ticket</button>
         <!-- MODAL 1 -->
         <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel1" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
@@ -53,6 +44,7 @@
                 <input th:value="${ticket.idTickets}" name="idTickets" type="hidden"/>
                 <input th:value="${session.usuario.id}" name="idSupervisorEncargado" type="hidden"/>
                 <input type="hidden" name="condicion" value="0"/>
+                <input value="1" name="bandera" type="hidden"/>
                 <div class="modal-body">
                   <h3>¿Está seguro de aceptar el ticket?</h3>
                 </div>
@@ -64,6 +56,16 @@
             </div>
           </div>
         </div>
+        <button th:if="${ticket.idSupervisorEncargado!= null && ticket.idSupervisorEncargado.id == session.usuario.id}" type="button" class="btn btn-outline-danger mx-4" onclick="scrollToSupervisores()">Reasignar Ticket</button>
+        <script>
+          function scrollToSupervisores() {
+            var seccionSupervisores = document.getElementById("seccionSupervisores");
+            if (seccionSupervisores) {
+              seccionSupervisores.scrollIntoView({ behavior: "smooth" });
+            }
+          }
+        </script>
+
       </div>
     </div>
     <nav>
@@ -78,6 +80,45 @@
 
   <section class="section profile">
     <div class="row">
+      <div class="card" th:if="${ticket.idSupervisorEncargado!=null && ticket.idSupervisorEncargado.id == session.usuario.id && ticket.idCuadrilla==null}">
+        <div class="card-body pt-3">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <h5 class="card-title" style="color: #095444">Seleccionar Cuadrilla</h5>
+            <button type="button" class="btn btn-outline-warning mt-auto" data-bs-toggle="modal" data-bs-target="#staticBackdrop4">Asignar Cuadrilla</button>
+          </div>
+
+          <div class="search-bar">
+            <form th:action="@{/supervisor/actualizarCuadrilla}" class="search-form" method="POST">
+              <input th:value="${ticket.idTickets}" name="idTickets" type="hidden"/>
+              <input value="1" name="check" type="hidden"/>
+              <div class="input-group mb-3">
+                <select class="form-select" th:field="*{idCuadrilla}" id="cuadrillas">
+                  <option th:each="cuadrilla : ${listaCuadrillas}" th:text="'Cuadrilla ' + ${cuadrilla.idCuadrilla}" th:value="${cuadrilla.idCuadrilla}"></option>
+                </select>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="modal fade" id="staticBackdrop4" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel4" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel4">Advertencia</h1>
+                      </div>
+                      <div class="modal-body">
+                        <h3>¿Esta seguro asignar el ticket a esta cuadrilla?</h3>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-outline-primary">Confirmar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- End Bordered Tabs -->
+        </div>
+      </div>
       <div class="col-xl-6">
         <div class="card">
           <div class="card-body pt-3">
@@ -106,11 +147,6 @@
                 </div>
 
                 <div class="row">
-                  <div class="col-lg-4 col-md-5 label">Fecha de vencimiento:</div>
-                  <div class="col-lg-8 col-md-7" th:text="${ticket.fechaCierre}"></div>
-                </div>
-
-                <div class="row">
                   <div class="col-lg-4 col-md-5 label">Servicio Relacionado:</div>
                   <div class="col-lg-8 col-md-7" th:text="${ticket.idTipoTicket.nombreTipoTicket}"></div>
                 </div>
@@ -126,7 +162,7 @@
               <br>
             </div><!-- End Bordered Tabs -->
             <div class="d-flex justify-content-end">
-              <a type="button" class="btn btn-outline-warning" th:href="@{'/supervisor/comentarios?id=' + ${ticket.idTickets}}" style="margin-right: 25px;">comentarios</a>
+              <a type="button" class="btn btn-outline-warning" th:href="@{'/supervisor/comentariosAsignados?id=' + ${ticket.idTickets}}" style="margin-right: 25px;">comentarios</a>
             </div>
           </div>
         </div>
@@ -137,7 +173,7 @@
           <div class="card-body pt-3">
             <div class="col-md-8 col-lg-9">
               <h5 class="card-title" style="color: #095444">Foto del Sitio:</h5>
-              <img th:src="@{|/image/${ticket.idSitios.archivo.idArchivos}|}" alt="Profile" style="max-width: 100%; height: auto; display: block; margin: 0 auto; max-height: 70vh;"
+              <img th:src="@{|/file/${ticket.idSitios.archivo.idArchivos}|}" alt="Profile" style="max-width: 100%; height: auto; display: block; margin: 0 auto; max-height: 70vh;"
                    onerror="this.onerror=null; this.src='https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg'">
               <br>
               <div class="tab-content pt-2">
@@ -148,6 +184,13 @@
                     <div class="col-lg-4 col-md-5 label">Descripcion:</div>
                     <div class="col-lg-8 col-md-7" th:text="${ticket.descripcion}"></div>
                   </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Tiempo Transcurrido:</div>
+                  <p class="col-lg-9 col-md-8">
+                    <span th:text="${dias}"></span> días <span th:text="${horas}"></span> horas con <span th:text="${minutos}"></span> minutos
+                  </p>
                 </div>
               </div>
 
@@ -202,6 +245,51 @@
       </div>
     </div>
 
+    <div class="col-xl-12">
+      <div class="card" th:if="${ticket.idSupervisorEncargado!= null && ticket.idSupervisorEncargado.id == session.usuario.id}">
+        <div class="card-body pt-3">
+
+          <h5 class="card-title" style="color: #095444">Seleccionar Supervisor</h5>
+          <div class="search-bar" id="seccionSupervisores">
+            <form th:action="@{/supervisor/actualizarSupervisor}" class="search-form" method="POST">
+              <input th:value="${ticket.idTickets}" name="idTickets" type="hidden"/>
+              <div class="input-group mb-3">
+                <select class="form-select" th:field="*{idSupervisorEncargado}" id="supervisores">
+                  <option th:each="supervisor : ${listaSupervisores}" th:text="${supervisor.nombre}" th:value="${supervisor.id}"></option>
+                </select>
+              </div>
+              <input type="hidden" name="condicion" value="1"/>
+              <input value="1" name="bandera" type="hidden"/>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel3" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel3">Advertencia</h1>
+                      </div>
+                      <div class="modal-body">
+                        <h3>¿Estás seguro reasignar el ticket a otro supervisor?</h3>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-outline-primary">Confirmar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-end align-items-center flex-grow-1">
+                  <button type="button" class="btn btn-outline-success me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop3">Reasignar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- End Bordered Tabs -->
+        </div>
+      </div>
+
+
+    </div>
+    </div>
     <!-- End Bordered Tabs -->
 
   </section>

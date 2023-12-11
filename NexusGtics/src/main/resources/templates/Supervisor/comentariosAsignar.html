@@ -7,7 +7,7 @@
 <!-- ======= Header ======= -->
 <header th:replace="Fragmentos/header :: header('supervisor')"><!-- End Header --></header><!-- End Header -->
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuSupervisor :: menu('comentariosTicket')">
+<aside th:replace="Fragmentos/menuSupervisor :: menu('comentariosAsignar')">
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main" th:object="${ticket}">
@@ -80,7 +80,7 @@
                             <div class="col-md-12">
                                 <input th:value="${session.usuario.id}" name="id" type="hidden"/>
                                 <input th:value="${ticket.idTickets}" name="idTicket" type="hidden"/>
-                                <input value="0" name="ara" type="hidden"/>
+                                <input value="1" name="ara" type="hidden"/>
                                 <textarea class="form-control" id="comentario" name="comentario" rows="6" placeholder="Deja tu comentario aquí..." required></textarea>
                             </div>
 

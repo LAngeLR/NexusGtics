@@ -829,8 +829,11 @@ public class TecnicoController {
         try {
             if (estado==6) {
                 Date fechaCambioEstado = new Date();
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
                 ticketRepository.guardarEstado(ticket.getIdTickets(),estado);
-                historialTicketRepository.crearHistorial(5, fechaCambioEstado, ticket.getIdTickets(), idTecnico, "Pasando a Supervisor");
+                historialTicketRepository.crearHistorial(5, fechaCambioEstado, fechaActual,horaActual,ticket.getIdTickets(), idTecnico, "Pasando a Supervisor");
                 redirectAttributes.addFlashAttribute("yum", "El ticket ha sido cerrado correctamente");
                 return "redirect:/tecnico/ticketasignado";
             } else {

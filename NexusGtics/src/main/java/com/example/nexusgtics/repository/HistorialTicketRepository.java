@@ -21,8 +21,8 @@ public interface HistorialTicketRepository extends JpaRepository<HistorialTicket
     // ------------------------------ SUPERVISOR --------------------------------------- //
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "insert into historialtickets (estado, fechaCambioEstado, idTickets, idUsuarios, descripcion) values (?1, ?2, ?3, ?4, ?5)")
-    void crearHistorial(int estado, Date fechaCambio, int idTicket, int idUser, String des);
+    @Query(nativeQuery = true, value = "insert into historialtickets (estado, fechaCambioEstado, fechaCambio, horaCambio, idTickets, idUsuarios, descripcion) values (?1, ?2, ?3, ?4, ?5, ?6, ?7)")
+    void crearHistorial(int estado, Date fechaCambioEstado, LocalDate fechaCambio, LocalTime horaCambio, int idTicket, int idUser, String des);
 
     @Transactional
     @Modifying
@@ -31,8 +31,8 @@ public interface HistorialTicketRepository extends JpaRepository<HistorialTicket
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "insert into historialtickets (estado, fechaCambioEstado, idTickets, idUsuarios, descripcion, idUsuariosReasignados) values (?1, ?2, ?3, ?4, ?5, ?6)")
-    void crearHistorialReasignado(int estado, Date fechaCambio, int idTicket, int idUser, String des, int idReasignado);
+    @Query(nativeQuery = true, value = "insert into historialtickets (estado,fechaCambioEstado, fechaCambio, horaCambio, idTickets, idUsuarios, descripcion, idUsuariosReasignados) values (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)")
+    void crearHistorialReasignado(int estado, Date fechaCambioEstado, LocalDate fechaCambio, LocalTime horaCambio, int idTicket, int idUser, String des, int idReasignado);
 
     @Query(nativeQuery = true, value = "SELECT \n" +
             "    TIMEDIFF(\n" +

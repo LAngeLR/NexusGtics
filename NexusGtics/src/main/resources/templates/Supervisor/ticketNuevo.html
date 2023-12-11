@@ -30,8 +30,8 @@
         <div class="d-flex justify-content-between align-items-center">
             <h1>Detalles</h1>
 
-            <div class="d-flex align-items-center" th:if="${ticket.idSupervisorEncargado == null}">
-                <button type="button" class="btn btn-outline-success me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">Aceptar Ticket</button>
+            <div class="d-flex align-items-center">
+                <button th:if="${ticket.idSupervisorEncargado == null}" type="button" class="btn btn-outline-success me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">Aceptar Ticket</button>
                 <!-- MODAL 1 -->
                 <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -44,6 +44,7 @@
                                 <input th:value="${ticket.idTickets}" name="idTickets" type="hidden"/>
                                 <input th:value="${session.usuario.id}" name="idSupervisorEncargado" type="hidden"/>
                                 <input type="hidden" name="condicion" value="0"/>
+                                <input value="0" name="bandera" type="hidden"/>
                                 <div class="modal-body">
                                     <h3>¿Está seguro de aceptar el ticket?</h3>
                                 </div>
@@ -55,7 +56,7 @@
                         </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-outline-danger mx-4" onclick="scrollToSupervisores()">Reasignar Ticket</button>
+                <button th:if="${ticket.idSupervisorEncargado!= null && ticket.idSupervisorEncargado.id == session.usuario.id}" type="button" class="btn btn-outline-danger mx-4" onclick="scrollToSupervisores()">Reasignar Ticket</button>
                 <script>
                     function scrollToSupervisores() {
                         var seccionSupervisores = document.getElementById("seccionSupervisores");
@@ -89,6 +90,7 @@
                     <div class="search-bar">
                         <form th:action="@{/supervisor/actualizarCuadrilla}" class="search-form" method="POST">
                             <input th:value="${ticket.idTickets}" name="idTickets" type="hidden"/>
+                            <input value="0" name="check" type="hidden"/>
                             <div class="input-group mb-3">
                                 <select class="form-select" th:field="*{idCuadrilla}" id="cuadrillas">
                                     <option th:each="cuadrilla : ${listaCuadrillas}" th:text="'Cuadrilla ' + ${cuadrilla.idCuadrilla}" th:value="${cuadrilla.idCuadrilla}"></option>
@@ -244,7 +246,7 @@
         </div>
 
         <div class="col-xl-12">
-            <div class="card" th:if="${ticket.idSupervisorEncargado == null}">
+            <div class="card" th:if="${ticket.idSupervisorEncargado!= null && ticket.idSupervisorEncargado.id == session.usuario.id}">
                 <div class="card-body pt-3">
 
                     <h5 class="card-title" style="color: #095444">Seleccionar Supervisor</h5>
@@ -257,6 +259,7 @@
                                 </select>
                             </div>
                             <input type="hidden" name="condicion" value="1"/>
+                            <input value="0" name="bandera" type="hidden"/>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel3" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
