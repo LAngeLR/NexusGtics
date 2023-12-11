@@ -374,47 +374,55 @@ CREATE TABLE `formularios` (
 -- Dumping data for table `formularios`
 --
 
-LOCK TABLES `formularios` WRITE;
-/*!40000 ALTER TABLE `formularios` DISABLE KEYS */;
-INSERT INTO `formularios` VALUES (1,'2023-09-10 05:30:00','Correcto',1,8,33,1,2,'Se instalo correctamente',1,1,'Tulio Rodriguez',72986654,25,'Falta',1,0,1,'Reparacion'),(2,'2023-09-10 05:30:00','Correcto',1,13,33,2,2,'Se realizo buen clabeado',0,0,'Angie Mariaca',74869953,32,'Falla en trabajo',0,0,0,'Cableado'),(3,'2023-09-10 05:30:00','Aceptable',1,14,33,3,2,'Hubo problemas',0,1,'Einer Fuster',851236695,21,'Realizar de nuevo',1,1,1,'Programacion'),(4,'2023-09-10 05:30:00','Realizado',1,15,33,4,2,'Se instalo correctamente',1,1,'Rosa Rodriguez',42589663,39,'Volver en x meses',0,1,1,'Cableado'),(5,'2023-09-10 05:30:00','Aceptable',1,16,33,5,2,'Se realizo buen clabeado',0,1,'Victor Tasayco',41258896,40,'No se pudo resolver problema',1,0,0,'Reparacion'),(6,'2023-09-10 06:30:00','En curso',1,7,33,6,2,'Hubo problemas',1,0,'Natali Gonzales',42587733,45,'Realizar de nuevo',0,1,1,'Cableado'),(7,'2023-09-10 06:30:00','En curso',1,9,33,7,2,'Se instalo correctamente',1,1,'Alexandra Dagnino',25478836,42,'Falta',1,0,0,'Cableado'),(8,'2023-09-10 06:30:00','Por terminar',1,10,33,8,2,'Hubo problemas',1,0,'Salvador Salazar',25486697,36,'Volver en x meses',1,1,1,'Programacion'),(9,'2023-09-10 06:30:00','Aceptable',1,11,33,9,2,'Se realizo buen clabeado',0,1,'Katy Masias',21470058,58,'No se pudo resolver problema',1,0,1,'Reparacion'),(10,'2023-09-10 06:30:00','Inconcluso',1,12,33,10,2,'Se instalo correctamente',0,0,'Rodrigo Palma',48259966,96,'Falla en trabajo',0,1,0,'Programacion'),(11,'2023-09-10 06:30:00','Por terminar',1,16,33,11,1,'Se realizo buen clabeado',1,1,'Manuel Zambrano',32658899,52,'No se pudo resolver problema',1,1,1,'Programacion'),(12,'2023-09-10 06:30:00','Aceptable',1,15,33,12,2,'Hubo problemas',0,0,'Pablo Masco',14725896,47,'Realizar de nuevo',1,1,1,'Cableado'),(13,'2023-09-10 06:30:00','Por terminar',1,13,33,13,1,'Se instalo correctamente',1,1,'Nallely Tasayco',12548863,72,'Falla en trabajo',0,0,0,'Reparacion'),(14,'2023-09-10 06:30:00','Inconcluso',1,9,33,14,1,'Hubo problemas',1,1,'Maria Lizano',24578866,31,'No se pudo resolver problema',0,1,0,'Programacion'),(15,'2023-09-10 06:30:00','Aceptable',1,7,33,15,1,'Se realizo buen clabeado',0,0,'Samira Yataco',25478866,63,'Volver en x meses',1,0,1,'Reparacion'),(16,'2023-09-10 06:30:00','Aceptable',1,11,33,16,1,'Se instalo correctamente',1,1,'Axel Guzman',23584411,28,'Falta',0,1,0,'Reparacion'),(17,'2023-09-10 06:30:00','En curso',1,14,33,17,1,'Hubo problemas',1,0,'Daniel Carpio',26587744,29,'Falla en trabajo',1,0,1,'Cableado'),(18,'2023-09-10 06:30:00','Aceptable',1,8,33,18,1,'Se instalo correctamente',0,1,'Fernando Levano',26589933,34,'Realizar de nuevo',0,1,0,'Programacion'),(19,'2023-09-10 06:30:00','Inconcluso',1,12,33,19,1,'Se realizo buen clabeado',0,1,'Ana Diaz',25478861,64,'Falta',1,1,0,'Reparacion');
-/*!40000 ALTER TABLE `formularios` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `historialtickets`
---
-
-DROP TABLE IF EXISTS `historialtickets`;
+DROP TABLE IF EXISTS `formularios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `historialtickets` (
-  `idhistorialTickets` int NOT NULL AUTO_INCREMENT,
-  `estado` int NOT NULL,
-  `fechaCambioEstado` datetime DEFAULT NULL,
+CREATE TABLE `formularios` (
+  `idFormularios` int NOT NULL AUTO_INCREMENT,
+  `fechaLlenado` datetime NOT NULL,
+  `descripcion` varchar(45) NOT NULL,
+  `confirmacion` tinyint(1) NOT NULL,
+  `idTecnico` int NOT NULL,
+  `idImagenesForm` int NOT NULL,
   `idTickets` int NOT NULL,
-  `idUsuarios` int NOT NULL,
-  `descripcion` varchar(250) DEFAULT NULL,
-  `idUsuariosReasignados` int DEFAULT NULL,
-  `fechaCambio` date DEFAULT NULL,
-  `horaCambio` time DEFAULT NULL,
-  PRIMARY KEY (`idhistorialTickets`),
-  KEY `fk_historialTickets_tickets_idx` (`idTickets`),
-  KEY `fk_historialtickets_usuarios1_idx` (`idUsuarios`),
-  KEY `fk_historialtickets_usuarios2_idx` (`idUsuariosReasignados`),
-  CONSTRAINT `fk_historialTickets_tickets` FOREIGN KEY (`idTickets`) REFERENCES `tickets` (`idTickets`),
-  CONSTRAINT `fk_historialtickets_usuarios1` FOREIGN KEY (`idUsuarios`) REFERENCES `usuarios` (`idUsuarios`),
-  CONSTRAINT `fk_historialtickets_usuarios2` FOREIGN KEY (`idUsuariosReasignados`) REFERENCES `usuarios` (`idUsuarios`)
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `idTipoTicket` int NOT NULL,
+  `hrelevantes` varchar(45) NOT NULL,
+  `conexion` tinyint NOT NULL,
+  `movilidad` tinyint NOT NULL,
+  `nomredantario` varchar(45) NOT NULL,
+  `dni` int NOT NULL,
+  `area` float NOT NULL,
+  `observaciones` varchar(45) NOT NULL,
+  `construccion` tinyint NOT NULL,
+  `instalacion` tinyint NOT NULL,
+  `despliegue` tinyint NOT NULL,
+  `trabarealizados` varchar(45) NOT NULL,
+  `equipoencendido` tinyint NOT NULL,
+  `equipoconectado` tinyint NOT NULL,
+  `situacion` varchar(45) NOT NULL,
+  `acciones` varchar(45) NOT NULL,
+  `bateriasestado` tinyint NOT NULL,
+  `averia` varchar(45) NOT NULL,
+  PRIMARY KEY (`idFormularios`),
+  KEY `fk_Formularios_Usuarios1_idx` (`idTecnico`),
+  KEY `fk_Formularios_Imagenes1_idx` (`idImagenesForm`),
+  KEY `fk_Formularios_Tickets1_idx` (`idTickets`),
+  KEY `fk_formularios_tipoticket1_idx` (`idTipoTicket`),
+  CONSTRAINT `fk_Formularios_Imagenes1` FOREIGN KEY (`idImagenesForm`) REFERENCES `archivos` (`idArchivos`),
+  CONSTRAINT `fk_Formularios_Tickets1` FOREIGN KEY (`idTickets`) REFERENCES `tickets` (`idTickets`),
+  CONSTRAINT `fk_formularios_tipoticket1` FOREIGN KEY (`idTipoTicket`) REFERENCES `tipoticket` (`idTipoTicket`),
+  CONSTRAINT `fk_Formularios_Usuarios1` FOREIGN KEY (`idTecnico`) REFERENCES `usuarios` (`idUsuarios`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `historialtickets`
+-- Dumping data for table `formularios`
 --
 
-LOCK TABLES `historialtickets` WRITE;
-/*!40000 ALTER TABLE `historialtickets` DISABLE KEYS */;
-INSERT INTO `historialtickets` VALUES (1,1,'2023-09-10 00:00:00',1,4,'Ticket Creado',NULL,'2023-09-10','00:00:00'),(2,2,'2023-09-10 01:00:00',1,6,'Supervisor Asignado',NULL,'2023-09-10','01:00:00'),(3,2,'2023-09-10 02:00:00',1,6,'Pasando a Tecnico',NULL,'2023-09-10','02:00:00'),(4,3,'2023-09-10 03:00:00',1,8,'bien',NULL,'2023-09-10','03:00:00'),(5,4,'2023-09-10 04:00:00',1,8,'bien',NULL,'2023-09-10','04:00:00'),(6,5,'2023-09-10 05:00:00',1,8,'bien',NULL,'2023-09-10','06:00:00'),(7,6,'2023-09-10 06:00:00',1,6,'Pasando a Analista',NULL,'2023-09-10','05:00:00'),(9,1,'2023-09-10 01:00:00',2,4,'Ticket Creado',NULL,'2023-09-10','07:00:00'),(10,2,'2023-09-10 02:00:00',2,5,'Supervisor Asignado',NULL,'2023-09-10','08:00:00'),(11,2,'2023-09-10 03:00:00',2,5,'Pasando a Tecnico',NULL,'2023-09-10','09:00:00'),(12,3,'2023-09-10 04:00:00',2,7,'si',NULL,'2023-09-10','00:00:00'),(13,4,'2023-09-10 05:00:00',2,7,'bien',NULL,'2023-09-10','01:00:00'),(14,5,'2023-09-10 06:00:00',2,7,'bien',NULL,'2023-09-10','02:00:00'),(15,1,'2023-09-10 02:00:00',3,3,'Ticket Creado',NULL,'2023-09-10','03:00:00'),(16,2,'2023-09-10 03:00:00',3,6,'Supervisor Asignado',NULL,'2023-09-10','04:00:00'),(17,2,'2023-09-10 04:00:00',3,6,'Pasando a Tecnico',NULL,'2023-09-10','05:00:00'),(18,3,'2023-09-10 05:00:00',3,8,'bien',NULL,'2023-09-10','06:00:00'),(19,4,'2023-09-10 06:00:00',3,8,'bien',NULL,'2023-09-10','07:00:00'),(20,1,'2023-09-10 03:00:00',4,3,'Ticket Creado',NULL,'2023-09-10','08:00:00'),(21,2,'2023-09-10 04:00:00',4,5,'Supervisor Asignado',NULL,'2023-09-10','07:00:00'),(22,2,'2023-09-10 05:00:00',4,5,'Pasando a Tecnico',NULL,'2023-09-10','06:00:00'),(23,3,'2023-09-10 06:00:00',4,7,'tal',NULL,'2023-09-10','05:00:00'),(24,1,'2023-09-10 04:00:00',5,4,'Ticket Creado',NULL,'2023-09-10','04:00:00'),(25,2,'2023-09-10 05:00:00',5,5,'Supervisor Asignado',NULL,'2023-09-10','03:00:00'),(26,1,'2023-09-10 05:00:00',6,3,'Ticket Creado',NULL,'2023-09-10','02:00:00'),(27,1,'2023-09-10 05:00:00',7,4,'Ticket Creado',NULL,'2023-09-10','01:00:00'),(28,1,'2023-09-10 05:00:00',8,4,'Ticket Creado',NULL,'2023-09-10','00:00:00'),(29,2,'2023-09-10 06:00:00',8,6,'Supervisor Asignado',NULL,'2023-09-10','09:00:00'),(30,1,'2023-09-10 05:00:00',9,3,'Ticket Creado',NULL,'2023-09-10','08:00:00'),(31,2,'2023-09-10 06:00:00',9,6,'Supervisor Asignado',NULL,'2023-09-10','07:00:00'),(32,2,'2023-09-10 07:00:00',9,6,'Pasando a Tecnico',NULL,'2023-09-10','06:00:00'),(33,3,'2023-09-10 08:00:00',9,8,'bien',NULL,'2023-09-10','05:00:00'),(34,4,'2023-09-10 09:00:00',9,8,'bien',NULL,'2023-09-10','04:00:00'),(35,1,'2023-09-10 05:00:00',10,4,'Ticket Creado',NULL,'2023-09-10','03:00:00'),(36,2,'2023-09-10 06:00:00',10,5,'Supervisor Asignado',NULL,'2023-09-10','02:00:00'),(37,2,'2023-09-10 07:00:00',10,5,'Pasando a Tecnico',NULL,'2023-09-10','01:00:00'),(38,3,'2023-09-10 08:00:00',10,7,'si',NULL,'2023-09-10','00:00:00'),(39,4,'2023-09-10 09:00:00',10,7,'bien',NULL,'2023-09-10','09:00:00'),(40,5,'2023-09-10 10:00:00',10,7,'bien',NULL,'2023-09-10','08:00:00'),(41,1,'2023-09-10 05:00:00',11,3,'Ticket Creado',NULL,'2023-09-10','07:00:00'),(42,2,'2023-09-10 06:00:00',11,6,'Supervisor Asignado',NULL,'2023-09-10','06:00:00'),(43,2,'2023-09-10 07:00:00',11,6,'Pasando a Tecnico',NULL,'2023-09-10','05:00:00'),(44,3,'2023-09-10 08:00:00',11,8,'bien',NULL,'2023-09-10','04:00:00'),(45,4,'2023-09-10 09:00:00',11,8,'bien',NULL,'2023-09-10','03:00:00'),(46,5,'2023-09-10 10:00:00',11,8,'bien',NULL,'2023-09-10','02:00:00'),(47,6,'2023-09-10 11:00:00',11,6,'Pasando a Analista',NULL,'2023-09-10','01:00:00'),(48,1,'2023-09-10 05:00:00',12,4,'Ticket Creado',NULL,'2023-09-10','00:00:00'),(49,2,'2023-09-10 06:00:00',12,5,'Supervisor Asignado',NULL,'2023-09-10','09:00:00'),(50,2,'2023-09-10 07:00:00',12,5,'Pasando a Tecnico',NULL,'2023-09-10','08:00:00'),(51,1,'2023-09-10 05:00:00',13,3,'Ticket Creado',NULL,'2023-09-10','07:00:00'),(52,2,'2023-09-10 06:00:00',13,5,'Supervisor Asignado',NULL,'2023-09-10','06:00:00'),(53,2,'2023-09-10 07:00:00',13,5,'Pasando a Tecnico',NULL,'2023-09-10','05:00:00'),(54,3,'2023-09-10 08:00:00',13,8,'tal',NULL,'2023-09-10','04:00:00'),(55,1,'2023-09-10 05:00:00',14,4,'Ticket Creado',NULL,'2023-09-10','03:00:00'),(56,2,'2023-09-10 06:00:00',14,5,'Supervisor Asignado',NULL,'2023-09-10','02:00:00'),(57,2,'2023-09-10 07:00:00',14,5,'Pasando a Tecnico',NULL,'2023-09-10','01:00:00'),(58,3,'2023-09-10 08:00:00',14,7,'tal',NULL,'2023-09-10','00:00:00'),(59,1,'2023-09-10 05:00:00',15,3,'Ticket Creado',NULL,'2023-09-10','09:00:00'),(60,2,'2023-09-10 06:00:00',15,5,'Supervisor Asignado',NULL,'2023-09-10','08:00:00'),(61,2,'2023-09-10 07:00:00',15,5,'Pasando a Tecnico',NULL,'2023-09-10','09:00:00'),(62,3,'2023-09-10 08:00:00',15,7,'bien',NULL,'2023-09-10','00:00:00'),(63,4,'2023-09-10 09:00:00',15,7,'bien',NULL,'2023-09-10','01:00:00'),(64,1,'2023-09-10 05:00:00',16,3,'Ticket Creado',NULL,'2023-09-10','02:00:00'),(65,2,'2023-09-10 06:00:00',16,6,'Supervisor Asignado',NULL,'2023-09-10','03:00:00'),(66,2,'2023-09-10 07:00:00',16,6,'Pasando a Tecnico',NULL,'2023-09-10','04:00:00'),(67,3,'2023-09-10 08:00:00',16,8,'bien',NULL,'2023-09-10','05:00:00'),(68,4,'2023-09-10 09:00:00',16,8,'bien',NULL,'2023-09-10','06:00:00'),(69,5,'2023-09-10 10:00:00',16,8,'bien',NULL,'2023-09-10','07:00:00'),(70,6,'2023-09-10 11:00:00',16,6,'Pasando a Analista',NULL,'2023-09-10','08:00:00'),(71,1,'2023-11-14 00:00:00',17,3,'Ticket Creado',NULL,'2023-11-14','09:00:00'),(72,2,'2023-11-14 01:00:00',17,6,'Supervisor Asignado',NULL,'2023-11-14','00:00:00'),(73,2,'2023-11-14 02:00:00',17,6,'Pasando a Tecnico',NULL,'2023-11-14','01:00:00'),(74,1,'2023-09-10 05:00:00',18,4,'Ticket Creado',NULL,'2023-09-10','02:00:00'),(75,2,'2023-09-10 06:00:00',18,5,'Supervisor Asignado',NULL,'2023-09-10','03:00:00'),(76,2,'2023-09-10 07:00:00',18,5,'Pasando a Tecnico',NULL,'2023-09-10','04:00:00'),(77,1,'2023-09-10 05:00:00',19,3,'Ticket Creado',NULL,'2023-09-10','05:00:00'),(78,2,'2023-09-10 06:00:00',19,5,'Supervisor Asignado',NULL,'2023-09-10','06:00:00'),(81,6,'2023-12-06 16:41:55',2,5,'Pasando a Analista',NULL,'2023-12-06','07:00:00'),(82,6,'2023-12-06 18:03:34',10,5,'Pasando a Analista',NULL,'2023-12-06','08:00:00'),(83,1,'2023-12-06 18:31:20',30,5,'Supervisor Asignado',NULL,'2023-12-06','09:00:00'),(84,2,'2023-12-06 18:31:43',30,5,'Pasando a Tecnico',NULL,'2023-12-06','00:00:00'),(85,1,'2023-12-06 18:32:36',6,5,'Supervisor Asignado',NULL,'2023-12-06','01:00:00'),(86,7,'2023-12-06 19:30:49',30,3,'Aprobación y finalización del ticket.',NULL,'2023-12-06','02:00:00'),(87,7,'2023-12-09 15:21:37',36,3,'Aprobación y finalización del ticket.',NULL,'2023-12-09','03:00:00'),(88,1,NULL,37,3,'Ticket creado',NULL,'2023-12-09','18:56:53'),(89,1,NULL,3,3,'Comentario agregado',NULL,'2023-12-09','19:03:19'),(90,5,NULL,3,3,'Comentario agregado',NULL,'2023-12-09','19:07:21'),(91,5,NULL,9,9,'Comentario agregado',NULL,'2023-12-09','19:24:33'),(92,3,NULL,18,9,'Comentario agregado',NULL,'2023-12-09','19:26:04');
-/*!40000 ALTER TABLE `historialtickets` ENABLE KEYS */;
+LOCK TABLES `formularios` WRITE;
+/*!40000 ALTER TABLE `formularios` DISABLE KEYS */;
+INSERT INTO `formularios` VALUES (1,'2023-09-10 05:30:00','Correcto',1,8,33,1,2,'Se instalo correctamente',1,1,'Tulio Rodriguez',72986654,25,'Falta',1,0,1,'Reparacion',0,1,'Tecnología 3G. ','Equipos encendidos',0,'Energia'),(2,'2023-09-10 05:30:00','Correcto',1,13,33,2,2,'Se realizo buen clabeado',0,0,'Angie Mariaca',74869953,32,'Falla en trabajo',0,0,0,'Cableado',1,1,'Tecnología 3G. ','Equipos encendidos',1,'Transporte'),(3,'2023-09-10 05:30:00','Aceptable',1,14,33,3,2,'Hubo problemas',0,1,'Einer Fuster',851236695,21,'Realizar de nuevo',1,1,1,'Programacion',0,0,'Tecnología 3G. ','Equipos encendidos',0,'Acceso'),(4,'2023-09-10 05:30:00','Realizado',1,15,33,4,2,'Se instalo correctamente',1,1,'Rosa Rodriguez',42589663,39,'Volver en x meses',0,1,1,'Cableado',1,1,'Tecnología 3G. ','Equipos encendidos',1,'Acceso'),(5,'2023-09-10 05:30:00','Aceptable',1,16,33,5,2,'Se realizo buen clabeado',0,1,'Victor Tasayco',41258896,40,'No se pudo resolver problema',1,0,0,'Reparacion',0,1,'Tecnología 3G. ','Equipos encendidos',0,'Transporte'),(6,'2023-09-10 06:30:00','En curso',1,7,33,6,2,'Hubo problemas',1,0,'Natali Gonzales',42587733,45,'Realizar de nuevo',0,1,1,'Cableado',1,0,'Tecnología 3G. ','Equipos encendidos',1,'Energia'),(7,'2023-09-10 06:30:00','En curso',1,9,33,7,2,'Se instalo correctamente',1,1,'Alexandra Dagnino',25478836,42,'Falta',1,0,0,'Cableado',0,0,'Tecnología 3G. ','Equipos encendidos',1,'Acceso'),(8,'2023-09-10 06:30:00','Por terminar',1,10,33,8,2,'Hubo problemas',1,0,'Salvador Salazar',25486697,36,'Volver en x meses',1,1,1,'Programacion',1,1,'Tecnología 3G. ','Equipos encendidos',1,'Transporte'),(9,'2023-09-10 06:30:00','Aceptable',1,11,33,9,2,'Se realizo buen clabeado',0,1,'Katy Masias',21470058,58,'No se pudo resolver problema',1,0,1,'Reparacion',1,0,'Tecnología 3G. ','Equipos encendidos',0,'Transporte'),(10,'2023-09-10 06:30:00','Inconcluso',1,12,33,10,2,'Se instalo correctamente',0,0,'Rodrigo Palma',48259966,96,'Falla en trabajo',0,1,0,'Programacion',1,0,'Tecnología 3G. ','Equipos encendidos',0,'Acceso'),(11,'2023-09-10 06:30:00','Por terminar',1,16,33,11,1,'Se realizo buen clabeado',1,1,'Manuel Zambrano',32658899,52,'No se pudo resolver problema',1,1,1,'Programacion',1,0,'Tecnología 3G. ','Equipos encendidos',1,'Energia'),(12,'2023-09-10 06:30:00','Aceptable',1,15,33,12,2,'Hubo problemas',0,0,'Pablo Masco',14725896,47,'Realizar de nuevo',1,1,1,'Cableado',0,1,'Tecnología 3G. ','Equipos encendidos',0,'Transporte'),(13,'2023-09-10 06:30:00','Por terminar',1,13,33,13,1,'Se instalo correctamente',1,1,'Nallely Tasayco',12548863,72,'Falla en trabajo',0,0,0,'Reparacion',0,0,'Tecnología 3G. ','Equipos encendidos',1,'Energia'),(14,'2023-09-10 06:30:00','Inconcluso',1,9,33,14,1,'Hubo problemas',1,1,'Maria Lizano',24578866,31,'No se pudo resolver problema',0,1,0,'Programacion',1,1,'Tecnología 3G. ','Equipos encendidos',0,'Transporte'),(15,'2023-09-10 06:30:00','Aceptable',1,7,33,15,1,'Se realizo buen clabeado',0,0,'Samira Yataco',25478866,63,'Volver en x meses',1,0,1,'Reparacion',0,0,'Tecnología 3G. ','Equipos encendidos',1,'Energia'),(16,'2023-09-10 06:30:00','Aceptable',1,11,33,16,1,'Se instalo correctamente',1,1,'Axel Guzman',23584411,28,'Falta',0,1,0,'Reparacion',0,1,'Tecnología 3G. ','Equipos encendidos',0,'Transporte'),(17,'2023-09-10 06:30:00','En curso',1,14,33,17,1,'Hubo problemas',1,0,'Daniel Carpio',26587744,29,'Falla en trabajo',1,0,1,'Cableado',1,0,'Tecnología 3G. ','Equipos encendidos',0,'Acceso'),(18,'2023-09-10 06:30:00','Aceptable',1,8,33,18,1,'Se instalo correctamente',0,1,'Fernando Levano',26589933,34,'Realizar de nuevo',0,1,0,'Programacion',0,0,'Tecnología 3G. ','Equipos encendidos',1,'Energia'),(19,'2023-09-10 06:30:00','Inconcluso',1,12,33,19,1,'Se realizo buen clabeado',0,1,'Ana Diaz',25478861,64,'Falta',1,1,0,'Reparacion',0,1,'Tecnología 3G. ','Equipos encendidos',0,'Transporte');
+/*!40000 ALTER TABLE `formularios` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -683,9 +691,11 @@ CREATE TABLE `tickets` (
   KEY `fk_Tickets_Cuadrillas1_idx` (`idCuadrilla`),
   KEY `fk_Tickets_Sitios1_idx` (`idSitios`),
   KEY `fk_tickets_tipoticket1_idx` (`idTipoTicket`),
-  KEY `idx_tickets_idsitiosCerrados` (`idsitioCerrado`),
+  KEY `idx_tickets_idsitiosCerrados` (`idsitioCerrado`) /*!80000 INVISIBLE */,
+  KEY `fk_Tickets_Sitiocerrado1_idx` (`idsitioCerrado`),
   CONSTRAINT `fk_Tickets_Cuadrillas1` FOREIGN KEY (`idCuadrilla`) REFERENCES `cuadrillas` (`idCuadrillas`),
   CONSTRAINT `fk_Tickets_Empresas1` FOREIGN KEY (`idEmpresaAsignada`) REFERENCES `empresas` (`idEmpresas`),
+  CONSTRAINT `fk_Tickets_Sitiocerrado1` FOREIGN KEY (`idsitioCerrado`) REFERENCES `sitiocerrado` (`idsitioCerrado`),
   CONSTRAINT `fk_Tickets_Sitios1` FOREIGN KEY (`idSitios`) REFERENCES `sitios` (`idSitios`),
   CONSTRAINT `fk_tickets_tipoticket1` FOREIGN KEY (`idTipoTicket`) REFERENCES `tipoticket` (`idTipoTicket`),
   CONSTRAINT `fk_Tickets_Usuarios1` FOREIGN KEY (`idSupervisorEncargado`) REFERENCES `usuarios` (`idUsuarios`),
