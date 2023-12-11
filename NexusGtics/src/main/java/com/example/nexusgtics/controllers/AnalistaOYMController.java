@@ -606,37 +606,36 @@ public class AnalistaOYMController {
             model.addAttribute("listaSitios", sitioRepository.findAll());
             return "AnalistaOYM/oymCrearTicket";
         }
-
         if(ticket.getIdSitios() == null || ticket.getIdSitios().getIdSitios() == null || ticket.getIdSitios().getIdSitios() == -1){
             model.addAttribute("msgSitio", "Escoger una sitio");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
             model.addAttribute("listaSitios", sitioRepository.findAll());
             return "AnalistaOYM/oymCrearTicket";
         }
-
         if(ticket.getUsuarioSolicitante().isEmpty() || ticket.getUsuarioSolicitante().equals(" ")){
-            model.addAttribute("msgPrioridad", "Debe seleccionar una descripción");
+            model.addAttribute("msgPrioridad", "Debe seleccionar un usuario solicitante");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
             model.addAttribute("listaSitios", sitioRepository.findAll());
             return "AnalistaOYM/oymCrearTicket";
         }
-
+        if (!ticket.getUsuarioSolicitante().matches("^[a-zA-Z ]+$")) {
+            model.addAttribute("msgPrioridad", "El usuario solicitante solo puede contener letras y espacios en blanco");
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+            model.addAttribute("listaSitios", sitioRepository.findAll());
+            return "AnalistaOYM/oymCrearTicket";
+        }
         if(ticket.getPrioridad() == null || ticket.getPrioridad().equals("-1")){
             model.addAttribute("msgPrioridad", "Seleccionar prioridad");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
             model.addAttribute("listaSitios", sitioRepository.findAll());
             return "AnalistaOYM/oymCrearTicket";
-
         }
-
         if(ticket.getDescripcion().isEmpty() || ticket.getDescripcion().equals(" ")){
             model.addAttribute("msgPrioridad", "Debe seleccionar una descripción");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
             model.addAttribute("listaSitios", sitioRepository.findAll());
             return "AnalistaOYM/oymCrearTicket";
         }
-
-
 
         Random random = new Random();
         int numeroRandom = random.nextInt(7) + 1;
