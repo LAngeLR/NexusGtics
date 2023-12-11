@@ -900,7 +900,10 @@ public class AnalistaDespController {
         if (cambioEstado.equals("Finalizado")) {
             estadoUtilizar = 8;
             Date fechaCambioEstado = new Date();
-            historialTicketRepository.crearHistorial(7,fechaCambioEstado,id,idAnalista,"Aprobación y finalización del ticket.");
+            ZoneId zonaHoraria = ZoneId.of("GMT-5");
+            LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+            LocalTime horaActual = LocalTime.now(zonaHoraria);
+            historialTicketRepository.crearHistorial(7,fechaCambioEstado,fechaActual,horaActual,id,idAnalista,"Aprobación y finalización del ticket.");
             ticketRepository.actualizarEstado(id,estadoUtilizar);
             redirectAttributes.addFlashAttribute("yum","El ticket ha sido finalizado correctamente");
             System.out.println("711");

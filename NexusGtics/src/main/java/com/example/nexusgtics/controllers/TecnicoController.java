@@ -829,8 +829,11 @@ public class TecnicoController {
         try {
             if (estado==6) {
                 Date fechaCambioEstado = new Date();
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
                 ticketRepository.guardarEstado(ticket.getIdTickets(),estado);
-                historialTicketRepository.crearHistorial(5, fechaCambioEstado, ticket.getIdTickets(), idTecnico, "Pasando a Supervisor");
+                historialTicketRepository.crearHistorial(5, fechaCambioEstado, fechaActual,horaActual,ticket.getIdTickets(), idTecnico, "Pasando a Supervisor");
                 redirectAttributes.addFlashAttribute("yum", "El ticket ha sido cerrado correctamente");
                 return "redirect:/tecnico/ticketasignado";
             } else {
@@ -930,9 +933,12 @@ public class TecnicoController {
         model.addAttribute("cuadrilla",idCuadrilla);
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         Optional<Sitio> optionalSitio = sitioRepository.findById(id);
+        Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(id);
         if (optionalTicket.isPresent() && optionalSitio.isPresent()) {
             Ticket ticket = optionalTicket.get();
             Sitio sitio1 = optionalSitio.get();
+            SitioCerrado sitioCerrado = optionalSitioCerrado.get();
+            model.addAttribute("sitioC", sitioCerrado);
             model.addAttribute("sitio",sitio1);
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaTicket", ticketRepository.findAll());

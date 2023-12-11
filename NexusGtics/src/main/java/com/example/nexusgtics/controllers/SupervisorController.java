@@ -440,6 +440,8 @@ public class SupervisorController {
     }
 
     //vista para asignarse el ticket
+
+
     @GetMapping("/ticketAsignar")
     public String asignarTicket(Model model, @RequestParam("id") String idStr, HttpSession httpSession){
 
@@ -449,20 +451,57 @@ public class SupervisorController {
         try{
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !ticketRepository.existsById(id)) {
-                return "redirect:/supervisor/listaTickets";
+                return "redirect:/supervisor/listaTicketsNuevos";
             }
             Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
+            List<Usuario> listaSupervisor = usuarioRepository.listaDeSupervisores(5,idSupervisor, u.getEmpresa().getIdEmpresas());
+            List<ListaCuadrillaCompletaDto> listaCuadrillas = cuadrillaRepository.cuadrillaCompleta(u.getEmpresa().getIdEmpresas());
             if (ticketBuscado.isPresent()) {
                 Ticket ticket = ticketBuscado.get();
                 model.addAttribute("ticket", ticket);
+                model.addAttribute("listaSupervisores",listaSupervisor);
+                model.addAttribute("listaCuadrillas",listaCuadrillas);
+
+                //---mandar tiempo transcurrido---
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria);
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                LocalDate fechaVariable = ticket.getFechaCreacion();
+                LocalTime horaVariable = ticket.getHoraCreacion();
+                Period diferencia = fechaVariable.until(fechaActual);
+                int difDia = diferencia.getDays(), hor, min;
+                float difTiempo= Duration.between(horaVariable,horaActual ).getSeconds(); //hv-ha
+                if(difDia==0){
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)(-difTiempo/3600);
+                        min = (int)((-difTiempo/3600-hor)*60);
+                    }
+                }else {
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)((24*3600+difTiempo)/3600);
+                        min = (int)(((24*3600+difTiempo)/3600 -hor)*60);
+                        difDia--;
+                    }
+                }
+                model.addAttribute("dias",difDia);
+                model.addAttribute("horas",hor);
+                model.addAttribute("minutos",min);
+
                 return "Supervisor/ticketAsignar";
             } else {
-                return "redirect:/supervisor/listaTickets";
+                return "redirect:/supervisor/listaTicketsNuevos";
             }
         } catch (NumberFormatException e) {
-            return "redirect:/supervisor/listaTickets";
+            return "redirect:/supervisor/listaTicketsNuevos";
         }
     }
+
 
     @GetMapping("/ticketProceso")
     public String procesoTicket(Model model, @RequestParam("id") String idStr){
@@ -581,41 +620,63 @@ public class SupervisorController {
     }
 
     @PostMapping("/actualizarSupervisor")
-    public String actualizarSupervisor(Ticket ticket , RedirectAttributes redirectAttributes, @RequestParam("condicion") int condicion,HttpSession httpSession){
+    public String actualizarSupervisor(Ticket ticket , RedirectAttributes redirectAttributes, @RequestParam("condicion") int condicion, @RequestParam("bandera") int bandera, HttpSession httpSession){
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idSupervisor = u.getId();
         Date fechaCambioEstado = new Date();
+        ZoneId zonaHoraria = ZoneId.of("GMT-5");
+        LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+        LocalTime horaActual = LocalTime.now(zonaHoraria);
 
         ticketRepository.actualizarSupervisor(ticket.getIdTickets(),ticket.getIdSupervisorEncargado().getId(), condicion);
 
         if(ticket.getIdSupervisorEncargado().getId() != null &&
                 ticket.getIdSupervisorEncargado().getId().intValue() != idSupervisor.intValue()){
-            historialTicketRepository.crearHistorialReasignado(1,fechaCambioEstado,ticket.getIdTickets(),idSupervisor,"Supervisor Asignado",ticket.getIdSupervisorEncargado().getId());
+            historialTicketRepository.crearHistorialReasignado(1,fechaCambioEstado,fechaActual,horaActual,ticket.getIdTickets(),idSupervisor,"Supervisor Asignado",ticket.getIdSupervisorEncargado().getId());
             ticketRepository.actualizarEstado(ticket.getIdTickets(),2);
-            redirectAttributes.addFlashAttribute("mensaje","Supervisor " + ticket.getIdSupervisorEncargado().getNombre()+" asignado");
+            redirectAttributes.addFlashAttribute("mensaje","Ticket Reasignado al supervisor " + ticket.getIdSupervisorEncargado().getNombre() + " correctamente");
             System.out.println("Mensaje Flash: " + redirectAttributes.getFlashAttributes());
-            return "redirect:/supervisor/dashboard";
+            if(bandera==1){
+                return "redirect:/supervisor/listaTicketsNuevos";
+            }
+            else{
+                return "redirect:/supervisor/listaTickets";
+            }
         }
         else{
             redirectAttributes.addAttribute("id",ticket.getIdTickets());
-            historialTicketRepository.crearHistorial(1,fechaCambioEstado,ticket.getIdTickets(),idSupervisor,"Supervisor Asignado");
+            historialTicketRepository.crearHistorial(1,fechaCambioEstado,fechaActual,horaActual,ticket.getIdTickets(),idSupervisor,"Supervisor Asignado");
             ticketRepository.actualizarEstado(ticket.getIdTickets(),2);
-            redirectAttributes.addFlashAttribute("mensaje", "Supervisor " + ticket.getIdSupervisorEncargado().getNombre() + " asignado");
-            return "redirect:/supervisor/ticketNuevo";
+            redirectAttributes.addFlashAttribute("mensaje", "Ticket aceptado correctamente");
+            if(bandera==1){
+                return "redirect:/supervisor/ticketAsignar";
+            }
+            else{
+                return "redirect:/supervisor/ticketNuevo";
+            }
         }
     }
 
     @PostMapping("/actualizarCuadrilla")
-    public String actualizarCuadrilla(Ticket ticket, RedirectAttributes redirectAttributes, HttpSession httpSession){
+    public String actualizarCuadrilla(Ticket ticket, RedirectAttributes redirectAttributes, HttpSession httpSession, @RequestParam("check") int check){
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idSupervisor = u.getId();
         ticketRepository.actualizarCuadrilla(ticket.getIdTickets(),ticket.getIdCuadrilla().getIdCuadrillas());
         Date fechaCambioEstado = new Date();
-        historialTicketRepository.crearHistorial(2,fechaCambioEstado,ticket.getIdTickets(),idSupervisor,"Pasando a Tecnico");
+        ZoneId zonaHoraria = ZoneId.of("GMT-5");
+        LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+        LocalTime horaActual = LocalTime.now(zonaHoraria);
+        historialTicketRepository.crearHistorial(2,fechaCambioEstado,fechaActual,horaActual,ticket.getIdTickets(),idSupervisor,"Pasando a Tecnico");
         ticketRepository.actualizarEstado(ticket.getIdTickets(),3);
 
-        redirectAttributes.addFlashAttribute("abc","Cuadrilla " + ticket.getIdCuadrilla().getIdCuadrillas()+ " asignada");
-        return "redirect:/supervisor/listaTickets";
+        redirectAttributes.addFlashAttribute("abc","Cuadrilla " + ticket.getIdCuadrilla().getIdCuadrillas()+ " asignada correctamente");
+
+        if(check==1){
+            return "redirect:/supervisor/listaTicketsNuevos";
+        }
+        else{
+            return "redirect:/supervisor/listaTickets";
+        }
     }
 
     @PostMapping("/actualizarEstado")
@@ -629,7 +690,10 @@ public class SupervisorController {
         if (cambioEstado.equals("Cerrado")) {
             estadoUtilizar = 7;
             Date fechaCambioEstado = new Date();
-            historialTicketRepository.crearHistorial(6,fechaCambioEstado,id,idSupervisor,"Pasando a Analista");
+            ZoneId zonaHoraria = ZoneId.of("GMT-5");
+            LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+            LocalTime horaActual = LocalTime.now(zonaHoraria);
+            historialTicketRepository.crearHistorial(6,fechaCambioEstado,fechaActual,horaActual,id,idSupervisor,"Pasando a Analista");
             ticketRepository.actualizarEstado(id,estadoUtilizar);
             redirectAttributes.addFlashAttribute("yum","El ticket ha sido cerrado correctamente");
             return "redirect:/supervisor/listaTickets";
@@ -659,6 +723,30 @@ public class SupervisorController {
             }
         } catch (NumberFormatException e) {
             return "redirect:/supervisor/listaTickets";
+        }
+
+    }
+
+    @GetMapping("/comentariosAsignados")
+    public String comentarioAsignadoTicket(Model model, @RequestParam("id") String idStr){
+
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/supervisor/listaTickets";
+            }
+            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
+            List<Comentario> listaComentarios = comentarioRepository.listarComentarios(id);
+            if (ticketOptional.isPresent()) {
+                Ticket ticket = ticketOptional.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("listaComentarios", listaComentarios);
+                return "Supervisor/comentariosAsignar";
+            } else {
+                return "redirect:/supervisor/listaTicketsNuevos";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/supervisor/listaTicketsNuevos";
         }
 
     }
@@ -874,7 +962,7 @@ public class SupervisorController {
 
 
     @PostMapping("/escribirComentario")
-    public String escribirComentario(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes, HttpSession httpSession){
+    public String escribirComentario(@RequestParam("id") int id,@RequestParam("idTicket") String idTicketStr, @RequestParam("comentario") String comentario, RedirectAttributes redirectAttributes, HttpSession httpSession, @RequestParam("ara") int ara){
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
 
 
@@ -895,7 +983,12 @@ public class SupervisorController {
                 //guardar también en historialTicket
                 historialTicketRepository.crearHistorial1(ticket.getEstado(),fechaActual,horaActual,ticket.getIdTickets(),u.getId(),"Comentario agregado");
 
-                return "redirect:/supervisor/comentarios?id="+idTicketStr;
+                if(ara==1){
+                    return "redirect:/supervisor/comentariosAsignados?id="+idTicketStr;
+                }
+                else{
+                    return "redirect:/supervisor/comentarios?id="+idTicketStr;
+                }
             } else {
                 return "redirect:/supervisor/listaTickets";
             }
