@@ -815,18 +815,14 @@ public class TecnicoController {
 
             /* Obtenemos el objeto ticket para obtener el idSitioCerrado */
             Ticket ticketPrevio = optionalTicket1.get();
-            Integer idSitioCerradoTicket = ticketPrevio.getIdsitioCerrado();
+            SitioCerrado sitioCerradoTicket = ticketPrevio.getIdsitioCerrado();
 
-            Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(idSitioCerradoTicket);
-            System.out.println("Optional Sitio 1: " + optionalSitioCerrado.isPresent());
 
-            if (optionalTicket1.isPresent() && optionalFormulario1.isPresent() && optionalSitioCerrado.isPresent()) {
+            if (optionalTicket1.isPresent() && optionalFormulario1.isPresent()) {
                 Ticket ticket = optionalTicket1.get();
                 Formulario formulario = optionalFormulario1.get();
-                SitioCerrado sitioCerrado = optionalSitioCerrado.get();
                 model.addAttribute("ticket", ticket);
                 model.addAttribute("formulario", formulario);
-                model.addAttribute("sitioCerrado", sitioCerrado);
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
 
                 //---mandar tiempo transcurrido---

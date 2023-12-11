@@ -792,7 +792,7 @@ public class AnalistaDespController {
         int numeroRandom = random.nextInt(7) + 1;
 
         ticket.setIdUsuarioCreador(u);
-        ticket.setIdsitioCerrado(numeroRandom);
+        // ticket.setIdsitioCerrado(numeroRandom); //me trae problemas al descomentarlo
         ticket.setReasignado(0);
         ticketRepository.save(ticket);
         attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente por el usuario: " + ticket.getUsuarioSolicitante());

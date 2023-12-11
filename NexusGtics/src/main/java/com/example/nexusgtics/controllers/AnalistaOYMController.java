@@ -644,7 +644,7 @@ public class AnalistaOYMController {
         int numeroRandom = random.nextInt(7) + 1;
 
         ticket.setIdUsuarioCreador(u);
-        ticket.setIdsitioCerrado(numeroRandom);
+        //ticket.setIdsitioCerrado(numeroRandom);
         ticket.setReasignado(0);
         ticketRepository.save(ticket);
         attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente por el usuario: " + ticket.getUsuarioSolicitante());
