@@ -101,6 +101,8 @@
                             <br>
                         </div><!-- End Bordered Tabs -->
                         <div class="d-flex justify-content-end" th:if="${ticket.estado != 7}">
+                            <a type="button" class="btn btn-outline-info" th:href="@{'/analistaOYM/formulario?id=' + ${ticket.idTickets}}" style="margin-right: 15px;" th:if="${ticket.estado == 6}">Formulario</a>
+                            <a type="button" class="btn btn-outline-info" th:href="@{'/analistaOYM/formulario?id=' + ${ticket.idTickets}}" style="margin-right: 15px;" th:if="${ticket.estado == 8}">Formulario</a>
                             <a type="button" class="btn btn-outline-info" th:href="@{'/analistaOYM/historial?id=' + ${ticket.idTickets}}" style="margin-right: 15px;">Historial</a>
                             <a type="button" class="btn btn-outline-warning" th:href="@{'/analistaOYM/comentarios?id=' + ${ticket.idTickets}}" style="margin-right: 25px;">Comentarios</a>
                         </div>
@@ -120,6 +122,7 @@
 
                                 <center><br>
                                     <a type="button" class="btn btn-outline-success" th:href="@{'/analistaOYM/formulario?id=' + ${ticket.idTickets}}">Formulario</a>
+                                    <a type="button" class="btn btn-outline-info" th:href="@{'/analistaOYM/historial?id=' + ${ticket.idTickets}}">Historial</a>
                                     <a type="button" class="btn btn-outline-warning" th:href="@{'/analistaOYM/comentarios?id=' + ${ticket.idTickets}}">comentarios</a>
                                     <button type="submit" class="btn btn-outline-danger" th:if="${ticket.estado==7}">Guardar</button>
                                 </center>

@@ -76,6 +76,11 @@
                   <div class="col-lg-8 col-md-7"><span class="badge text-bg-danger">Cerrado</span></div>
                 </div>
 
+                <div class="row" th:if="${tickets.estado==8}">
+                  <div class="col-lg-4 col-md-5 label">Estado:</div>
+                  <div class="col-lg-8 col-md-7"><span class="badge text-bg-danger">Finalizado</span></div>
+                </div>
+
                 <form th:action="@{/supervisor/actualizarEstado}" class="search-form" method="POST">
                   <input th:value="${tickets.idTickets}" name="idTickets" type="hidden" />
 
@@ -109,7 +114,7 @@
         <div class="card">
           <div class="card-body pt-3">
             <div class="col-md-8 col-lg-9">
-              <h5 class="card-title" style="color: #095444">Formulario:</h5>
+              <h5 class="card-title" style="color: #095444">Foto del sitio:</h5>
               <img th:src="@{|/file/${tickets.idSitios.archivo.idArchivos}|}" alt="Profile" style="max-width: 100%; height: auto; display: block; margin: 0 auto; max-height: 70vh;"
                    onerror="this.onerror=null; this.src='https://www.tecnologia-informatica.com/wp-content/uploads/2018/09/mantenimiento-computadoras-16.jpeg'">
               <br>

@@ -778,27 +778,60 @@ public class SupervisorController {
 
     }
 
+//    @GetMapping("/formulario")
+//    public String formulario(Model model, @RequestParam("id") String idStr){
+//        try {
+//            int id = Integer.parseInt(idStr);
+//            if (id <= 0 || !ticketRepository.existsById(id)) {
+//                return "redirect:/supervisor/ticketCerrado?id="+idStr;
+//            }
+//            /*Analizar Sitio cerrado y su funcion para mostrar form*/
+//            Optional<Formulario> formularioOptional = formularioRepository.findById(id);
+//            /*Optional<SitioCerrado> sitioCerradoOptional = sitioCerradoRepository.findById(id);*/
+//            if (formularioOptional.isPresent() /*&& sitioCerradoOptional.isPresent()*/) {
+//                Formulario formulario = formularioOptional.get();
+//                /*SitioCerrado sitioCerrado = sitioCerradoOptional.get();*/
+//                model.addAttribute("formulario", formulario);
+//                /*model.addAttribute("sitioCerrado", sitioCerrado);*/
+//                return "Supervisor/formulario";
+//            } else {
+//                return "redirect:/supervisor/ticketCerrado?id="+idStr;
+//            }
+//        } catch (NumberFormatException e) {
+//            return "redirect:/supervisor/ticketCerrado?id="+idStr;
+//        }
+//    }
     @GetMapping("/formulario")
-    public String formulario(Model model, @RequestParam("id") String idStr){
+    public String formulario(Model model, @RequestParam("id") String idStr,
+                                    @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult, HttpSession httpSession) {
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+
         try {
             int id = Integer.parseInt(idStr);
-            if (id <= 0 || !ticketRepository.existsById(id)) {
-                return "redirect:/supervisor/ticketCerrado?id="+idStr;
+            if (id <= 0 || !formularioRepository.existsById(id)) {
+                System.out.println("error 1");
+                return "redirect:/supervisor/listaTickets";
             }
-            /*Analizar Sitio cerrado y su funcion para mostrar form*/
-            Optional<Formulario> formularioOptional = formularioRepository.findById(id);
-            /*Optional<SitioCerrado> sitioCerradoOptional = sitioCerradoRepository.findById(id);*/
-            if (formularioOptional.isPresent() /*&& sitioCerradoOptional.isPresent()*/) {
-                Formulario formulario = formularioOptional.get();
-                /*SitioCerrado sitioCerrado = sitioCerradoOptional.get();*/
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            Optional<Sitio> sitioOptional = sitioRepository.findById(id);
+            if (optionalFormulario.isPresent() && sitioOptional.isPresent()) {
+                formulario = optionalFormulario.get();
+                Sitio sitio = sitioOptional.get();
+                Usuario u = (Usuario) httpSession.getAttribute("usuario");
+                Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+                model.addAttribute("cuadrilla",idCuadrilla);
                 model.addAttribute("formulario", formulario);
-                /*model.addAttribute("sitioCerrado", sitioCerrado);*/
+                model.addAttribute("sitio", sitio);
+                model.addAttribute("idTick", formularioRepository.obtenerid(id));
                 return "Supervisor/formulario";
             } else {
-                return "redirect:/supervisor/ticketCerrado?id="+idStr;
+                System.out.println("error 2");
+                return "redirect:/supervisor/listaTickets";
             }
         } catch (NumberFormatException e) {
-            return "redirect:/supervisor/ticketCerrado?id="+idStr;
+            System.out.println("error 3");
+            return "redirect:/supervisor/listaTickets";
         }
     }
 
