@@ -38,13 +38,13 @@
             </a>
             <ul id="tick-nav" th:classappend="${currentPage == 'listaTicket' or currentPage == 'crearTicket' or currentPage == 'dashboard' or currentPage == 'mapaTicket' ? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">
                 <li>
-                    <a th:classappend="${currentPage == 'listaTicket' ? 'active' : ''}" th:href="@{/analistaDespliegue/ticket}">
-                        <i class="bi bi-circle"></i><span>Lista de Tickets</span>
+                    <a th:classappend="${currentPage == 'crearTicket' ? 'active' : ''}" th:href="@{/analistaDespliegue/crearTicket}">
+                        <i class="bi bi-circle"></i><span>Crear Ticket</span>
                     </a>
                 </li>
                 <li>
-                    <a th:classappend="${currentPage == 'crearTicket' ? 'active' : ''}" th:href="@{/analistaDespliegue/crearTicket}">
-                        <i class="bi bi-circle"></i><span>Crear Ticket</span>
+                    <a th:classappend="${currentPage == 'listaTicket' ? 'active' : ''}" th:href="@{/analistaDespliegue/ticket}">
+                        <i class="bi bi-circle"></i><span>Lista de Tickets</span>
                     </a>
                 </li>
                 <li>

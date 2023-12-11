@@ -995,6 +995,31 @@ public class AnalistaDespController {
         }
     }
 
+    @GetMapping("/historial")
+    public String historialTicket(Model model, @RequestParam("id") String idStr){
+
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/analistaDespliegue/listaTickets";
+            }
+            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
+            List<HistorialTicket> listaHistorial= historialTicketRepository.listarHistorial1(id);
+
+            if (ticketOptional.isPresent()) {
+                Ticket ticket = ticketOptional.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("listaHistorial", listaHistorial);
+                return "AnalistaDespliegue/despliegueHistorialTicket";
+            } else {
+                return "redirect:/analistaDespliegue/listaTickets";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/analistaDespliegue/listaTickets";
+        }
+
+    }
+
     /*PARA VISUALIZAR FOTOS*/
     @GetMapping("/image/{id}")
     public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") int id){

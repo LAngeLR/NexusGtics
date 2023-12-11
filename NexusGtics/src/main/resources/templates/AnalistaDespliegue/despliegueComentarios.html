@@ -34,8 +34,8 @@
         <h1>Comentarios</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/tickets}">Lista Tickets</a></li>
-                <li class="breadcrumb-item" >Detalles Ticket</li>
+                <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/ticket}">Lista Tickets</a></li>
+                <li class="breadcrumb-item"><a th:href="@{'/analistaDespliegue/verTicket?id=' + ${ticket.idTickets}}">Detalles Ticket</a></li>
                 <li class="breadcrumb-item active">Comentarios</li>
             </ol>
         </nav>
@@ -48,7 +48,8 @@
 
                 <div class="card">
                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                        <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+                        <img th:src="@{|/file/${session.usuario.archivo.idArchivos}|}" alt="Profile"  class="rounded-circle" width="150" height="150"
+                             onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
                         <h2 style="color: #095444" th:text="|${session.usuario.nombre} ${session.usuario.apellido}|">German Cisneros</h2>
                         <h3 th:text="${session.usuario.cargo.nombreCargo}">Supervisor</h3>
                         <h3 th:text="${session.usuario.dni}">ID: 113253983</h3>
@@ -94,7 +95,8 @@
                         <div class="info-box card" th:each="comentarios: ${listaComentarios}">
                             <div class="row align-items-center">
                                 <div class="col-lg-1">
-                                    <img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle" style="max-width: 50px; max-height: 50px;">
+                                    <img th:src="@{|/file/${comentarios.comentarista.archivo.idArchivos}|}" alt="Profile" class="rounded-circle" style="max-width: 50px; max-height: 50px;"
+                                         onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
                                 </div>
                                 <div class="col-lg-5" style="margin-left: 20px;"> <!-- Ajusta el margen izquierdo según tus necesidades -->
                                     <h3 th:text="${comentarios.comentarista.nombre} + ' ' + ${comentarios.comentarista.apellido}" style="font-weight: bold; color: #00489b; font-size: large"></h3>

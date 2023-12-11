@@ -729,6 +729,30 @@ public class SupervisorController {
     }
 
 
+    @GetMapping("/comentariosAsignados")
+    public String comentarioAsignadoTicket(Model model, @RequestParam("id") String idStr){
+
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/supervisor/listaTickets";
+            }
+            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
+            List<Comentario> listaComentarios = comentarioRepository.listarComentarios(id);
+            if (ticketOptional.isPresent()) {
+                Ticket ticket = ticketOptional.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("listaComentarios", listaComentarios);
+                return "Supervisor/comentariosAsignar";
+            } else {
+                return "redirect:/supervisor/listaTicketsNuevos";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/supervisor/listaTicketsNuevos";
+        }
+
+    }
+
     @GetMapping("/historial")
     public String historialTicket(Model model, @RequestParam("id") String idStr){
 
@@ -750,31 +774,6 @@ public class SupervisorController {
             }
         } catch (NumberFormatException e) {
             return "redirect:/supervisor/listaTickets";
-        }
-
-    }
-
-
-    @GetMapping("/comentariosAsignados")
-    public String comentarioAsignadoTicket(Model model, @RequestParam("id") String idStr){
-
-        try {
-            int id = Integer.parseInt(idStr);
-            if (id <= 0 || !ticketRepository.existsById(id)) {
-                return "redirect:/supervisor/listaTickets";
-            }
-            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
-            List<Comentario> listaComentarios = comentarioRepository.listarComentarios(id);
-            if (ticketOptional.isPresent()) {
-                Ticket ticket = ticketOptional.get();
-                model.addAttribute("ticket", ticket);
-                model.addAttribute("listaComentarios", listaComentarios);
-                return "Supervisor/comentariosAsignar";
-            } else {
-                return "redirect:/supervisor/listaTicketsNuevos";
-            }
-        } catch (NumberFormatException e) {
-            return "redirect:/supervisor/listaTicketsNuevos";
         }
 
     }

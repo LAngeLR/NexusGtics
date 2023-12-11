@@ -863,6 +863,31 @@ public class AnalistaOYMController {
         }
     }
 
+    @GetMapping("/historial")
+    public String historialTicket(Model model, @RequestParam("id") String idStr){
+
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/analistaOYM/listaTickets";
+            }
+            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
+            List<HistorialTicket> listaHistorial= historialTicketRepository.listarHistorial1(id);
+
+            if (ticketOptional.isPresent()) {
+                Ticket ticket = ticketOptional.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("listaHistorial", listaHistorial);
+                return "AnalistaOYM/oymHistorialTicket";
+            } else {
+                return "redirect:/analistaOYM/listaTickets";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/analistaOYM/listaTickets";
+        }
+
+    }
+
 
     @GetMapping("/image/{id}")
     public ResponseEntity<byte[]> mostrarImagen(@PathVariable("id") int id){
