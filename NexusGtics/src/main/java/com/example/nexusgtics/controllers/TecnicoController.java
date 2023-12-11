@@ -933,9 +933,12 @@ public class TecnicoController {
         model.addAttribute("cuadrilla",idCuadrilla);
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         Optional<Sitio> optionalSitio = sitioRepository.findById(id);
+        Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(id);
         if (optionalTicket.isPresent() && optionalSitio.isPresent()) {
             Ticket ticket = optionalTicket.get();
             Sitio sitio1 = optionalSitio.get();
+            SitioCerrado sitioCerrado = optionalSitioCerrado.get();
+            model.addAttribute("sitioC", sitioCerrado);
             model.addAttribute("sitio",sitio1);
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaTicket", ticketRepository.findAll());
