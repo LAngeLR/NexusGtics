@@ -27,10 +27,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.math.RoundingMode;
 
 import static com.example.nexusgtics.controllers.GcsController.downloadObject;
@@ -43,6 +40,8 @@ import static java.sql.DriverManager.getConnection;
 @RequestMapping("/admin")
 public class AdminController {
 
+    private static List<String> listaCampos = new ArrayList<>();
+    private static List<String> listaCamposEquipos = new ArrayList<>();
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -500,6 +499,7 @@ public class AdminController {
     public String listaSitio(Model model) {
         List<Sitio> listaSitio = sitioRepository.listaDeSitios();
         model.addAttribute("listaSitio", listaSitio);
+        model.addAttribute("camposNuevos", listaCampos);
         return "Administrador/listaSitio";
     }
 
@@ -871,6 +871,8 @@ public class AdminController {
     public String listaEquipo(Model model) {
         List<Equipo> listaEquipo = equipoRepository.listaEquiposHabilitados();
         model.addAttribute("listaEquipo", listaEquipo);
+        model.addAttribute("camposNuevos", listaCamposEquipos);
+
         return "Administrador/listaEquipo";
     }
 
@@ -1404,44 +1406,100 @@ public class AdminController {
         }
     }
 
+    private static boolean existeElementoSinDistincion(List<String> lista, String nuevoElemento) {
+        for (String elemento : lista) {
+            if (elemento.equalsIgnoreCase(nuevoElemento)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
     /* CAMPOS DINAMICOS */
     @PostMapping("/campoDinamico")
-    public String manejarFormulario(@RequestParam("campo") String campo,
+    public String campoDinamico(@RequestParam("campo") String campo,
                                     @RequestParam("tipoDato") int tipoDato,RedirectAttributes redirectAttributes) {
 
-        String sql = "ALTER TABLE nexus.sitios ADD COLUMN " + campo + " " +
-                (tipoDato == 1 ? "DOUBLE" : tipoDato == 2 ? "INT" : "VARCHAR(255)");
+        if (campo.isEmpty() || campo.isBlank() || (tipoDato != 1 && tipoDato != 2 && tipoDato != 3)){
+            redirectAttributes.addFlashAttribute("msg4", "Los campos no deben estar vacíos");
+            return "redirect:/admin/listaSitio";
+        }
+
+        if (!existeElementoSinDistincion(listaCampos, campo)) {
+            String sql = "ALTER TABLE nexus.sitios ADD COLUMN " + campo + " " +
+                    (tipoDato == 1 ? "DOUBLE" : tipoDato == 2 ? "INT" : "VARCHAR(255)");
+            jdbcTemplate.execute(sql);
+            System.out.println(listaCampos);
+            listaCampos.add(campo);
+            redirectAttributes.addFlashAttribute("msg3", "Se ha creado exitosamente el campo '" + campo +"' ");
+            return "redirect:/admin/listaSitio";
+
+        } else {
+
+            redirectAttributes.addFlashAttribute("msg4", "El campo '" + campo +"' ya existe en la tabla ");
+            return "redirect:/admin/listaSitio";
+        }
+
+    }
+
+
+    @PostMapping("/eliminarCampoDinamico")
+    public String eliminarCampoDinamico(@RequestParam("campo") String campo,
+                                    RedirectAttributes redirectAttributes) {
+
+        String sql = "ALTER TABLE nexus.sitios DROP COLUMN " + campo;
+        System.out.println(sql);
         jdbcTemplate.execute(sql);
-        redirectAttributes.addFlashAttribute("msg3", "Se ha creado exitosamente el campo '" + campo +"' ");
+        listaCampos.remove(campo);
+        redirectAttributes.addFlashAttribute("msg3", "Se ha eliminado exitosamente el campo '" + campo +"' ");
+        System.out.println(listaCampos);
         return "redirect:/admin/listaSitio";
     }
 
-//    public String createDynamicField(@RequestBody Map<String, String> requestBody) {
-//        String dataType = requestBody.get("tipoDato");
-//        String fieldName = requestBody.get("campo");
-//
-//        String createFieldStatement = "ALTER TABLE nexus.sitios ADD COLUMN " + fieldName + " " +
-//                (dataType.equals("1") ? "DOUBLE" : dataType.equals("2") ? "INT" : "VARCHAR(255)") + "";
-//
-//        try (Connection connection = getConnection()) {
-//            PreparedStatement statement = connection.prepareStatement(createFieldStatement);
-//            statement.executeUpdate();
-//            System.out.println("Se añadió el nuevo campo");
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return "Error al añadir el campo";
-//        }
-//
-//        return "Campo creado exitosamente";
-//    }
+
+    /*CAMPOS DINAMICOS DE EQUIPOS*/
+    /* CAMPOS DINAMICOS */
+    @PostMapping("/campoDinamicoEquipo")
+    public String campoDinamicoEquipo(@RequestParam("campo") String campo,
+                                @RequestParam("tipoDato") int tipoDato,RedirectAttributes redirectAttributes) {
+
+        if (campo.isEmpty() || campo.isBlank() || (tipoDato != 1 && tipoDato != 2 && tipoDato != 3)){
+            redirectAttributes.addFlashAttribute("msg4", "Los campos no deben estar vacíos");
+            return "redirect:/admin/listaEquipo";
+        }
+
+        if (!existeElementoSinDistincion(listaCamposEquipos, campo)) {
+            String sql = "ALTER TABLE nexus.equipos ADD COLUMN " + campo + " " +
+                    (tipoDato == 1 ? "DOUBLE" : tipoDato == 2 ? "INT" : "VARCHAR(255)");
+            jdbcTemplate.execute(sql);
+            System.out.println(listaCamposEquipos);
+            listaCamposEquipos.add(campo);
+            redirectAttributes.addFlashAttribute("msg3", "Se ha creado exitosamente el campo '" + campo +"' ");
+            return "redirect:/admin/listaEquipo";
+
+        } else {
+
+            redirectAttributes.addFlashAttribute("msg4", "El campo '" + campo +"' ya existe en la tabla ");
+            return "redirect:/admin/listaEquipo";
+        }
+
+    }
 
 
 
+    @PostMapping("/eliminarCampoDinamicoEquipo")
+    public String eliminarCampoDinamicoEquipo(@RequestParam("campo") String campo,
+                                        RedirectAttributes redirectAttributes) {
 
-
-
-
+        String sql = "ALTER TABLE nexus.equipos DROP COLUMN " + campo;
+        System.out.println(sql);
+        jdbcTemplate.execute(sql);
+        listaCamposEquipos.remove(campo);
+        redirectAttributes.addFlashAttribute("msg3", "Se ha eliminado exitosamente el campo '" + campo +"' ");
+        System.out.println(listaCamposEquipos);
+        return "redirect:/admin/listaEquipo";
+    }
 
 }

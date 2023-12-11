@@ -38,15 +38,15 @@
                   <!--a th:href="@{/admin/crearCampo}" class="btn btn-outline-dark me-2 mt-3 float-end">Añadir campo</a-->
 <!--                  <a th:href="@{/campoDinamico}" class="btn btn-outline-primary me-2 mt-3 float-end"-->
 <!--                     data-bs-toggle="modal" data-bs-target="#exampleModal">Campo dinamico</a>-->
-                  <a class="btn btn-outline-primary me-2 mt-3 float-end"
-                     data-bs-toggle="modal" data-bs-target="#exampleModal">Campo dinamico</a>
 
-                  <!-- Modal -->
+
+                  <a class="btn btn-outline-primary me-2 mt-3 float-end"
+                     data-bs-toggle="modal" data-bs-target="#exampleModal">Nuevo campo</a>
                   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalLabel">Campo dinámico</h1>
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">Campo dinámico sitio</h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -64,8 +64,42 @@
                               <label class="form-label">Nombre del campo</label>
                               <input type="text" class="form-control" id="campo" name="campo">
                             </div>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                             <input type="submit" value="Añadir" class="btn btn-primary">
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <a class="btn btn-outline-danger me-2 mt-3 float-end"
+                     data-bs-toggle="modal" data-bs-target="#exampleModal2">Eliminar campo</a>
+                  <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel2">Campo dinámico sitio</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form th:action="@{/admin/eliminarCampoDinamico}" method="post">
+                            <div class="mb-3">
+                              <label for="campo" class="form-label">Campo a eliminar</label>
+
+                              <div class="mb-3" th:if="${#lists.isEmpty(camposNuevos)}">
+                                  <label class="form-label">No hay registros de nuevos campos</label>
+                              </div>
+
+                              <select th:if="${not #lists.isEmpty(camposNuevos)}" class="form-select" aria-label="Default select example" name="campo">
+                                <option value="">--Seleccione el campo--</option>
+                                <option th:each="campo: ${camposNuevos}"
+                                        th:text="${campo}" th:value="${campo}"
+                                        ></option>
+                              </select>
+                            </div>
+
+                            <input th:if="${not #lists.isEmpty(camposNuevos)}" type="submit" value="Eliminar" class="btn btn-outline-danger">
                           </form>
                         </div>
                       </div>
@@ -78,11 +112,12 @@
 
 
 
-
                   <h5 class="card-title">Lista de sitios</h5>
                   <div th:if="${msg1 != null}" th:text="${msg1}" class="alert alert-success" role="alert"></div>
                   <div th:if="${msg2 != null}" th:text="${msg2}" class="alert alert-success" role="alert"></div>
-                  <div th:if="${msg3 != null}" th:text="${msg3}" class="alert alert-success" role="alert"></div>
+                  <div th:if="${msg3 != null}" th:text="${msg3}" class="alert alert-primary" role="alert"></div>
+                  <div th:if="${msg4 != null}" th:text="${msg4}" class="alert alert-danger" role="alert"></div>
+
                 </div>
                 <!-- Table with stripped rows -->
                 <table class="table datatable">
