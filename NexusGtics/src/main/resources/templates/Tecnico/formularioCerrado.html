@@ -144,12 +144,13 @@
             </table></center>
           </div>
         </div>
-        <div class="card mb-3 tabla-con-sombra">
+
+        <div th:if="${formulario.ticket.idTipoTicket.idTipoTicket == 1}" class="card mb-3 tabla-con-sombra">
           <div class="card-body table-responsive">
             <h5 class="card-title" style="color: #729a9d">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle-fill" viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-8 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-              </svg> Validación de sitio
+              </svg> Validación de equipo
             </h5>
             <table class="table table-bordered tabla-con-sombra">
               <tr>
@@ -167,133 +168,216 @@
                   <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
                 </td>
                 <!---->
-                <td><b style="color:#3c6264">¿La movilidad llegó al sitio?</b></td>
-                <td th:if="${formulario.movilidad==1}">
+                <td><b style="color:#3c6264">¿Hay equipos encendidos?</b></td>
+                <td th:if="${formulario.equipoencendido==1}">
                   <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
                 </td>
-                <td th:if="${formulario.movilidad==0}">
+                <td th:if="${formulario.equipoencendido==0}">
                   <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
                 </td>
               </tr>
               <tr>
-                <td><b style="color:#3c6264">Área del sitio</b></td>
-                <td th:text="${formulario.area} + 'm2' ">Área del sitio</td>
-                <!---->
-                <td><b style="color:#3c6264">Observación</b></td>
-                <td th:text="${formulario.observaciones}"></td>
+                <td><b style="color:#3c6264">¿Hay equipos encendidos?</b></td>
+                <td th:if="${formulario.equipoconectado==1}">
+                  <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
+                </td>
+                <td th:if="${formulario.equipoconectado==0}">
+                  <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
+                </td>
               </tr></table>
-                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                <div id="map"></div>
-                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                <script>
-                  var latitud = [[${sitio.latitud}]];
-                  var longitud = [[${sitio.longitud}]];
-                  let map = L.map('map').setView([latitud,longitud],18)
-                  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                    attribution:
-                            'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-                  }).addTo(map);
-                  L.marker([latitud,longitud]).addTo(map).bindPopup('Lugar').openPopup();
-                </script>
-
-                <script>
-                  function centrarMapaEnCoordenadasIniciales() {
-                    map.setView([latitud, longitud], 18);
-                  }
-                  var botonCentrar = L.control({ position: 'bottomright' });
-
-                  botonCentrar.onAdd = function (map) {
-                    var container = L.DomUtil.create('div', 'boton-centrar');
-                    var button = L.DomUtil.create('button', 'btn btn-primary', container);
-                    button.type = 'button';
-                    var icono = L.DomUtil.create('i', 'bx bx-collapse', button);
-                    L.DomEvent.on(button, 'click', centrarMapaEnCoordenadasIniciales);
-                    return container;
-                  };
-                  botonCentrar.addTo(map);
-                </script>
-            <br>
-            <p><b style="color:#3c6264">Fotos del sitio visitado</b></p>
-            <div id="carouselExample" class="carousel slide">
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <img src="https://peruconstruye.net/wp-content/uploads/2021/11/huancavelica-7.jpg" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                  <img src="https://data-peru.itp.gob.pe/api/image?slug=geo&id=0907&size=thumb" class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                  <img src="https://elperuano.pe/suplementosflipping/lonuestro/270/web/img/foto14.jpg" class="d-block w-100" alt="...">
-                </div>
-              </div>
-              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-              </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-              </button>
-            </div>
           </div>
         </div>
-        <div  class="card mb-3 tabla-con-sombra">
+
+        <div th:if="${formulario.ticket.idTipoTicket.idTipoTicket == 2}" class="card mb-3 tabla-con-sombra">
+        <div class="card-body table-responsive">
+          <h5 class="card-title" style="color: #729a9d">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle-fill" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-8 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+            </svg> Validación de Sitio
+          </h5>
+          <table class="table table-bordered tabla-con-sombra">
+            <tr>
+              <td><b style="color:#3c6264">Nombre del arrendatario:</b></td>
+              <td th:text="${formulario.nomredantario}"> </td>
+              <td><b style="color:#3c6264">DNI:</b></td>
+              <td th:text="${formulario.dni}"></td>
+            </tr>
+            <tr>
+              <td><b style="color:#3c6264">¿Existe conexión de energía?</b></td>
+              <td th:if="${formulario.conexion==1}">
+                <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
+              </td>
+              <td th:if="${formulario.conexion==0}">
+                <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
+              </td>
+              <!---->
+              <td><b style="color:#3c6264">¿La movilidad llegó al sitio?</b></td>
+              <td th:if="${formulario.movilidad==1}">
+                <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
+              </td>
+              <td th:if="${formulario.movilidad==0}">
+                <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
+              </td>
+            </tr>
+            <tr>
+              <td><b style="color:#3c6264">Área del sitio</b></td>
+              <td th:text="${formulario.area} + 'm2' ">Área del sitio</td>
+              <!---->
+              <td><b style="color:#3c6264">Observación</b></td>
+              <td th:text="${formulario.observaciones}"></td>
+            </tr></table>
+          <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+          <div id="map"></div>
+          <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+          <script>
+            var latitud = [[${sitio.latitud}]];
+            var longitud = [[${sitio.longitud}]];
+            let map = L.map('map').setView([latitud,longitud],18)
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+              attribution:
+                      'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            }).addTo(map);
+            L.marker([latitud,longitud]).addTo(map).bindPopup('Lugar').openPopup();
+          </script>
+
+          <script>
+            function centrarMapaEnCoordenadasIniciales() {
+              map.setView([latitud, longitud], 18);
+            }
+            var botonCentrar = L.control({ position: 'bottomright' });
+
+            botonCentrar.onAdd = function (map) {
+              var container = L.DomUtil.create('div', 'boton-centrar');
+              var button = L.DomUtil.create('button', 'btn btn-primary', container);
+              button.type = 'button';
+              var icono = L.DomUtil.create('i', 'bx bx-collapse', button);
+              L.DomEvent.on(button, 'click', centrarMapaEnCoordenadasIniciales);
+              return container;
+            };
+            botonCentrar.addTo(map);
+          </script>
+          <br>
+          <p><b style="color:#3c6264">Fotos del sitio visitado</b></p>
+          <div id="carouselExample" class="carousel slide">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="https://peruconstruye.net/wp-content/uploads/2021/11/huancavelica-7.jpg" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="https://data-peru.itp.gob.pe/api/image?slug=geo&id=0907&size=thumb" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="https://elperuano.pe/suplementosflipping/lonuestro/270/web/img/foto14.jpg" class="d-block w-100" alt="...">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+        <div th:if="${formulario.ticket.idTipoTicket.idTipoTicket == 1}" class="card mb-3 tabla-con-sombra">
           <div class="card-body table-responsive">
             <h5 class="card-title" style="color: #729a9d">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle-fill" viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-8 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-              </svg> Trabajo Realizado
+              </svg> Atención del caso
             </h5>
             <table class="table table-bordered tabla-con-sombra">
               <tr>
-                <td><b style="color:#3c6264">¿Se realizó construcción de infraestructura?</b></td>
-                <td th:if="${formulario.conexion==1}">
-                  <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
-                </td>
-                <td th:if="${formulario.conexion==0}">
-                  <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
-                </td>
+                <td><b style="color:#3c6264">Situación encontrada</b></td>
+                <td th:text="${formulario.situacion}"></td>
                 <!---->
-                <td><b style="color:#3c6264">¿Se realizó instalaciones electricas?</b></td>
-                <td th:if="${formulario.movilidad==1}">
-                  <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
-                </td>
-                <td th:if="${formulario.movilidad==0}">
-                  <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
-                </td>
+                <td><b style="color:#3c6264">Acciones ejecutadas</b></td>
+                <td th:text="${formulario.acciones}"></td>
               </tr>
               <tr>
-                <td><b style="color:#3c6264">Tecnología instalada</b></td>
-                <td>2G, 3G, 4G</td>
+                <td><b style="color:#3c6264">¿Estado de baterías correctos?</b></td>
+                <td th:if="${formulario.bateriasestado==1}">
+                  <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
+                </td>
+                <td th:if="${formulario.bateriasestado==0}">
+                  <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
+                </td>
                 <!---->
-                <td><b style="color:#3c6264">Descripción de trabajos realizados</b></td>
-                <td th:text="${formulario.trabarealizados}"></td>
+                <td><b style="color:#3c6264">Especialidad de la avería</b></td>
+                <td th:text="${formulario.averia}"></td>
+              </tr>
+              <tr>
+                <td><b style="color:#3c6264">Observaciones</b></td>
+                <td th:text="${formulario.observaciones}"></td>
               </tr>
             </table>
-            <p><b style="color:#3c6264">Fotos de instalación</b></p>
-              <div id="carousel1" class="carousel slide">
-                <div class="carousel-inner">
-                  <div class="carousel-item active">
-                    <img src="https://cdn.www.gob.pe/uploads/document/file/1487402/standard_ANTENAS.jpg.jpg" class="d-block w-100" alt="...">
-                  </div>
-                  <div class="carousel-item">
-                    <img src="https://s1.eestatic.com/2020/12/23/omicrono/545706383_168200103_1706x960.jpg" class="d-block w-100" alt="...">
-                  </div>
-                  <div class="carousel-item">
-                    <img src="https://www.redusers.com/noticias/wp-content/uploads/2014/08/icampo.fw_-650x450.png" class="d-block w-100" alt="...">
-                  </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Next</span>
-                </button>
-              </div>
+            <p><b style="color:#3c6264">Fotos de situación</b></p>
+            <img src="https://cdn.www.gob.pe/uploads/document/file/1487402/standard_ANTENAS.jpg.jpg" class="d-block w-100" alt="...">
+            <p><b style="color:#3c6264">Fotos de baterías</b></p>
+            <img src="https://cdn.www.gob.pe/uploads/document/file/1487402/standard_ANTENAS.jpg.jpg" class="d-block w-100" alt="...">
+
           </div>
         </div>
+        <div  th:if="${formulario.ticket.idTipoTicket.idTipoTicket == 2}" class="card mb-3 tabla-con-sombra">
+        <div class="card-body table-responsive">
+          <h5 class="card-title" style="color: #729a9d">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle-fill" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-8 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+            </svg> Trabajo Realizado
+          </h5>
+          <table class="table table-bordered tabla-con-sombra">
+            <tr>
+              <td><b style="color:#3c6264">¿Se realizó construcción de infraestructura?</b></td>
+              <td th:if="${formulario.conexion==1}">
+                <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
+              </td>
+              <td th:if="${formulario.conexion==0}">
+                <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
+              </td>
+              <!---->
+              <td><b style="color:#3c6264">¿Se realizó instalaciones electricas?</b></td>
+              <td th:if="${formulario.movilidad==1}">
+                <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
+              </td>
+              <td th:if="${formulario.movilidad==0}">
+                <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
+              </td>
+            </tr>
+            <tr>
+              <td><b style="color:#3c6264">Tecnología instalada</b></td>
+              <td>2G, 3G, 4G</td>
+              <!---->
+              <td><b style="color:#3c6264">Descripción de trabajos realizados</b></td>
+              <td th:text="${formulario.trabarealizados}"></td>
+            </tr>
+          </table>
+          <p><b style="color:#3c6264">Fotos de instalación</b></p>
+          <div id="carousel1" class="carousel slide">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="https://cdn.www.gob.pe/uploads/document/file/1487402/standard_ANTENAS.jpg.jpg" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="https://s1.eestatic.com/2020/12/23/omicrono/545706383_168200103_1706x960.jpg" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="https://www.redusers.com/noticias/wp-content/uploads/2014/08/icampo.fw_-650x450.png" class="d-block w-100" alt="...">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
+      </div>
       </section>
     <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicketCerrado?id='+${formulario.ticket.idTickets}}" style="background-color: rgb(2,52,91); color:white">Regresar</a>
       </div>
