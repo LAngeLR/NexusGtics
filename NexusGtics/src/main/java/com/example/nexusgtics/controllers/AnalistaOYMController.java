@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
@@ -41,11 +40,13 @@ public class AnalistaOYMController {
     final ArchivoRepository archivoRepository;
     final SitiosHasEquiposRepository sitiosHasEquiposRepository;
     final CargoRepository cargoRepository;
+    final FormularioRepository formularioRepository;
+    final TecnicosCuadrillaRepository tecnicosCuadrillaRepository;
     private final PasswordEncoder passwordEncoder;
     @Autowired
     private SitioCerradoRepository sitioCerradoRepository;
 
-    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, HistorialTicketRepository historialTicketRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1, UsuarioRepository usuarioRepository, ComentarioRepository comentarioRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository, PasswordEncoder passwordEncoder, SitioCerradoRepository  sitioCerradoRepository){
+    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, HistorialTicketRepository historialTicketRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1, UsuarioRepository usuarioRepository, ComentarioRepository comentarioRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository, FormularioRepository formularioRepository, TecnicosCuadrillaRepository tecnicosCuadrillaRepository, PasswordEncoder passwordEncoder, SitioCerradoRepository  sitioCerradoRepository){
         this.sitioRepository = sitioRepository;
         this.ticketRepository = ticketRepository;
         this.equipoRepository = equipoRepository;
@@ -56,6 +57,8 @@ public class AnalistaOYMController {
         this.archivoRepository = archivoRepository;
         this.sitiosHasEquiposRepository = sitiosHasEquiposRepository;
         this.cargoRepository = cargoRepository;
+        this.formularioRepository = formularioRepository;
+        this.tecnicosCuadrillaRepository = tecnicosCuadrillaRepository;
         this.passwordEncoder = passwordEncoder;
         this.sitioCerradoRepository = sitioCerradoRepository;
     }
@@ -759,9 +762,7 @@ public class AnalistaOYMController {
                 //poner fechaCierre hora actual
                 ZoneId zonaHoraria = ZoneId.of("GMT-5");
                 LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
-                ticket.setFechaCreacion(fechaActual);
                 LocalTime horaActual = LocalTime.now(zonaHoraria);
-                ticket.setHoraCreacion(horaActual);
                 ticketRepository.guardarCierre(fechaActual,horaActual,id);
             }
 
@@ -886,6 +887,40 @@ public class AnalistaOYMController {
             return "redirect:/analistaOYM/listaTickets";
         }
 
+    }
+
+    @GetMapping("/formulario")
+    public String formulario(Model model, @RequestParam("id") String idStr,
+                             @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult, HttpSession httpSession) {
+        List<Ticket> listaT = ticketRepository.findAll();
+        model.addAttribute("listaTicket", listaT);
+
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !formularioRepository.existsById(id)) {
+                System.out.println("error 1");
+                return "redirect:/analistaOYM/ticket";
+            }
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
+            Optional<Sitio> sitioOptional = sitioRepository.findById(id);
+            if (optionalFormulario.isPresent() && sitioOptional.isPresent()) {
+                formulario = optionalFormulario.get();
+                Sitio sitio = sitioOptional.get();
+                Usuario u = (Usuario) httpSession.getAttribute("usuario");
+                Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+                model.addAttribute("cuadrilla",idCuadrilla);
+                model.addAttribute("formulario", formulario);
+                model.addAttribute("sitio", sitio);
+                model.addAttribute("idTick", formularioRepository.obtenerid(id));
+                return "AnalistaOYM/oymFormulario";
+            } else {
+                System.out.println("error 2");
+                return "redirect:/analistaOYM/ticket";
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("error 3");
+            return "redirect:/analistaOYM/ticket";
+        }
     }
 
 

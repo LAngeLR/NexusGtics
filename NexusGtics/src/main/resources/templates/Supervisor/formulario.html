@@ -118,12 +118,56 @@
                     </table></center>
                 </div>
             </div>
-            <div class="card mb-3 tabla-con-sombra">
+
+            <div th:if="${formulario.ticket.idTipoTicket.idTipoTicket == 1}" class="card mb-3 tabla-con-sombra">
                 <div class="card-body table-responsive">
                     <h5 class="card-title" style="color: #729a9d">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle-fill" viewBox="0 0 16 16">
                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-8 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                        </svg> Validación de sitio
+                        </svg> Validación de equipo
+                    </h5>
+                    <table class="table table-bordered tabla-con-sombra">
+                        <tr>
+                            <td><b style="color:#3c6264">Nombre del arrendatario:</b></td>
+                            <td th:text="${formulario.nomredantario}"> </td>
+                            <td><b style="color:#3c6264">DNI:</b></td>
+                            <td th:text="${formulario.dni}"></td>
+                        </tr>
+                        <tr>
+                            <td><b style="color:#3c6264">¿Existe conexión de energía?</b></td>
+                            <td th:if="${formulario.conexion==1}">
+                                <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
+                            </td>
+                            <td th:if="${formulario.conexion==0}">
+                                <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
+                            </td>
+                            <!---->
+                            <td><b style="color:#3c6264">¿Hay equipos encendidos?</b></td>
+                            <td th:if="${formulario.equipoencendido==1}">
+                                <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
+                            </td>
+                            <td th:if="${formulario.equipoencendido==0}">
+                                <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b style="color:#3c6264">¿Hay equipos encendidos?</b></td>
+                            <td th:if="${formulario.equipoconectado==1}">
+                                <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
+                            </td>
+                            <td th:if="${formulario.equipoconectado==0}">
+                                <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
+                            </td>
+                        </tr></table>
+                </div>
+            </div>
+
+            <div th:if="${formulario.ticket.idTipoTicket.idTipoTicket == 2}" class="card mb-3 tabla-con-sombra">
+                <div class="card-body table-responsive">
+                    <h5 class="card-title" style="color: #729a9d">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-8 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                        </svg> Validación de Sitio
                     </h5>
                     <table class="table table-bordered tabla-con-sombra">
                         <tr>
@@ -160,11 +204,12 @@
                     <div id="map"></div>
                     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
                     <script>
-                        var latitud = [[${sitioCerrado.latitud}]];
-                        var longitud = [[${sitioCerrado.longitud}]];
+                        var latitud = [[${sitio.latitud}]];
+                        var longitud = [[${sitio.longitud}]];
                         let map = L.map('map').setView([latitud,longitud],18)
-                        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                            attribution:
+                                'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
                         }).addTo(map);
                         L.marker([latitud,longitud]).addTo(map).bindPopup('Lugar').openPopup();
                     </script>
@@ -210,7 +255,47 @@
                     </div>
                 </div>
             </div>
-            <div  class="card mb-3 tabla-con-sombra">
+
+            <div th:if="${formulario.ticket.idTipoTicket.idTipoTicket == 1}" class="card mb-3 tabla-con-sombra">
+                <div class="card-body table-responsive">
+                    <h5 class="card-title" style="color: #729a9d">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-8 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                        </svg> Atención del caso
+                    </h5>
+                    <table class="table table-bordered tabla-con-sombra">
+                        <tr>
+                            <td><b style="color:#3c6264">Situación encontrada</b></td>
+                            <td th:text="${formulario.situacion}"></td>
+                            <!---->
+                            <td><b style="color:#3c6264">Acciones ejecutadas</b></td>
+                            <td th:text="${formulario.acciones}"></td>
+                        </tr>
+                        <tr>
+                            <td><b style="color:#3c6264">¿Estado de baterías correctos?</b></td>
+                            <td th:if="${formulario.bateriasestado==1}">
+                                <span class="badge rounded-pill" style="background-color: #78ad4a">Sí</span>
+                            </td>
+                            <td th:if="${formulario.bateriasestado==0}">
+                                <span class="badge rounded-pill" style="background-color: #ea4f7b">No</span>
+                            </td>
+                            <!---->
+                            <td><b style="color:#3c6264">Especialidad de la avería</b></td>
+                            <td th:text="${formulario.averia}"></td>
+                        </tr>
+                        <tr>
+                            <td><b style="color:#3c6264">Observaciones</b></td>
+                            <td th:text="${formulario.observaciones}"></td>
+                        </tr>
+                    </table>
+                    <p><b style="color:#3c6264">Fotos de situación</b></p>
+                    <img src="https://cdn.www.gob.pe/uploads/document/file/1487402/standard_ANTENAS.jpg.jpg" class="d-block w-100" alt="...">
+                    <p><b style="color:#3c6264">Fotos de baterías</b></p>
+                    <img src="https://cdn.www.gob.pe/uploads/document/file/1487402/standard_ANTENAS.jpg.jpg" class="d-block w-100" alt="...">
+
+                </div>
+            </div>
+            <div  th:if="${formulario.ticket.idTipoTicket.idTipoTicket == 2}" class="card mb-3 tabla-con-sombra">
                 <div class="card-body table-responsive">
                     <h5 class="card-title" style="color: #729a9d">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle-fill" viewBox="0 0 16 16">
