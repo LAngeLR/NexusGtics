@@ -2,6 +2,7 @@ package com.example.nexusgtics.controllers;
 
 import com.example.nexusgtics.dto.DashboardGraficoDto;
 import com.example.nexusgtics.dto.DetalleCuadrillaDto;
+import com.example.nexusgtics.dto.HistorialTicketDto;
 import com.example.nexusgtics.dto.ListaCuadrillaCompletaDto;
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
@@ -726,6 +727,33 @@ public class SupervisorController {
         }
 
     }
+
+
+    @GetMapping("/historial")
+    public String historialTicket(Model model, @RequestParam("id") String idStr){
+
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/supervisor/listaTickets";
+            }
+            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
+            List<HistorialTicket> listaHistorial= historialTicketRepository.listarHistorial1(id);
+
+            if (ticketOptional.isPresent()) {
+                Ticket ticket = ticketOptional.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("listaHistorial", listaHistorial);
+                return "Supervisor/historialTicket";
+            } else {
+                return "redirect:/supervisor/listaTickets";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/supervisor/listaTickets";
+        }
+
+    }
+
 
     @GetMapping("/comentariosAsignados")
     public String comentarioAsignadoTicket(Model model, @RequestParam("id") String idStr){

@@ -2,6 +2,8 @@ package com.example.nexusgtics.repository;
 
 import com.example.nexusgtics.dto.ActividadDto;
 import com.example.nexusgtics.dto.DashboardGraficoDto;
+import com.example.nexusgtics.dto.HistorialTicketDto;
+import com.example.nexusgtics.entity.Comentario;
 import com.example.nexusgtics.entity.HistorialTicket;
 import jakarta.transaction.Transactional;
 import org.springframework.cglib.core.Local;
@@ -92,4 +94,15 @@ public interface HistorialTicketRepository extends JpaRepository<HistorialTicket
             "    month")
     List<DashboardGraficoDto> grafico();
     */
+
+    @Query(nativeQuery = true, value = "SELECT ht.estado,  ht.idTickets,  ht.descripcion,  ht.fechaCambio,  ht.horaCambio, CONCAT( u.nombre, ' ' ,u.apellido) AS nombre, c.nombreCargo AS cargo\n" +
+            "FROM historialtickets ht\n" +
+            "JOIN usuarios u ON ht.idUsuarios = u.idUsuarios\n" +
+            "JOIN cargos c ON u.idCargos = c.idCargos\n" +
+            "WHERE ht.idTickets = ?1\n" +
+            "ORDER BY ht.fechaCambio DESC, ht.horaCambio DESC;")
+    List<HistorialTicketDto> listarHistorial(int id);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM historialtickets WHERE idTickets = ?1 ORDER BY fechaCambio DESC, horaCambio DESC;\n")
+    List<HistorialTicket> listarHistorial1(int id);
 }
