@@ -29,6 +29,8 @@
       <section class="section">
         <div th:if="${archivoSubido != null}" th:text="${archivoSubido}" class="alert alert-primary" role="alert"></div>
         <div th:if="${msgImagen1 != null}" th:text="${msgImagen1}" class="alert alert-danger" role="alert"></div>
+        <div th:if="${msgCadena != null}" th:text="${msgCadena}" class="alert alert-danger" role="alert"></div>
+        <div th:if="${msgExtension != null}" th:text="${msgExtension}" class="alert alert-danger" role="alert"></div>
 
 
         <div class="row">
@@ -47,7 +49,7 @@
               </div>
 
               <div class="mb-3">
-                <label class="form-label">Archivo (pdf, docx, xlsx) </label>
+                <label class="form-label">Archivo (pdf | docx | xlsx) </label>
                 <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
                        accept=".pdf, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
                 <div id="emailHelp" class="form-text">El tamaño del archivo no debe de exceder los 100 MB.</div>
