@@ -1,8 +1,6 @@
 package com.example.nexusgtics.controllers;
-
-import com.example.nexusgtics.dto.DashboardGraficoDto;
+import com.example.nexusgtics.controllers.Email.CorreoService;
 import com.example.nexusgtics.dto.DetalleCuadrillaDto;
-import com.example.nexusgtics.dto.HistorialTicketDto;
 import com.example.nexusgtics.dto.ListaCuadrillaCompletaDto;
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
@@ -26,6 +24,8 @@ import static com.example.nexusgtics.controllers.GcsController.uploadObject;
 @Controller
 @RequestMapping("/supervisor")
 public class SupervisorController {
+    @Autowired
+    private CorreoService correoService;
     @Autowired
     private HttpSession session;
     private final CuadrillaRepository cuadrillaRepository;
@@ -343,6 +343,7 @@ public class SupervisorController {
     @GetMapping( {"/","","supervisor"})
     public String paginaPrincipal(Model model){
         model.addAttribute("currentPage", "Inicio");
+        correoService.enviarCorreo("a20192832@pucp.edu.pe", "Prueba", "Solo para probar si realmente funciona el envio de correo");
         return "Supervisor/menuSupervisor";
     }
 
@@ -452,6 +453,7 @@ public class SupervisorController {
         try{
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !ticketRepository.existsById(id)) {
+                System.out.println("error: 1");
                 return "redirect:/supervisor/listaTicketsNuevos";
             }
             Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
@@ -496,9 +498,11 @@ public class SupervisorController {
 
                 return "Supervisor/ticketAsignar";
             } else {
+                System.out.println("error: 2");
                 return "redirect:/supervisor/listaTicketsNuevos";
             }
         } catch (NumberFormatException e) {
+            System.out.println("error: 3");
             return "redirect:/supervisor/listaTicketsNuevos";
         }
     }
@@ -578,7 +582,6 @@ public class SupervisorController {
                 model.addAttribute("tickets", ticket);
                 model.addAttribute("comentario",comentarioRepository.obtenerUltimoComentario(ticket.getIdTickets()));
                 model.addAttribute("tecnicoLider",user);
-                model.addAttribute("tiempoTranscurrido",historialTicketRepository.tiempoTranscurrido(id));
 
                 //---mandar tiempo transcurrido---
                 ZoneId zonaHoraria = ZoneId.of("GMT-5");
@@ -694,7 +697,7 @@ public class SupervisorController {
             ZoneId zonaHoraria = ZoneId.of("GMT-5");
             LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
             LocalTime horaActual = LocalTime.now(zonaHoraria);
-            historialTicketRepository.crearHistorial(6,fechaCambioEstado,fechaActual,horaActual,id,idSupervisor,"Pasando a Analista");
+            historialTicketRepository.crearHistorial(7,fechaCambioEstado,fechaActual,horaActual,id,idSupervisor,"Pasando a Analista");
             ticketRepository.actualizarEstado(id,estadoUtilizar);
             redirectAttributes.addFlashAttribute("yum","El ticket ha sido cerrado correctamente");
             return "redirect:/supervisor/listaTickets";

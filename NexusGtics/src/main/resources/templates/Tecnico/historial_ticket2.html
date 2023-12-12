@@ -29,287 +29,264 @@
   <link th:href="@{/assets/css/style.css}" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-      body {
-        margin:0;
-        background-color: #21d4fd;
-        background-image: linear-gradient(19deg, #b9dcf6 0%, #ffffff 100%);
+    .step-wizard {
+      background-color: #21d4fd;
+      background-image: linear-gradient(19deg, #b9dcf6 0%, #ffffff 100%);
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .text-box {
+      background-color: #FFFFFF;
+      border: 1px solid #FFFFFF;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .step-wizard-list {
+      background: #fff;
+      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+      color: #333;
+      list-style-type: none;
+      border-radius: 10px;
+      display: flex;
+      padding: 20px 10px;
+      position: relative;
+      z-index: 10;
+      max-width: 100%; /* Ajusta según sea necesario */
+    }
+
+    .step-wizard-item {
+      padding: 0 1em; /* Utiliza em o % para el relleno lateral */
+      margin-top: 1em; /* Utiliza em o % para el margen superior */
+      flex-basis: 0;
+      -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+      flex-grow: 1;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      min-width: 170px;
+      position: relative;
+      font-size: 1em; /* Utiliza em en lugar de px para el tamaño de fuente */
+    }
+
+    .step-wizard-item + .step-wizard-item:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 19px;
+      background: #21d4fd;
+      width: 100%;
+      height: 2px;
+      transform: translateX(-50%);
+      z-index: -10;
+    }
+
+    .progress-count {
+      height: 40px;
+      width: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: 600;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+      color: transparent;
+    }
+    .progress-count1 {
+      height: 40px;
+      width: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: 600;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+      color: transparent;
+    }
+
+    .progress-count:after {
+      content: "";
+      height: 40px;
+      width: 40px;
+      background: #21d4fd;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      z-index: -10;
+    }
+    .progress-count1:after {
+      content: "";
+      height: 40px;
+      width: 40px;
+      background: #d3d3d3;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      z-index: -10;
+    }
+
+    .progress-count:before {
+      content: "";
+      height: 10px;
+      width: 20px;
+      border-left: 3px solid #fff;
+      border-bottom: 3px solid #fff;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -60%) rotate(-45deg);
+      transform-origin: center center;
+    }
+    .progress-count1:before {
+      content: "";
+      height: 10px;
+      width: 20px;
+      border-left: 3px solid #dad9d9;
+      border-bottom: 3px solid #dad9d9;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -60%) rotate(-45deg);
+      transform-origin: center center;
+    }
+
+    .progress-label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .current-item ~ .step-wizard-item .progress-count:after {
+      height: 10px;
+      width: 10px;
+    }
+
+    .current-item ~ .step-wizard-item .progress-label {
+      opacity: 0.5;
+    }
+
+    .current-item .progress-count:after {
+      background: #fff;
+      border: 2px solid #21d4fd;
+    }
+
+    .current-item .progress-count {
+      color: #21d4fd;
+    }
+
+    @media (max-width: 768px) {
+      .step-wizard-item {
+        font-size: 0.8em;
       }
+    }
 
 
-      h1 {
-        color:#333;
-        font-weight:700;
-        margin-top:125px;
-        text-align:center;
-        text-transform:uppercase;
-        letter-spacing:4px;
-        line-height:23px;
-      }
 
-      /* --- Start progress bar --- */
-
-      .process-wrapper {
-        margin:auto;
-        max-width:1080px;
-      }
-
-      #progress-bar-container {
-        position:relative;
-        width:90%;
-        margin:auto;
-        height:100px;
-        margin-top:65px;
-      }
-
-      #progress-bar-container ul {
-        padding:0;
-        margin:0;
-        padding-top:15px;
-        z-index:9999;
-        position:absolute;
-        width:100%;
-        margin-top:-40px
-      }
-
-      #progress-bar-container li:before {
-        content:" ";
-        display:block;
-        margin:auto;
-        width:30px;
-        height:30px;
-        border-radius:50%;
-        border:solid 2px #aaa;
-        transition:all ease 0.3s;
-
-      }
-
-      #progress-bar-container li.active:before, #progress-bar-container li:hover:before {
-        border:solid 2px #fff;
-
-        background: linear-gradient(to right, #519b3f 0%, #e0c934 100%);
-      }
-
-      #progress-bar-container li {
-        list-style:none;
-        float:left;
-        width:20%;
-        text-align:center;
-        color:#aaa;
-        text-transform:uppercase;
-        font-size:11px;
-        cursor:pointer;
-        font-weight:700;
-        transition:all ease 0.2s;
-        vertical-align:bottom;
-        height:60px;
-        position:relative;
-      }
-
-      #progress-bar-container li .step-inner {
-        position:absolute;
-        width:100%;
-        bottom:0;
-        font-size: 14px;
-      }
-
-      #progress-bar-container li.active, #progress-bar-container li:hover {
-        color:#444;
-      }
-
-      #progress-bar-container li:after {
-        content:" ";
-        display:block;
-        width:6px;
-        height:6px;
-        background:#777;
-        margin:auto;
-        border:solid 7px #fff;
-        border-radius:50%;
-        margin-top:40px;
-        box-shadow:0 2px 13px -1px rgba(0,0,0,0.3);
-        transition:all ease 0.2s;
-
-      }
-
-      #progress-bar-container li:hover:after {
-        background:#555;
-      }
-
-      #progress-bar-container li.active:after {
-        background:#207893;
-      }
-
-      #progress-bar-container #line {
-        width:80%;
-        margin:auto;
-        background: #eee;
-        height:6px;
-        position:absolute;
-        left:10%;
-        top:57px;
-        z-index:1;
-        border-radius:50px;
-        transition:all ease 0.9s;
-      }
-
-      #progress-bar-container #line-progress {
-        content:" ";
-        width:3%;
-        height:100%;
-        background: #207893;
-        background: linear-gradient(to right, #1d366e 0%,#2ea3b7 100%);
-        position:absolute;
-        z-index:2;
-        border-radius:50px;
-        transition:all ease 0.9s;
-      }
-
-      #progress-content-section {
-        width:90%;
-        margin: auto;
-        background: white;
-        border-radius: 4px;
-      }
-
-      #progress-content-section .section-content {
-        padding:30px 40px;
-        text-align:center;
-      }
-
-      #progress-content-section .section-content h2 {
-        font-size:17px;
-        text-transform:uppercase;
-        color:#333;
-        letter-spacing:1px;
-      }
-
-      #progress-content-section .section-content p {
-        font-size:16px;
-        line-height:1.8em;
-        color:#777;
-      }
-
-      #progress-content-section .section-content {
-        display:none;
-        animation: FadeInUp 700ms ease 1;
-        animation-fill-mode:forwards;
-        transform:translateY(15px);
-        opacity:0;
-      }
-
-      #progress-content-section .section-content.active {
-        display:block;
-      }
-
-      @keyframes FadeInUp {
-        0% {
-          transform:translateY(15px);
-          opacity:0;
-        }
-
-        100% {
-          transform:translateY(0px);
-          opacity:1;
-        }
-      }
-</style>
+  </style>
 </head>
 <body>
 <!-- ======= Header =======
 <header th:replace="Fragmentos/header :: header('Técnico')"></header> -->
-<header th:replace="Fragmentos/headerDos :: header('tecnico',${listaTicket}, ${cuadrilla})"></header>
+<header th:replace="Fragmentos/header :: header('tecnico')"></header>
 <!-- End Header -->
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuTecnico :: menu(currentPage='historial_ticket2')"></aside><!-- End Sidebar-->
-
+<aside th:replace="Fragmentos/menuTecnico :: menu(currentPage='historial_ticket')"></aside><!-- End Sidebar-->
 <main id="main" class="main">
   <div class="pagetitle">
-    <h1>Historial del ticket</h1>
+    <h1>Historial de ticket en técnico</h1>
   </div><!-- End Page Title -->
+  <section class="step-wizard">
+    <br>
+    <div class="container">
+      <ul class="step-wizard-list">
+        <li class="step-wizard-item">
+          <span class="progress-count">1</span>
+          <span class="progress-label">Analista - crear</span>
+        </li>
+        <li class="step-wizard-item">
+          <span class="progress-count">2</span>
+          <span class="progress-label">Supervisor - asigna</span>
+        </li>
+        <li class="step-wizard-item">
+          <span class="progress-count">3</span>
+          <span class="progress-label">Técnico - tus movimientos</span>
+        </li>
+        <li class="step-wizard-item">
+          <span class="progress-count1">4</span>
+          <span class="progress-label">Supervisor - supervisa</span>
+        </li>
+        <li class="step-wizard-item">
+          <span class="progress-count1">5</span>
+          <span class="progress-label">Analista - cierra</span>
+        </li>
+      </ul>
+    </div>
 
-  <section class="section dashboard">
-    <div class="process-wrapper">
-      <div id="progress-bar-container">
-        <ul>
-          <li class="step step01 active"><div class="step-inner">Analista</div></li>
-          <li class="step step02 active"><div class="step-inner">Supervisor</div></li>
-          <li class="step step03 active"><div class="step-inner">Técnico</div></li>
-          <li class="step step04"><div class="step-inner">Supervisor</div></li>
-          <li class="step step05"><div class="step-inner">Analista</div></li>
-        </ul>
-
-        <div id="line">
-          <div id="line-progress" style="width: 50%;"></div>
-        </div>
-      </div>
-
-      <div id="progress-content-section" class="text-box">
-        <div class="section-content discovery">
-          <h2>ANALISTA</h2>
-          <p>colocar</p>
-        </div>
-
-        <div class="section-content strategy">
-          <h2>SUPERVISOR</h2>
-          <p>colocar</p>
-        </div>
-
-        <div class="section-content creative active">
-          <h2>TÉCNICO</h2>
-          <p>colocar</p>
-        </div>
-
-        <div class="section-content production">
-          <h2>SUPERVISOR</h2>
-          <p>colocar</p>
-        </div>
-
-        <div class="section-content analysis">
-          <h2>ANALISTA</h2>
-          <p>colocar</p>
-        </div>
+    <br>
+    <div class="card" style="background-color: rgba(255,255,255,0.63)">
+      <div data-bs-spy="scroll" class="card-body" style="max-height: 400px; overflow-y: auto;">
+        <div class="row gy-4">
+          <div class="col">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="info-box card" id="item-1" th:each="historial: ${listaHistorial}">
+                  <div class="row align-items-center">
+                    <div class="col-lg-2">
+                      <img th:src="@{|/file/${historial.usuario.archivo.idArchivos}|}" alt="Profile" class="rounded-circle" style="max-width: 50px; max-height: 50px;"
+                           onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
+                    </div>
+                    <div class="col-lg-8" style="margin-left: 20px;">
+                      <h3>
+                        <span th:text="${historial.usuario.nombre + ' ' + historial.usuario.apellido}" style="font-weight: bold; color: #00489b; font-size: large"></span>
+                        <p th:text="${' (' + historial.usuario.cargo.nombreCargo + ' - ' + historial.usuario.empresa.nombre + ')'}" style="color: rgba(0,0,0,0.51)"></p>
+                      </h3>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <br>
+                      <p th:text="${historial.ticket.descripcion}" style="color: rgba(0,0,0,0.51)"></p>
+                      <br>
+                      <p style="display: inline;">Cambio Hecho:  </p>
+                      <h2 th:text=" ${historial.descripcion}" style="font-size: 20px; color: black; display: inline-block;"></h2>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-12 text-end">
+                      <span th:text="${historial.fechaCambio}"></span>   <span th:text="${historial.horaCambio}"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div></div>
       </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script>
-
-      $(".step").click( function() {
-        $(this).addClass("active").prevAll().addClass("active");
-        $(this).nextAll().removeClass("active");
-      });
-
-      $(".step01").click( function() {
-        $("#line-progress").css("width", "3%");
-        $(".discovery").addClass("active").siblings().removeClass("active");
-      });
-
-      $(".step02").click( function() {
-        $("#line-progress").css("width", "25%");
-        $(".strategy").addClass("active").siblings().removeClass("active");
-      });
-
-      $(".step03").click( function() {
-        $("#line-progress").css("width", "50%");
-        $(".creative").addClass("active").siblings().removeClass("active");
-      });
-
-      $(".step04").click( function() {
-        $("#line-progress").css("width", "75%");
-        $(".production").addClass("active").siblings().removeClass("active");
-      });
-
-      $(".step05").click( function() {
-        $("#line").css("width", "100%");
-        $(".analysis").addClass("active").siblings().removeClass("active");
-      });
-
-    </script>
   </section>
-
-</main><!-- End #main -->
-
+</main>
 
 <footer id="footer" class="footer">
   <div class="credits" style="font-size: x-small;color:#5e5d5d">

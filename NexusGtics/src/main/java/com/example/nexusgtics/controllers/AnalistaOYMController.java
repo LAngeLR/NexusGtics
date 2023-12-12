@@ -24,6 +24,7 @@ import java.time.*;
 import java.util.*;
 
 import static com.example.nexusgtics.controllers.GcsController.uploadObject;
+import static com.example.nexusgtics.controllers.GcsController.uploadObjectArchivo;
 
 @Controller
 @RequestMapping(value = {"/analistaOYM"})
@@ -34,6 +35,7 @@ public class AnalistaOYMController {
     final SitioRepository sitioRepository;
     final UsuarioRepository usuarioRepository;
     final EquipoRepository equipoRepository;
+    final ArchivoSitioRepository archivoSitioRepository;
     final HistorialTicketRepository historialTicketRepository;
     final EmpresaRepository empresaRepository;
     private final ComentarioRepository comentarioRepository;
@@ -46,10 +48,11 @@ public class AnalistaOYMController {
     @Autowired
     private SitioCerradoRepository sitioCerradoRepository;
 
-    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, HistorialTicketRepository historialTicketRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1, UsuarioRepository usuarioRepository, ComentarioRepository comentarioRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository, FormularioRepository formularioRepository, TecnicosCuadrillaRepository tecnicosCuadrillaRepository, PasswordEncoder passwordEncoder, SitioCerradoRepository  sitioCerradoRepository){
+    public AnalistaOYMController(SitioRepository sitioRepository, TicketRepository ticketRepository, EquipoRepository equipoRepository, ArchivoSitioRepository archivoSitioRepository, HistorialTicketRepository historialTicketRepository, EmpresaRepository empresaRepository, EmpresaRepository empresaRepository1, UsuarioRepository usuarioRepository, ComentarioRepository comentarioRepository, ArchivoRepository archivoRepository, SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository, FormularioRepository formularioRepository, TecnicosCuadrillaRepository tecnicosCuadrillaRepository, PasswordEncoder passwordEncoder, SitioCerradoRepository  sitioCerradoRepository){
         this.sitioRepository = sitioRepository;
         this.ticketRepository = ticketRepository;
         this.equipoRepository = equipoRepository;
+        this.archivoSitioRepository = archivoSitioRepository;
         this.historialTicketRepository = historialTicketRepository;
         this.empresaRepository = empresaRepository;
         this.usuarioRepository = usuarioRepository;
@@ -93,6 +96,20 @@ public class AnalistaOYMController {
 
             if (optionalUsuario.isPresent()) {
                 Usuario usuarioDB = optionalUsuario.get();
+
+
+                if(file.getSize()>1){
+                    if (file.getOriginalFilename().length() > 40) {
+                        model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 caracteres");
+                        return "AnalistaOYM/perfilEditar";
+                    }
+                    String extensionValida = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+                    if (!extensionValida.equals("png") && !extensionValida.equals("jpg") && !extensionValida.equals("jpeg")) {
+                        model.addAttribute("msgExtension", "Solo se permiten archivos con extensión png, jpg y jpeg");
+                        return "AnalistaOYM/perfilEditar";
+                    }
+                }
+
 
                 if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
                     model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
@@ -301,7 +318,17 @@ public class AnalistaOYMController {
                                   BindingResult bindingResult,
                                   Model model,
                                   RedirectAttributes attr) {
-
+        if(file.getSize()>1){
+            if (file.getOriginalFilename().length() > 40) {
+                model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 caracteres");
+                return "AnalistaOYM/oymEditarSitio";
+            }
+            String extensionValida = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+            if (!extensionValida.equals("png") && !extensionValida.equals("jpg") && !extensionValida.equals("jpeg")) {
+                model.addAttribute("msgExtension", "Solo se permiten archivos con extensión png, jpg y jpeg");
+                return "AnalistaOYM/oymEditarSitio";
+            }
+        }
         if (sitio.getTipo() == null || sitio.getTipo().equals("-1")) {
             model.addAttribute("msgTipo", "Escoger un tipo de Sitio");
 
@@ -663,7 +690,12 @@ public class AnalistaOYMController {
         int numeroRandom = random.nextInt(7) + 1;
 
         ticket.setIdUsuarioCreador(u);
-        //ticket.setIdsitioCerrado(numeroRandom);
+        Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(numeroRandom);
+        if (optionalSitioCerrado.isPresent()) {
+            SitioCerrado sitioCerrado = optionalSitioCerrado.get();
+            ticket.setIdsitioCerrado(sitioCerrado);
+        }
+
         ticket.setReasignado(0);
         ticketRepository.save(ticket);
         attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente por el usuario: " + ticket.getUsuarioSolicitante());
@@ -1049,7 +1081,128 @@ public class AnalistaOYMController {
     }
 
 
+    /* SUBIDA DE ARCHIVOS */
+    @GetMapping("/archivosSitios")
+    public String archivosSitios(Model model, @ModelAttribute("sitio") Sitio sitio){
+        List<Sitio>  listaSitio = sitioRepository.listaDeSitios();
+        model.addAttribute("listaSitio",listaSitio);
+        model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+//        model.addAttribute("nombreSitios", archivoSitioRepository.nombreSitios());
+        System.out.println();
+        model.addAttribute("listaArchivos", archivoSitioRepository.findAll());
+        return "AnalistaOYM/oymArchivosSitios";
+    }
 
+    /* SUBIR ARCHIVOS*/
+    @PostMapping("/subirArchivo")
+    public String subirArchivo(@RequestParam("imagenSubida") MultipartFile file,
+                               @RequestParam("idSitios") int idSitios,
+                               Model model,
+                               RedirectAttributes attr) {
+        System.out.println(idSitios);
+        System.out.println(file.getContentType());
+        System.out.println(file.getSize());
+        System.out.println(file.getName());
+
+        System.out.println("Maximo tamaño permitido - 1048576 bytes");
+
+        if(file.getSize()>1){
+            /*VALIDACIÓN PARA QUE EL NOMBRE DEL ARHCIVO SEA MENOR A 40*/
+            if (file.getOriginalFilename().length() > 40) {
+                model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 caracteres");
+//                return "redirect:/analistaDespliegue/archivosSitios";
+                model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                model.addAttribute("listaArchivos", archivoSitioRepository.findAll());
+                return "AnalistaOYM/oymArchivosSitios";
+            }
+
+            /*VALIDACION DE EXTENSIÓN*/
+            String extensionValida = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+            if (!extensionValida.equals("pdf") && !extensionValida.equals("docx") && !extensionValida.equals("xlsx")) {
+                model.addAttribute("msgExtension", "Solo se permiten archivos con extensión pdf, docx y xlsx");
+//                return "redirect:/analistaDespliegue/archivosSitios";
+                model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                model.addAttribute("listaArchivos", archivoSitioRepository.findAll());
+                return "AnalistaOYM/oymArchivosSitios";
+
+            }
+
+        }
+
+//        int maxFileSize = 20000000;
+//        int maxFileSize = 1048576;
+//
+//        if (file.getSize() > maxFileSize) {
+//            System.out.println(file.getSize());
+//            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (100MB).");
+//            return "redirect:/analistaDespliegue/archivosSitios";
+//        }
+
+        try {
+            /*OBTENGO EL SITIO DE MANERA OPCIONAL*/
+            Optional<Sitio> optionalSitio = sitioRepository.findById(idSitios);
+            Integer idSitioNombre = idSitios;
+
+            if (optionalSitio.isPresent()) {
+                /*pregunto si el sitio existe en al BD*/
+                Sitio sitioBD = optionalSitio.get();
+
+                if(file.getSize()>1){
+                    // Obtenemos el nombre del archivo
+                    String fileName = file.getOriginalFilename();
+                    String nombreFront = fileName.substring(0, fileName.lastIndexOf('.'));
+                    String extension = "";
+                    int i = fileName.lastIndexOf('.');
+                    if (i > 0) {
+                        extension = fileName.substring(i+1);
+                    }
+                    Archivossitio archivossitio = new Archivossitio();
+                    archivossitio.setNombreArchivo(fileName);
+                    archivossitio.setTipo(2);
+                    archivossitio.setArchivo(file.getBytes());
+                    archivossitio.setContentType(file.getContentType());
+                    archivossitio.setIdSitioSitio(optionalSitio.get());
+                    archivossitio.setNombreSitio(optionalSitio.get().getNombre());
+                    archivossitio.setNombreFront(nombreFront);
+                    Archivossitio archivossitio1 = archivoSitioRepository.save(archivossitio);
+                    String nombreArchivo = "archivo-"+archivossitio1.getIdSitioSitio().getIdSitios()+"-"+archivossitio1.getId()+"."+extension;
+                    archivossitio1.setNombreArchivo(nombreArchivo);
+                    System.out.println("El nombre del archivo essss: ");
+                    System.out.println(archivossitio1.getNombreArchivo());
+                    archivoSitioRepository.save(archivossitio1);
+                    uploadObjectArchivo(archivossitio1);
+                    archivossitio1.setArchivo(null);
+                    attr.addFlashAttribute("archivoSubido", "El archivo '"+ archivossitio1.getNombreFront() +"' ha sido subido exitosamente al sitio '" + archivossitio1.getNombreSitio()+"'");
+
+                }
+
+            } else {
+                return "redirect:/analistaOYM";
+            }
+            return "redirect:/analistaOYM/archivosSitios";
+
+        } catch (IOException e) {
+            model.addAttribute("msgImagen1", "Error al procesar el archivo: " + e.getMessage());
+            return "redirect:/analistaOYM/archivosSitios";
+        }
+    }
+
+
+    @GetMapping("/borrarArchivo")
+    public String borrarArchivo(@RequestParam("id") int id,
+                                RedirectAttributes attr) {
+
+        Optional<Archivossitio> optional = archivoSitioRepository.findById(id);
+
+        if (optional.isPresent()) {
+            Archivossitio archivossitio = optional.get();
+            archivoSitioRepository.deleteById(id);
+            attr.addFlashAttribute("archivoEliminado", "El archivo '"+ archivossitio.getNombreFront() +"' ha sido eliminado exitosamente del sitio '" + archivossitio.getNombreSitio()+"'");
+
+        }
+
+        return "redirect:/analistaOYM/archivosSitios";
+    }
 
 
 

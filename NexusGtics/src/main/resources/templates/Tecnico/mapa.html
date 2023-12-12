@@ -29,28 +29,26 @@
     <link th:href="@{/assets/css/style.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <style>
-        #map { height: 80vh; width: 100hw; }
-        select {
-            width: 30%;
-            font-size: 0.8rem
-        }
-        .legend {
-            padding: 10px;
-            font-size: 14px;
-            line-height: 18px;
-            color: #555;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        .container {
+            overflow: hidden;
         }
 
-        .legend i {
-            width: 18px;
-            height: 18px;
-            margin-right: 8px;
-            border-radius: 50%;
-            display: inline-block;
+        .filterDiv {
+            float: left;
+            background-color: #2196F3;
+            color: #ffffff;
+            width: 100px;
+            line-height: 100px;
+            text-align: center;
+            margin: 2px;
+            display: none; /* Hidden by default */
         }
+
+        /* The "show" class is added to the filtered elements */
+        .show {
+            display: block;
+        }
+
 
     </style>
 </head>
@@ -77,115 +75,187 @@
         <section class="section profile">
             <div class="row">
                 <div class="col-xl-12">
-                    <div class="card" >
+                    <div class="card">
+                        <center>
+                            <div class="card-body">
+                                <h5 class="card-title">Distribucion</h5>
+
+                                <table>
+                                    <tr>
+                                        <td style="padding-right: 20px;">
+                                            <p style="color: red">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                                </svg> <b style="color:black;" class="fw-light">Tickets Cerrados</b>
+                                            </p>
+                                        </td>
+                                        <td style="padding-left: 20px;">
+                                            <p style="color: green">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                                </svg>
+                                                <b style="color: black;" class="fw-light">Tickets Progreso</b>
+                                            </p>
+                                        </td>
+
+                                        <td style="padding-left: 20px;">
+                                            <p style="color: blue">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                                </svg>
+                                                <b style="color: black;" class="fw-light">Tickets Nuevos</b>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </center>
+                    </div>
+                </div>
+
+                <div class="col-xl-12">
+                    <div class="card">
                         <div class="card-body pt-3">
-                            <div id="select-location">
-                                <select name="location" id="location">
-                                    <option value="-1">Selecciona uno...</option>
-                                    <!--<option th:each="sitio :${sitioCerradoList}"
-                                            th:value="${sitio.latitud + ',' + sitio.longitud}" th:text="${sitio.distrito}">Empire State Building</option>-->
-                                    <option th:each="ticket :${listaMp}"
-                                            th:text="${ticket.estado == 3 ? 'Nuevo' : (ticket.estado == 4 or ticket.estado == 5) ? 'Progreso' : (ticket.estado == 6) ? 'Cerrado' : 'Otro'}"
-                                            th:value="${ticket.idSitios.latitud + ',' + ticket.idSitios.longitud}">
-                                        Empire State Building
-                                    </option>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div id="select-location-cerrado" class="select-location flex-grow-1">
+                                    <select name="location" id="location-cerrado" class="location-select">
+                                        <option value="-1">Selecciona uno...</option>
+                                        <option th:each="ticketC :${ticketsCerrados}"
+                                                th:text="${ticketC.idSitios.nombre}"
+                                                th:value="${ticketC.idSitios.latitud + ',' + ticketC.idSitios.longitud + ',' + ticketC.estado}">
+                                            Empire State Building
+                                        </option>
+                                    </select>
+                                </div>
+                                <div id="select-location-progreso" class="select-location flex-grow-1">
+                                    <select name="location" id="location-progreso" class="location-select">
+                                        <option value="-1">Selecciona uno...</option>
+                                        <option th:each="ticketP :${ticketsProgreso}"
+                                                th:text="${ticketP.idSitios.nombre}"
+                                                th:value="${ticketP.idSitios.latitud + ',' + ticketP.idSitios.longitud + ',' + ticketP.estado}">
+                                            Empire State Building
+                                        </option>
+                                    </select>
+                                </div>
+                                <div id="select-location-nuevo" class="select-location flex-grow-1">
+                                    <select name="location" id="location-nuevo" class="location-select">
+                                        <option value="-1">Selecciona uno...</option>
+                                        <option th:each="ticketN :${ticketsNuevos}"
+                                                th:text="${ticketN.idSitios.nombre}"
+                                                th:value="${ticketN.idSitios.latitud + ',' + ticketN.idSitios.longitud + ',' + ticketN.estado}">
 
-                                </select>
+                                            Empire State Building
+                                        </option>
+                                    </select>
+                                </div>
+                                <div id="select-options" class="d-flex">
+                                    <button class="option-btn3 active" data-option="cerrado">Cerrado</button>
+                                    <button class="option-btn2" data-option="progreso">Progreso</button>
+                                    <button class="option-btn1" data-option="nuevo">Nuevo</button>
+                                </div>
                             </div>
-                            <br>
-                            <div id="map">
+
+                            <!-- Mapas -->
+                            <div id="map-cerrado" class="map-container">
+                                <div class="map"></div>
                             </div>
+
+                            <div id="map-progreso" class="map-container">
+                                <div class="map"></div>
+                            </div>
+
+                            <div id="map-nuevo" class="map-container">
+                                <div class="map"></div>
+                            </div>
+
+                            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
                             <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
                             <script>
-                                let map = L.map('map').setView([-12.0690694, -77.0786442], 17);
+                                $(document).ready(function () {
+                                    function initializeMap(mapId, selectId, color) {
+                                        let map = L.map(mapId).setView([-12.0690694, -77.0786442], 18);
+                                        let marker = null;
 
-                                //mapa general
-                                L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                                    attribution:
-                                        'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-                                }).addTo(map);
-                                var Stadia_StamenTerrainLines = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain_lines/{z}/{x}/{y}{r}.{ext}', {
-                                    minZoom: 0,
-                                    maxZoom: 18,
-                                    attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                                    ext: 'png'
-                                }).addTo(map);
-                                //mapa general - fin
-                                //INICIO DE LEYENDAAAA
-                                var zoneLegend = {
-                                    "Ticket Nuevo": {
-                                        icon: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-                                        color: 'green'
-                                    },
-                                    "Ticket Cerrado": {
-                                        icon: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-                                        color: 'red'
-                                    },
-                                    "Ticket Progreso": {
-                                        icon: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
-                                        color: 'yellow'
+                                        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                                            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                                        }).addTo(map);
+
+                                        $(selectId).change(function () {
+                                            let values = $(this).val().split(",");
+                                            let coords = values.slice(0, 5);
+
+                                            if (!marker) {
+                                                marker = L.marker(coords, { icon: createIcon(color) }).addTo(map);
+                                            } else {
+                                                marker.setLatLng(coords).update();
+                                            }
+
+                                            map.flyTo(coords, 18);
+                                        });
                                     }
 
-                                };
+                                    initializeMap('map-cerrado', '#location-cerrado', 'red');
+                                    initializeMap('map-progreso', '#location-progreso', 'green');
+                                    initializeMap('map-nuevo', '#location-nuevo', 'blue');
 
-                                var legend = L.control({ position: 'bottomright' });
+                                    $(".select-location").hide();
+                                    $(".map-container").hide();
 
-                                legend.onAdd = function (map) {
-                                    var div = L.DomUtil.create('div', 'legend');
-                                    for (var zone in zoneLegend) {
-                                        div.innerHTML += '<i style="background:' + zoneLegend[zone].color + '"></i> ' + zone + '<br>';
-                                    }
-                                    return div;
-                                };
+                                    $(".option-btn1").click(function () {
+                                        $(".select-location").hide();
+                                        $(".map-container").hide();
 
-                                legend.addTo(map);
+                                        let option = $(this).data("option");
 
-                                //FINN DE LEYENDAAAA
+                                        $(`#select-location-${option}`).show();
+                                        $(`#map-${option}`).show();
+                                    });
 
-                                var redIcon = new L.Icon({
-                                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-                                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                                    iconSize: [25, 41],
-                                    iconAnchor: [12, 41],
-                                    popupAnchor: [1, -34],
-                                    shadowSize: [41, 41]
+                                    $(".option-btn2").click(function () {
+                                        $(".select-location").hide();
+                                        $(".map-container").hide();
+
+                                        let option = $(this).data("option");
+
+                                        $(`#select-location-${option}`).show();
+                                        $(`#map-${option}`).show();
+                                    });
+
+                                    $(".option-btn3").click(function () {
+                                        $(".select-location").hide();
+                                        $(".map-container").hide();
+
+                                        let option = $(this).data("option");
+
+                                        $(`#select-location-${option}`).show();
+                                        $(`#map-${option}`).show();
+                                    });
+
+                                    // Mostrar por defecto el mapa y combobox de "cerrado"
+                                    $("#select-location-cerrado").show();
+                                    $("#map-cerrado").show();
+                                    $(".option-btn3").addClass("active");  // Agrega una clase 'active' al botón de "cerrado"
                                 });
 
-                                var greenIcon = new L.Icon({
-                                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-                                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                                    iconSize: [25, 41],
-                                    iconAnchor: [12, 41],
-                                    popupAnchor: [1, -34],
-                                    shadowSize: [41, 41]
-                                });
-                                var yellowIcon = new L.Icon({
-                                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
-                                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                                    iconSize: [25, 41],
-                                    iconAnchor: [12, 41],
-                                    popupAnchor: [1, -34],
-                                    shadowSize: [41, 41]
-                                });
-
-                                L.marker([-12.0690694, -77.0786442], {icon: yellowIcon}).addTo(map);
-                                L.marker([-13.5167110, -71.9788230], {icon: greenIcon}).addTo(map);
-                                L.marker([-12.1219000, -77.0297000], {icon: redIcon}).addTo(map);
-
-                                document.getElementById('select-location').addEventListener('change', function(e){
-                                    let coords = e.target.value.split(",");
-                                    L.marker(coords).addTo(map)
-                                    map.flyTo(coords, 17);
-                                });
-
+                                function createIcon(color) {
+                                    return L.icon({
+                                        iconUrl: `https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
+                                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                                        iconSize: [25, 41],
+                                        iconAnchor: [12, 41],
+                                        popupAnchor: [1, -34],
+                                        shadowSize: [41, 41]
+                                    });
+                                }
                             </script>
-                            <!-- MAPA -->
                         </div>
                     </div>
                 </div>
 
+
             </div>
-            <a type="button" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" class="btn btn-outline-dark" th:href="@{'/tecnico/'}">Atrás</a>
         </section>
     </div>
 

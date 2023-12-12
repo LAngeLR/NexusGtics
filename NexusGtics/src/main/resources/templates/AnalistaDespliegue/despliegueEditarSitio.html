@@ -53,7 +53,8 @@
     <div class="pagetitle">
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/listaSitio}">Lista de sitios</a></li>
+          <li class="breadcrumb-item"><a>Sitios</a></li>
+          <li class="breadcrumb-item"><a>Lista de sitios</a></li>
           <li class="breadcrumb-item active">Editar sitio</li>
         </ol>
       </nav>
@@ -178,9 +179,10 @@
                           var latitud = [[${sitio.latitud}]];
                           var longitud = [[${sitio.longitud}]];
                           let map = L.map('mi_mapa').setView([latitud,longitud],18)
-                          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                          L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                            attribution: ''
                           }).addTo(map);
+
                           L.marker([latitud,longitud]).addTo(map).bindPopup(nombre).openPopup();
 
                         </script>
@@ -193,7 +195,7 @@
               </div>
               <div>
                 <a  th:href="@{'/analistaDespliegue/listaSitio'}" class="btn btn-outline-danger " >Cancelar</a>
-                <button  type="submit" class="btn btn-outline-primary " >Aceptar</button>
+                <button  type="submit" class="btn btn-outline-primary">Guardar cambios</button>
               </div>
 
             </form>

@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head th:include="Fragmentos/head :: head('Analista de Despliegue')"></head>
+<head th:include="Fragmentos/head :: head('Analista de Mantenimiento')"></head>
 
 
 <body>
 
 <!-- ======= Header ======= -->
-<header th:replace="Fragmentos/header :: header('analistaDespliegue')"><!-- End Header --></header><!-- End Header -->
+<header th:replace="Fragmentos/header :: header('analistaOYM')"><!-- End Header --></header><!-- End Header -->
 
   <!-- ======= Sidebar ======= -->
 <!-- ======= Sidebar ======= -->
-<aside th:replace="Fragmentos/menuDespliegue :: menu('archivoSitio')">
+<aside th:replace="Fragmentos/menuAnalistaOYM :: menu('archivoSitio')">
 </aside><!-- End Sidebar-->
 
   <main id="main" class="main">
@@ -20,7 +20,7 @@
       <div class="pagetitle">
         <nav>
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Sitios</a></li>
+            <li class="breadcrumb-item"><a>Sitios</a></li>
             <li class="breadcrumb-item active">Archivos de sitio</li>
           </ol>
         </nav>
@@ -38,7 +38,7 @@
 
             <div class="card">
               <div class="card-body">
-                <form th:action="@{/analistaDespliegue/subirArchivo}" method="post" th:object="${sitio}" enctype="multipart/form-data" >
+                <form th:action="@{/analistaOYM/subirArchivo}" method="post" th:object="${sitio}" enctype="multipart/form-data" >
                   <div class="pagetitle1">
                     <h1 class="card-title">Subida de archivos</h1>
                   </div>
@@ -102,7 +102,7 @@
                     <td>
                       <div>
                         <a class="btn btn-primary" th:href="@{|/fileArchivo/${lista.idSitioSitio.idSitios}/${lista.id}|}"><i class="bi bi-file-earmark-arrow-down-fill"></i></a>
-                        <a class="btn btn-danger" th:href="@{'/analistaDespliegue/borrarArchivo?id=' + ${lista.id}}"
+                        <a class="btn btn-danger" th:href="@{'/analistaOYM/borrarArchivo?id=' + ${lista.id}}"
                            onclick="return confirm('¿Estás seguro que deseas borrar este archivo?')"><i class="bi bi-trash3-fill"></i></a>
                       </div>
                     </td>

@@ -53,13 +53,28 @@
     <div class="pagetitle">
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a th:href="@{/analistaOYM/listaSitio}">Lista de sitios</a></li>
+          <li class="breadcrumb-item"><a>Sitios</a></li>
+          <li class="breadcrumb-item">Lista de sitios</li>
           <li class="breadcrumb-item active">Editar sitio</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
     <section class="section dashboard">
+
+      <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
+      </div>
+      <div class="alert alert-danger" role="alert" th:if="${msgImagen1 != null}" th:text="${msgImagen1}">
+      </div>
+
+      <div class="alert alert-danger" role="alert" th:if="${msgPeso != null}" th:text="${msgPeso}">
+      </div>
+      <div class="alert alert-danger" role="alert" th:if="${msgCadena != null}" th:text="${msgCadena}">
+      </div>
+      <div class="alert alert-danger" role="alert" th:if="${msgExtension != null}" th:text="${msgExtension}">
+      </div>
+
       <div class="row">
+
         <div class="rounded p-5" style="background-color: #FFFFFF;">
           <div class="pagetitle">
             <h1 class="card-title">Editar de sitio</h1>
@@ -173,8 +188,8 @@
                         var latitud = [[${sitio.latitud}]];
                         var longitud = [[${sitio.longitud}]];
                         let map = L.map('mi_mapa').setView([latitud,longitud],18)
-                        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                          attribution: ''
                         }).addTo(map);
                         L.marker([latitud,longitud]).addTo(map).bindPopup(nombre).openPopup();
 
@@ -188,7 +203,7 @@
             </div>
             <div>
               <a  th:href="@{'/analistaOYM/listaSitio'}" class="btn btn-outline-danger " >Cancelar</a>
-              <button  type="submit" class="btn btn-outline-primary " >Aceptar</button>
+              <button  type="submit" class="btn btn-outline-primary">Guardar cambios</button>
             </div>
 
           </form>
