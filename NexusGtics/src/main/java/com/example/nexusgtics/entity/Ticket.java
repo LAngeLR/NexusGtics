@@ -32,7 +32,7 @@ public class Ticket implements Serializable {
 
     @Column(name = "usuarioSolicitante", length = 70)
     @Size(max = 70)
-    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "La Provincia debe contener solo letras")
+    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "El usuario debe contener solo letras")
     @NotBlank(message = "El campo no debe estar vacío")
     private String usuarioSolicitante;
 

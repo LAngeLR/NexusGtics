@@ -72,34 +72,26 @@
 <!--                    <div class="alert alert-danger" role="alert" th:if="${msgDescrip != null}" th:text="${msgDescrip}"></div>-->
 <!--                    <div class="alert alert-danger" role="alert" th:if="${msgUser != null}" th:text="${msgUser}"></div>-->
                     <div class="alert alert-danger" role="alert" th:if="${msgPrio != null}" th:text="${msgPrio}"></div>
-
                     <form method="POST" th:action="@{/analistaOYM/updateTicket}" th:object="${ticket}" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6">
                                 <input type="hidden" class="form-control" th:field="*{idTickets}">
                                 <input type="hidden" name="estado" id="estado" th:field="*{estado}">
                                 <input type="hidden" name="fechaCreacion" id="fechaCreacion" th:field="*{fechaCreacion}">
+                                <input type="hidden" name="HoraCreacion" id="HoraCreacion" th:field="*{horaCreacion}">
+                                <input type="hidden" name="" id="idEmpresaAsignada" th:field="*{idEmpresaAsignada}">
+                                <input type="hidden" name="" id="idSitios" th:field="*{idSitios}">
                                 <input type="hidden" name="idTipoTicket" id="idTipoTicket" value="1">
                                 <input type="hidden" name="idUsuarioCreador" id="idUsuarioCreador" value="4">
 
                                 <div class="mb-3">
-                                    <label for="idEmpresaAsignada">Empresa</label>
-                                    <select class="form-select" name="idEmpresaAsignada" id="idEmpresaAsignada">
-                                        <option th:each="empresa: ${listaEmpresa}"
-                                                th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
-                                                th:selected="${ticket.idEmpresaAsignada.idEmpresas == empresa.idEmpresas}"
-                                        >Open this select menu</option>
-                                    </select>
+                                    <label class="form-label">Empresa:</label>
+                                    <input type="text" class="form-control" th:field="*{idEmpresaAsignada.nombre}" disabled>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="idSitios">Sitio de despliegue:</label>
-                                    <select name="idSitios" id="idSitios" class="form-select">
-                                        <option th:each="sitio: ${listaSitios}"
-                                                th:text="${sitio.nombre}" th:value="${sitio.idSitios}"
-                                                th:selected="${ticket.idSitios.idSitios == sitio.idSitios}"
-                                        >Sitio de Tipo</option>
-                                    </select>
+                                    <label class="form-label">Sitio de Despliegue:</label>
+                                    <input type="text" class="form-control" th:field="*{idSitios.nombre}" disabled>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Descripción:</label>
