@@ -50,88 +50,203 @@
 </aside><!-- End Sidebar-->
 
 <main id="main" class="main">
-    <div class="pagetitle">
-        <nav>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">Tickets</li>
-                <li class="breadcrumb-item active">Mapa de tickets</li>
-            </ol>
-        </nav>
-    </div><!-- End Page Title -->
+    <div class="container">
+        <div class="pagetitle">
+            <h1>Mapa</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/}">Home</a></li>
+                    <li class="breadcrumb-item active">Tickets</li>
+                    <li class="breadcrumb-item active">Mapa</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+        <section class="section profile">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <center>
+                            <div class="card-body">
+                                <h5 class="card-title">Distribucion</h5>
 
-    <section class="section profile">
-        <h5 class="card-title">Mapa de tickets</h5>
+                                <table>
+                                    <tr>
+                                        <td style="padding-right: 20px;">
+                                            <p style="color: red">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                                </svg> <b style="color:black;" class="fw-light">Tickets Cerrados</b>
+                                            </p>
+                                        </td>
+                                        <td style="padding-left: 20px;">
+                                            <p style="color: green">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                                </svg>
+                                                <b style="color: black;" class="fw-light">Tickets Progreso</b>
+                                            </p>
+                                        </td>
 
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="card">
-                    <center>
-                        <div class="card-body">
-                            <h5 class="card-title">Distribución</h5>
+                                        <td style="padding-left: 20px;">
+                                            <p style="color: blue">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                                                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                                                </svg>
+                                                <b style="color: black;" class="fw-light">Tickets Nuevos</b>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
 
-                            <table>
-                                <tr>
-                                    <td style="padding-right: 20px;">
-                                        <p style="color: red">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                                            </svg> <b style="color:black;" class="fw-light">Tickets Creados</b>
-                                        </p>
-                                    </td>
-                                    <td style="padding-left: 20px;">
-                                        <p style="color: #F0E108">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                                            </svg>
-                                            <b style="color: black;" class="fw-light">Tickets Cerrados</b>
-                                        </p>
-                                    </td>
-                                </tr>
-                            </table>
-
-                        </div>
-                    </center>
-                </div>
-            </div>
-
-            <div class="col-xl-12">
-                <div class="card">
-                    <div class="card-body pt-3">
-                        <div id="select-location">
-                            <select name="location" id="location">
-                                <option value="-1" class="text-center">-- Seleccione un sitio --</option>
-                                <option th:each="sitio :${sitioList}"
-                                        th:value="${sitio.latitud + ',' + sitio.longitud}" th:text="${sitio.nombre}">Empire State Building</option>
-                                <!--<option value="40.689167, -74.044444">Estatua de la Libertad</option>
-                                <option value="51.507,0.1275">Londres</option>-->
-                            </select>
-                        </div>
-                        <br>
-                        <div id="map">
-                        </div>
-                        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                        <script>
-                            let map = L.map('map').setView([-12.0690694, -77.0786442], 18);
-
-                            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                                attribution: ''
-                            }).addTo(map);
-
-                            let defaultCoords = [-12.0690694, -77.0786442];
-                            L.marker(defaultCoords).addTo(map);
-
-                            document.getElementById('select-location').addEventListener('change', function(e){
-                                let coords = e.target.value.split(",");
-                                L.marker(coords).addTo(map)
-                                map.flyTo(coords, 18);
-                            });
-                        </script>
-                        <!-- MAPA -->
+                            </div>
+                        </center>
                     </div>
                 </div>
+
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body pt-3">
+                            <div class="d-flex justify-content-between mb-3">
+                                <div id="select-location-cerrado" class="select-location flex-grow-1">
+                                    <select name="location" id="location-cerrado" class="location-select">
+                                        <option value="-1">Selecciona uno...</option>
+                                        <option th:each="ticketC :${ticketsCerrados}"
+                                                th:text="${ticketC.idSitios.nombre}"
+                                                th:value="${ticketC.idSitios.latitud + ',' + ticketC.idSitios.longitud + ',' + ticketC.estado}">
+                                            Empire State Building
+                                        </option>
+                                    </select>
+                                </div>
+                                <div id="select-location-progreso" class="select-location flex-grow-1">
+                                    <select name="location" id="location-progreso" class="location-select">
+                                        <option value="-1">Selecciona uno...</option>
+                                        <option th:each="ticketP :${ticketsProgreso}"
+                                                th:text="${ticketP.idSitios.nombre}"
+                                                th:value="${ticketP.idSitios.latitud + ',' + ticketP.idSitios.longitud + ',' + ticketP.estado}">
+                                            Empire State Building
+                                        </option>
+                                    </select>
+                                </div>
+                                <div id="select-location-nuevo" class="select-location flex-grow-1">
+                                    <select name="location" id="location-nuevo" class="location-select">
+                                        <option value="-1">Selecciona uno...</option>
+                                        <option th:each="ticketN :${ticketsNuevos}"
+                                                th:text="${ticketN.idSitios.nombre}"
+                                                th:value="${ticketN.idSitios.latitud + ',' + ticketN.idSitios.longitud + ',' + ticketN.estado}">
+
+                                            Empire State Building
+                                        </option>
+                                    </select>
+                                </div>
+                                <div id="select-options" class="d-flex">
+                                    <button class="option-btn3 active" data-option="cerrado">Cerrado</button>
+                                    <button class="option-btn2" data-option="progreso">Progreso</button>
+                                    <button class="option-btn1" data-option="nuevo">Nuevo</button>
+                                </div>
+                            </div>
+
+                            <!-- Mapas -->
+                            <div id="map-cerrado" class="map-container">
+                                <div class="map"></div>
+                            </div>
+
+                            <div id="map-progreso" class="map-container">
+                                <div class="map"></div>
+                            </div>
+
+                            <div id="map-nuevo" class="map-container">
+                                <div class="map"></div>
+                            </div>
+
+                            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+                            <script>
+                                $(document).ready(function () {
+                                    function initializeMap(mapId, selectId, color) {
+                                        let map = L.map(mapId).setView([-12.0690694, -77.0786442], 18);
+                                        let marker = null;
+
+                                        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                                            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                                        }).addTo(map);
+
+                                        $(selectId).change(function () {
+                                            let values = $(this).val().split(",");
+                                            let coords = values.slice(0, 5);
+
+                                            if (!marker) {
+                                                marker = L.marker(coords, { icon: createIcon(color) }).addTo(map);
+                                            } else {
+                                                marker.setLatLng(coords).update();
+                                            }
+
+                                            map.flyTo(coords, 18);
+                                        });
+                                    }
+
+                                    initializeMap('map-cerrado', '#location-cerrado', 'red');
+                                    initializeMap('map-progreso', '#location-progreso', 'green');
+                                    initializeMap('map-nuevo', '#location-nuevo', 'blue');
+
+                                    $(".select-location").hide();
+                                    $(".map-container").hide();
+
+                                    $(".option-btn1").click(function () {
+                                        $(".select-location").hide();
+                                        $(".map-container").hide();
+
+                                        let option = $(this).data("option");
+
+                                        $(`#select-location-${option}`).show();
+                                        $(`#map-${option}`).show();
+                                    });
+
+                                    $(".option-btn2").click(function () {
+                                        $(".select-location").hide();
+                                        $(".map-container").hide();
+
+                                        let option = $(this).data("option");
+
+                                        $(`#select-location-${option}`).show();
+                                        $(`#map-${option}`).show();
+                                    });
+
+                                    $(".option-btn3").click(function () {
+                                        $(".select-location").hide();
+                                        $(".map-container").hide();
+
+                                        let option = $(this).data("option");
+
+                                        $(`#select-location-${option}`).show();
+                                        $(`#map-${option}`).show();
+                                    });
+
+                                    // Mostrar por defecto el mapa y combobox de "cerrado"
+                                    $("#select-location-cerrado").show();
+                                    $("#map-cerrado").show();
+                                    $(".option-btn3").addClass("active");  // Agrega una clase 'active' al botón de "cerrado"
+                                });
+
+                                function createIcon(color) {
+                                    return L.icon({
+                                        iconUrl: `https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
+                                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                                        iconSize: [25, 41],
+                                        iconAnchor: [12, 41],
+                                        popupAnchor: [1, -34],
+                                        shadowSize: [41, 41]
+                                    });
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
 </main><!-- End #main -->
 

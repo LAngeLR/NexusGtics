@@ -118,7 +118,11 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
     @Query(nativeQuery = true, value = "UPDATE tickets SET fechaCierre = ?1, horaCierre = ?2 WHERE (idTickets = ?3);\n")
     void guardarCierre(LocalDate fechaActual, LocalTime horaActual, int id);
 
-    @Query(value ="select * from tickets where estado=2 and idUsuarioCreador=?1 and idSupervisorEncargado IS NULL;", nativeQuery = true )
+    @Query(value ="SELECT *\n" +
+            "FROM nexus.tickets\n" +
+            "WHERE estado = 1\n" +
+            "  AND idUsuarioCreador = ?1\n" +
+            "  AND fechaCreacion >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK);\n", nativeQuery = true )
     List<Ticket> recienCreados(int id);
 
     @Query(value ="SELECT \n" +

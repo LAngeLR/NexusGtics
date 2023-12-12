@@ -562,10 +562,18 @@ public class AnalistaOYMController {
     @GetMapping("/mapaTickets")
     public String mapaTickets(Model model){
 
-        List<Ticket> listaT= ticketRepository.findAll();
-        model.addAttribute("listaTicket", listaT);
-        List<Sitio> sitioList = sitioRepository.listaDeSitios();
-        model.addAttribute("sitioList", sitioList);
+        List<Sitio> listaSitios = sitioRepository.findAll();
+        List<Ticket> listaTickets1 = ticketRepository.cerrados();
+        List<Ticket> listaTickets2 = ticketRepository.progreso();
+        List<Ticket> listaTickets3 = ticketRepository.nuevos();
+
+        //List<Ticket> listaTickets = ticketRepository.listarMapaSupervisor(idSupervisor,u.getEmpresa().getIdEmpresas());
+
+        model.addAttribute("ticketsCerrados", listaTickets1);
+        model.addAttribute("ticketsProgreso", listaTickets2);
+        model.addAttribute("ticketsNuevos", listaTickets3);
+
+        model.addAttribute("sitios", listaSitios);
 
         return "AnalistaOYM/oymMapaTickets";
     }

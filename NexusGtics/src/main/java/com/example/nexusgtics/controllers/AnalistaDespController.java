@@ -685,10 +685,18 @@ public class AnalistaDespController {
     @GetMapping("/mapaTickets")
     public String mapaTickets(Model model){
 
-        List<Ticket> listaT= ticketRepository.findAll();
-        model.addAttribute("listaTicket", listaT);
-        List<Sitio> sitioList = sitioRepository.listaDeSitios();
-        model.addAttribute("sitioList", sitioList);
+        List<Sitio> listaSitios = sitioRepository.findAll();
+        List<Ticket> listaTickets1 = ticketRepository.cerrados();
+        List<Ticket> listaTickets2 = ticketRepository.progreso();
+        List<Ticket> listaTickets3 = ticketRepository.nuevos();
+
+        //List<Ticket> listaTickets = ticketRepository.listarMapaSupervisor(idSupervisor,u.getEmpresa().getIdEmpresas());
+
+        model.addAttribute("ticketsCerrados", listaTickets1);
+        model.addAttribute("ticketsProgreso", listaTickets2);
+        model.addAttribute("ticketsNuevos", listaTickets3);
+
+        model.addAttribute("sitios", listaSitios);
 
         return "AnalistaDespliegue/despliegueMapaTickets";
     }
@@ -780,14 +788,12 @@ public class AnalistaDespController {
             model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaDespliegue/despliegueCrearTicket";
         }
-
         if(ticket.getIdSitios() == null || ticket.getIdSitios().getIdSitios() == null || ticket.getIdSitios().getIdSitios() == -1){
             model.addAttribute("msgSitio", "Escoger una sitio");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
             model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaDespliegue/despliegueCrearTicket";
         }
-
         if(ticket.getUsuarioSolicitante().isEmpty() || ticket.getUsuarioSolicitante().equals(" ")){
             model.addAttribute("msgPrioridad", "Debe seleccionar un usuario solicitante");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
@@ -800,23 +806,18 @@ public class AnalistaDespController {
             model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaDespliegue/despliegueCrearTicket";
         }
-
         if(ticket.getPrioridad() == null || ticket.getPrioridad().equals("-1")){
             model.addAttribute("msgPrioridad", "Seleccionar prioridad");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
             model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaDespliegue/despliegueCrearTicket";
-
         }
-
         if(ticket.getDescripcion().isEmpty() || ticket.getDescripcion().equals(" ")){
             model.addAttribute("msgPrioridad", "Debe seleccionar una descripción");
             model.addAttribute("listaEmpresa", empresaRepository.noNexus());
             model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaDespliegue/despliegueCrearTicket";
         }
-
-
 
         Random random = new Random();
         int numeroRandom = random.nextInt(7) + 1;
@@ -827,6 +828,7 @@ public class AnalistaDespController {
             SitioCerrado sitioCerrado = optionalSitioCerrado.get();
             ticket.setIdsitioCerrado(sitioCerrado);
         }
+
         ticket.setReasignado(0);
         ticketRepository.save(ticket);
         attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente por el usuario: " + ticket.getUsuarioSolicitante());
