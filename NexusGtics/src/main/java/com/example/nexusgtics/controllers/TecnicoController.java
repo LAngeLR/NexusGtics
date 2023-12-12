@@ -944,6 +944,8 @@ public class TecnicoController {
         }
     }
 
+
+
     //Desplazamiento en progreso para cerrado
     @GetMapping("/desplazamientoProgreso")
     public String desplazamientoProgreso(Model model, @RequestParam("id") int id,
