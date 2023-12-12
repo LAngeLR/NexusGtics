@@ -63,50 +63,167 @@
         </div>
     <div class="container py-4">
         <div class="p-5 mb-4 card" style="background-color: #f8fdfb;">
-            <h3 class="display-5 fw-bold" style="color:#7199a2">Formulario</h3>
             <div class="row">
-                <div class="col-sm-3 mb-3 mb-sm-0">
-                        <div class="card-body">
-                            <div class="imagen-recortada">
-                                <img style="width: 105%;height:105%" src="https://static.vecteezy.com/system/resources/previews/024/658/992/non_2x/3d-male-character-pointing-left-free-png.png" class="img-fluid" alt="llegadasitio">
+                <h2 style="font-weight: bold; color: #0f5132">Formulario - Ticket Mantenimiento</h2>
+                <form method="POST" th:action="@{/tecnico/saveFormularioMantenimiento}" th:object="${formulario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+                    <input type="hidden" class="form-control" th:field="*{idFormularios}">
+                    <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
+                    <input type="hidden" class="form-control" th:field="*{fechaLlenado}">
+                    <input type="hidden" class="form-control" th:field="*{descripcion}">
+                    <input type="hidden" class="form-control" th:field="*{confirmacion}">
+                    <input type="hidden" class="form-control" th:field="*{tecnico}">
+                    <input type="hidden" class="form-control" th:field="*{ticket}">
+                    <input type="hidden" class="form-control" th:field="*{tipoticket}">
+                    <input type="hidden" class="form-control" th:field="*{movilidad}">
+                    <input type="hidden" class="form-control" th:field="*{area}">
+                    <input type="hidden" class="form-control" th:field="*{construccion}">
+                    <input type="hidden" class="form-control" th:field="*{instalacion}">
+                    <input type="hidden" class="form-control" th:field="*{despliegue}">
+                    <input type="hidden" class="form-control" th:field="*{trabarealizados}">
+
+
+                    <!--<input type="hidden" name="hrelevantes" id="hrelevantes" th:field="*{hrelevantes}">-->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Hechos relevantes en la llegada al sitio:</label>
+                                <input th:field="*{hrelevantes}" type="text" th:class="${#fields.hasErrors('hrelevantes')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('hrelevantes')}" th:errors="*{hrelevantes}">
+                                    Mensaje de error de hrelevantes
+                                </div>
+                            </div>
+
+                            <!------------------------------------------------------------------->
+
+                            <div class="mb-3">
+                                <label class="form-label">Nombres del arrendatario:</label>
+                                <input th:field="*{nomredantario}" type="text" th:class="${#fields.hasErrors('nomredantario')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('nomredantario')}" th:errors="*{nomredantario}">
+                                    Mensaje de error de nomredantario
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">DNI:</label>
+                                <input th:field="*{dni}" type="number" th:class="${#fields.hasErrors('dni')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">
+                                    Mensaje de error de dni
+                                </div>
+                            </div>
+
+
+<!--                            <div class="form-check form-switch" th:if="${formulario.conexion==0}">-->
+<!--                                <label class="form-label">¿Conexión de energia?:</label>-->
+<!--                                <input class="form-check-input" type="checkbox" role="switch" th:field="*{conexion}"><br>-->
+<!--                                <label class="form-check-label" for="flexSwitchCheckDefault" style="font-size: xx-small">No hay conexión</label>-->
+<!--                            </div>-->
+<!--                            <div class="form-check form-switch" th:if="${formulario.conexion==1}">-->
+<!--                                <label class="form-label">¿Conexión de energia?:</label>-->
+<!--                                <input class="form-check-input" type="checkbox" role="switch" th:field="*{conexion}" checked=""><br>-->
+<!--                                <label class="form-check-label" for="flexSwitchCheckChecked" style="font-size: xx-small">Sí hay conexión</label>-->
+<!--                            </div>-->
+
+                            <div class="form-check form-switch" th:if="${formulario.conexion.equals(false)}">
+                                <label class="form-label">¿Conexión de energía?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" th:field="*{conexion}" th:value="0"><br>
+                                <label class="form-check-label" for="flexSwitchCheckDefault" style="font-size: xx-small">No hay conexión</label>
+                            </div>
+
+                            <div class="form-check form-switch" th:if="${formulario.conexion.equals(true)}">
+                                <label class="form-label">¿Conexión de energía?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" th:field="*{conexion}" th:value="1" checked=""><br>
+                                <label class="form-check-label" for="flexSwitchCheckChecked" style="font-size: xx-small">Sí hay conexión</label>
+                            </div>
+
+
+                            <br>
+
+
+
+
+                            <div class="form-check form-switch" th:if="${formulario.equipoencendido.equals(false)}">
+                                <label class="form-label">¿El equipo está encendido?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" th:field="*{equipoencendido}" th:value="0"><br>
+                                <label class="form-check-label" style="font-size: xx-small">No está encendido</label>
+                            </div>
+                            <div class="form-check form-switch" th:if="${formulario.equipoencendido.equals(true)}">
+                                <label class="form-label">¿El equipo está encendido?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" checked="" th:field="*{equipoencendido}" th:value="1"><br>
+                                <label class="form-check-label" style="font-size: xx-small">Sí está encendido</label>
+                            </div>
+
+
+                            <div class="form-check form-switch" th:if="${formulario.equipoconectado.equals(false)}">
+                                <label class="form-label">¿El equipo está conectado?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="conectado" th:field="*{equipoconectado}" th:value="0"><br>
+                                <label class="form-check-label" for="conectado" style="font-size: xx-small">No está conectado</label>
+                            </div>
+                            <div class="form-check form-switch" th:if="${formulario.equipoconectado.equals(true)}">
+                                <label class="form-label">¿El equipo está conectado?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="conectado2" th:field="*{equipoconectado}" th:value="1" checked=""><br>
+                                <label class="form-check-label" for="conectado2" style="font-size: xx-small">Sí está conectado</label>
+                            </div>
+                            <div class="form-check form-switch" th:if="${formulario.bateriasestado.equals(false)}">
+                                <label class="form-label">¿Correcto estado de baterias?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="bateriaestado" th:field="*{bateriasestado}" th:value="0"><br>
+                                <label class="form-check-label" for="bateriaestado" style="font-size: xx-small">Mal estado</label>
+                            </div>
+                            <div class="form-check form-switch" th:if="${formulario.bateriasestado.equals(true)}">
+                                <label class="form-label">¿Correcto estado de baterias?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="bateriaestado2" th:field="*{bateriasestado}" th:value="1" checked=""><br>
+                                <label class="form-check-label" for="bateriaestado2" style="font-size: xx-small">Correcto estado</label>
+                            </div>
+
+                            <br>
+                            <div class="mb-3">
+                                <label class="form-label">Situación encontrada:</label>
+                                <textarea th:field="*{situacion}" rows="3" th:class="${#fields.hasErrors('situacion')?'form-control is-invalid':'form-control'}"></textarea>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('situacion')}" th:errors="*{situacion}">
+                                    Mensaje de error de situacion
+                                </div>
                             </div>
                         </div>
-                </div>
-                <div class="col-sm-9">
-                        <div class="card-body">
-                            <p>En la parte inferior encontrarás 3 formularios.</p>
-                            <p>- En el <b>primer</b> formulario completa en relación a tu llegada, ¿qué problema sucede?.</p>
-                            <p>- En el <b>segundo y tercer</b> formulario completa en relación al equipo, atención del caso, ¿Hay equipos encendidos?, ¿Equipos conectados?, etc</p>
-                            <p>No olvides que debes de llenar todos los formularios para que el Supervisor cierre el ticket.</p>
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end" th:if="${formulario.ticket.estado==4}">
-                                <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicket?id='+${formulario.ticket.idTickets}}" style="background-color: #202a3b; color:white">Atrás</a>
+                        <br><br>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Acciones ejecutadas:</label>
+                                <textarea th:field="*{acciones}" rows="5" th:class="${#fields.hasErrors('acciones')?'form-control is-invalid':'form-control'}"></textarea>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('acciones')}" th:errors="*{acciones}">
+                                    Mensaje de error de acciones
+                                </div>
                             </div>
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end" th:if="${formulario.ticket.estado==5}">
-                                <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicketProgreso?id='+${formulario.ticket.idTickets}}" style="background-color: #202a3b; color:white">Atrás</a>
+                            <div class="mb-3">
+                                <label class="form-label"> Especialidad de avería </label>
+                                <select class="form-select" th:field="*{averia}">
+                                    <option value="-1">--Selecciona un tipo--</option>
+                                    <option value="Energia" th:selected="${averiaSeleccionada == 'Energia'}">Energía</option>
+                                    <option value="Transporte" th:selected="${averiaSeleccionada == 'Transporte'}">Transporte</option>
+                                    <option value="Acceso" th:selected="${averiaSeleccionada == 'Acceso'}">Acceso</option>
+                                </select>
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label">Observaciones:</label>
+                                <input th:field="*{observaciones}" type="text" th:class="${#fields.hasErrors('observaciones')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('observaciones')}" th:errors="*{observaciones}">
+                                    Mensaje de error de observaciones
+                                </div>
+                            </div>
+
                         </div>
-                </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-outline-danger">Guardar cambios</button>
+                    </div>
+                    <!--<a th:href="@{'/tecnico/verTicketProgreso?id='+${formulario.ticket.idTickets}}" class="btn btn-outline-danger">Regresar</a>
+                    <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicketProgreso?id='+${formulario.ticket.idTickets}}" style="background-color: #202a3b; color:white">Atrás</a>-->
+                </form>
             </div>
         </div>
-
-       <center><div class="row align-items-md-stretch">
-            <div class="col-md-6">
-                <div class="h-100 p-5 rounded-3" style="background-color: #202a3b; color:white">
-                    <img style="width: 65%;height: 65%" src="https://us.123rf.com/450wm/massimosanti/massimosanti1802/massimosanti180200003/95316837-hombre-trabajando-los-t%C3%A9cnicos-est%C3%A1n-reparando-sistemas-de-transmisi%C3%B3n-de-alto-voltaje-en-los.jpg" class="img-fluid" alt="llegadasitio">
-                    <br><br>
-                    <h5><b>Llegada a sitio</b></h5>
-                    <a class="btn btn-outline-light" type="button" th:href="@{'/tecnico/formulario1?id='+${formulario.ticket.idTickets}}">Formulario 1</a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="h-100 p-5 bg-body-tertiary border rounded-3">
-                    <img style="width: 65%;height:65%"  src="https://acortar.link/9ziteJ" class="img-fluid" alt="validación">
-                    <br> <br>
-                    <h5><b>Validación de sitio</b></h5>
-                    <a class="btn btn-outline-secondary" type="button" th:href="@{'/tecnico/formulario2mantenimiento?id='+${formulario.ticket.idTickets}}">Formulario 2 y 3</a>
-                </div>
-            </div>
-        </div></center>
     </div>
 </main>
 

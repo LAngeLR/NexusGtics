@@ -58,11 +58,11 @@ public class Formulario implements Serializable {
 
     @NotNull
     @Column(name = "conexion", nullable = false)
-    private Byte conexion;
+    private Boolean conexion;
 
     @NotNull
     @Column(name = "movilidad", nullable = false)
-    private Byte movilidad;
+    private Boolean movilidad;
 
     @Size(max = 45)
     @NotNull
@@ -86,15 +86,15 @@ public class Formulario implements Serializable {
 
     @NotNull
     @Column(name = "construccion", nullable = false)
-    private Byte construccion;
+    private Boolean construccion;
 
     @NotNull
     @Column(name = "instalacion", nullable = false)
-    private Byte instalacion;
+    private Boolean instalacion;
 
     @NotNull
     @Column(name = "despliegue", nullable = false)
-    private Byte despliegue;
+    private Boolean despliegue;
 
     @Size(max = 45)
     @NotNull
@@ -103,11 +103,11 @@ public class Formulario implements Serializable {
 
     @NotNull
     @Column(name = "equipoencendido", nullable = false)
-    private Byte equipoencendido;
+    private Boolean equipoencendido;
 
     @NotNull
     @Column(name = "equipoconectado", nullable = false)
-    private Byte equipoconectado;
+    private Boolean equipoconectado;
 
     @Size(max = 45)
     @NotNull
@@ -121,7 +121,7 @@ public class Formulario implements Serializable {
 
     @NotNull
     @Column(name = "bateriasestado", nullable = false)
-    private Byte bateriasestado;
+    private Boolean bateriasestado;
 
     @Size(max = 45)
     @NotNull
