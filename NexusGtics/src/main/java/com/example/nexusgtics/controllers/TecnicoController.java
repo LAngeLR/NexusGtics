@@ -73,6 +73,7 @@ public class TecnicoController {
         this.tecInstaladaRepository = tecInstaladaRepository;
         this.passwordEncoder = passwordEncoder;
         this.historialTicketRepository=historialTicketRepository;
+        this.equipoRepository = equipoRepository;
     }
 
     //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -453,20 +454,23 @@ public class TecnicoController {
 
     //-----------------------------------------------------------------------
     @GetMapping("/dashboard")
-    public String pagdashboard(Model model,@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,HttpSession httpSession) {
+    public String pagdashboard(Model model, HttpSession httpSession) {
 
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         model.addAttribute("usuario", u);
         Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        Integer idTecnico = u.getId();
         model.addAttribute("cuadrilla",idCuadrilla);
 
         //Ticket u = (Ticket) httpSession.getAttribute("ticket");
         //Integer idTickets = u.getIdTickets();
         int ticketsnuevos = ticketRepository.cantidadTicketsnuevos();
         model.addAttribute("totalTicketsNuevos", ticketsnuevos);
-
+        model.addAttribute("actividad",historialTicketRepository.actividadReciente(idTecnico));
+        model.addAttribute("cantidadEquipos", equipoRepository.obtenerEquiposMarca());
+        model.addAttribute("culminados", ticketRepository.infoDash(idTecnico,7));
         int totalEmpresas = ticketRepository.cantidadEmpresas();
         model.addAttribute("totalempresas", totalEmpresas);
 
@@ -475,6 +479,20 @@ public class TecnicoController {
 
         List<Ticket> listaT1 = ticketRepository.listaTicketsAsignado();
         model.addAttribute("listaTicket1", listaT1);
+
+        for (int i : new int[]{4, 2, 3}) {
+            for (int j = 0; j <= 7; j++) {
+                String attributeName = String.format("TicketXMes%d%d", i, j);
+                model.addAttribute(attributeName, ticketRepository.TicketXMesDespliegye(i, j));
+
+            }
+        }
+        for (int a : new int[]{4, 2, 3}) {
+            for (int b = 0; b <= 7; b++) {
+                String attributeName = String.format("TicketXMeses%d%d", a, b);
+                model.addAttribute(attributeName, ticketRepository.TicketXMesMantenimiento(a, b));
+            }
+        }
 
         return "Tecnico/dashboard";
 
