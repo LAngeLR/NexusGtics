@@ -328,6 +328,8 @@ public class SupervisorController {
         if (passwordEncoder.matches(contrasenia, contraseniaAlmacenada)) {
             String contraseniaNuevaEncriptada = passwordEncoder.encode(contraseniaNueva);
             usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
+            correoService.enviarCorreo(u.getCorreo(), "Actualizacion de contraseña", "La contraseña de su usuario en " + u.getEmpresa().getNombre() + " ha sido actualizada");
+
             redirectAttributes.addFlashAttribute("msg1", "La contraseña se ha actualizado exitosamente");
 
             return "redirect:/supervisor/perfil";
@@ -343,7 +345,6 @@ public class SupervisorController {
     @GetMapping( {"/","","supervisor"})
     public String paginaPrincipal(Model model){
         model.addAttribute("currentPage", "Inicio");
-        correoService.enviarCorreo("a20192832@pucp.edu.pe", "Prueba", "Solo para probar si realmente funciona el envio de correo");
         return "Supervisor/menuSupervisor";
     }
 

@@ -1,5 +1,6 @@
 package com.example.nexusgtics.controllers;
 
+import com.example.nexusgtics.controllers.Email.CorreoService;
 import com.example.nexusgtics.entity.Archivo;
 import com.example.nexusgtics.entity.Cargo;
 import com.example.nexusgtics.entity.Empresa;
@@ -33,7 +34,8 @@ import static java.lang.Integer.parseInt;
 @Controller
 @RequestMapping("/superadmin")
 public class SuperAdminController {
-
+    @Autowired
+    private CorreoService correoService;
     @Autowired
     private HttpSession session;
 
@@ -103,6 +105,14 @@ public class SuperAdminController {
         if (optionalUsuario.isPresent()) {
             Usuario usuario = optionalUsuario.get();
             usuarioRepository.desactivarUsuario(id);
+            correoService.enviarCorreo(usuario.getCorreo(), "Desactivacion de cuenta",
+                    "Estimado " + usuario.getCargo().getNombreCargo() + ":\n\n" +
+                            "Le informamos que su cuenta ha sido desactivada temporalmente por decisión de la empresa.\n" +
+                            "\n" +
+                            "Gracias por su atención,\n" +
+                            "Japyld Solutions");
+
+
             attr.addFlashAttribute("msg1", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se sido desactivado exitosamente");
 
         }
