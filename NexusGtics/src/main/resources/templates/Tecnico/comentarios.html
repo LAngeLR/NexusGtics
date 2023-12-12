@@ -142,7 +142,9 @@
 
                             <div class="col-md-12 text-center">
                                 <button type="submit" class="btn btn-outline-danger">Agregar</button>
-                                <a type="button" class="btn btn-outline-success" th:href="@{'/tecnico/verTicket?id=' + ${ticket.idTickets}}">Atrás</a>
+                                <a th:if="${ticket.estado== 5}" type="button" class="btn btn-outline-success" th:href="@{'/tecnico/verTicketProgreso?id=' + ${ticket.idTickets}}">Atrás</a>
+                                <a th:if="${ticket.estado== 4}" type="button" class="btn btn-outline-success" th:href="@{'/tecnico/verTicket?id=' + ${ticket.idTickets}}">Atrás</a>
+                                <a th:if="${ticket.estado== 6}" type="button" class="btn btn-outline-success" th:href="@{'/tecnico/verTicketCerrado?id=' + ${ticket.idTickets}}">Atrás</a>
                             </div>
                         </div>
                     </form>

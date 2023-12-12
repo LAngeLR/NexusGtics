@@ -1074,20 +1074,12 @@ public class TecnicoController {
         //'listar'
         List<Ticket> lista = ticketRepository.listarEstado();
         model.addAttribute("ticketList", lista);
-        List<Sitio> sitio = sitioRepository.findAll();
-        model.addAttribute("sitioListC", sitio);
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
         model.addAttribute("cuadrilla",idCuadrilla);
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
-        Optional<Sitio> optionalSitio = sitioRepository.findById(id);
-        Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(id);
-        if (optionalTicket.isPresent() && optionalSitio.isPresent()) {
+        if (optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();
-            Sitio sitio1 = optionalSitio.get();
-            SitioCerrado sitioCerrado = optionalSitioCerrado.get();
-            model.addAttribute("sitioC", sitioCerrado);
-            model.addAttribute("sitio",sitio1);
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaTicket", ticketRepository.findAll());
             return "Tecnico/desplazamientoCerrado";
