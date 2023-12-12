@@ -58,31 +58,25 @@
                             <h1 class="card-title" style="color: #095444">Datos generales del Ticket</h1>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label">Prioridad:</label>
+                            <label class="col-sm-4 form-label"><b>Prioridad:</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext fw-bold" style="color: #D01515" th:field="*{ticket.prioridad}" readonly>
                             </div>
                         </div>
                         <div class="mb-3 row" >
-                            <label class="col-sm-4 form-label" >Nombre de Usuario:</label>
+                            <label class="col-sm-4 form-label" ><b>Nombre de Usuario:</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext" th:field="*{ticket.usuarioSolicitante}" disabled>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label">Fecha de apertura</label>
+                            <label class="col-sm-4 form-label"><b>Fecha de apertura</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext" th:field="*{ticket.fechaCreacion}" disabled>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label">Fecha de vencimiento:</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control-plaintext"  th:field="*{ticket.fechaCierre}" disabled>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label class="col-sm-4 form-label" >Servicio Relacionado:</label>
+                            <label class="col-sm-4 form-label" ><b>Servicio Relacionado:</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext" th:field="*{ticket.idTipoTicket.nombreTipoTicket}" disabled>
                             </div>
@@ -130,31 +124,31 @@
                             <img th:src="@{|/file/${formulario.archivo.getIdArchivos()}|}" alt="Profile" style="max-height:25rem; max-width:25rem">
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label" style="color: #095444">Comentario:</label>
+                            <label class="col-sm-4 form-label" style="color: #095444"><b>Comentario:</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext"  th:object="${ticket}" th:field="*{descripcion}" disabled>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label" style="color: #095444">Descripción:</label>
+                            <label class="col-sm-4 form-label" style="color: #095444"><b>Descripción:</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext"  th:object="${formulario}" th:field="*{descripcion}" disabled>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label">Líder Técnico:</label>
+                            <label class="col-sm-4 form-label"><b>Líder Técnico:</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext" th:field="*{ticket.idUsuarioCreador.apellido}" disabled>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label">Nº Cuadrilla:</label>
+                            <label class="col-sm-4 form-label"><b>Nº Cuadrilla:</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext" th:field="*{ticket.idCuadrilla.idCuadrillas}" disabled>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label">Tiempo Transcurrido:</label>
+                            <label class="col-sm-4 form-label"><b>Tiempo Transcurrido:</b></label>
                             <p class="col-lg-9 col-md-8">
                                 <span th:text="${dias}"></span> días <span th:text="${horas}"></span> horas con <span th:text="${minutos}"></span> minutos
                             </p>
