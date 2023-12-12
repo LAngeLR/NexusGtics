@@ -499,10 +499,10 @@ public class TecnicoController {
 
     }
 
-    //-----------------PROBANDO HISTORIAL
+    //-----------------PROBANDO HISTORIAL --------------
 
     @GetMapping("/historialticket")
-    public String historialTicket(Model model,
+    public String historialTicket(Model model, @RequestParam("id") String idStr,
                           RedirectAttributes attr,HttpSession httpSession){
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
@@ -513,14 +513,32 @@ public class TecnicoController {
         List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado();
         model.addAttribute("ticketAsignados",ticketAsignados);
 
-        return "Tecnico/historial_ticket";
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/tecnico/ticketasignado";
+            }
+            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
+            List<HistorialTicket> listaHistorial= historialTicketRepository.listarHistorial1(id);
+
+            if (ticketOptional.isPresent()) {
+                Ticket ticket = ticketOptional.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("listaHistorial", listaHistorial);
+                return "Tecnico/historial_ticket";
+            } else {
+                return "redirect:/tecnico/ticketasignado";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/tecnico/ticketasignado";
+        }
 
     }
 
     //--------------------------------------------------
     @GetMapping("/historialticket2")
-    public String historialTicket2(Model model,
-                                  RedirectAttributes attr,HttpSession httpSession){
+    public String historialTicket2(Model model, @RequestParam("id") String idStr,
+                                   RedirectAttributes attr,HttpSession httpSession){
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
         model.addAttribute("cuadrilla",idCuadrilla);
@@ -530,7 +548,25 @@ public class TecnicoController {
         List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado();
         model.addAttribute("ticketAsignados",ticketAsignados);
 
-        return "Tecnico/historial_ticket2";
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/tecnico/ticketasignado";
+            }
+            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
+            List<HistorialTicket> listaHistorial= historialTicketRepository.listarHistorial1(id);
+
+            if (ticketOptional.isPresent()) {
+                Ticket ticket = ticketOptional.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("listaHistorial", listaHistorial);
+                return "Tecnico/historial_ticket2";
+            } else {
+                return "redirect:/tecnico/ticketasignado";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/tecnico/ticketasignado";
+        }
 
     }
 
@@ -1038,20 +1074,12 @@ public class TecnicoController {
         //'listar'
         List<Ticket> lista = ticketRepository.listarEstado();
         model.addAttribute("ticketList", lista);
-        List<Sitio> sitio = sitioRepository.findAll();
-        model.addAttribute("sitioListC", sitio);
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
         model.addAttribute("cuadrilla",idCuadrilla);
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
-        Optional<Sitio> optionalSitio = sitioRepository.findById(id);
-        Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(id);
-        if (optionalTicket.isPresent() && optionalSitio.isPresent()) {
+        if (optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();
-            Sitio sitio1 = optionalSitio.get();
-            SitioCerrado sitioCerrado = optionalSitioCerrado.get();
-            model.addAttribute("sitioC", sitioCerrado);
-            model.addAttribute("sitio",sitio1);
             model.addAttribute("ticket", ticket);
             model.addAttribute("listaTicket", ticketRepository.findAll());
             return "Tecnico/desplazamientoCerrado";
@@ -1568,17 +1596,27 @@ public class TecnicoController {
     }
 
     //-----------------------------------------------------------------------
+
     @GetMapping("/mapa")
-    public String pagmapa(Model model, HttpSession httpSession) {
+    public String mapaTickets(Model model, HttpSession httpSession){
+
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
         model.addAttribute("cuadrilla",idCuadrilla);
-        List<Ticket> listaT = ticketRepository.findAll();
-        model.addAttribute("listaTicket", listaT);
-        List<Ticket> listaMp = ticketRepository.listarmapa();
-        model.addAttribute("listaMp",listaMp);
-        List<SitioCerrado> sitioCerradoList = sitioCerradoRepository.findAll();
-        model.addAttribute("sitioCerradoList", sitioCerradoList);
+
+        List<Sitio> listaSitios = sitioRepository.findAll();
+        List<Ticket> listaTickets1 = ticketRepository.cerrados();
+        List<Ticket> listaTickets2 = ticketRepository.progreso();
+        List<Ticket> listaTickets3 = ticketRepository.nuevos();
+
+        //List<Ticket> listaTickets = ticketRepository.listarMapaSupervisor(idSupervisor,u.getEmpresa().getIdEmpresas());
+
+        model.addAttribute("ticketsCerrados", listaTickets1);
+        model.addAttribute("ticketsProgreso", listaTickets2);
+        model.addAttribute("ticketsNuevos", listaTickets3);
+
+        model.addAttribute("sitios", listaSitios);
+
         return "Tecnico/mapa";
     }
 
