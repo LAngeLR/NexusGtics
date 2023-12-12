@@ -452,6 +452,7 @@ public class SupervisorController {
         try{
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !ticketRepository.existsById(id)) {
+                System.out.println("error: 1");
                 return "redirect:/supervisor/listaTicketsNuevos";
             }
             Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
@@ -496,9 +497,11 @@ public class SupervisorController {
 
                 return "Supervisor/ticketAsignar";
             } else {
+                System.out.println("error: 2");
                 return "redirect:/supervisor/listaTicketsNuevos";
             }
         } catch (NumberFormatException e) {
+            System.out.println("error: 3");
             return "redirect:/supervisor/listaTicketsNuevos";
         }
     }

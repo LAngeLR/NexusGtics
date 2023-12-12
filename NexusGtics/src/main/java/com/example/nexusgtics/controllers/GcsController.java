@@ -118,8 +118,8 @@ public class GcsController {
 //                    System.out.println(archivo1.getIdArchivos());
 //                    System.out.println(archivo1.getNombre());
                     String nombreArchivo = "archivo-"+archivo1.getIdArchivos();
-                    System.out.println("NombreArchivoFOTO: " + nombreArchivo);
-                    System.out.println("NombreArchivoByteFFOTO: " + archivo1.getNombre());
+//                    System.out.println("NombreArchivoFOTO: " + nombreArchivo);
+//                    System.out.println("NombreArchivoByteFFOTO: " + archivo1.getNombre());
                     byte[] image = downloadObject("labgcp-401300", "proyecto-gtics", archivo1.getNombre());
                     HttpHeaders headers = new HttpHeaders();
                     headers.setContentType(MediaType.parseMediaType(archivo1.getContentType()));

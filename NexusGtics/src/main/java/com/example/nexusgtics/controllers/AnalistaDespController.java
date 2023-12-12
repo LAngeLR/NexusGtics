@@ -39,7 +39,7 @@ public class AnalistaDespController {
     final EmpresaRepository empresaRepository;
     final EquipoRepository equipoRepository;
     final HistorialTicketRepository historialTicketRepository;
-
+    final SitioCerradoRepository sitioCerradoRepository;
     final ArchivoRepository archivoRepository;
     final SitiosHasEquiposRepository sitiosHasEquiposRepository;
     final CargoRepository cargoRepository;
@@ -52,7 +52,7 @@ public class AnalistaDespController {
     public AnalistaDespController(TicketRepository ticketRepository, ComentarioRepository comentarioRepository,
                                   SitioRepository sitioRepository, UsuarioRepository usuarioRepository,
                                   EmpresaRepository empresaRepository, EquipoRepository equipoRepository,
-                                  HistorialTicketRepository historialTicketRepository, ArchivoRepository archivoRepository,
+                                  HistorialTicketRepository historialTicketRepository, SitioCerradoRepository sitioCerradoRepository, ArchivoRepository archivoRepository,
                                   SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository,
                                   FormularioRepository formularioRepository, ArchivoSitioRepository archivoSitioRepository, TecnicosCuadrillaRepository tecnicosCuadrillaRepository, PasswordEncoder passwordEncoder){
         this.ticketRepository = ticketRepository;
@@ -62,6 +62,7 @@ public class AnalistaDespController {
         this.empresaRepository = empresaRepository;
         this.equipoRepository = equipoRepository;
         this.historialTicketRepository = historialTicketRepository;
+        this.sitioCerradoRepository = sitioCerradoRepository;
         this.archivoRepository = archivoRepository;
         this.sitiosHasEquiposRepository = sitiosHasEquiposRepository;
         this.cargoRepository = cargoRepository;
@@ -821,7 +822,11 @@ public class AnalistaDespController {
         int numeroRandom = random.nextInt(7) + 1;
 
         ticket.setIdUsuarioCreador(u);
-        // ticket.setIdsitioCerrado(numeroRandom); //me trae problemas al descomentarlo
+        Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(numeroRandom);
+        if (optionalSitioCerrado.isPresent()) {
+            SitioCerrado sitioCerrado = optionalSitioCerrado.get();
+            ticket.setIdsitioCerrado(sitioCerrado);
+        }
         ticket.setReasignado(0);
         ticketRepository.save(ticket);
         attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente por el usuario: " + ticket.getUsuarioSolicitante());
