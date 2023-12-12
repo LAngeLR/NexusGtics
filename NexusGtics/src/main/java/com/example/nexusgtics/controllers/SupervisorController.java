@@ -328,7 +328,12 @@ public class SupervisorController {
         if (passwordEncoder.matches(contrasenia, contraseniaAlmacenada)) {
             String contraseniaNuevaEncriptada = passwordEncoder.encode(contraseniaNueva);
             usuarioRepository.actualizarContraA(contraseniaNuevaEncriptada, id);
-            correoService.enviarCorreo(u.getCorreo(), "Actualizacion de contraseña", "La contraseña de su usuario en " + u.getEmpresa().getNombre() + " ha sido actualizada");
+            correoService.enviarCorreo(u.getCorreo(), "Actualizacion de contraseña",
+                    "Estimado " + u.getCargo().getNombreCargo() + " de la empresa " + u.getEmpresa().getNombre()+":\n\n" +
+                            "Le informamos que su contraseña ha sido cambiada\n" +
+                            "\n" +
+                            "Gracias por su atención,\n" +
+                            "Nexus");
 
             redirectAttributes.addFlashAttribute("msg1", "La contraseña se ha actualizado exitosamente");
 

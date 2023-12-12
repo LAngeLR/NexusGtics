@@ -110,7 +110,7 @@ public class SuperAdminController {
                             "Le informamos que su cuenta ha sido desactivada temporalmente por decisión de la empresa.\n" +
                             "\n" +
                             "Gracias por su atención,\n" +
-                            "Japyld Solutions");
+                            "Nexus");
 
 
             attr.addFlashAttribute("msg1", "El usuario '" + usuario.getNombre() + " " + usuario.getApellido() + "' se sido desactivado exitosamente");
