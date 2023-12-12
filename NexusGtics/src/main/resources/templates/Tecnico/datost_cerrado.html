@@ -58,37 +58,31 @@
                             <h1 class="card-title" style="color: #095444">Datos generales del Ticket</h1>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label">Prioridad:</label>
+                            <label class="col-sm-4 form-label"><b>Prioridad:</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext fw-bold" style="color: #D01515" th:field="*{ticket.prioridad}" readonly>
                             </div>
                         </div>
                         <div class="mb-3 row" >
-                            <label class="col-sm-4 form-label" >Nombre de Usuario:</label>
+                            <label class="col-sm-4 form-label" ><b>Nombre de Usuario:</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext" th:field="*{ticket.usuarioSolicitante}" disabled>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label">Fecha de apertura</label>
+                            <label class="col-sm-4 form-label"><b>Fecha de apertura</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext" th:field="*{ticket.fechaCreacion}" disabled>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label">Fecha de vencimiento:</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control-plaintext"  th:field="*{ticket.fechaCierre}" disabled>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label class="col-sm-4 form-label" >Servicio Relacionado:</label>
+                            <label class="col-sm-4 form-label" ><b>Servicio Relacionado:</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext" th:field="*{ticket.idTipoTicket.nombreTipoTicket}" disabled>
                             </div>
                         </div>
                         <div class="mb-3 row" th:if="${ticket.estado==6}">
-                            <div class="col-lg-3 col-md-4 label">Estado:</div>
+                            <div class="col-lg-3 col-md-4 label"><b>Estado:</b></div>
                             <div class="col-lg-9 col-md-8"><span class="badge rounded-pill" style="background-color: #ea8579">Cerrado</span></div>
                         </div>
                         <input th:value="${ticket.idTickets}" name="idTickets" type="hidden" />
@@ -121,74 +115,34 @@
                     </div>
                     <div class="col-xl-6">
                         <!--Aqui inicia carusel-->
-
-                        <div id="carouselExampleIndicators" class="mb-3 row carousel slide">
-                            <div class="carousel-indicators">
-                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                            </div>
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <img th:src="@{|/file/${ticket.idSupervisorEncargado.archivo.getIdArchivos()}|}" class="d-block w-100" alt="Profile" style="max-height:25rem; max-width:30rem">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5>Formulario</h5>
-                                        <p>Llegada a sitio</p>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <img th:src="@{|/file/${ticket.idSupervisorEncargado.archivo.getIdArchivos()}|}" alt="Profile" style="max-height:25rem; max-width:30rem">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5>Formulario</h5>
-                                        <p>Validación de sitio</p>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <img th:src="@{|/file/${ticket.idSupervisorEncargado.archivo.getIdArchivos()}|}" class="d-block w-100" alt="Profile" style="max-height:25rem; max-width:30rem">
-                                    <div class="carousel-caption d-none d-md-block">
-                                        <h5>Formulario</h5>
-                                        <p>Trabajo realizado</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        </div>
-
                         <!--Aqui finaliza carusel-->
-
+                        <h1 class="card-title" style="color: #095444">Formulario - Resumen</h1>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label" style="color: #095444">Comentario:</label>
+                            <label class="col-sm-4 form-label" style="color: #095444"><b>Comentario:</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext"  th:object="${ticket}" th:field="*{descripcion}" disabled>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label" style="color: #095444">Descripción:</label>
+                            <label class="col-sm-4 form-label" style="color: #095444"><b>Descripción:</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext"  th:object="${formulario}" th:field="*{descripcion}" disabled>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label">Líder Técnico:</label>
+                            <label class="col-sm-4 form-label"><b>Líder Técnico:</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext" th:field="*{ticket.idUsuarioCreador.apellido}" disabled>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label">Nº Cuadrilla:</label>
+                            <label class="col-sm-4 form-label"><b>Nº Cuadrilla:</b></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control-plaintext" th:field="*{ticket.idCuadrilla.idCuadrillas}" disabled>
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-4 form-label">Tiempo Transcurrido:</label>
+                            <label class="col-sm-4 form-label"><b>Tiempo Transcurrido:</b></label>
                             <p class="col-lg-9 col-md-8">
                                 <span th:text="${dias}"></span> días <span th:text="${horas}"></span> horas con <span th:text="${minutos}"></span> minutos
                             </p>

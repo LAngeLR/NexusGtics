@@ -88,6 +88,30 @@
                         </div>
                     </div>
 
+                    <!-- Customers Card -->
+                    <div class="col-xxl-4 col-xl-12">
+                        <div class="card info-card customers-card">
+                            <div class="card mb-3">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                        <img src="https://static.vecteezy.com/system/resources/previews/024/762/376/original/engineer-3d-illustration-png.png" class="img-fluid rounded-start" alt="Inge">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title" th:text="'Felicidades Técnico ' + ${session.usuario.nombre}"></h5>
+                                            <p class="card-text">
+                                                ¡Ingresa al siguiente botón para ver tus tickets!
+                                            </p>
+
+                                            <p class="card-text"><small class="text-body-secondary"><a th:href="@{/tecnico/ticketasignado}" class="btn btn-light">Tickets</a></small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
                     <!-- Reports -->
                     <div class="col-12">
                         <div class="card">
