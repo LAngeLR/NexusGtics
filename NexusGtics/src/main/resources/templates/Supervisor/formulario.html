@@ -10,26 +10,26 @@
 <aside th:replace="Fragmentos/menuSupervisor :: menu('formulario')">
 </aside><!-- End Sidebar-->
 
+<style>
+    .card {
+        border: 2px solid #85acb1; /* Establece un borde sólido */
+        border-image: linear-gradient(0deg, #74969a 50%, transparent 50%) 1; /* Crea un patrón de líneas */
+        background-color: #fafffd; /* Establece un color de fondo */
+        padding: 20px; /* Agrega espacio interior para que las líneas no estén demasiado cerca del contenido */
+    }
+    #map { height: 48vh; width: 50hw; }
+    select {
+        width: 30%;
+        font-size: 0.8rem
+    }
+    .tabla-con-sombra {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Establece la sombra */
+    }
+</style>
+
 <main id="main" class="main" th:object="${formulario}">
-    <style>
-        .card {
-            border: 2px solid #85acb1; /* Establece un borde sólido */
-            border-image: linear-gradient(0deg, #74969a 50%, transparent 50%) 1; /* Crea un patrón de líneas */
-            background-color: #fafffd; /* Establece un color de fondo */
-            padding: 20px; /* Agrega espacio interior para que las líneas no estén demasiado cerca del contenido */
-        }
-        #map { height: 48vh; width: 50hw; }
-        select {
-            width: 30%;
-            font-size: 0.8rem
-        }
-        .tabla-con-sombra {
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Establece la sombra */
-        }
-    </style>
     <div class="container">
         <div class="pagetitle">
-            <h1>Formulario</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a th:href="@{/supervisor/listaTickets}">Lista Tickets</a></li>
@@ -37,12 +37,13 @@
                     <li class="breadcrumb-item" th:if="${formulario.ticket.estado==3 || formulario.ticket.estado==4 || formulario.ticket.estado==5 }"><a th:href="@{'/supervisor/ticketProceso?id=' + ${formulario.ticket.idTickets}}">Detalles Ticket</a></li>
                     <li class="breadcrumb-item" th:if="${formulario.ticket.estado==7 || formulario.ticket.estado==6}"><a th:href="@{'/supervisor/ticketCerrado?id=' + ${formulario.ticket.idTickets}}">Detalles Ticket</a></li>
                     <li class="breadcrumb-item active">Formulario</li>
-
                 </ol>
             </nav>
         </div><!-- End Page Title -->
 
-        <section class="section profile" th:object="${formulario}">
+        <!-- Nuevo diseño de formulario-->
+
+        <section class="section profile" >
 
             <div class="card mb-3 tabla-con-sombra">
                 <div class="card-body table-responsive">
@@ -353,7 +354,9 @@
                 </div>
             </div>
         </section>
+        <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicketCerrado?id='+${formulario.ticket.idTickets}}" style="background-color: rgb(2,52,91); color:white">Regresar</a>
     </div>
+    <!--Fin diseño de formulario-->
 </main>
 <!-- End #main -->
 

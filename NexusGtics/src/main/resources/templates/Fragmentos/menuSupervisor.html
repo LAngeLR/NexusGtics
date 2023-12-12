@@ -11,17 +11,17 @@
         </li>
 
         <li class="nav-item">
-            <a th:class="${currentPage == 'listaTicketsNuevos' or currentPage == 'listaTicket' or currentPage == 'dashboard' or currentPage == 'ticketProceso' or currentPage == 'ticketCerrado' or currentPage == 'ticketNuevo' or currentPage == 'ticketAsignar' or currentPage == 'comentariosTicket' or currentPage == 'comentariosAsignar'? 'nav-link' : 'nav-link collapsed active'}" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+            <a th:class="${currentPage == 'listaTicketsNuevos' or currentPage == 'listaTicket' or currentPage == 'dashboard' or currentPage == 'ticketProceso' or currentPage == 'ticketCerrado' or currentPage == 'ticketNuevo' or currentPage == 'ticketAsignar' or currentPage == 'comentariosTicket' or currentPage == 'comentariosAsignar' or currentPage == 'formulario'? 'nav-link' : 'nav-link collapsed active'}" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-people"></i><span>Tickets</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="tables-nav" th:classappend="${currentPage == 'listaTicketsNuevos' or currentPage == 'listaTicket' or currentPage == 'dashboard' or currentPage == 'ticketProceso' or currentPage =='ticketCerrado' or currentPage =='ticketAsignar' or currentPage == 'ticketNuevo' or currentPage == 'comentariosTicket' or currentPage == 'comentariosAsignar'? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">
+            <ul id="tables-nav" th:classappend="${currentPage == 'listaTicketsNuevos' or currentPage == 'listaTicket' or currentPage == 'dashboard' or currentPage == 'ticketProceso' or currentPage =='ticketCerrado' or currentPage =='ticketAsignar' or currentPage == 'ticketNuevo' or currentPage == 'comentariosTicket' or currentPage == 'comentariosAsignar' or currentPage == 'formulario'? 'nav-content collapse show' : 'nav-content collapse'}" data-bs-parent="#sidebar-nav">
                 <li>
                     <a th:classappend="${currentPage == 'listaTicketsNuevos' or currentPage == 'ticketAsignar' or currentPage == 'comentariosAsignar'? 'active' : ''}" th:href="@{/supervisor/listaTicketsNuevos}">
                         <i class="bi bi-circle"></i><span>Tickets Sin Asignar</span>
                     </a>
                 </li>
                 <li>
-                    <a th:classappend="${currentPage == 'listaTicket' or currentPage =='ticketCerrado' or currentPage =='ticketProceso' or currentPage == 'ticketNuevo' or currentPage == 'comentariosTicket'? 'active' : ''}" th:href="@{/supervisor/listaTickets}">
+                    <a th:classappend="${currentPage == 'listaTicket' or currentPage =='ticketCerrado' or currentPage =='ticketProceso' or currentPage == 'ticketNuevo' or currentPage == 'comentariosTicket' or currentPage == 'formulario'? 'active' : ''}" th:href="@{/supervisor/listaTickets}">
                         <i class="bi bi-circle"></i><span>Ver Tickets</span>
                     </a>
                 </li>
