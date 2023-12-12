@@ -34,7 +34,7 @@
 
     <style>
         #map{
-            min-height: 35rem;
+            min-height: 50rem;
             min-width: 20rem;
         }
         .card {
@@ -263,8 +263,56 @@
                             </div>
                             <center>
                                 <p style="font-size: x-small">Para culminar desplazamiento dar click en "Terminar "</p>
-                                <a type="button" class="btn btn-outline-danger" th:href="@{'/tecnico/verTicketProgreso?id='+${ticket.idTickets}}">Terminar</a>
-                                <a type="button" class="btn btn-outline-light" th:href="@{'/tecnico/verTicketProgreso?id='+${ticket.idTickets}}">Atrás</a>
+                                <a type="button" class="btn btn-outline-danger btn-sm" th:href="@{'/tecnico/verTicketProgreso?id='+${ticket.idTickets}}">Terminar</a>
+                                <a type="button" class="btn btn-outline-light btn-sm" th:href="@{'/tecnico/verTicketProgreso?id='+${ticket.idTickets}}">Atrás</a>
+                                <p></p>
+                                <p style="font-size: xx-small">En caso no ubique su destino le dejamos las latitudes y longitudes para que las coloque en el mapa de google, tenga un buen viaje</p>
+
+                                <a type="button" class="btn btn-outline-warning btn-sm" href="https://www.google.com/maps/@-12.075008,-77.0342912,12z?entry=ttu">
+                                    <img src="https://cdn-icons-png.flaticon.com/256/355/355980.png" width="20rem" alt="googlemaps">
+                                </a>
+                                <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    LonLat
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="color:#000;">Longitudes y latitudes</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body" style="color:#000;">
+                                                Aquí encontrarás las latitudes y longitudes del lugar en donde te encuentras y a donde te diriges
+                                                <table class="table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col">Lugar</th>
+                                                        <th scope="col">Latitud</th>
+                                                        <th scope="col">Longitud</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <th scope="row">Inicio</th>
+                                                        <td th:text="${ticket.idSitios.latitud}">Latitud</td>
+                                                        <td th:text="${ticket.idSitios.longitud}">Longitud</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">Destino</th>
+                                                        <td th:text="${ticket.idsitioCerrado.latitud}">Latitud</td>
+                                                        <td th:text="${ticket.idsitioCerrado.longitud}">Longitud</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </center>
                         </div>
                     </form>
