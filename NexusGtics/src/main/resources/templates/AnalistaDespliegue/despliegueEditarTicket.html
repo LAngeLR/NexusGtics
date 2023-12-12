@@ -54,9 +54,14 @@
         <div class="pagetitle">
             <nav>
                 <ol class="breadcrumb">
+<<<<<<< HEAD
+                    <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/ticket}">Lista de tickets</a></li>
+                    <li class="breadcrumb-item active">Editar Ticket</li>
+=======
                     <li class="breadcrumb-item"><a>Tickets</a></li>
                     <li class="breadcrumb-item"><a>Lista de tickets</a></li>
                     <li class="breadcrumb-item active">Editar ticket</li>
+>>>>>>> 2bc681225ac9c2c17659f9b48cc4b0e939edc262
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -67,38 +72,32 @@
                 <div class="pagetitle">
                     <h1 class="card-title">Editar ticket</h1>
                 </div>
-                <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}">
-                    A simple success alert—check it out!
-                </div>
-                <form method="POST" th:action="@{/analistaDespliegue/saveTicket}" th:object="${ticket}" enctype="multipart/form-data">
+                <div class="alert alert-danger" role="alert" th:if="${msgEmpresa != null}" th:text="${msgEmpresa}"></div>
+                <div class="alert alert-danger" role="alert" th:if="${msgSitio != null}" th:text="${msgSitio}"></div>
+                <!--                    <div class="alert alert-danger" role="alert" th:if="${msgDescrip != null}" th:text="${msgDescrip}"></div>-->
+                <!--                    <div class="alert alert-danger" role="alert" th:if="${msgUser != null}" th:text="${msgUser}"></div>-->
+                <div class="alert alert-danger" role="alert" th:if="${msgPrio != null}" th:text="${msgPrio}"></div>
+                <form method="POST" th:action="@{/analistaDespliegue/updateTicket}" th:object="${ticket}" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-6">
                             <input type="hidden" class="form-control" th:field="*{idTickets}">
                             <input type="hidden" name="estado" id="estado" th:field="*{estado}">
                             <input type="hidden" name="fechaCreacion" id="fechaCreacion" th:field="*{fechaCreacion}">
-                            <input type="hidden" name="idTipoTicket" id="idTipoTicket" value="1">
+                            <input type="hidden" name="HoraCreacion" id="HoraCreacion" th:field="*{horaCreacion}">
+                            <input type="hidden" name="" id="idEmpresaAsignada" th:field="*{idEmpresaAsignada}">
+                            <input type="hidden" name="" id="idSitios" th:field="*{idSitios}">
+                            <input type="hidden" name="idTipoTicket" id="idTipoTicket" value="2">
                             <input type="hidden" name="idUsuarioCreador" id="idUsuarioCreador" value="4">
 
                             <div class="mb-3">
-                                <label class="form-label">Empresa</label>
-                                <select class="form-select" name="idEmpresaAsignada" id="idEmpresaAsignada">
-                                    <option th:each="empresa: ${listaEmpresa}"
-                                            th:text="${empresa.nombre}" th:value="${empresa.idEmpresas}"
-                                            th:selected="${ticket.idEmpresaAsignada.idEmpresas == empresa.idEmpresas}">Open this select menu</option>
-                                </select>
+                                <label class="form-label">Empresa:</label>
+                                <input type="text" class="form-control" th:field="*{idEmpresaAsignada.nombre}" disabled>
                             </div>
 
-                            <div class="input-group mb-3">
-                                <label class="form-label">Sitio de despliegue:</label>
-                                <div class="col-12">
-                                    <select name="idSitios" id="idSitios" class="form-select">
-                                        <option th:each="sitio: ${listaSitios}"
-                                                th:text="${sitio.distrito}" th:value="${sitio.idSitios}"
-                                                th:selected="${ticket.idSitios.idSitios == sitio.idSitios}">Sitio de Tipo</option>
-                                    </select>
-                                </div>
+                            <div class="mb-3">
+                                <label class="form-label">Sitio de Despliegue:</label>
+                                <input type="text" class="form-control" th:field="*{idSitios.nombre}" disabled>
                             </div>
-
                             <div class="mb-3">
                                 <label class="form-label">Descripción:</label>
                                 <input th:field="*{descripcion}" type="text" th:class="${#fields.hasErrors('descripcion')?'form-control is-invalid':'form-control'}"/>
@@ -131,6 +130,10 @@
                                     <option value="Urgente">Urgente</option>
                                 </select>
                             </div>
+
+
+
+
 
                         </div>
 

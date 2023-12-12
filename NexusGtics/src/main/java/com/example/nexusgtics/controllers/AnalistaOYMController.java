@@ -562,10 +562,18 @@ public class AnalistaOYMController {
     @GetMapping("/mapaTickets")
     public String mapaTickets(Model model){
 
-        List<Ticket> listaT= ticketRepository.findAll();
-        model.addAttribute("listaTicket", listaT);
-        List<Sitio> sitioList = sitioRepository.listaDeSitios();
-        model.addAttribute("sitioList", sitioList);
+        List<Sitio> listaSitios = sitioRepository.findAll();
+        List<Ticket> listaTickets1 = ticketRepository.cerrados();
+        List<Ticket> listaTickets2 = ticketRepository.progreso();
+        List<Ticket> listaTickets3 = ticketRepository.nuevos();
+
+        //List<Ticket> listaTickets = ticketRepository.listarMapaSupervisor(idSupervisor,u.getEmpresa().getIdEmpresas());
+
+        model.addAttribute("ticketsCerrados", listaTickets1);
+        model.addAttribute("ticketsProgreso", listaTickets2);
+        model.addAttribute("ticketsNuevos", listaTickets3);
+
+        model.addAttribute("sitios", listaSitios);
 
         return "AnalistaOYM/oymMapaTickets";
     }
@@ -729,24 +737,33 @@ public class AnalistaOYMController {
     public String updateTicket(@ModelAttribute("ticket")  @Valid Ticket ticket,
                               BindingResult bindingResult, Model model, RedirectAttributes attr){
         try {
-
+            System.out.println("inicia");
             Integer idTicket = ticket.getIdTickets();
             Optional<Ticket> optTicket = ticketRepository.findById(idTicket);
 
             if (optTicket.isPresent()){
-
+                System.out.println("entra present");
                 Ticket ticketBD = optTicket.get();
+                ticketBD.setHoraCreacion(ticket.getHoraCreacion());
+                ticketBD.setFechaCreacion((ticket.getFechaCreacion()));
+                ticketBD.setIdEmpresaAsignada(ticket.getIdEmpresaAsignada());
+                ticketBD.setIdSitios(ticket.getIdSitios());
 
+                System.out.println(ticketBD.getIdEmpresaAsignada());
                 if(ticketBD.getIdEmpresaAsignada() == null || ticket.getIdEmpresaAsignada().equals("-1")){
+                    System.out.println("entra empresa");
                     model.addAttribute("msgEmpresa", "Selecciona una Empresa");
                     model.addAttribute("listaEmpresa", empresaRepository.noNexus());
                     model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                    System.out.println("error empresa");
                     return "AnalistaOYM/oymEditarTicket";
                 }
                 if(ticketBD.getIdSitios() == null || ticket.getIdSitios().equals("-1")){
+                    System.out.println("entra sitios");
                     model.addAttribute("msgSitio", "Selecciona un Sitio de Despliegue");
                     model.addAttribute("listaEmpresa", empresaRepository.noNexus());
                     model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                    System.out.println("error sitio");
                     return "AnalistaOYM/oymEditarTicket";
                 }
 //                if(ticketBD.getDescripcion() == null){
@@ -758,12 +775,17 @@ public class AnalistaOYMController {
 //                    return "AnalistaOYM/oymEditarTicket";
 //                }
                 if(ticketBD.getPrioridad() == null){
+                    System.out.println("entra prio");
+
                     model.addAttribute("msgPrio", "Selecciona la prioridad del Ticket");
                     model.addAttribute("listaEmpresa", empresaRepository.noNexus());
                     model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                    System.out.println("error prio");
+
                     return "AnalistaOYM/oymEditarTicket";
                 }
-                if (!bindingResult.hasErrors()) {
+                if(!bindingResult.hasErrors()) {
+                    System.out.println("pass binding");
                     if (ticket.getIdSitios() != null) {
                         attr.addFlashAttribute("msg2", "El ticket ha sido actualizado exitosamente");
                     }
@@ -772,18 +794,21 @@ public class AnalistaOYMController {
                     ticketBD.setDescripcion(ticket.getDescripcion());
                     ticketBD.setUsuarioSolicitante(ticket.getUsuarioSolicitante());
                     ticketBD.setPrioridad(ticket.getPrioridad());
-
+                    ticketBD.setFechaCreacion((ticket.getFechaCreacion()));
+                    ticketBD.setHoraCreacion((ticket.getHoraCreacion()));
                     ticketRepository.save(ticketBD);
+                    System.out.println("pasa por save");
                     return "redirect:/analistaOYM/ticket";
                 }
                 else {
+                    System.out.println("Errores de enlace: " + bindingResult.getAllErrors());
+                    System.out.println(ticketBD.getHoraCreacion());
                     model.addAttribute("listaEmpresa", empresaRepository.noNexus());
                     model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
                     System.out.println("se mando en ticket, Binding");
                     return "AnalistaOYM/oymEditarTicket";
                 }
             } else {
-
                 return "redirect:/analistaOYM";
             }
         } catch (NumberFormatException e){
