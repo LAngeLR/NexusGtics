@@ -85,14 +85,14 @@
                                     <div class="col-lg-4 col-md-4 label"><b>Estado:</b></div>
                                     <div class="col-lg-8 col-md-8"><span class="badge text-bg-danger">Cerrado</span></div>
                                 </div>
-                                <form th:action="@{/tecnico/actualizarEstado}" class="search-form" method="POST">
+                                <form th:action="@{/tecnico/estadoCaminoAProgreso}" class="search-form" method="POST">
                                     <input th:value="${ticket.idTickets}" name="idTickets" type="hidden" />
                                     <div class="row" th:if="${ticket.estado==4}">
                                         <div class="col-sm-4 label"><b>Estado:</b></div>
                                         <div class="col-sm-6 label">
                                             <select class="form-select small select" aria-label="Default select example" name="cambioEstado">
-                                                <option value="En camino">En camino</option>
-                                                <option value="Progreso">Progreso</option>
+                                                <option value="4">En camino</option>
+                                                <option value="5">Progreso</option>
                                             </select>
                                         </div>
                                     </div>

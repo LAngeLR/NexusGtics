@@ -581,7 +581,7 @@ public class SupervisorController {
                 model.addAttribute("tickets", ticket);
                 model.addAttribute("comentario",comentarioRepository.obtenerUltimoComentario(ticket.getIdTickets()));
                 model.addAttribute("tecnicoLider",user);
-                model.addAttribute("tiempoTranscurrido",historialTicketRepository.tiempoTranscurrido(id));
+//                model.addAttribute("tiempoTranscurrido",historialTicketRepository.tiempoTranscurrido(id));
 
                 //---mandar tiempo transcurrido---
                 ZoneId zonaHoraria = ZoneId.of("GMT-5");
@@ -697,7 +697,7 @@ public class SupervisorController {
             ZoneId zonaHoraria = ZoneId.of("GMT-5");
             LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
             LocalTime horaActual = LocalTime.now(zonaHoraria);
-            historialTicketRepository.crearHistorial(6,fechaCambioEstado,fechaActual,horaActual,id,idSupervisor,"Pasando a Analista");
+            historialTicketRepository.crearHistorial(7,fechaCambioEstado,fechaActual,horaActual,id,idSupervisor,"Pasando a Analista");
             ticketRepository.actualizarEstado(id,estadoUtilizar);
             redirectAttributes.addFlashAttribute("yum","El ticket ha sido cerrado correctamente");
             return "redirect:/supervisor/listaTickets";
