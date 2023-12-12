@@ -486,15 +486,16 @@ public class TecnicoController {
     public String Tickets(Model model,
                           RedirectAttributes attr,HttpSession httpSession){
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
-        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        Integer idCuadrilla1 = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        int idCuadrilla = idCuadrilla1.intValue();
         model.addAttribute("cuadrilla",idCuadrilla);
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
 
-                List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado();
-                model.addAttribute("ticketAsignados",ticketAsignados);
+        List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado1(idCuadrilla);
+        model.addAttribute("ticketAsignados",ticketAsignados);
 
-                    return "Tecnico/ticket_asignado";
+        return "Tecnico/ticket_asignado";
 
     }
 
@@ -741,6 +742,7 @@ public class TecnicoController {
         model.addAttribute("cuadrilla",idCuadrilla);
         try {
             if (id <= 0 || !ticketRepository.existsById(id)) {
+                System.out.println("error1");
                 return "redirect:/tecnico/ticketasignado";
             }
             Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
@@ -785,9 +787,11 @@ public class TecnicoController {
 
                 return "Tecnico/datost_nuevo";
             } else {
+                System.out.println("error2");
                 return "redirect:/tecnico/ticketasignado";
             }
         } catch (NumberFormatException e) {
+            System.out.println("error3");
             return "redirect:/tecnico/ticketasignado";
         }
     }
@@ -815,18 +819,14 @@ public class TecnicoController {
 
             /* Obtenemos el objeto ticket para obtener el idSitioCerrado */
             Ticket ticketPrevio = optionalTicket1.get();
-            Integer idSitioCerradoTicket = ticketPrevio.getIdsitioCerrado();
+            SitioCerrado sitioCerradoTicket = ticketPrevio.getIdsitioCerrado();
 
-            Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(idSitioCerradoTicket);
-            System.out.println("Optional Sitio 1: " + optionalSitioCerrado.isPresent());
 
-            if (optionalTicket1.isPresent() && optionalFormulario1.isPresent() && optionalSitioCerrado.isPresent()) {
+            if (optionalTicket1.isPresent() && optionalFormulario1.isPresent()) {
                 Ticket ticket = optionalTicket1.get();
                 Formulario formulario = optionalFormulario1.get();
-                SitioCerrado sitioCerrado = optionalSitioCerrado.get();
                 model.addAttribute("ticket", ticket);
                 model.addAttribute("formulario", formulario);
-                model.addAttribute("sitioCerrado", sitioCerrado);
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
 
                 //---mandar tiempo transcurrido---

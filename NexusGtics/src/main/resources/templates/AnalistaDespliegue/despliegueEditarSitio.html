@@ -59,6 +59,11 @@
       </nav>
     </div><!-- End Page Title -->
       <section class="section dashboard">
+
+        <div th:if="${msgCadena != null}" th:text="${msgCadena}" class="alert alert-danger" role="alert"></div>
+        <div th:if="${msgExtension != null}" th:text="${msgExtension}" class="alert alert-danger" role="alert"></div>
+
+
         <div class="row">
           <div class="rounded p-5" style="background-color: #FFFFFF;">
             <div class="pagetitle">

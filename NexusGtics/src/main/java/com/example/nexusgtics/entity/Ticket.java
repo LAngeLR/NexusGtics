@@ -56,8 +56,9 @@ public class Ticket implements Serializable {
     @JoinColumn(name = "idSitios", nullable = false)
     private Sitio idSitios;
 
-    @Column(name = "idsitioCerrado")
-    private Integer idsitioCerrado;
+    @ManyToOne
+    @JoinColumn(name = "idsitioCerrado", nullable = false)
+    private SitioCerrado idsitioCerrado;
 
     @ManyToOne
     @JoinColumn(name = "idTipoTicket", nullable = false)
