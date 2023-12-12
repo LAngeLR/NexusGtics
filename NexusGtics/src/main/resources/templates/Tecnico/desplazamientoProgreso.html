@@ -262,16 +262,16 @@
                                 <br><br>
                             </div>
                             <center>
-                                <p style="font-size: x-small">Para culminar desplazamiento dar click en "Terminar "</p>
-                                <a type="button" class="btn btn-outline-danger btn-sm" th:href="@{'/tecnico/verTicketProgreso?id='+${ticket.idTickets}}">Terminar</a>
+                                <p th:if="${ticket.estado==4}" style="font-size: x-small">Para culminar desplazamiento dar click en "Terminar "</p>
+                                <a th:if="${ticket.estado==4}" type="button" class="btn btn-outline-danger btn-sm" th:href="@{'/tecnico/verTicketProgreso?id='+${ticket.idTickets}}">Terminar</a>
                                 <a type="button" class="btn btn-outline-light btn-sm" th:href="@{'/tecnico/verTicketProgreso?id='+${ticket.idTickets}}">Atrás</a>
                                 <p></p>
-                                <p style="font-size: xx-small">En caso no ubique su destino le dejamos las latitudes y longitudes para que las coloque en el mapa de google, tenga un buen viaje</p>
+                                <p th:if="${ticket.estado==4}" style="font-size: xx-small">En caso no ubique su destino le dejamos las latitudes y longitudes para que las coloque en el mapa de google, tenga un buen viaje</p>
 
-                                <a type="button" class="btn btn-outline-warning btn-sm" href="https://www.google.com/maps/@-12.075008,-77.0342912,12z?entry=ttu">
+                                <a th:if="${ticket.estado==4}" type="button" class="btn btn-outline-warning btn-sm" href="https://www.google.com/maps/@-12.075008,-77.0342912,12z?entry=ttu">
                                     <img src="https://cdn-icons-png.flaticon.com/256/355/355980.png" width="20rem" alt="googlemaps">
                                 </a>
-                                <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <button th:if="${ticket.estado==4}" type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     LonLat
                                 </button>
                                 <!-- Modal -->
@@ -354,6 +354,7 @@
                 </div>
 
             </div>
+
         </div>
     </section>
 
