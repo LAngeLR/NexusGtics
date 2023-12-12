@@ -20,9 +20,10 @@
         <div class="pagetitle">
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/analistaOYM/}">Inicio</a></li>
-                    <li class="breadcrumb-item"><a th:href="@{/analistaOYM/listaSitio}">Lista de Sitios</a></li>
-                    <li class="breadcrumb-item active">Visualizar equipo</li>
+                    <li class="breadcrumb-item"><a>Sitios</a></li>
+                    <li class="breadcrumb-item">Lista de sitios</li>
+                    <li class="breadcrumb-item">Equipos no pertenecientes</li>
+                    <li class="breadcrumb-item active">Equipo</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -72,7 +73,9 @@
                                 <div class="mb-3">
                                     <label for="descuento">Foto de referencia:</label>
                                     <br>
-                                    <img th:src="@{|image/${equipo.archivo.idArchivos}|}" style="max-width: 600px;" alt="">
+                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                        <img th:src="@{|/file/${equipo.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
+                                    </div>
                                 </div>
 
                             </div>

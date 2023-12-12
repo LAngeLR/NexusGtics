@@ -21,11 +21,10 @@
 
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Inicio</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">Home</li>
-                <li class="breadcrumb-item active">Ticket</li>
+                <li class="breadcrumb-item">Tickets</li>
+                <li class="breadcrumb-item">Lista de tickets</li>
                 <li class="breadcrumb-item active">Datos del ticket</li>
             </ol>
         </nav>
@@ -170,8 +169,8 @@
                         var latitud = [[${ticket.idSitios.latitud}]];
                         var longitud = [[${ticket.idSitios.longitud}]];
                         let map = L.map('map').setView([latitud,longitud],18)
-                        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                            attribution: ''
                         }).addTo(map);
                         L.marker([latitud,longitud]).addTo(map).bindPopup('Sitio').openPopup();
                     </script>
@@ -207,6 +206,9 @@
             </div>
         </div>
     </section>
+    <div>
+        <a th:href="@{/analistaDespliegue/ticket}" class="btn btn-outline-danger">Regresar</a>
+    </div>
 
 </main><!-- End #main -->
 
