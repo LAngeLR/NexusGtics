@@ -84,46 +84,9 @@
 
                             <!------------------------------------------------------------->
                             <br>
-                            <div class="col-auto" th:if="${ticket.estado==3}">
-                                <!--<label for="fechaHora" class="col-form-label" style="font-size: small">Fecha y hora de comienzo:</label>-->
-                                <label for="fecha">Selecciona una fecha:</label>
-                            </div>
-                            <div class="col-auto" th:if="${ticket.estado==3}">
-                                <input class="col-form-label" type="date" id="fecha" name="fecha" th:value="${ticket.fechaCreacion}">
-                            </div>
-
-                            <div class="col-auto" th:if="${ticket.estado==3}">
-                                <!--<label for="fechaHora" class="col-form-label" style="font-size: small">Fecha y hora de comienzo:</label>-->
-                                <label for="hora">Selecciona una hora:</label>
-                                <br>
-                            </div>
-                            <div class="col-auto" th:if="${ticket.estado==3}">
-                                <input type="time" id="hora" name="hora" th:value="${ticket.horaCreacion}">
-                                <br><br>
-                            </div>
-
-                            <div class="col-auto" th:if="${ticket.estado==4}">
-                                <label for="fecha2">Selecciona una fecha:</label>
-                            </div>
-                            <div class="col-auto" th:if="${ticket.estado==4}">
-                                <input type="date" id="fecha2" name="fecha2" th:value="${ticket.fechaCreacion}">
-                                <br><br>
-                            </div>
-                            <div class="col-auto" th:if="${ticket.estado==4}">
-                                <!--<label for="fechaHora" class="col-form-label" style="font-size: small">Fecha y hora de comienzo:</label>-->
-                                <label for="hora2">Selecciona una hora:</label>
-                                <br>
-                            </div>
-                            <div class="col-auto" th:if="${ticket.estado==4}">
-                                <input type="time" id="hora2" name="hora2" th:value="${ticket.horaCreacion}">
-                                <br><br>
-                            </div>
 
                             <center>
-                                <p style="font-size: x-small">Para empezar desplazamiento dar click en "Empezar"</p>
-                                <a th:if="${ticket.estado==3}" type="button" class="btn btn-outline-success" th:href="@{'/tecnico/verTicketNuevo?id='+${ticket.idTickets}}">Empezar</a>
                                 <a th:if="${ticket.estado==3}" type="button" class="btn btn-outline-light" th:href="@{'/tecnico/verTicketNuevo?id=' + ${ticket.idTickets}}">Atrás</a>
-                                <a th:if="${ticket.estado==4}" type="button" class="btn btn-outline-success" th:href="@{'/tecnico/verTicket?id='+${ticket.idTickets}}">Empezar</a>
                                 <a th:if="${ticket.estado==4}" type="button" class="btn btn-outline-light" th:href="@{'/tecnico/verTicket?id=' + ${ticket.idTickets}}">Atrás</a>
                             </center>
                         </div>
