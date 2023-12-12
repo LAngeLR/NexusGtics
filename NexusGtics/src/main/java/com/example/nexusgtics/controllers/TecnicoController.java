@@ -488,7 +488,6 @@ public class TecnicoController {
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idCuadrilla1 = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
         int idCuadrilla = idCuadrilla1.intValue();
-        System.out.println(idCuadrilla);
         model.addAttribute("cuadrilla",idCuadrilla);
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
@@ -743,6 +742,7 @@ public class TecnicoController {
         model.addAttribute("cuadrilla",idCuadrilla);
         try {
             if (id <= 0 || !ticketRepository.existsById(id)) {
+                System.out.println("error1");
                 return "redirect:/tecnico/ticketasignado";
             }
             Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
@@ -787,9 +787,11 @@ public class TecnicoController {
 
                 return "Tecnico/datost_nuevo";
             } else {
+                System.out.println("error2");
                 return "redirect:/tecnico/ticketasignado";
             }
         } catch (NumberFormatException e) {
+            System.out.println("error3");
             return "redirect:/tecnico/ticketasignado";
         }
     }
