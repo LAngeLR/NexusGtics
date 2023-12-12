@@ -486,15 +486,17 @@ public class TecnicoController {
     public String Tickets(Model model,
                           RedirectAttributes attr,HttpSession httpSession){
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
-        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        Integer idCuadrilla1 = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        int idCuadrilla = idCuadrilla1.intValue();
+        System.out.println(idCuadrilla);
         model.addAttribute("cuadrilla",idCuadrilla);
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
 
-                List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado();
-                model.addAttribute("ticketAsignados",ticketAsignados);
+        List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado1(idCuadrilla);
+        model.addAttribute("ticketAsignados",ticketAsignados);
 
-                    return "Tecnico/ticket_asignado";
+        return "Tecnico/ticket_asignado";
 
     }
 
