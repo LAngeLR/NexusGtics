@@ -537,8 +537,8 @@ public class TecnicoController {
 
     //--------------------------------------------------
     @GetMapping("/historialticket2")
-    public String historialTicket2(Model model,
-                                  RedirectAttributes attr,HttpSession httpSession){
+    public String historialTicket2(Model model, @RequestParam("id") String idStr,
+                                   RedirectAttributes attr,HttpSession httpSession){
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
         model.addAttribute("cuadrilla",idCuadrilla);
@@ -548,7 +548,25 @@ public class TecnicoController {
         List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado();
         model.addAttribute("ticketAsignados",ticketAsignados);
 
-        return "Tecnico/historial_ticket2";
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/tecnico/ticketasignado";
+            }
+            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
+            List<HistorialTicket> listaHistorial= historialTicketRepository.listarHistorial1(id);
+
+            if (ticketOptional.isPresent()) {
+                Ticket ticket = ticketOptional.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("listaHistorial", listaHistorial);
+                return "Tecnico/historial_ticket2";
+            } else {
+                return "redirect:/tecnico/ticketasignado";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/tecnico/ticketasignado";
+        }
 
     }
 
