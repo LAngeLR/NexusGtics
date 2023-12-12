@@ -119,40 +119,15 @@
                         </form>
                     </div>
                     <div class="col-xl-6">
-                        <div class="mb-3 row">
-                            <h5 class="card-title" style="color: #095444">Formulario:</h5>
-                            <img th:src="@{|/file/${formulario.archivo.getIdArchivos()}|}" alt="Profile" style="max-height:25rem; max-width:25rem">
+                        <div class="pagetitle">
+                            <h4 class="card-title" style="color: #1e4470; font-weight: bolder">¡Técnico!,</h4>
                         </div>
-                        <div class="mb-3 row">
-                            <label class="col-sm-4 form-label" style="color: #095444"><b>Comentario:</b></label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control-plaintext"  th:object="${ticket}" th:field="*{descripcion}" disabled>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label class="col-sm-4 form-label" style="color: #095444"><b>Descripción:</b></label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control-plaintext"  th:object="${formulario}" th:field="*{descripcion}" disabled>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label class="col-sm-4 form-label"><b>Líder Técnico:</b></label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control-plaintext" th:field="*{ticket.idUsuarioCreador.apellido}" disabled>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label class="col-sm-4 form-label"><b>Nº Cuadrilla:</b></label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control-plaintext" th:field="*{ticket.idCuadrilla.idCuadrillas}" disabled>
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label class="col-sm-4 form-label"><b>Tiempo Transcurrido:</b></label>
-                            <p class="col-lg-9 col-md-8">
-                                <span th:text="${dias}"></span> días <span th:text="${horas}"></span> horas con <span th:text="${minutos}"></span> minutos
-                            </p>
-                        </div>
+                        <p>Te encuentras en el lugar, ahora dependiento de tu ticket si es de <b>Mantenimiento</b> o <b>Despliegue</b> vas a tener un tipo de formulario, de igual manera, sigue los siguentes pasos:</p>
+                        <p><b style="color:#D01515">1. </b> Ingresa al formulario y rellena los datos pedidos.
+                        </p>
+                        <p> <b style="color:#D01515">2. </b> Así mismo, encontrará los pasos a seguir para el formulario.
+                        </p>
+                        <center><img src="https://images.sw.cdn.siemens.com/siemens-disw-assets/public/6MO1cPi9KpusYQUjSrJMak/en-US/img67-maximize-service-knowledge-for-greater-profits-promo-640x480.png?auto=format,compress&w=640&q=60" width="60%"></center>
                     </div>
 
                 </div><!-- End Bordered Tabs -->

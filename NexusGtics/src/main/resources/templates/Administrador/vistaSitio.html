@@ -135,9 +135,10 @@
                         var latitud = [[${sitio.latitud}]];
                         var longitud = [[${sitio.longitud}]];
                         let map = L.map('mi_mapa').setView([latitud,longitud],18)
-                        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                          attribution: ''
                         }).addTo(map);
+
                         L.marker([latitud,longitud]).addTo(map).bindPopup('Sitio').openPopup();
 
                       </script>
