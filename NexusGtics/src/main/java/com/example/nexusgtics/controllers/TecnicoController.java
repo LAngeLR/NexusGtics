@@ -1596,17 +1596,27 @@ public class TecnicoController {
     }
 
     //-----------------------------------------------------------------------
+
     @GetMapping("/mapa")
-    public String pagmapa(Model model, HttpSession httpSession) {
+    public String mapaTickets(Model model, HttpSession httpSession){
+
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
         model.addAttribute("cuadrilla",idCuadrilla);
-        List<Ticket> listaT = ticketRepository.findAll();
-        model.addAttribute("listaTicket", listaT);
-        List<Ticket> listaMp = ticketRepository.listarmapa();
-        model.addAttribute("listaMp",listaMp);
-        List<SitioCerrado> sitioCerradoList = sitioCerradoRepository.findAll();
-        model.addAttribute("sitioCerradoList", sitioCerradoList);
+
+        List<Sitio> listaSitios = sitioRepository.findAll();
+        List<Ticket> listaTickets1 = ticketRepository.cerrados();
+        List<Ticket> listaTickets2 = ticketRepository.progreso();
+        List<Ticket> listaTickets3 = ticketRepository.nuevos();
+
+        //List<Ticket> listaTickets = ticketRepository.listarMapaSupervisor(idSupervisor,u.getEmpresa().getIdEmpresas());
+
+        model.addAttribute("ticketsCerrados", listaTickets1);
+        model.addAttribute("ticketsProgreso", listaTickets2);
+        model.addAttribute("ticketsNuevos", listaTickets3);
+
+        model.addAttribute("sitios", listaSitios);
+
         return "Tecnico/mapa";
     }
 
