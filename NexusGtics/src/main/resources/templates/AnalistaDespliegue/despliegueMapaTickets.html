@@ -51,23 +51,23 @@
 
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Mapa de Tickets</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/}">Inicio</a></li>
-                <li class="breadcrumb-item active">Tickets</li>
-                <li class="breadcrumb-item active">Mapa de Tickets</li>
+                <li class="breadcrumb-item">Tickets</li>
+                <li class="breadcrumb-item active">Mapa de tickets</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
 
     <section class="section profile">
+        <h5 class="card-title">Mapa de tickets</h5>
+
         <div class="row">
             <div class="col-xl-12">
                 <div class="card">
                     <center>
                         <div class="card-body">
-                            <h5 class="card-title">Distribucion</h5>
+                            <h5 class="card-title">Distribución</h5>
 
                             <table>
                                 <tr>
@@ -99,7 +99,7 @@
                     <div class="card-body pt-3">
                         <div id="select-location">
                             <select name="location" id="location">
-                                <option value="-1">Selecciona uno...</option>
+                                <option value="-1" class="text-center">-- Seleccione un sitio --</option>
                                 <option th:each="sitio :${sitioList}"
                                         th:value="${sitio.latitud + ',' + sitio.longitud}" th:text="${sitio.nombre}">Empire State Building</option>
                                 <!--<option value="40.689167, -74.044444">Estatua de la Libertad</option>
@@ -113,9 +113,8 @@
                         <script>
                             let map = L.map('map').setView([-12.0690694, -77.0786442], 18);
 
-                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                attribution:
-                                    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                                attribution: ''
                             }).addTo(map);
 
                             let defaultCoords = [-12.0690694, -77.0786442];

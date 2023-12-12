@@ -442,8 +442,10 @@ public class AnalistaOYMController {
 
         if (optionalEquipo.isPresent()) {
             sitiosHasEquiposRepository.agregarEquipo(idSitios, idEquipos);
+            // Agrega un mensaje de éxito como flash attribute
             redirectAttributes.addFlashAttribute("mensaje", "Equipo agregado con éxito.");
         } else {
+            // Agrega un mensaje de error como flash attribute
             redirectAttributes.addFlashAttribute("mensaje", "Error: Equipo no encontrado.");
         }
 
@@ -459,6 +461,23 @@ public class AnalistaOYMController {
     }
     @GetMapping("/listaEquiposPerteneciente")
     public String listaEquipoP(Model model, @RequestParam("id") int id){
+        List<Equipo> leq = equipoRepository.listaEquiposHabilitados();
+        int idSitios =   0;
+
+        for (Equipo equipo : leq) {
+            // Verificar si ya existe un registro con la combinación idSitios y idEquipos
+            List<SitiosHasEquipo> existentes = sitiosHasEquiposRepository.listaEquiposPorSitioYEquipo(idSitios, equipo.getIdEquipos());
+
+            if (existentes.isEmpty()) {
+                // No hay registros existentes, podemos agregar el equipo
+                sitiosHasEquiposRepository.agregarEquipo(0, equipo.getIdEquipos());
+                System.out.println(equipo.getIdEquipos());
+            } else {
+                // Ya existe un registro, puedes manejarlo de alguna manera si es necesario
+                // Por ejemplo, puedes registrar un mensaje de registro, omitirlo, etc.
+                System.out.println("Ya existe un registro para idSitios=" + idSitios + " e idEquipos=" + equipo.getIdEquipos());
+            }
+        }
         List<SitiosHasEquipo> listaEquipos = sitiosHasEquiposRepository.listaEquiposPorSitio(id);
         model.addAttribute("listaEquipo",listaEquipos);
         model.addAttribute("idSitios", id); // Agregar el valor de "id" al modelo
@@ -644,7 +663,12 @@ public class AnalistaOYMController {
         int numeroRandom = random.nextInt(7) + 1;
 
         ticket.setIdUsuarioCreador(u);
-        ticket.setIdsitioCerrado(numeroRandom);
+        Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(numeroRandom);
+        if (optionalSitioCerrado.isPresent()) {
+            SitioCerrado sitioCerrado = optionalSitioCerrado.get();
+            ticket.setIdsitioCerrado(sitioCerrado);
+        }
+
         ticket.setReasignado(0);
         ticketRepository.save(ticket);
         attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente por el usuario: " + ticket.getUsuarioSolicitante());
@@ -673,6 +697,72 @@ public class AnalistaOYMController {
 
     }
 
+
+    @PostMapping("/updateTicket")
+    public String updateTicket(@ModelAttribute("ticket")  @Valid Ticket ticket,
+                              BindingResult bindingResult, Model model, RedirectAttributes attr){
+        try {
+
+            Integer idTicket = ticket.getIdTickets();
+            Optional<Ticket> optTicket = ticketRepository.findById(idTicket);
+
+            if (optTicket.isPresent()){
+
+                Ticket ticketBD = optTicket.get();
+
+                if(ticketBD.getIdEmpresaAsignada() == null || ticket.getIdEmpresaAsignada().equals("-1")){
+                    model.addAttribute("msgEmpresa", "Selecciona una Empresa");
+                    model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+                    model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                    return "AnalistaOYM/oymEditarTicket";
+                }
+                if(ticketBD.getIdSitios() == null || ticket.getIdSitios().equals("-1")){
+                    model.addAttribute("msgSitio", "Selecciona un Sitio de Despliegue");
+                    model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+                    model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                    return "AnalistaOYM/oymEditarTicket";
+                }
+//                if(ticketBD.getDescripcion() == null){
+//                    model.addAttribute("msgDescrip", "La descripcion debe estar llena");
+//                    return "AnalistaOYM/oymEditarTicket";
+//                }
+//                if(ticketBD.getUsuarioSolicitante() == null){
+//                    model.addAttribute("msgUser", "Por favor indica el Usuario Solicitante");
+//                    return "AnalistaOYM/oymEditarTicket";
+//                }
+                if(ticketBD.getPrioridad() == null){
+                    model.addAttribute("msgPrio", "Selecciona la prioridad del Ticket");
+                    model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+                    model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                    return "AnalistaOYM/oymEditarTicket";
+                }
+                if (!bindingResult.hasErrors()) {
+                    if (ticket.getIdSitios() != null) {
+                        attr.addFlashAttribute("msg2", "El ticket ha sido actualizado exitosamente");
+                    }
+                    ticketBD.setIdEmpresaAsignada(ticket.getIdEmpresaAsignada());
+                    ticketBD.setIdSitios(ticket.getIdSitios());
+                    ticketBD.setDescripcion(ticket.getDescripcion());
+                    ticketBD.setUsuarioSolicitante(ticket.getUsuarioSolicitante());
+                    ticketBD.setPrioridad(ticket.getPrioridad());
+
+                    ticketRepository.save(ticketBD);
+                    return "redirect:/analistaOYM/ticket";
+                }
+                else {
+                    model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+                    model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                    System.out.println("se mando en ticket, Binding");
+                    return "AnalistaOYM/oymEditarTicket";
+                }
+            } else {
+
+                return "redirect:/analistaOYM";
+            }
+        } catch (NumberFormatException e){
+            return "redirect:/analistaOYM/ticket";
+        }
+    }
     @GetMapping("/editarTicket")
     public String editarTicket(Model model, @RequestParam("id") int id){
 
@@ -680,7 +770,7 @@ public class AnalistaOYMController {
         if(optTicket.isPresent()){
             Ticket ticket = optTicket.get();
             model.addAttribute("ticket", ticket);
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
             model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaOYM/oymEditarTicket";
 

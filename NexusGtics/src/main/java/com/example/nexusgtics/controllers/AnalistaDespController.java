@@ -39,7 +39,7 @@ public class AnalistaDespController {
     final EmpresaRepository empresaRepository;
     final EquipoRepository equipoRepository;
     final HistorialTicketRepository historialTicketRepository;
-
+    final SitioCerradoRepository sitioCerradoRepository;
     final ArchivoRepository archivoRepository;
     final SitiosHasEquiposRepository sitiosHasEquiposRepository;
     final CargoRepository cargoRepository;
@@ -52,7 +52,7 @@ public class AnalistaDespController {
     public AnalistaDespController(TicketRepository ticketRepository, ComentarioRepository comentarioRepository,
                                   SitioRepository sitioRepository, UsuarioRepository usuarioRepository,
                                   EmpresaRepository empresaRepository, EquipoRepository equipoRepository,
-                                  HistorialTicketRepository historialTicketRepository, ArchivoRepository archivoRepository,
+                                  HistorialTicketRepository historialTicketRepository, SitioCerradoRepository sitioCerradoRepository, ArchivoRepository archivoRepository,
                                   SitiosHasEquiposRepository sitiosHasEquiposRepository, CargoRepository cargoRepository,
                                   FormularioRepository formularioRepository, ArchivoSitioRepository archivoSitioRepository, TecnicosCuadrillaRepository tecnicosCuadrillaRepository, PasswordEncoder passwordEncoder){
         this.ticketRepository = ticketRepository;
@@ -62,6 +62,7 @@ public class AnalistaDespController {
         this.empresaRepository = empresaRepository;
         this.equipoRepository = equipoRepository;
         this.historialTicketRepository = historialTicketRepository;
+        this.sitioCerradoRepository = sitioCerradoRepository;
         this.archivoRepository = archivoRepository;
         this.sitiosHasEquiposRepository = sitiosHasEquiposRepository;
         this.cargoRepository = cargoRepository;
@@ -92,6 +93,10 @@ public class AnalistaDespController {
                              @ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult,
                              Model model,
                              RedirectAttributes attr, HttpSession httpSession){
+
+
+
+
 
         // ESTO SE AÑADIO DE BARD
         //session.setAttribute("usuario", usuario);
@@ -210,6 +215,18 @@ public class AnalistaDespController {
 
             if (optionalUsuario.isPresent()) {
                 Usuario usuarioDB = optionalUsuario.get();
+
+                if(file.getSize()>1){
+                    if (file.getOriginalFilename().length() > 40) {
+                        model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 caracteres");
+                        return "AnalistaDespliegue/perfilEditar";
+                    }
+                    String extensionValida = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+                    if (!extensionValida.equals("png") && !extensionValida.equals("jpg") && !extensionValida.equals("jpeg")) {
+                        model.addAttribute("msgExtension", "Solo se permiten archivos con extensión png, jpg y jpeg");
+                        return "AnalistaDespliegue/perfilEditar";
+                    }
+                }
 
                 if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
                     model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
@@ -432,6 +449,19 @@ public class AnalistaDespController {
             model.addAttribute("msgZona", "Escoger un tipo de zona");
 
                 return "AnalistaDespliegue/despliegueEditarSitio";
+        }
+
+        if(file.getSize()>1){
+            if (file.getOriginalFilename().length() > 40) {
+                model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 caracteres");
+                return "AnalistaDespliegue/despliegueEditarSitio";
+            }
+
+            String extensionValida = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+            if (!extensionValida.equals("png") && !extensionValida.equals("jpg") && !extensionValida.equals("jpeg")) {
+                model.addAttribute("msgExtension", "Solo se permiten archivos con extensión png, jpg y jpeg");
+                return "AnalistaDespliegue/despliegueEditarSitio";
+            }
         }
 
         if (file.getSize() > 0 && !file.getContentType().startsWith("image/")) {
@@ -792,7 +822,11 @@ public class AnalistaDespController {
         int numeroRandom = random.nextInt(7) + 1;
 
         ticket.setIdUsuarioCreador(u);
-        ticket.setIdsitioCerrado(numeroRandom);
+        Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(numeroRandom);
+        if (optionalSitioCerrado.isPresent()) {
+            SitioCerrado sitioCerrado = optionalSitioCerrado.get();
+            ticket.setIdsitioCerrado(sitioCerrado);
+        }
         ticket.setReasignado(0);
         ticketRepository.save(ticket);
         attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente por el usuario: " + ticket.getUsuarioSolicitante());
@@ -1119,15 +1153,37 @@ public class AnalistaDespController {
 
         System.out.println("Maximo tamaño permitido - 1048576 bytes");
 
+        if(file.getSize()>1){
+            /*VALIDACIÓN PARA QUE EL NOMBRE DEL ARHCIVO SEA MENOR A 40*/
+            if (file.getOriginalFilename().length() > 40) {
+                model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 caracteres");
+//                return "redirect:/analistaDespliegue/archivosSitios";
+                model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                model.addAttribute("listaArchivos", archivoSitioRepository.findAll());
+                return "AnalistaDespliegue/despliegueArchivosSitios";
+            }
+
+            /*VALIDACION DE EXTENSIÓN*/
+            String extensionValida = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+            if (!extensionValida.equals("pdf") && !extensionValida.equals("docx") && !extensionValida.equals("xlsx")) {
+                model.addAttribute("msgExtension", "Solo se permiten archivos con extensión pdf, docx y xlsx");
+//                return "redirect:/analistaDespliegue/archivosSitios";
+                model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                model.addAttribute("listaArchivos", archivoSitioRepository.findAll());
+                return "AnalistaDespliegue/despliegueArchivosSitios";
+
+            }
+
+        }
 
 //        int maxFileSize = 20000000;
-        int maxFileSize = 1048576;
-
-        if (file.getSize() > maxFileSize) {
-            System.out.println(file.getSize());
-            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (1MB).");
-            return "redirect:/analistaDespliegue/archivosSitios";
-        }
+//        int maxFileSize = 1048576;
+//
+//        if (file.getSize() > maxFileSize) {
+//            System.out.println(file.getSize());
+//            model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (100MB).");
+//            return "redirect:/analistaDespliegue/archivosSitios";
+//        }
 
         try {
             /*OBTENGO EL SITIO DE MANERA OPCIONAL*/

@@ -73,20 +73,17 @@
                     <h5><b>Ingrese los datos pedidos antes de empezar:</b></h5><br>
                     <form method="POST" th:action="@{/tecnico/saveDesplazamiento}" th:object="${ticket}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row g-3 align-items-center">
-                            <div class="col-auto">
-                                <label for="ticketid" class="col-form-label"><b>Ticket ID:</b></label>
-                            </div>
-                            <div class="col-auto">
-                                <input type="text" id="ticketid" class="form-control-plaintext" th:field="*{idTickets}" disabled style="font-size: medium;color: #ebf6fd;"></div>
-                                        <br>
+
                             <div class="col-auto">
                                 <label for="lugarInicio" class="col-form-label" style="font-size: small">Lugar Inicio:</label>
                             </div>
 
                             <div class="col-auto">
-                                <input type="text" id="lugarInicio" class="form-control" aria-describedby="lugarInicio" th:field="*{idSitios.nombre}">
+                                <input type="text" id="lugarInicio" class="form-control" aria-describedby="lugarInicio" th:field="*{idSitios.nombre}" disabled>
                             </div>
-                                        <br>
+
+                            <!------------------------------------------------------------->
+                            <br>
                             <div class="col-auto" th:if="${ticket.estado==3}">
                                 <!--<label for="fechaHora" class="col-form-label" style="font-size: small">Fecha y hora de comienzo:</label>-->
                                 <label for="fecha">Selecciona una fecha:</label>
@@ -106,9 +103,10 @@
                             </div>
 
                             <div class="col-auto" th:if="${ticket.estado==4}">
-                                <label for="fecha2">Selecciona una fecha:</label></div>
+                                <label for="fecha2">Selecciona una fecha:</label>
+                            </div>
                             <div class="col-auto" th:if="${ticket.estado==4}">
-                                <input type="date" id="fecha2" name="fecha" th:value="${ticket.fechaCreacion}">
+                                <input type="date" id="fecha2" name="fecha2" th:value="${ticket.fechaCreacion}">
                                 <br><br>
                             </div>
                             <div class="col-auto" th:if="${ticket.estado==4}">
@@ -117,14 +115,16 @@
                                 <br>
                             </div>
                             <div class="col-auto" th:if="${ticket.estado==4}">
-                                <input type="time" id="hora2" name="hora" th:value="${ticket.horaCreacion}">
+                                <input type="time" id="hora2" name="hora2" th:value="${ticket.horaCreacion}">
                                 <br><br>
                             </div>
 
                             <center>
                                 <p style="font-size: x-small">Para empezar desplazamiento dar click en "Empezar"</p>
-                                <a type="button" class="btn btn-outline-success" th:href="@{'/tecnico/verTicketNuevo?id='+${ticket.idTickets}}">Empezar</a>
-                                <a type="button" class="btn btn-outline-light" th:href="@{'/tecnico/verTicketNuevo?id=' + ${ticket.idTickets}}">Atrás</a>
+                                <a th:if="${ticket.estado==3}" type="button" class="btn btn-outline-success" th:href="@{'/tecnico/verTicketNuevo?id='+${ticket.idTickets}}">Empezar</a>
+                                <a th:if="${ticket.estado==3}" type="button" class="btn btn-outline-light" th:href="@{'/tecnico/verTicketNuevo?id=' + ${ticket.idTickets}}">Atrás</a>
+                                <a th:if="${ticket.estado==4}" type="button" class="btn btn-outline-success" th:href="@{'/tecnico/verTicket?id='+${ticket.idTickets}}">Empezar</a>
+                                <a th:if="${ticket.estado==4}" type="button" class="btn btn-outline-light" th:href="@{'/tecnico/verTicket?id=' + ${ticket.idTickets}}">Atrás</a>
                             </center>
                         </div>
                     </form>

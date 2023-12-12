@@ -14,13 +14,19 @@ import java.util.List;
 @Repository
 public interface SitiosHasEquiposRepository extends JpaRepository<SitiosHasEquipo, SitiosHasEquipoId> {
 
-    @Query(value ="select * from sitios_has_equipos where  idSitios = ?1", nativeQuery = true )
+    @Query(value ="SELECT she.*\n" +
+            "FROM sitios_has_equipos she\n" +
+            "JOIN equipos e ON she.idEquipos = e.idEquipos\n" +
+            "WHERE she.idSitios = ?1 AND e.habilitado = 1;\n", nativeQuery = true )
     List<SitiosHasEquipo> listaEquiposPorSitio(int idSitios);
 
-    @Query(value ="SELECT MIN(idSitios) AS idSitios, idEquipos\n" +
-            "FROM sitios_has_equipos\n" +
-            "WHERE idEquipos NOT IN (SELECT idEquipos FROM sitios_has_equipos WHERE idSitios = ?1)\n" +
-            "GROUP BY idEquipos;", nativeQuery = true )
+    @Query(value ="SELECT MIN(se.idSitios) AS idSitios, se.idEquipos\n" +
+            "FROM sitios_has_equipos se\n" +
+            "JOIN sitios s ON se.idSitios = s.idSitios\n" +
+            "JOIN equipos e ON se.idEquipos = e.idEquipos\n" +
+            "WHERE se.idEquipos NOT IN (SELECT idEquipos FROM sitios_has_equipos WHERE idSitios = 2) \n" +
+            "  AND e.habilitado = 1\n" +
+            "GROUP BY se.idEquipos", nativeQuery = true )
     List<SitiosHasEquipo> listaEquiposNoSitio(int idSitios);
 
         @Transactional

@@ -22,12 +22,18 @@ public class Ticket implements Serializable {
     private Integer idTickets;
 
     @Column(name = "descripcion", nullable = false, length = 45)
+    @Size(max = 45)
+    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "La Provincia debe contener solo letras")
+    @NotBlank(message = "El campo no debe estar vacío")
     private String descripcion;
 
     @Column(name = "estado", nullable = false)
     private Integer estado;
 
     @Column(name = "usuarioSolicitante", length = 70)
+    @Size(max = 70)
+    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "La Provincia debe contener solo letras")
+    @NotBlank(message = "El campo no debe estar vacío")
     private String usuarioSolicitante;
 
     @ManyToOne
@@ -50,8 +56,9 @@ public class Ticket implements Serializable {
     @JoinColumn(name = "idSitios", nullable = false)
     private Sitio idSitios;
 
-    @Column(name = "idsitioCerrado")
-    private Integer idsitioCerrado;
+    @ManyToOne
+    @JoinColumn(name = "idsitioCerrado", nullable = false)
+    private SitioCerrado idsitioCerrado;
 
     @ManyToOne
     @JoinColumn(name = "idTipoTicket", nullable = false)

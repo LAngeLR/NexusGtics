@@ -452,6 +452,7 @@ public class SupervisorController {
         try{
             int id = Integer.parseInt(idStr);
             if (id <= 0 || !ticketRepository.existsById(id)) {
+                System.out.println("error: 1");
                 return "redirect:/supervisor/listaTicketsNuevos";
             }
             Optional<Ticket> ticketBuscado = ticketRepository.findById(id);
@@ -496,9 +497,11 @@ public class SupervisorController {
 
                 return "Supervisor/ticketAsignar";
             } else {
+                System.out.println("error: 2");
                 return "redirect:/supervisor/listaTicketsNuevos";
             }
         } catch (NumberFormatException e) {
+            System.out.println("error: 3");
             return "redirect:/supervisor/listaTicketsNuevos";
         }
     }
@@ -693,7 +696,7 @@ public class SupervisorController {
             ZoneId zonaHoraria = ZoneId.of("GMT-5");
             LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
             LocalTime horaActual = LocalTime.now(zonaHoraria);
-            historialTicketRepository.crearHistorial(6,fechaCambioEstado,fechaActual,horaActual,id,idSupervisor,"Pasando a Analista");
+            historialTicketRepository.crearHistorial(7,fechaCambioEstado,fechaActual,horaActual,id,idSupervisor,"Pasando a Analista");
             ticketRepository.actualizarEstado(id,estadoUtilizar);
             redirectAttributes.addFlashAttribute("yum","El ticket ha sido cerrado correctamente");
             return "redirect:/supervisor/listaTickets";

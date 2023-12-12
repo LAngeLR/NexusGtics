@@ -599,7 +599,7 @@ public class AdminController {
         if(file.getSize()>1){
             /*VALIDACIÓN PARA QUE EL NOMBRE DEL ARHCIVO SEA MENOR A 40*/
             if (file.getOriginalFilename().length() > 40) {
-                model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 carácteres");
+                model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 caracteres");
 
                 if (sitio.getIdSitios() == null) {
                     return "Administrador/crearSitio";
@@ -747,7 +747,7 @@ public class AdminController {
                 if(file.getSize()>1){
                     /*VALIDACIÓN PARA QUE EL NOMBRE DEL ARHCIVO SEA MENOR A 40*/
                     if (file.getOriginalFilename().length() > 40) {
-                        model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 carácteres");
+                        model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 caracteres");
                         return "Administrador/editarSitio";
                     }
 
@@ -917,7 +917,7 @@ public class AdminController {
         if(file.getSize()>1){
             /*VALIDACIÓN PARA QUE EL NOMBRE DEL ARHCIVO SEA MENOR A 40*/
             if (file.getOriginalFilename().length() > 40) {
-                model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 carácteres");
+                model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 caracteres");
 
                 if (equipo.getIdEquipos() == null) {
                     return "Administrador/crearEquipo";
@@ -1037,7 +1037,7 @@ public class AdminController {
 
                     /*VALIDACIÓN PARA QUE EL NOMBRE DEL ARHCIVO SEA MENOR A 40*/
                     if (file.getOriginalFilename().length() > 40) {
-                        model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 carácteres");
+                        model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 caracteres");
                         return "Administrador/editarEquipo";
                     }
 
@@ -1207,7 +1207,7 @@ public class AdminController {
 
                 if(file.getSize()>1){
                     if (file.getOriginalFilename().length() > 40) {
-                        model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 carácteres");
+                        model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 caracteres");
                         return "Administrador/perfilEditar";
                     }
                     String extensionValida = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);

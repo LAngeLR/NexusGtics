@@ -34,8 +34,17 @@
 
     <style>
         #map{
-            min-height: 35rem;
+            min-height: 50rem;
             min-width: 20rem;
+        }
+        .card {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            max-width: 100%;
+            border-collapse: collapse;
         }
     </style>
 </head>
@@ -212,28 +221,98 @@
                                 <input type="text" id="lugarInicio" class="form-control" aria-describedby="lugarInicio" th:value="${ticket.idSitios.nombre}" disabled>
                             </div>
                             <div class="col-auto">
-                                <label for="fechaHora" class="col-form-label" style="font-size: small; color:#8dbe6c"><b>Fecha y hora de comienzo:</b></label></div>
-                            <div class="col-auto">
-                                <input id="fechaHora" class="form-control" name="fechahora" step="1" th:value="${ticket.fechaCreacion}" disabled>
+                                <!--<label for="fechaHora" class="col-form-label" style="font-size: small">Fecha y hora de comienzo:</label>-->
+                                <label for="fecha">Selecciona una fecha:</label>
                             </div>
                             <div class="col-auto">
-                                <label for="lugarCierre" class="col-form-label" style="font-size: small">Lugar de cierre:</label>
-                            </div>
-
-                            <div class="col-auto">
-                                <input type="text" id="lugarCierre" class="form-control" aria-describedby="lugarInicio" th:field="*{idsitioCerrado.nombre}">
+                                <input class="col-form-label" type="date" id="fecha" name="fecha" th:value="${ticket.fechaCreacion}">
                             </div>
 
                             <div class="col-auto">
-                                <label for="fechaHora2" class="col-form-label" style="font-size: small">Fecha y hora determino:</label></div>
-
-                            <div class="col-auto">
-                                <input id="fechaHora2" type="datetime-local" class="form-control" name="fechahora" step="1" min="2023-01-01T00:00" max="2023-12-31T12:00" th:value="${ticket.fechaCierre}">
+                                <!--<label for="fechaHora" class="col-form-label" style="font-size: small">Fecha y hora de comienzo:</label>-->
+                                <label for="hora">Selecciona una hora:</label>
                                 <br>
                             </div>
+                            <div class="col-auto">
+                                <input class="col-form-label" type="time" id="hora" name="hora" th:value="${ticket.horaCreacion}">
+                                <br><br>
+                            </div>
+
+                            <div class="col-auto">
+                                <label for="lugarCierre" class="col-form-label" style="font-size: small; color:#8dbe6c"><b>Lugar a dirigirse:</b></label></div>
+                            <div class="col-auto">
+                                <input id="lugarCierre" class="form-control" name="lugarCierre" step="1" th:value="${ticket.idsitioCerrado.nombre}" disabled>
+                            </div>
+
+                            <div class="col-auto">
+                                <!--<label for="fechaHora" class="col-form-label" style="font-size: small">Fecha y hora de comienzo:</label>-->
+                                <label for="fecha2">Selecciona una fecha:</label>
+                            </div>
+                            <div class="col-auto">
+                                <input class="col-form-label" type="date" id="fecha2" name="fecha2" th:value="${ticket.fechaCierre}">
+                            </div>
+
+                            <div class="col-auto">
+                                <!--<label for="fechaHora" class="col-form-label" style="font-size: small">Fecha y hora de comienzo:</label>-->
+                                <label for="hora2">Selecciona una hora:</label>
+                                <br>
+                            </div>
+                            <div class="col-auto">
+                                <input class="col-form-label" type="time" id="hora2" name="hora2" th:value="${ticket.horaCierre}">
+                                <br><br>
+                            </div>
                             <center>
-                                <p style="font-size: x-small">Para culminar desplazamiento dar click en "Terminar "</p>
-                                <a type="button" class="btn btn-outline-danger" th:href="@{'/tecnico/verTicketProgreso?id='+${ticket.idTickets}}">Terminar</a>
+                                <p th:if="${ticket.estado==4}" style="font-size: x-small">Para culminar desplazamiento dar click en "Terminar "</p>
+                                <a th:if="${ticket.estado==4}" type="button" class="btn btn-outline-danger btn-sm" th:href="@{'/tecnico/verTicketProgreso?id='+${ticket.idTickets}}">Terminar</a>
+                                <a type="button" class="btn btn-outline-light btn-sm" th:href="@{'/tecnico/verTicketProgreso?id='+${ticket.idTickets}}">Atrás</a>
+                                <p></p>
+                                <p th:if="${ticket.estado==4}" style="font-size: xx-small">En caso no ubique su destino le dejamos las latitudes y longitudes para que las coloque en el mapa de google, tenga un buen viaje</p>
+
+                                <a th:if="${ticket.estado==4}" type="button" class="btn btn-outline-warning btn-sm" href="https://www.google.com/maps/@-12.075008,-77.0342912,12z?entry=ttu">
+                                    <img src="https://cdn-icons-png.flaticon.com/256/355/355980.png" width="20rem" alt="googlemaps">
+                                </a>
+                                <button th:if="${ticket.estado==4}" type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    LonLat
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel" style="color:#000;">Longitudes y latitudes</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body" style="color:#000;">
+                                                Aquí encontrarás las latitudes y longitudes del lugar en donde te encuentras y a donde te diriges
+                                                <table class="table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col">Lugar</th>
+                                                        <th scope="col">Latitud</th>
+                                                        <th scope="col">Longitud</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <th scope="row">Inicio</th>
+                                                        <td th:text="${ticket.idSitios.latitud}">Latitud</td>
+                                                        <td th:text="${ticket.idSitios.longitud}">Longitud</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">Destino</th>
+                                                        <td th:text="${ticket.idsitioCerrado.latitud}">Latitud</td>
+                                                        <td th:text="${ticket.idsitioCerrado.longitud}">Longitud</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </center>
                         </div>
                     </form>
@@ -243,23 +322,39 @@
             <div class="col-xl-8">
                 <div class="card">
                     <div class="card-body pt-3">
+                        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
                         <div id="map"></div>
-                        <!-- MAPA -->
+                        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
                         <script>
-                            var map = L.map('map').setView([-12.2681124, -74.8087287], 7);
+                            var latitud = [[${ticket.idSitios.latitud}]];
+                            var longitud = [[${ticket.idSitios.longitud}]];
+                            var latitud2 = [[${ticket.idsitioCerrado.latitud}]];
+                            var longitud2 = [[${ticket.idsitioCerrado.longitud}]];
 
-                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            var map = L.map('map').setView([latitud, longitud], 7);
+
+                            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
                             }).addTo(map);
 
-                            L.marker([-12.2681124, -74.8087287]).addTo(map)
-                                .bindPopup('Sitio Inicial')
-                                .openPopup();
+                            // Marcador 1 (Rojo por defecto)
+                            L.marker([latitud, longitud]).addTo(map).bindPopup('Estás aquí').openPopup();
+
+                            // Marcador 2 (Verde)
+                            var greenIcon = L.icon({
+                                iconUrl: 'https://icones.pro/wp-content/uploads/2021/02/icone-de-broche-de-localisation-rouge.png',
+                                iconSize: [38, 38],
+                                iconAnchor: [22, 94],
+                                popupAnchor: [-3, -76],
+                            });
+
+                            L.marker([latitud2, longitud2], { icon: greenIcon }).addTo(map).bindPopup('Dirígete hacia aquí').openPopup();
                         </script>
                     </div>
                 </div>
 
             </div>
+
         </div>
     </section>
 

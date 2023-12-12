@@ -486,15 +486,16 @@ public class TecnicoController {
     public String Tickets(Model model,
                           RedirectAttributes attr,HttpSession httpSession){
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
-        Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        Integer idCuadrilla1 = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
+        int idCuadrilla = idCuadrilla1.intValue();
         model.addAttribute("cuadrilla",idCuadrilla);
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
 
-                List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado();
-                model.addAttribute("ticketAsignados",ticketAsignados);
+        List<Ticket> ticketAsignados = ticketRepository.listaTicketsAsignado1(idCuadrilla);
+        model.addAttribute("ticketAsignados",ticketAsignados);
 
-                    return "Tecnico/ticket_asignado";
+        return "Tecnico/ticket_asignado";
 
     }
 
@@ -535,7 +536,7 @@ public class TecnicoController {
 
     //-----------------------------------------------------------------------
     @GetMapping({"/verTicket", "/verticket"})
-    public String pagdatostick(Model model, @RequestParam("id") String idStr,
+    public String pagdatostick(Model model, @RequestParam("id") int id,
                                RedirectAttributes attr, HttpSession httpSession) {
         /* Lo que se mando al Header */
 
@@ -545,10 +546,57 @@ public class TecnicoController {
         Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
         model.addAttribute("cuadrilla",idCuadrilla);
 
-        Integer idTecnico = u.getId();
 
+        //Integer idTecnico = u.getId();
         try {
-            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !ticketRepository.existsById(id)) {
+                return "redirect:/tecnico/ticketasignado";
+            }
+            Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
+            if (optionalTicket1.isPresent()) {
+                Ticket ticket = optionalTicket1.get();
+                model.addAttribute("ticket", ticket);
+                model.addAttribute("listaTicket", ticketRepository.listarEstado());
+
+                //---mandar tiempo transcurrido---
+                ZoneId zonaHoraria = ZoneId.of("GMT-5");
+                LocalDate fechaActual = LocalDate.now(zonaHoraria);
+                LocalTime horaActual = LocalTime.now(zonaHoraria);
+                LocalDate fechaVariable = ticket.getFechaCreacion();
+                LocalTime horaVariable = ticket.getHoraCreacion();
+                Period diferencia = fechaVariable.until(fechaActual);
+                int difDia = diferencia.getDays(), hor, min;
+                float difTiempo= Duration.between(horaVariable,horaActual ).getSeconds(); //hv-ha
+                if(difDia==0){
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)(-difTiempo/3600);
+                        min = (int)((-difTiempo/3600-hor)*60);
+                    }
+                }else {
+                    if(difTiempo>=0){
+                        hor = (int)(difTiempo/3600);
+                        min = (int)((difTiempo/3600-hor)*60);
+                    }else{
+                        hor = (int)((24*3600+difTiempo)/3600);
+                        min = (int)(((24*3600+difTiempo)/3600 -hor)*60);
+                        difDia--;
+                    }
+                }
+                model.addAttribute("dias",difDia);
+                model.addAttribute("horas",hor);
+                model.addAttribute("minutos",min);
+
+                return "Tecnico/datos_ticket";
+            } else {
+                return "redirect:/tecnico/ticketasignado";
+            }
+        } catch (NumberFormatException e) {
+            return "redirect:/tecnico/ticketasignado";
+        }
+        /*try {
             if (idTecnico <= 0 || !ticketRepository.existsById(idTecnico)) {
                 return "redirect:/tecnico/ticketasignado";
             }
@@ -614,7 +662,7 @@ public class TecnicoController {
             }
         } catch (NumberFormatException e) {
             return "redirect:/tecnico/ticketasignado";
-        }
+        }*/
     }
 
     //------------------- DATOS DE PROGRESO---------------------------------//
@@ -691,15 +739,13 @@ public class TecnicoController {
         model.addAttribute("cuadrilla",idCuadrilla);
         try {
             if (id <= 0 || !ticketRepository.existsById(id)) {
+                System.out.println("error1");
                 return "redirect:/tecnico/ticketasignado";
             }
             Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
-            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
-            if (optionalTicket1.isPresent() && optionalFormulario.isPresent()) {
+            if (optionalTicket1.isPresent()) {
                 Ticket ticket = optionalTicket1.get();
-                Formulario formulario = optionalFormulario.get();
                 model.addAttribute("ticket", ticket);
-                model.addAttribute("formulario", formulario);
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
 
                 //---mandar tiempo transcurrido---
@@ -735,9 +781,11 @@ public class TecnicoController {
 
                 return "Tecnico/datost_nuevo";
             } else {
+                System.out.println("error2");
                 return "redirect:/tecnico/ticketasignado";
             }
         } catch (NumberFormatException e) {
+            System.out.println("error3");
             return "redirect:/tecnico/ticketasignado";
         }
     }
@@ -765,18 +813,14 @@ public class TecnicoController {
 
             /* Obtenemos el objeto ticket para obtener el idSitioCerrado */
             Ticket ticketPrevio = optionalTicket1.get();
-            Integer idSitioCerradoTicket = ticketPrevio.getIdsitioCerrado();
+            SitioCerrado sitioCerradoTicket = ticketPrevio.getIdsitioCerrado();
 
-            Optional<SitioCerrado> optionalSitioCerrado = sitioCerradoRepository.findById(idSitioCerradoTicket);
-            System.out.println("Optional Sitio 1: " + optionalSitioCerrado.isPresent());
 
-            if (optionalTicket1.isPresent() && optionalFormulario1.isPresent() && optionalSitioCerrado.isPresent()) {
+            if (optionalTicket1.isPresent() && optionalFormulario1.isPresent()) {
                 Ticket ticket = optionalTicket1.get();
                 Formulario formulario = optionalFormulario1.get();
-                SitioCerrado sitioCerrado = optionalSitioCerrado.get();
                 model.addAttribute("ticket", ticket);
                 model.addAttribute("formulario", formulario);
-                model.addAttribute("sitioCerrado", sitioCerrado);
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
 
                 //---mandar tiempo transcurrido---
@@ -877,6 +921,72 @@ public class TecnicoController {
     */
 
     //-----------------------------------------------------------------------
+    //pasar de estado 3 a 4
+    @PostMapping("/estadoNuevoACamino")
+    public String estadoNuevoACamino(@RequestParam("idTickets") int id, @RequestParam("cambioEstado") String cambioEstado, RedirectAttributes redirectAttributes, HttpSession httpSession) {
+        int estadoUtilizar;
+        redirectAttributes.addAttribute("id",id);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idTecnico = u.getId();
+        if (cambioEstado.equals("4")) {
+            estadoUtilizar = 4;
+            Date fechaCambioEstado = new Date();
+            ZoneId zonaHoraria = ZoneId.of("GMT-5");
+            LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+            LocalTime horaActual = LocalTime.now(zonaHoraria);
+            historialTicketRepository.crearHistorial(4,fechaCambioEstado,fechaActual,horaActual,id,idTecnico,"Cuadrilla en desplazamiento a Sitio");
+            ticketRepository.actualizarEstado(id,estadoUtilizar);
+            redirectAttributes.addFlashAttribute("yum","Ticket en camino");
+            return "redirect:/tecnico/verTicket";
+        } else{
+            System.out.println("no hubo cambio");
+            return "redirect:/tecnico/verTicketNuevo";
+        }
+    }
+    //pasar de estado 4 a 5
+    @PostMapping("/estadoCaminoAProgreso")
+    public String estadoCaminoAProgreso(@RequestParam("idTickets") int id, @RequestParam("cambioEstado") String cambioEstado, RedirectAttributes redirectAttributes, HttpSession httpSession) {
+        int estadoUtilizar;
+        redirectAttributes.addAttribute("id",id);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idTecnico = u.getId();
+        if (cambioEstado.equals("5")) {
+            estadoUtilizar = 5;
+            Date fechaCambioEstado = new Date();
+            ZoneId zonaHoraria = ZoneId.of("GMT-5");
+            LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+            LocalTime horaActual = LocalTime.now(zonaHoraria);
+            historialTicketRepository.crearHistorial(5,fechaCambioEstado,fechaActual,horaActual,id,idTecnico,"Llegada de cuadrilla a Sitio e inicio de labores");
+            ticketRepository.actualizarEstado(id,estadoUtilizar);
+            redirectAttributes.addFlashAttribute("yum","Ticket en acción");
+            return "redirect:/tecnico/verTicketProgreso";
+        } else{
+            System.out.println("no hubo cambio");
+            return "redirect:/tecnico/verTicket";
+        }
+    }
+    //pasar de estado 4 a 5
+    @PostMapping("/estadoProgresoACerrado")
+    public String estadoProgresoACerrado(@RequestParam("idTickets") int id, @RequestParam("cambioEstado") String cambioEstado, RedirectAttributes redirectAttributes, HttpSession httpSession) {
+        int estadoUtilizar;
+        redirectAttributes.addAttribute("id",id);
+        Usuario u = (Usuario) httpSession.getAttribute("usuario");
+        Integer idTecnico = u.getId();
+        if (cambioEstado.equals("6")) {
+            estadoUtilizar = 6;
+            Date fechaCambioEstado = new Date();
+            ZoneId zonaHoraria = ZoneId.of("GMT-5");
+            LocalDate fechaActual = LocalDate.now(zonaHoraria); // Obtener la fecha actual en la zona horaria GMT-5
+            LocalTime horaActual = LocalTime.now(zonaHoraria);
+            historialTicketRepository.crearHistorial(6,fechaCambioEstado,fechaActual,horaActual,id,idTecnico,"Cuadrilla terminó labores");
+            ticketRepository.actualizarEstado(id,estadoUtilizar);
+            redirectAttributes.addFlashAttribute("yum","Labores realizadas");
+            return "redirect:/tecnico/verTicketCerrado";
+        } else{
+            System.out.println("no hubo cambio");
+            return "redirect:/tecnico/verTicketProgreso";
+        }
+    }
 
 
     @GetMapping("/desplazamiento")
@@ -897,6 +1007,8 @@ public class TecnicoController {
             return "redirect:/ticket/verTicket";
         }
     }
+
+
 
     //Desplazamiento en progreso para cerrado
     @GetMapping("/desplazamientoProgreso")

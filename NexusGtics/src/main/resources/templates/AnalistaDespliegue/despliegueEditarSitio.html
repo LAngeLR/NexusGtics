@@ -59,6 +59,11 @@
       </nav>
     </div><!-- End Page Title -->
       <section class="section dashboard">
+
+        <div th:if="${msgCadena != null}" th:text="${msgCadena}" class="alert alert-danger" role="alert"></div>
+        <div th:if="${msgExtension != null}" th:text="${msgExtension}" class="alert alert-danger" role="alert"></div>
+
+
         <div class="row">
           <div class="rounded p-5" style="background-color: #FFFFFF;">
             <div class="pagetitle">
@@ -173,9 +178,10 @@
                           var latitud = [[${sitio.latitud}]];
                           var longitud = [[${sitio.longitud}]];
                           let map = L.map('mi_mapa').setView([latitud,longitud],18)
-                          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                          L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                            attribution: ''
                           }).addTo(map);
+
                           L.marker([latitud,longitud]).addTo(map).bindPopup(nombre).openPopup();
 
                         </script>
@@ -188,7 +194,7 @@
               </div>
               <div>
                 <a  th:href="@{'/analistaDespliegue/listaSitio'}" class="btn btn-outline-danger " >Cancelar</a>
-                <button  type="submit" class="btn btn-outline-primary " >Aceptar</button>
+                <button  type="submit" class="btn btn-outline-primary">Guardar cambios</button>
               </div>
 
             </form>
