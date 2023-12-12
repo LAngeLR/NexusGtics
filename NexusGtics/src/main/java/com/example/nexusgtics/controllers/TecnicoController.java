@@ -1096,28 +1096,19 @@ public class TecnicoController {
                                 HttpSession httpSession){
         List<Ticket> listaT = ticketRepository.findAll();
         model.addAttribute("listaTicket", listaT);
-        List<Formulario> formularioList = formularioRepository.findAll();
-        model.addAttribute("formularioList",formularioList);
         Usuario u = (Usuario) httpSession.getAttribute("usuario");
         Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
         model.addAttribute("cuadrilla",idCuadrilla);
-        int id = u.getId();
         try{
-            //int id = Integer.parseInt(idStr);
-            if (id <= 0 || !usuarioRepository.existsById(id)) {
+            int id = Integer.parseInt(idStr);
+            if (id <= 0 || !formularioRepository.existsById(id)) {
                 return "redirect:/tecnico/verTicketProgreso";
             }
-            Optional<Ticket> ticketOptional = ticketRepository.findById(id);
             Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
-            Optional<Sitio> sitioOptional = sitioRepository.findById(id);
-            if (optionalFormulario.isPresent() && sitioOptional.isPresent()) {
-                Ticket ticket = ticketOptional.get();
+            if (optionalFormulario.isPresent()) {
                 formulario = optionalFormulario.get();
-                Sitio sitio = sitioOptional.get();
-                model.addAttribute("sitio", sitio);
                 model.addAttribute("formulario", formulario);
-                model.addAttribute("ticket", ticket);
-                model.addAttribute("listaFormulario", formularioRepository.findAll());
+                model.addAttribute("idTick", formularioRepository.obtenerid(id));
                 return "Tecnico/formulario";
             } else {
                 return "redirect:/tecnico/verTicketProgreso";
@@ -1127,15 +1118,14 @@ public class TecnicoController {
         }
     }
     @PostMapping("/saveFormularioDespliegue")
-    public String saveFormulario1(@RequestParam("imagenSubida") MultipartFile file,@RequestParam("imagenSubida2") MultipartFile file2,
-                                  @ModelAttribute("formulario1") @Valid Formulario formulario1, BindingResult bindingResult,
+    public String saveFormulario1(/*@RequestParam("imagenSubida") MultipartFile file,@RequestParam("imagenSubida2") MultipartFile file2,*/
+                                  @ModelAttribute("formulario") @Valid Formulario formulario, BindingResult bindingResult,
                                   Model model, RedirectAttributes attr, HttpSession httpSession) {
 
         List<Ticket> ticketList = ticketRepository.findAll();
         model.addAttribute("listaTicket", ticketList);
 
-
-        if(file.getSize()>1 || file2.getSize()>1){
+        /*if(file.getSize()>1 || file2.getSize()>1){
             if (file.getOriginalFilename().length() > 40 || file2.getOriginalFilename().length() > 40) {
                 model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 caracteres");
                 return "Tecnico/formulario1";
@@ -1147,19 +1137,19 @@ public class TecnicoController {
                 model.addAttribute("msgExtension", "Solo se permiten archivos con extensión png, jpg y jpeg");
                 return "Tecnico/formulario1";
             }
-        }
+        }*/
 
 
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
+        /*if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
             model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
             return "Tecnico/formulario1";
         }
         if (file2.getSize() > 0 && !file2.getContentType().startsWith("image/") && !file2.isEmpty()) {
             model.addAttribute("msgImagen1", "El archivo subido no es una imagen válida");
             return "Tecnico/formulario1";
-        }
+        }*/
 
-        String fileName1 = file.getOriginalFilename();
+        /*String fileName1 = file.getOriginalFilename();
         if (fileName1.contains("..") && !file.isEmpty()) {
             model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
             return "Tecnico/formulario1";
@@ -1169,9 +1159,9 @@ public class TecnicoController {
         if (fileName2.contains("..") && !file2.isEmpty()) {
             model.addAttribute("msgImagen1", "No se permiten '..' en el archivo ");
             return "Tecnico/formulario1";
-        }
+        }*/
 
-        int maxFileSize = 10485760;
+        /*int maxFileSize = 10485760;
         if (file.getSize() > maxFileSize && !file.isEmpty()) {
             System.out.println(file.getSize());
             model.addAttribute("msgImagen", "El archivo subido excede el tamaño máximo permitido (10MB).");
@@ -1182,16 +1172,16 @@ public class TecnicoController {
             System.out.println(file2.getSize());
             model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
             return "redirect:/tecnico/formulario1";
-        }
+        }*/
 
 
         if (!bindingResult.hasErrors()) { //si no hay errores, se realiza el flujo normal
-            if (formulario1.getArchivo() == null) {
-                formulario1.setArchivo(new Archivo());
+            if (formulario.getArchivo() == null) {
+                formulario.setArchivo(new Archivo());
             }
 
-            try{
-                if(!file.isEmpty() && !file2.isEmpty()){
+            //try{
+                /*if(!file.isEmpty() && !file2.isEmpty()){
                     String fileName = file.getOriginalFilename();
                     String fileName22 = file2.getOriginalFilename();
                     String extension1 = "";
@@ -1222,25 +1212,30 @@ public class TecnicoController {
 //                    archivoRepository.save(archivo2);
                     uploadObject(archivo1);
 //                    uploadObject(archivo2);
-                }
-                if (formulario1.getIdFormularios() == null) {
-                    attr.addFlashAttribute("msg", "El formulario 1 se ha guardado exitosamente");
+                }*/
+                if (formulario.getIdFormularios() == null) {
+                    attr.addFlashAttribute("msg", "El formulario se ha guardado exitosamente");
                 } else {
-                    attr.addFlashAttribute("msg", "El formulario 1 se ha guardado exitosamente");
+                    attr.addFlashAttribute("msg", "El formulario se ha guardado exitosamente");
                 }
-                formularioRepository.save(formulario1);
-                return "redirect:/tecnico/formulario";
+                formularioRepository.save(formulario);
+                attr.addFlashAttribute("msg", "El formulario se ha actualizado exitosamente");
+            return "redirect:/tecnico/verTicketProgreso?id="+ formulario.getIdFormularios() ;
 
-            } catch (IOException e) {
+            /*} catch (IOException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
 
         } else {
-            if (formulario1.getIdFormularios() == null) {
+            /*if (formulario.getIdFormularios() == null) {
                 return "Tecnico/formulario";
-            } else {
-                return "Tecnico/formulario1";
-            }
+            } else {*/
+            Optional<Formulario> optionalFormulario = formularioRepository.findById(formulario.getIdFormularios());
+            formulario = optionalFormulario.get();
+            model.addAttribute("formulario", formulario);
+            model.addAttribute("idTick", formularioRepository.obtenerid(formulario.getIdFormularios()));
+            return "Tecnico/formulario";
+            //}
         }
     }
 

@@ -61,14 +61,6 @@
                 </ol>
             </nav>
         </div>
-        <div class="alert alert-danger" role="alert" th:if="${msgImagen != null}" th:text="${msgImagen}"></div>
-        <div class="alert alert-danger" role="alert" th:if="${msgImagen1 != null}" th:text="${msgImagen1}"></div>
-        <div class="alert alert-danger" role="alert" th:if="${msgPeso != null}" th:text="${msgPeso}">
-        </div>
-        <div class="alert alert-danger" role="alert" th:if="${msgCadena != null}" th:text="${msgCadena}">
-        </div>
-        <div class="alert alert-danger" role="alert" th:if="${msgExtension != null}" th:text="${msgExtension}">
-        </div>
     <div class="container py-4">
         <div class="p-5 mb-4 card" style="background-color: #f8fdfb;">
             <div class="row">
@@ -76,7 +68,19 @@
                 <form method="POST" th:action="@{/tecnico/saveFormularioDespliegue}" th:object="${formulario}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                     <input type="hidden" class="form-control" th:field="*{idFormularios}">
                     <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
-                    <!--                    <input type="hidden" name="hrelevantes" id="hrelevantes" th:field="*{hrelevantes}">-->
+                    <input type="hidden" class="form-control" th:field="*{fechaLlenado}">
+                    <input type="hidden" class="form-control" th:field="*{descripcion}">
+                    <input type="hidden" class="form-control" th:field="*{confirmacion}">
+                    <input type="hidden" class="form-control" th:field="*{tecnico}">
+                    <input type="hidden" class="form-control" th:field="*{ticket}">
+                    <input type="hidden" class="form-control" th:field="*{tipoticket}">
+                    <input type="hidden" class="form-control" th:field="*{equipoencendido}">
+                    <input type="hidden" class="form-control" th:field="*{equipoconectado}">
+                    <input type="hidden" class="form-control" th:field="*{situacion}">
+                    <input type="hidden" class="form-control" th:field="*{acciones}">
+                    <input type="hidden" class="form-control" th:field="*{bateriasestado}">
+                    <input type="hidden" class="form-control" th:field="*{averia}">
+                    <!--<input type="hidden" name="hrelevantes" id="hrelevantes" th:field="*{hrelevantes}">-->
 
                     <div class="row">
                         <div class="col-md-6">
@@ -113,57 +117,58 @@
                                 </div>
                             </div>
 
-                            <div class="form-check form-switch" th:if="${formulario.conexion==0}">
+
+                            <div class="form-check form-switch" th:if="${formulario.conexion.equals(false)}">
                                 <label class="form-label">¿Conexión de energia?:</label>
-                                <input class="form-check-input" type="checkbox" role="switch" id="conexion"><br>
+                                <input class="form-check-input" type="checkbox" role="switch" id="conexion" th:field="*{conexion}" th:value="0"><br>
                                 <label class="form-check-label" for="conexion" style="font-size: xx-small">No hay conexión</label>
                             </div>
-                            <div class="form-check form-switch" th:if="${formulario.conexion==1}">
+                            <div class="form-check form-switch" th:if="${formulario.conexion.equals(true)}">
                                 <label class="form-label">¿Conexión de energia?:</label>
-                                <input class="form-check-input" type="checkbox" role="switch" id="conexion1" checked=""><br>
-                                <label class="form-check-label" for="conexion1" style="font-size: xx-small">Sí hay conexión</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="conexion1" th:field="*{conexion}" th:value="1" checked=""><br>
+                                <label class="form-check-label" for="conexion1" style="font-size: xx-small" >Sí hay conexión</label>
                             </div>
                             <br>
-                            <div class="form-check form-switch" th:if="${formulario.movilidad==0}">
+                            <div class="form-check form-switch" th:if="${formulario.movilidad.equals(false)}">
                                 <label class="form-label">¿La movilidad llega al sitio?:</label>
-                                <input class="form-check-input" type="checkbox" role="switch" id="movilidad0"><br>
+                                <input class="form-check-input" type="checkbox" role="switch" id="movilidad0" th:field="*{movilidad}" th:value="0"><br>
                                 <label class="form-check-label" for="movilidad0" style="font-size: xx-small">No llega movilidad</label>
                             </div>
-                            <div class="form-check form-switch" th:if="${formulario.movilidad==1}">
+                            <div class="form-check form-switch" th:if="${formulario.movilidad.equals(true)}">
                                 <label class="form-label">¿La movilidad llega al sitio?:</label>
-                                <input class="form-check-input" type="checkbox" role="switch" id="movilidad1" checked=""><br>
-                                <label class="form-check-label" for="movilidad1" style="font-size: xx-small">Sí llega movilidad</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="movilidad1" th:field="*{movilidad}" th:value="1" checked=""><br>
+                                <label class="form-check-label" for="movilidad1" style="font-size: xx-small" >Sí llega movilidad</label>
                             </div>
-                            <div class="form-check form-switch" th:if="${formulario.construccion==0}">
+                            <div class="form-check form-switch" th:if="${formulario.construccion.equals(false)}">
                                 <label class="form-label">¿Se realizó construcción de infraestructura?:</label>
-                                <input class="form-check-input" type="checkbox" role="switch" id="construccion0"><br>
+                                <input class="form-check-input" type="checkbox" role="switch" id="construccion0" th:field="*{construccion}" th:value="0"><br>
                                 <label class="form-check-label" for="construccion0" style="font-size: xx-small">No se realizó construcción de infraestructuras</label>
                             </div>
-                            <div class="form-check form-switch" th:if="${formulario.construccion==1}">
+                            <div class="form-check form-switch" th:if="${formulario.construccion.equals(true)}">
                                 <label class="form-label">¿Se realizó construcción de infraestructura?:</label>
-                                <input class="form-check-input" type="checkbox" role="switch" id="construccion1" checked=""><br>
+                                <input class="form-check-input" type="checkbox" role="switch" id="construccion1" th:field="*{construccion}" th:value="1" checked=""><br>
                                 <label class="form-check-label" for="construccion1" style="font-size: xx-small">Sí se realizó construcción de infraestructuras</label>
                             </div>
                             <br>
-                            <div class="form-check form-switch" th:if="${formulario.instalacion==0}">
+                            <div class="form-check form-switch" th:if="${formulario.instalacion.equals(false)}">
                                 <label class="form-label">¿Se realizó instalaciones eléctricas?:</label>
-                                <input class="form-check-input" type="checkbox" role="switch" id="instalacion0"><br>
+                                <input class="form-check-input" type="checkbox" role="switch" id="instalacion0" th:field="*{instalacion}" th:value="0"><br>
                                 <label class="form-check-label" for="instalacion0" style="font-size: xx-small">No hay instalación eléctricas</label>
                             </div>
-                            <div class="form-check form-switch" th:if="${formulario.instalacion==1}">
+                            <div class="form-check form-switch" th:if="${formulario.instalacion.equals(true)}">
                                 <label class="form-label">¿Se realizó instalaciones eléctricas?:</label>
-                                <input class="form-check-input" type="checkbox" role="switch" id="instalacion1" checked=""><br>
+                                <input class="form-check-input" type="checkbox" role="switch" id="instalacion1" th:field="*{instalacion}" th:value="1" checked=""><br>
                                 <label class="form-check-label" for="instalacion1" style="font-size: xx-small">Sí hay instalación eléctricas</label>
                             </div>
 
-                            <div class="form-check form-switch" th:if="${formulario.despliegue==0}">
+                            <div class="form-check form-switch" th:if="${formulario.despliegue.equals(false)}">
                                 <label class="form-label">¿Se realizó despliegue de equipos?:</label>
-                                <input class="form-check-input" type="checkbox" role="switch" id="despliegueEquiposNo"><br>
+                                <input class="form-check-input" type="checkbox" role="switch" id="despliegueEquiposNo" th:field="*{despliegue}" th:value="0"><br>
                                 <label class="form-check-label" for="despliegueEquiposNo" style="font-size: xx-small">No hay despliegue de equipos</label>
                             </div>
-                            <div class="form-check form-switch" th:if="${formulario.despliegue==1}">
+                            <div class="form-check form-switch" th:if="${formulario.despliegue.equals(true)}">
                                 <label class="form-label">¿Se realizó despliegue de equipos?:</label>
-                                <input class="form-check-input" type="checkbox" role="switch" id="despliegueEquiposSi" checked=""><br>
+                                <input class="form-check-input" type="checkbox" role="switch" id="despliegueEquiposSi" th:field="*{despliegue}" th:value="1" checked=""><br>
                                 <label class="form-check-label" for="despliegueEquiposSi" style="font-size: xx-small">Sí hay despliegue de equipos</label>
                             </div>
                             <br>
@@ -192,8 +197,8 @@
                                 <div id="map"></div>
                                 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
                                 <script>
-                                    var latitud = [[${sitio.latitud}]];
-                                    var longitud = [[${sitio.longitud}]];
+                                    var latitud = [[${formulario.ticket.idSitios.latitud}]];
+                                    var longitud = [[${formulario.ticket.idSitios.longitud}]];
                                     let map = L.map('map').setView([latitud,longitud],18)
                                     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                                         attribution:
