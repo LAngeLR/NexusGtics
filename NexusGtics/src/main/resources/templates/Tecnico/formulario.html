@@ -49,258 +49,6 @@
 <!-- ======= Sidebar ======= -->
 <aside th:replace="Fragmentos/menuTecnico :: menu('formulario')"></aside><!-- End Sidebar-->
 
-<!--<main id="main" class="main">
-    <div class="container">
-        <div class="pagetitle">
-            <h1>Formulario</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/tecnico/}">Home</a></li>
-                    <li class="breadcrumb-item active">Tickets Asignados</li>
-                    <li class="breadcrumb-item active">Datos del ticket</li>
-                    <li class="breadcrumb-item active">Formulario</li>
-                </ol>
-            </nav>
-        </div>
-
-        <section class="section">
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Información del cliente y ticket:</h5>
-                        <form method="POST" th:action="@{/tecnico/saveFormulario}" th:object="${formulario}"  enctype="multipart/form-data" style="margin-bottom: -35px;">
-                            <div class="row">
-                                <div class="col-sm-10">
-                                    <div class="mb-3 ">
-                                        <label class="form-label">ID del Ticket</label>
-                                        <input type="number" class="form-control"  th:field="*{ticket.idTickets}" disabled>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Nombre completo</label>
-                                        <input type="text" class="form-control"  th:field="*{ticket.usuarioSolicitante}" disabled>
-                                    </div>
-                                    <div class="mb-3 ">
-                                        <label class=" form-label">Prioridad del Ticket</label>
-                                        <input type="text" class="form-control" th:field="*{ticket.prioridad}" disabled>
-
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Servicio</label>
-                                        <input type="text" class="form-control" th:field="*{ticket.idTipoTicket.nombreTipoTicket}" disabled>
-
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Fecha y hora:</label>
-                                        <br>
-                                        <input type="datetime-local" class="form-control" name="fechahora" step="1" min="2023-01-01T00:00" max="2023-12-31T12:00" value="2023-01-01T12:00">
-                                    </div>
-
-                                </div>
-                                <div class="mb-3">
-                                    <h5>Descripción:</h5>
-                                    <label class="form-label">Del trabajo realizado</label>
-                                    <input type="text" class="form-control" th:field="*{descripcion}">
-
-                                </div>
-                                <div class="mb-3">
-                                    <label for="imagenSubida" class="form-label">Foto de trabajo realizado:</label>
-                                    <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                        <img id="imgPreview" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                                    </div>
-                                    <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
-                                           accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                                </div>
-                                <div class="row mb-5">
-                                    <h5><b>Datos del técnico:</b></h5>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-4 col-form-label">Nombre </label>
-                                        <div class="col-sm-8">
-                                            <input class="form-control" type="text" th:field="*{tecnico.nombre}" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-4 col-form-label">Apellido </label>
-                                        <div class="col-sm-8">
-                                            <input class="form-control" type="text" th:field="*{tecnico.apellido}" disabled>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="row mb-5">
-                                    <h5><b>Información General del ticket</b></h5>
-                                    <p>Llegada a sitio:</p>
-                                    <div class="mb-3 row">
-                                        <label for="imagenSubida1" class="form-label">Foto del técnico </label>
-                                        <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                            <img id="imgPreview1" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                                        </div>
-                                        <input class="form-control" type="file" name="imagenSubida1" id="imagenSubida1"
-                                               accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <p>Descripción</p>
-                                        <label class="col-sm-4 col-form-label">Hechos relevantes: </label>
-                                        <div class="form-floating col-sm-8">
-                                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled" style="height: 100px" disabled>He colocado la maquina en su lugar despues de repararlo</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label for="imagenSubida2" class="form-label">Foto del sitio </label>
-                                        <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                            <img id="imgPreview2" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                                        </div>
-                                        <input class="form-control" type="file" name="imagenSubida2" id="imagenSubida2"
-                                               accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                                    </div>
-
-                                </div>
-                                <div class="row mb-5">
-                                    <h5><b>Validación de Sitio</b></h5>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-6 col-form-label">¿Existe conexión de energía? </label>
-                                        <div class="col-sm-6">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
-                                                <label class="form-check-label" for="flexSwitchCheckChecked">Sí</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-5 col-form-label">Nombre de arrendatario: </label>
-                                        <div class="col-sm-7">
-                                            <input type="text" class="form-control"  th:field="*{ticket.usuarioSolicitante}" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-5 col-form-label">DNI del arrendatario: </label>
-                                        <div class="col-sm-7">
-                                            <input class="form-control" type="text" placeholder="72495536" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-6 col-form-label">¿La movilidad llega al sitio?</label>
-                                        <div class="col-sm-6">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked1" checked>
-                                                <label class="form-check-label" for="flexSwitchCheckChecked1">Sí</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-6 col-form-label">Área del sitio /m2: </label>
-                                        <div class="col-sm-6">
-                                            <input class="form-control" type="number" placeholder="25,2" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <p>Observaciones</p>
-                                        <label class="col-sm-4 col-form-label">Descripción: </label>
-                                        <div class="form-floating col-sm-8">
-                                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
-                                            <label for="floatingTextarea2">Comments</label>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <div id="map" ></div>
-                                        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                                        <script>
-                                            let map = L.map('map').setView([-12.06802,-77.03462],14)
-                                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                            }).addTo(map);
-                                            L.marker([-12.06802,-77.03462]).addTo(map).bindPopup('Sitio').openPopup();
-
-                                        </script>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label for="imagenSubida3" class="form-label">Foto del sitio </label>
-                                        <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                            <img id="imgPreview3" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                                        </div>
-                                        <input class="form-control" type="file" name="imagenSubida3" id="imagenSubida3"
-                                               accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                                    </div>
-                                </div>
-                                <div class="row mb-5">
-                                    <h5><b>Trabajo realizado</b></h5>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-6 col-form-label">¿Se realizó construcción de infraestructura? </label>
-                                        <div class="col-sm-6">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked2" checked>
-                                                <label class="form-check-label" for="flexSwitchCheckChecked2">Sí</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-6 col-form-label">¿Se realizó instalaciones electricas? </label>
-                                        <div class="col-sm-6">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked3" checked>
-                                                <label class="form-check-label" for="flexSwitchCheckChecked3">Sí</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-6 col-form-label">Tecnología instalada: </label>
-                                        <div class="col-sm-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                                <label class="form-check-label" for="flexCheckDefault">FFTH</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
-                                                <label class="form-check-label" for="flexCheckDefault1">HFC</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2">
-                                                <label class="form-check-label" for="flexCheckDefault2">2G</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault3">
-                                                <label class="form-check-label" for="flexCheckDefault3">3G</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault4">
-                                                <label class="form-check-label" for="flexCheckDefault4">4G</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault5">
-                                                <label class="form-check-label" for="flexCheckDefault5">5G</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <p><b>Descripción</b></p>
-                                        <label class="col-sm-4 col-form-label">Trabajos realizados: </label>
-                                        <div class="form-floating col-sm-8">
-                                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2Disabled1" style="height: 100px" disabled>Se procedió con lel montaje de la torre, además de la adecuación del gabinete para la correcta operación de los equipos a instalarse. Se instalron: BBU, RRU, Router, Switch, Rectificadores y baterías.</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label class="col-sm-2 col-form-label">Foto del sitio </label>
-                                        <div class="card mx-auto" style="width: 250px; max-height: 250px">
-                                            <img id="imgPreview4" th:src="@{|image/${formulario.archivo.idArchivos}|}" class="card-img-top" style="max-height: 250px" alt="">
-                                        </div>
-                                        <input class="form-control" type="file" name="imagenSubida3" id="imagenSubida4"
-                                               accept="image/*" onchange="previewImage(event, '#imgPreview')">
-                                    </div>
-                                    <center><button type="submit" class="btn btn-danger">Enviar</button>
-                                        <a type="button" class="btn btn-secondary" th:href="@{'/tecnico/verTicket?id='+${formulario.ticket.idTickets}}">Cancelar</a></center>
-                                </div>
-                                </div>
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-    </div>
-</main>-->
-
 <main  id="main" class="main">
         <div class="pagetitle">
             <h1>Formulario</h1>
@@ -315,60 +63,355 @@
         </div>
     <div class="container py-4">
         <div class="p-5 mb-4 card" style="background-color: #f8fdfb;">
-            <h3 class="display-5 fw-bold" style="color:#7199a2">Formulario</h3>
+
             <div class="row">
-                <div class="col-sm-3 mb-3 mb-sm-0">
-                        <div class="card-body">
-                            <div class="imagen-recortada">
-                                <img style="width: 105%;height:105%" src="https://static.vecteezy.com/system/resources/previews/024/658/992/non_2x/3d-male-character-pointing-left-free-png.png" class="img-fluid" alt="llegadasitio">
+                <h2>Formulario 1 -despliegue</h2>
+
+                <form method="POST" th:action="@{/tecnico/saveFormulario1}" th:object="${formulario1}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+                    <input type="hidden" class="form-control" th:field="*{idFormularios}">
+                    <input type="hidden" class="form-control" th:field="*{archivo.idArchivos}">
+                    <!--                    <input type="hidden" name="hrelevantes" id="hrelevantes" th:field="*{hrelevantes}">-->
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Hechos relevantes en la llegada al sitio:</label>
+                            <input th:field="*{hrelevantes}" type="text" th:class="${#fields.hasErrors('hrelevantes')?'form-control is-invalid':'form-control'}"/>
+                            <div class="invalid-feedback"
+                                 th:if="${#fields.hasErrors('hrelevantes')}" th:errors="*{hrelevantes}">
+                                Mensaje de error de hrelevantes
                             </div>
                         </div>
-                </div>
-                <div class="col-sm-9">
-                        <div class="card-body">
-                            <p>En la parte inferior encontrarás 3 formularios.</p>
-                            <p>- En el <b>primer</b> formulario completa en relación a tu llegada, ¿qué problema sucede?.</p>
-                            <p>- En el <b>segundo</b> formulario completa en relación al sitio, ¿en dondé te encuentras?, describe tu alrededor, ¿existe conexión, movilidad?, etc</p>
-                            <p>- Finalmente en el <b>tercer</b> formulario, responde las preguntas una vez finalizado todo el trabajo.</p>
-                            <p>No olvides que debes de llenar todos los formularios para que el Supervisor cierre el ticket.</p>
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end" th:if="${formulario.ticket.estado==4}">
-                                <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicket?id='+${formulario.ticket.idTickets}}" style="background-color: #202a3b; color:white">Atrás</a>
+
+
+                        <div class="mb-3">
+                            <label for="imagenSubida" class="form-label">Foto de usted en el sitio:</label>
+                            <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                <img id="imgPreview" th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile"
+                                     onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
                             </div>
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-end" th:if="${formulario.ticket.estado==5}">
-                                <a type="button" class="btn btn-light btn-sm" th:href="@{'/tecnico/verTicketProgreso?id='+${formulario.ticket.idTickets}}" style="background-color: #202a3b; color:white">Atrás</a>
+                            <input class="form-control" type="file" name="imagenSubida" id="imagenSubida"
+                                   accept="image/*" onchange="previewImage(event, '#imgPreview')">
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label class="form-label">Nombres del arrendatario:</label>
+                            <input th:field="*{nomredantario}" type="text" th:class="${#fields.hasErrors('nomredantario')?'form-control is-invalid':'form-control'}"/>
+                            <div class="invalid-feedback"
+                                 th:if="${#fields.hasErrors('nomredantario')}" th:errors="*{nomredantario}">
+                                Mensaje de error de nomredantario
                             </div>
                         </div>
-                </div>
+
+
+
+                        <div class="mb-3">
+                            <label class="form-label">DNI:</label>
+                            <input th:field="*{dni}" type="number" th:class="${#fields.hasErrors('dni')?'form-control is-invalid':'form-control'}"/>
+                            <div class="invalid-feedback"
+                                 th:if="${#fields.hasErrors('dni')}" th:errors="*{dni}">
+                                Mensaje de error de dni
+                            </div>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <div class="form-check form-switch" th:if="${formulario2.conexion==0}">
+                                <label class="form-label">¿Conexión de energia?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="conexion"><br>
+                                <label class="form-check-label" for="conexion" style="font-size: xx-small">No hay conexión</label>
+                            </div>
+
+                            <div class="form-check form-switch" th:if="${formulario2.conexion==1}">
+                                <label class="form-label">¿Conexión de energia?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="conexion1" checked=""><br>
+                                <label class="form-check-label" for="conexion1" style="font-size: xx-small">Sí hay conexión</label>
+                            </div>
+                            <br>
+                            <div class="form-check form-switch" th:if="${formulario2.movilidad==0}">
+                                <label class="form-label">¿La movilidad llega al sitio?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"><br>
+                                <label class="form-check-label" for="flexSwitchCheckDefault" style="font-size: xx-small">No llega movilidad</label>
+                            </div>
+                            <div class="form-check form-switch" th:if="${formulario2.movilidad==1}">
+                                <label class="form-label">¿La movilidad llega al sitio?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked=""><br>
+                                <label class="form-check-label" for="flexSwitchCheckChecked" style="font-size: xx-small">Sí llega movilidad</label>
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Área del sitio:</label>
+                            <input th:field="*{area}" type="number" th:class="${#fields.hasErrors('area')?'form-control is-invalid':'form-control'}"/>
+                            <div class="invalid-feedback"
+                                 th:if="${#fields.hasErrors('area')}" th:errors="*{area}">
+                                Mensaje de error de area
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Observaciones:</label>
+                            <input th:field="*{observaciones}" type="text" th:class="${#fields.hasErrors('observaciones')?'form-control is-invalid':'form-control'}"/>
+                            <div class="invalid-feedback"
+                                 th:if="${#fields.hasErrors('observaciones')}" th:errors="*{observaciones}">
+                                Mensaje de error de observaciones
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                                <div id="map"></div>
+                                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                                <script>
+                                    var latitud = [[${sitio.latitud}]];
+                                    var longitud = [[${sitio.longitud}]];
+                                    let map = L.map('map').setView([latitud,longitud],18)
+                                    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                                        attribution:
+                                            'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                                    }).addTo(map);
+                                    L.marker([latitud,longitud]).addTo(map).bindPopup('Lugar').openPopup();
+                                </script>
+
+                                <script>
+                                    function centrarMapaEnCoordenadasIniciales() {
+                                        map.setView([latitud, longitud], 18);
+                                    }
+                                    var botonCentrar = L.control({ position: 'bottomright' });
+
+                                    botonCentrar.onAdd = function (map) {
+                                        var container = L.DomUtil.create('div', 'boton-centrar');
+                                        var button = L.DomUtil.create('button', 'btn btn-primary', container);
+                                        button.type = 'button';
+                                        var icono = L.DomUtil.create('i', 'bx bx-collapse', button);
+                                        L.DomEvent.on(button, 'click', centrarMapaEnCoordenadasIniciales);
+                                        return container;
+                                    };
+                                    botonCentrar.addTo(map);
+                                </script>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="imagenSubida1" class="form-label">Fotos del sitio:</label>
+                                <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                    <img id="imgPreview2" th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile" class="rounded-circle"
+                                         onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
+                                </div>
+                                <input class="form-control" type="file" name="imagenSubida1" id="imagenSubida1"
+                                       accept="image/*" onchange="previewImage(event, '#imgPreview')">
+
+                            </div>
+
+                            <button type="submit" class="btn btn-outline-primary float-end">Guardar</button>
+                        </div>
+
+
+                        <br>
+
+
+
+                        <div class="col-md-6">
+                            <div class="form-check form-switch" th:if="${formulario3.construccion==0}">
+                                <label class="form-label">¿Se realizó construcción de infraestructura?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="conexion11"><br>
+                                <label class="form-check-label" for="conexion" style="font-size: xx-small">No se realizó construcción de infraestructuras</label>
+                            </div>
+                            <div class="form-check form-switch" th:if="${formulario3.construccion==1}">
+                                <label class="form-label">¿Se realizó construcción de infraestructura?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="conexion12" checked=""><br>
+                                <label class="form-check-label" for="conexion1" style="font-size: xx-small">Sí se realizó construcción de infraestructuras</label>
+                            </div>
+                            <br>
+                            <div class="form-check form-switch" th:if="${formulario3.instalacion==0}">
+                                <label class="form-label">¿Se realizó instalaciones eléctricas?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault11"><br>
+                                <label class="form-check-label" for="flexSwitchCheckDefault" style="font-size: xx-small">No hay instalación eléctricas</label>
+                            </div>
+                            <div class="form-check form-switch" th:if="${formulario3.instalacion==1}">
+                                <label class="form-label">¿Se realizó instalaciones eléctricas?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked12" checked=""><br>
+                                <label class="form-check-label" for="flexSwitchCheckChecked" style="font-size: xx-small">Sí hay instalación eléctricas</label>
+                            </div>
+
+                            <br>
+                            <div class="form-check form-switch" th:if="${formulario3.despliegue==0}">
+                                <label class="form-label">¿Se realizó despliegue de equipos?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="despliegueEquiposNo"><br>
+                                <label class="form-check-label" for="despliegueEquiposNo" style="font-size: xx-small">No hay despliegue de equipos</label>
+                            </div>
+                            <div class="form-check form-switch" th:if="${formulario3.despliegue==1}">
+                                <label class="form-label">¿Se realizó despliegue de equipos?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="despliegueEquiposSi" checked=""><br>
+                                <label class="form-check-label" for="despliegueEquiposSi" style="font-size: xx-small">Sí hay despliegue de equipos</label>
+                            </div>
+                            <br>
+
+                            <div class="mb-3">
+                                <label class="form-label"> Selector de Tipo de transporte</label>
+                                <select class="form-select">
+                                    <option value="-1">--Selecciona un tipo--</option>
+                                    <option value="FibraOptica">Fibra Optica</option>
+                                    <option value="Microondas">Microondas</option>
+                                    <option value="Satelite">Satélite</option>
+                                </select>
+                            </div>
+                            <h6>Tecnología instalada</h6>
+                            <div class="mb-3" th:each="tecIns:${tecInsList}">
+
+                                <div th:if="${tecIns.checkTecInstalada(tecFormList)}">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""  th:id="${tecIns.getId()+'checkbox'}" checked>
+                                        <label class="form-check-label" th:text="${tecIns.getNombre()}">
+                                        </label></div>
+                                </div>
+                                <div th:unless="${tecIns.checkTecInstalada(tecFormList)}">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""  th:id="${tecIns.getId()+'checkbox'}">
+                                        <label class="form-check-label" th:text="${tecIns.getNombre()}">
+                                        </label></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Descripción de los trabajos realizados:</label>
+                                <input th:field="*{trabarealizados}" type="text" th:class="${#fields.hasErrors('trabarealizados')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('trabarealizados')}" th:errors="*{trabarealizados}">
+                                    Mensaje de error de trabajos realizados
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                    <br>
+
+
+
+
+
+
+<!--                    SE VAN  GUARDAR LOS CAMBIOS-->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-outline-danger">Guardar cambios</button>
+                    </div>
+                </form>
+
+                <h2>Formulario 2 -despliegue</h2>
+                <form method="POST" th:action="@{/tecnico/saveFormulario2}" th:object="${formulario2}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+
+                </form>
+
+                <h2>Formulario 3 -despliegue</h2>
+                <form method="POST" th:action="@{/tecnico/saveFormulario3}" th:object="${formulario3}" enctype="multipart/form-data" style="margin-bottom: -35px;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-check form-switch" th:if="${formulario3.construccion==0}">
+                                <label class="form-label">¿Se realizó construcción de infraestructura?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="conexion"><br>
+                                <label class="form-check-label" for="conexion" style="font-size: xx-small">No se realizó construcción de infraestructuras</label>
+                            </div>
+                            <div class="form-check form-switch" th:if="${formulario3.construccion==1}">
+                                <label class="form-label">¿Se realizó construcción de infraestructura?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="conexion1" checked="" name=""><br>
+                                <label class="form-check-label" for="conexion1" style="font-size: xx-small">Sí se realizó construcción de infraestructuras</label>
+                            </div>
+                            <br>
+                            <div class="form-check form-switch" th:if="${formulario3.instalacion==0}">
+                                <label class="form-label">¿Se realizó instalaciones eléctricas?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"><br>
+                                <label class="form-check-label" for="flexSwitchCheckDefault" style="font-size: xx-small">No hay instalación eléctricas</label>
+                            </div>
+                            <div class="form-check form-switch" th:if="${formulario3.instalacion==1}">
+                                <label class="form-label">¿Se realizó instalaciones eléctricas?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked=""><br>
+                                <label class="form-check-label" for="flexSwitchCheckChecked" style="font-size: xx-small">Sí hay instalación eléctricas</label>
+                            </div>
+
+                            <br>
+                            <div class="form-check form-switch" th:if="${formulario3.despliegue==0}">
+                                <label class="form-label">¿Se realizó despliegue de equipos?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="despliegueEquiposNo"><br>
+                                <label class="form-check-label" for="despliegueEquiposNo" style="font-size: xx-small">No hay despliegue de equipos</label>
+                            </div>
+                            <div class="form-check form-switch" th:if="${formulario3.despliegue==1}">
+                                <label class="form-label">¿Se realizó despliegue de equipos?:</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="despliegueEquiposSi" checked=""><br>
+                                <label class="form-check-label" for="despliegueEquiposSi" style="font-size: xx-small">Sí hay despliegue de equipos</label>
+                            </div>
+                            <br>
+
+                            <div class="mb-3">
+                                <label class="form-label"> Selector de Tipo de transporte</label>
+                                <select class="form-select">
+                                    <option value="-1">--Selecciona un tipo--</option>
+                                    <option value="FibraOptica">Fibra Optica</option>
+                                    <option value="Microondas">Microondas</option>
+                                    <option value="Satelite">Satélite</option>
+                                </select>
+                            </div>
+                            <h6>Tecnología instalada</h6>
+                            <div class="mb-3" th:each="tecIns:${tecInsList}">
+
+                                <div th:if="${tecIns.checkTecInstalada(tecFormList)}">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""  th:id="${tecIns.getId()+'checkbox'}" checked>
+                                        <label class="form-check-label" th:text="${tecIns.getNombre()}">
+                                        </label></div>
+                                </div>
+                                <div th:unless="${tecIns.checkTecInstalada(tecFormList)}">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value=""  th:id="${tecIns.getId()+'checkbox'}">
+                                        <label class="form-check-label" th:text="${tecIns.getNombre()}">
+                                        </label></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Descripción de los trabajos realizados:</label>
+                                <input th:field="*{trabarealizados}" type="text" th:class="${#fields.hasErrors('trabarealizados')?'form-control is-invalid':'form-control'}"/>
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('trabarealizados')}" th:errors="*{trabarealizados}">
+                                    Mensaje de error de trabajos realizados
+                                </div>
+                            </div>
+
+                            </div>
+
+
+
+
+                            <br><br>
+                            <div class="col-md-6">
+
+                            <div class="mb-3">
+                                <label for="imagenSubida1" class="form-label">Fotos del sitio:</label>
+                                <div class="card mx-auto" style="width: 250px; max-height: 250px">
+                                    <img id="imgPreview2" th:src="@{|/file/*{archivo.idArchivos}|}" alt="Profile" class="rounded-circle"
+                                         onerror="this.onerror=null; this.src='https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png'">
+                                </div>
+                                <input class="form-control" type="file" name="imagenSubida1" id="imagenSubida1"
+                                       accept="image/*" onchange="previewImage(event, '#imgPreview')">
+
+                            </div>
+                            <button type="submit" class="btn btn-outline-primary float-end">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+
+
             </div>
         </div>
-
-       <center><div class="row align-items-md-stretch">
-            <div class="col-md-4">
-                <div class="h-100 p-5 rounded-3" style="background-color: #202a3b; color:white">
-                    <img style="width: 65%;height: 65%" src="https://us.123rf.com/450wm/massimosanti/massimosanti1802/massimosanti180200003/95316837-hombre-trabajando-los-t%C3%A9cnicos-est%C3%A1n-reparando-sistemas-de-transmisi%C3%B3n-de-alto-voltaje-en-los.jpg" class="img-fluid" alt="llegadasitio">
-                    <br><br>
-                    <h5><b>Llegada a sitio</b></h5>
-                    <a class="btn btn-outline-light" type="button" th:href="@{'/tecnico/formulario1?id='+${formulario.ticket.idTickets}}">Formulario 1</a>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="h-100 p-5 bg-body-tertiary border rounded-3">
-                    <img style="width: 65%;height:65%"  src="https://clarity.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/15/14620/7281" class="img-fluid" alt="validación">
-                    <br> <br>
-                    <h5><b>Validación de sitio</b></h5>
-                    <a class="btn btn-outline-secondary" type="button" th:href="@{'/tecnico/formulario2?id='+${formulario.ticket.idTickets}}">Formulario 2</a>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="h-100 p-5 rounded-3" style="background-color: #202a3b; color:white">
-                    <img style="width:65%;height: 65%"  src="https://www.osiptel.gob.pe/media/ixnh1ufj/21613752-50b7-4024-975f-26de7c512368.jpg" class="img-fluid" alt="trabajo">
-                    <br><br>
-                    <h5><b>Trabajo realizado</b></h5>
-                    <a class="btn btn-outline-light" type="button" th:href="@{'/tecnico/formulario3?id='+${formulario.ticket.idTickets}}">Formulario 3</a>
-                </div>
-            </div>
-        </div></center>
     </div>
+
+    <a th:if="${formulario1.ticket.idTipoTicket.idTipoTicket == 2}" th:href="@{'/tecnico/formulario?id='+${formulario1.idFormularios}}" class="btn btn-outline-danger">Regresar</a>
+    <a th:if="${formulario1.ticket.idTipoTicket.idTipoTicket == 1}" th:href="@{'/tecnico/formularioMantenimiento?id='+${formulario1.ticket.idTickets}}" class="btn btn-outline-danger">Regresar</a>
 </main>
 
 

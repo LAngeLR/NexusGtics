@@ -1189,60 +1189,54 @@ public class TecnicoController {
         List<Ticket> ticketList = ticketRepository.findAll();
         model.addAttribute("listaTicket", ticketList);
 
-        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
-            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
-            if (formulario1.getIdFormularios() == null) {
-                return "Tecnico/formulario";
-            } else {
+
+        if(file.getSize()>1 || file2.getSize()>1){
+            if (file.getOriginalFilename().length() > 40 || file2.getOriginalFilename().length() > 40) {
+                model.addAttribute("msgCadena", "El nombre del archivo no debe sobrepasar los 45 caracteres");
+                return "Tecnico/formulario1";
+            }
+            String extensionValida = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+            String extensionValida2 = file2.getOriginalFilename().substring(file2.getOriginalFilename().lastIndexOf(".")+1);
+            if (!extensionValida.equals("png") && !extensionValida.equals("jpg") && !extensionValida.equals("jpeg") &&
+                    !extensionValida2.equals("png") && !extensionValida2.equals("jpg") && !extensionValida2.equals("jpeg")) {
+                model.addAttribute("msgExtension", "Solo se permiten archivos con extensión png, jpg y jpeg");
                 return "Tecnico/formulario1";
             }
         }
+
+
+        if (file.getSize() > 0 && !file.getContentType().startsWith("image/") && !file.isEmpty()) {
+            model.addAttribute("msgImagen", "El archivo subido no es una imagen válida");
+            return "Tecnico/formulario1";
+        }
         if (file2.getSize() > 0 && !file2.getContentType().startsWith("image/") && !file2.isEmpty()) {
             model.addAttribute("msgImagen1", "El archivo subido no es una imagen válida");
-            if (formulario1.getIdFormularios() == null) {
-                return "Tecnico/formulario";
-            } else {
-                return "Tecnico/formulario1";
-            }
+            return "Tecnico/formulario1";
         }
 
         String fileName1 = file.getOriginalFilename();
         if (fileName1.contains("..") && !file.isEmpty()) {
             model.addAttribute("msgImagen", "No se permiten '..' en el archivo ");
-            if (formulario1.getIdFormularios() == null) {
-                return "Tecnico/formulario";
-            } else {
-                return "Tecnico/formulario1";
-            }
+            return "Tecnico/formulario1";
         }
+
         String fileName2 = file2.getOriginalFilename();
         if (fileName2.contains("..") && !file2.isEmpty()) {
             model.addAttribute("msgImagen1", "No se permiten '..' en el archivo ");
-            if (formulario1.getIdFormularios() == null) {
-                return "Tecnico/formulario";
-            } else {
-                return "Tecnico/formulario1";
-            }
+            return "Tecnico/formulario1";
         }
 
         int maxFileSize = 10485760;
         if (file.getSize() > maxFileSize && !file.isEmpty()) {
             System.out.println(file.getSize());
             model.addAttribute("msgImagen", "El archivo subido excede el tamaño máximo permitido (10MB).");
-            if (formulario1.getIdFormularios() == null) {
-                return "Tecnico/formulario";
-            } else {
-                return "redirect:/tecnico/formulario1";
-            }
+            return "redirect:/tecnico/formulario1";
         }
+
         if (file2.getSize() > maxFileSize && !file2.isEmpty()) {
             System.out.println(file2.getSize());
             model.addAttribute("msgImagen1", "El archivo subido excede el tamaño máximo permitido (10MB).");
-            if (formulario1.getIdFormularios() == null) {
-                return "Tecnico/formulario";
-            } else {
-                return "redirect:/tecnico/formulario1";
-            }
+            return "redirect:/tecnico/formulario1";
         }
 
 
@@ -1252,15 +1246,23 @@ public class TecnicoController {
             }
 
             try{
-                /*Si file contiene algo --> Guardarlo*/
                 if(!file.isEmpty() && !file2.isEmpty()){
-                    // Obtenemos el nombre del archivo
                     String fileName = file.getOriginalFilename();
+                    String fileName22 = file2.getOriginalFilename();
                     String extension1 = "";
+                    String extension2 = "";
+
                     int i = fileName.lastIndexOf('.');
                     if (i > 0) {
                         extension1 = fileName.substring(i+1);
                     }
+
+                    int j = fileName22.lastIndexOf('.');
+                    if (j > 0) {
+                        extension2 = fileName22.substring(j+1);
+                    }
+
+
 
                     Archivo archivo = formulario1.getArchivo();
                     archivo.setNombre(fileName);
@@ -1272,9 +1274,9 @@ public class TecnicoController {
                     String nombreArchivo = "archivo-"+archivo1.getIdArchivos()+"."+extension1;
                     archivo1.setNombre(nombreArchivo);
                     archivoRepository.save(archivo1);
-                    archivoRepository.save(archivo2);
+//                    archivoRepository.save(archivo2);
                     uploadObject(archivo1);
-                    uploadObject(archivo2);
+//                    uploadObject(archivo2);
                 }
                 if (formulario1.getIdFormularios() == null) {
                     attr.addFlashAttribute("msg", "El formulario 1 se ha guardado exitosamente");

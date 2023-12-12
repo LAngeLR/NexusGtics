@@ -65,6 +65,7 @@
                     <div class="alert alert-danger" role="alert" th:if="${msgFormulario2 != null}" th:text="${msgFormulario2}">
                         A simple success alert—check it out!
                     </div>
+
                     <form method="POST" th:action="@{/tecnico/saveFormulario2}" th:object="${formulario2}" enctype="multipart/form-data" style="margin-bottom: -35px;">
                         <div class="row">
                             <div class="col-md-6">
@@ -180,6 +181,7 @@
                             </div>
                         </div>
                     </form>
+
                 </div>
                 <br><br>
 
