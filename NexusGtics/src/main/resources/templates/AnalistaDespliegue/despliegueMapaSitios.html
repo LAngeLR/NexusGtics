@@ -21,14 +21,14 @@
 
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Mapa de Sitios</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/analistaDespliegue/}">Inicio</a></li>
-                <li class="breadcrumb-item active" >Mapas</li>
+                <li class="breadcrumb-item">Sitios</li>
                 <li class="breadcrumb-item active">Mapa de sitios</li>
             </ol>
         </nav>
+        <h1>Mapa de Sitios</h1>
+
     </div><!-- End Page Title -->
 
     <section class="section profile">
@@ -87,7 +87,7 @@
 
 
                             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                                attribution: ''
                             }).addTo(map);
 
                             let defaultCoords = [-12.0690694, -77.0786442];
