@@ -578,7 +578,6 @@ public class SupervisorController {
                 model.addAttribute("tickets", ticket);
                 model.addAttribute("comentario",comentarioRepository.obtenerUltimoComentario(ticket.getIdTickets()));
                 model.addAttribute("tecnicoLider",user);
-                model.addAttribute("tiempoTranscurrido",historialTicketRepository.tiempoTranscurrido(id));
 
                 //---mandar tiempo transcurrido---
                 ZoneId zonaHoraria = ZoneId.of("GMT-5");

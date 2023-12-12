@@ -56,7 +56,7 @@
             </div>
           </div>
         </div>
-        <button th:if="${ticket.idSupervisorEncargado!= null && ticket.idSupervisorEncargado.id == session.usuario.id}" type="button" class="btn btn-outline-danger mx-4" onclick="scrollToSupervisores()">Reasignar Ticket</button>
+        <button th:if="${ticket.idSupervisorEncargado!= null && ticket.idSupervisorEncargado.id == session.usuario.id}" type="button" class="btn btn-outline-success me-2" onclick="mostrarCombobox()">Reasignar</button>
         <script>
           function scrollToSupervisores() {
             var seccionSupervisores = document.getElementById("seccionSupervisores");
@@ -70,7 +70,7 @@
     </div>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a th:href="@{/supervisor/listaTickets}">Lista Tickets</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/supervisor/listaTicketsNuevos}">Lista Tickets sin asignar</a></li>
         <li class="breadcrumb-item active">Detalles Ticket</li>
       </ol>
     </nav>
@@ -246,7 +246,7 @@
     </div>
 
     <div class="col-xl-12">
-      <div class="card" th:if="${ticket.idSupervisorEncargado!= null && ticket.idSupervisorEncargado.id == session.usuario.id}">
+      <div class="card" id="cartita" th:if="${ticket.idSupervisorEncargado!= null && ticket.idSupervisorEncargado.id == session.usuario.id}" style="display: none;">
         <div class="card-body pt-3">
 
           <h5 class="card-title" style="color: #095444">Seleccionar Supervisor</h5>
@@ -289,6 +289,14 @@
 
 
     </div>
+    <script>
+      function mostrarCombobox() {
+        var combobox = document.getElementById("cartita");
+        combobox.style.display = "block";
+        combobox.scrollIntoView({ behavior: "smooth" });
+      }
+    </script>
+
     </div>
     <!-- End Bordered Tabs -->
 

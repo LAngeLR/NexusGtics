@@ -36,7 +36,7 @@
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/supervisor/listaTickets}">Lista Tickets</a></li>
-                <li class="breadcrumb-item" th:if="${ticket.estado==2}"><a th:href="@{'/supervisor/ticketNuevo?id=' + ${ticket.idTickets}}">Detalles Ticket</a></li>
+                <li class="breadcrumb-item" th:if="${ticket.estado==2}"><a th:href="@{'/supervisor/ticketAsignar?id=' + ${ticket.idTickets}}">Detalles Ticket</a></li>
                 <li class="breadcrumb-item" th:if="${ticket.estado==3 || ticket.estado==4 || ticket.estado==5 }"><a th:href="@{'/supervisor/ticketProceso?id=' + ${ticket.idTickets}}">Detalles Ticket</a></li>
                 <li class="breadcrumb-item" th:if="${ticket.estado==7 || ticket.estado==6}"><a th:href="@{'/supervisor/ticketCerrado?id=' + ${ticket.idTickets}}">Detalles Ticket</a></li>
                 <li class="breadcrumb-item active">Comentarios</li>
