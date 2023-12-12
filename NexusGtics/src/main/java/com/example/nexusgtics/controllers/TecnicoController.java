@@ -553,12 +553,9 @@ public class TecnicoController {
                 return "redirect:/tecnico/ticketasignado";
             }
             Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
-            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
-            if (optionalTicket1.isPresent() && optionalFormulario.isPresent()) {
+            if (optionalTicket1.isPresent()) {
                 Ticket ticket = optionalTicket1.get();
-                Formulario formulario = optionalFormulario.get();
                 model.addAttribute("ticket", ticket);
-                model.addAttribute("formulario", formulario);
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
 
                 //---mandar tiempo transcurrido---
@@ -746,12 +743,9 @@ public class TecnicoController {
                 return "redirect:/tecnico/ticketasignado";
             }
             Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
-            Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
-            if (optionalTicket1.isPresent() && optionalFormulario.isPresent()) {
+            if (optionalTicket1.isPresent()) {
                 Ticket ticket = optionalTicket1.get();
-                Formulario formulario = optionalFormulario.get();
                 model.addAttribute("ticket", ticket);
-                model.addAttribute("formulario", formulario);
                 model.addAttribute("listaTicket", ticketRepository.listarEstado());
 
                 //---mandar tiempo transcurrido---
