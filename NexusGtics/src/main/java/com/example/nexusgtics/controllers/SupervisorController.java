@@ -1,8 +1,5 @@
 package com.example.nexusgtics.controllers;
-
-import com.example.nexusgtics.dto.DashboardGraficoDto;
 import com.example.nexusgtics.dto.DetalleCuadrillaDto;
-import com.example.nexusgtics.dto.HistorialTicketDto;
 import com.example.nexusgtics.dto.ListaCuadrillaCompletaDto;
 import com.example.nexusgtics.entity.*;
 import com.example.nexusgtics.repository.*;
