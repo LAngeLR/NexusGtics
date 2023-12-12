@@ -1,4 +1,5 @@
 package com.example.nexusgtics.controllers;
+import com.example.nexusgtics.controllers.Email.CorreoService;
 import com.example.nexusgtics.dto.DetalleCuadrillaDto;
 import com.example.nexusgtics.dto.ListaCuadrillaCompletaDto;
 import com.example.nexusgtics.entity.*;
@@ -23,6 +24,8 @@ import static com.example.nexusgtics.controllers.GcsController.uploadObject;
 @Controller
 @RequestMapping("/supervisor")
 public class SupervisorController {
+    @Autowired
+    private CorreoService correoService;
     @Autowired
     private HttpSession session;
     private final CuadrillaRepository cuadrillaRepository;
@@ -340,6 +343,7 @@ public class SupervisorController {
     @GetMapping( {"/","","supervisor"})
     public String paginaPrincipal(Model model){
         model.addAttribute("currentPage", "Inicio");
+        correoService.enviarCorreo("a20192832@pucp.edu.pe", "Prueba", "Solo para probar si realmente funciona el envio de correo");
         return "Supervisor/menuSupervisor";
     }
 
