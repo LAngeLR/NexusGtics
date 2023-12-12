@@ -106,23 +106,78 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Reportes de las cuadrillas <span>Avance de las cuadrillas durante el día</span></h5>
+                                <h5 class="card-title">Reportes de tickets por despliegue <span>Los ultimos 7 meses</span></h5>
 
                                 <!-- Line Chart -->
                                 <div id="reportsChart"></div>
 
                                 <script>
                                     document.addEventListener("DOMContentLoaded", () => {
+                                        const meses = [
+                                            "Enero",
+                                            "Febrero",
+                                            "Marzo",
+                                            "Abril",
+                                            "Mayo",
+                                            "Junio",
+                                            "Julio",
+                                            "Agosto",
+                                            "Septiembre",
+                                            "Octubre",
+                                            "Noviembre",
+                                            "Diciembre"
+                                        ];
+
+                                        const obtenerNombresMeses = () => {
+                                            const fechaActual = new Date();
+                                            const mesesActuales = [];
+
+                                            for (let i = 0; i <= 7; i++) {
+                                                const fechaMesAnterior = new Date();
+                                                fechaMesAnterior.setMonth(fechaActual.getMonth() - i);
+                                                const nombreMes = meses[fechaMesAnterior.getMonth()];
+                                                mesesActuales.push(nombreMes);
+                                            }
+
+                                            return mesesActuales.reverse();
+                                        };
                                         new ApexCharts(document.querySelector("#reportsChart"), {
                                             series: [{
-                                                name: 'Cuadrilla 1',
-                                                data: [31, 40, 28, 51, 42, 82, 56],
+                                                name: 'UNO',
+                                                data: [
+                                                    [[${TicketXMes47}]],
+                                                    [[${TicketXMes46}]],
+                                                    [[${TicketXMes45}]],
+                                                    [[${TicketXMes44}]],
+                                                    [[${TicketXMes43}]],
+                                                    [[${TicketXMes42}]],
+                                                    [[${TicketXMes41}]],
+                                                    [[${TicketXMes40}]]
+                                                ],
                                             }, {
-                                                name: 'Cuadrilla 2',
-                                                data: [11, 32, 45, 32, 34, 52, 41]
+                                                name: '4T',
+                                                data: [
+                                                    [[${TicketXMes27}]],
+                                                    [[${TicketXMes26}]],
+                                                    [[${TicketXMes25}]],
+                                                    [[${TicketXMes24}]],
+                                                    [[${TicketXMes23}]],
+                                                    [[${TicketXMes22}]],
+                                                    [[${TicketXMes21}]],
+                                                    [[${TicketXMes20}]]
+                                                ],
                                             }, {
-                                                name: 'Cuadrilla3',
-                                                data: [15, 11, 32, 18, 9, 24, 11]
+                                                name: 'Huawei',
+                                                data: [
+                                                    [[${TicketXMes37}]],
+                                                    [[${TicketXMes36}]],
+                                                    [[${TicketXMes35}]],
+                                                    [[${TicketXMes34}]],
+                                                    [[${TicketXMes33}]],
+                                                    [[${TicketXMes32}]],
+                                                    [[${TicketXMes31}]],
+                                                    [[${TicketXMes30}]]
+                                                ],
                                             }],
                                             chart: {
                                                 height: 350,
@@ -152,14 +207,9 @@
                                                 width: 2
                                             },
                                             xaxis: {
-                                                type: 'datetime',
-                                                categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+                                                type: 'category',
+                                                categories: obtenerNombresMeses()
                                             },
-                                            tooltip: {
-                                                x: {
-                                                    format: 'dd/MM/yy HH:mm'
-                                                },
-                                            }
                                         }).render();
                                     });
                                 </script>
@@ -172,57 +222,122 @@
 
                     <!-- Recent Sales -->
                     <div class="col-12">
-                        <div class="card recent-sales overflow-auto">
+                        <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Solicitudes Recientes | <span th:text="'Empresa: ' + ${session.usuario.empresa.nombre}"></span></h5>
+                                <h5 class="card-title">Reportes de tickets por Mantenimiento <span>Los ultimos 7 meses</span></h5>
 
-                                <table class="table table-borderless datatable">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Usuario</th>
-                                        <th scope="col">Tipo de Ticket</th>
-                                        <th scope="col">Fecha Creación</th>
-                                        <th scope="col">Prioridad</th>
-                                        <th scope="col">Ver más</th>
+                                <!-- Line Chart -->
+                                <div id="reportsChart1"></div>
 
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each=" ticket, info : ${listaTickets}">
-                                        <th th:text="${info.index + 1}"></th>
-                                        <td th:text="${ticket.usuarioSolicitante}"></td>
-                                        <td th:text="${ticket.idTipoTicket.nombreTipoTicket}"></td>
-                                        <td th:text="${ticket.fechaCreacion}"></td>
-                                        <td>
-                                            <div th:if="${ticket.prioridad == 'Baja prioridad'}">
-                                                <span class="badge text-bg-info" th:text="${ticket.prioridad}">Baja Prioridad</span>
-                                            </div>
-                                            <div th:if="${ticket.prioridad == 'No critico'}">
-                                                <span class="badge text-bg-success" th:text="${ticket.prioridad}">Baja Prioridad</span>
-                                            </div>
-                                            <div th:if="${ticket.prioridad == 'Urgente'}">
-                                                <span class="badge text-bg-danger" th:text="${ticket.prioridad}">Baja Prioridad</span>
-                                            </div>
-                                            <div th:if="${ticket.prioridad == 'Hacer'}">
-                                                <span class="badge text-bg-warning" th:text="${ticket.prioridad}">Baja Prioridad</span>
-                                            </div>
-                                        </td>
-                                        <td th:if="${ticket.estado==1}"><center><a type="button" class="btn btn-light btn-sm" th:href="@{'/supervisor/ticketNuevo?id=' + ${ticket.idTickets}}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-                                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
-                                            </svg>
-                                        </a></center></td>
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", () => {
+                                        const meses1 = [
+                                            "Enero",
+                                            "Febrero",
+                                            "Marzo",
+                                            "Abril",
+                                            "Mayo",
+                                            "Junio",
+                                            "Julio",
+                                            "Agosto",
+                                            "Septiembre",
+                                            "Octubre",
+                                            "Noviembre",
+                                            "Diciembre"
+                                        ];
 
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                        const obtenerNombresMeses1 = () => {
+                                            const fechaActual1 = new Date();
+                                            const mesesActuales1 = [];
+
+                                            for (let a = 0; a <= 7; a++) {
+                                                const fechaMesAnterior1 = new Date();
+                                                fechaMesAnterior1.setMonth(fechaActual1.getMonth() - a);
+                                                const nombreMes1 = meses1[fechaMesAnterior1.getMonth()];
+                                                mesesActuales1.push(nombreMes1);
+                                            }
+
+                                            return mesesActuales1.reverse();
+                                        };
+                                        new ApexCharts(document.querySelector("#reportsChart1"), {
+                                            series: [{
+                                                name: 'UNO',
+                                                data: [
+                                                    [[${TicketXMeses47}]],
+                                                    [[${TicketXMeses46}]],
+                                                    [[${TicketXMeses45}]],
+                                                    [[${TicketXMeses44}]],
+                                                    [[${TicketXMeses43}]],
+                                                    [[${TicketXMeses42}]],
+                                                    [[${TicketXMeses41}]],
+                                                    [[${TicketXMeses40}]]
+                                                ],
+                                            }, {
+                                                name: '4T',
+                                                data: [
+                                                    [[${TicketXMeses27}]],
+                                                    [[${TicketXMeses26}]],
+                                                    [[${TicketXMeses25}]],
+                                                    [[${TicketXMeses24}]],
+                                                    [[${TicketXMeses23}]],
+                                                    [[${TicketXMeses22}]],
+                                                    [[${TicketXMeses21}]],
+                                                    [[${TicketXMeses20}]]
+                                                ],
+                                            }, {
+                                                name: 'Huawei',
+                                                data: [
+                                                    [[${TicketXMeses37}]],
+                                                    [[${TicketXMeses36}]],
+                                                    [[${TicketXMeses35}]],
+                                                    [[${TicketXMeses34}]],
+                                                    [[${TicketXMeses33}]],
+                                                    [[${TicketXMesses32}]],
+                                                    [[${TicketXMeses31}]],
+                                                    [[${TicketXMeses30}]]
+                                                ],
+                                            }],
+                                            chart: {
+                                                height: 350,
+                                                type: 'area',
+                                                toolbar: {
+                                                    show: false
+                                                },
+                                            },
+                                            markers: {
+                                                size: 4
+                                            },
+                                            colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                                            fill: {
+                                                type: "gradient",
+                                                gradient: {
+                                                    shadeIntensity: 1,
+                                                    opacityFrom: 0.3,
+                                                    opacityTo: 0.4,
+                                                    stops: [0, 90, 100]
+                                                }
+                                            },
+                                            dataLabels: {
+                                                enabled: false
+                                            },
+                                            stroke: {
+                                                curve: 'smooth',
+                                                width: 2
+                                            },
+                                            xaxis: {
+                                                type: 'category',
+                                                categories: obtenerNombresMeses1()
+                                            },
+                                        }).render();
+                                    });
+                                </script>
+                                <!-- End Line Chart -->
 
                             </div>
 
                         </div>
-                    </div><!-- End Recent Sales -->
+                    </div>
+                    <!-- End Recent Sales -->
 
                 </div>
             </div><!-- End Left side columns -->

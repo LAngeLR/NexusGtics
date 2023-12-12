@@ -879,6 +879,20 @@ public class SupervisorController {
         model.addAttribute("tecnicosMes",usuarioRepository.tecnicosEsteMes(6,u.getEmpresa().getIdEmpresas()));
         model.addAttribute("tecnicosPasados",usuarioRepository.tecnicosMesPasado(6,u.getEmpresa().getIdEmpresas()));
 
+        for (int i : new int[]{4, 2, 3}) {
+            for (int j = 0; j <= 7; j++) {
+                String attributeName = String.format("TicketXMes%d%d", i, j);
+                model.addAttribute(attributeName, ticketRepository.TicketXMesDespliegye(i, j));
+
+            }
+        }
+        for (int a : new int[]{4, 2, 3}) {
+            for (int b = 0; b <= 7; b++) {
+                String attributeName = String.format("TicketXMeses%d%d", a, b);
+                model.addAttribute(attributeName, ticketRepository.TicketXMesMantenimiento(a, b));
+            }
+        }
+
         /*
         List<DashboardGraficoDto> graficoData = historialTicketRepository.grafico();
 
