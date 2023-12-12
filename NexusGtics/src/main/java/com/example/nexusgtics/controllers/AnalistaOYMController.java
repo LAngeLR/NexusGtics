@@ -697,6 +697,72 @@ public class AnalistaOYMController {
 
     }
 
+
+    @PostMapping("/updateTicket")
+    public String updateTicket(@ModelAttribute("ticket")  @Valid Ticket ticket,
+                              BindingResult bindingResult, Model model, RedirectAttributes attr){
+        try {
+
+            Integer idTicket = ticket.getIdTickets();
+            Optional<Ticket> optTicket = ticketRepository.findById(idTicket);
+
+            if (optTicket.isPresent()){
+
+                Ticket ticketBD = optTicket.get();
+
+                if(ticketBD.getIdEmpresaAsignada() == null || ticket.getIdEmpresaAsignada().equals("-1")){
+                    model.addAttribute("msgEmpresa", "Selecciona una Empresa");
+                    model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+                    model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                    return "AnalistaOYM/oymEditarTicket";
+                }
+                if(ticketBD.getIdSitios() == null || ticket.getIdSitios().equals("-1")){
+                    model.addAttribute("msgSitio", "Selecciona un Sitio de Despliegue");
+                    model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+                    model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                    return "AnalistaOYM/oymEditarTicket";
+                }
+//                if(ticketBD.getDescripcion() == null){
+//                    model.addAttribute("msgDescrip", "La descripcion debe estar llena");
+//                    return "AnalistaOYM/oymEditarTicket";
+//                }
+//                if(ticketBD.getUsuarioSolicitante() == null){
+//                    model.addAttribute("msgUser", "Por favor indica el Usuario Solicitante");
+//                    return "AnalistaOYM/oymEditarTicket";
+//                }
+                if(ticketBD.getPrioridad() == null){
+                    model.addAttribute("msgPrio", "Selecciona la prioridad del Ticket");
+                    model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+                    model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                    return "AnalistaOYM/oymEditarTicket";
+                }
+                if (!bindingResult.hasErrors()) {
+                    if (ticket.getIdSitios() != null) {
+                        attr.addFlashAttribute("msg2", "El ticket ha sido actualizado exitosamente");
+                    }
+                    ticketBD.setIdEmpresaAsignada(ticket.getIdEmpresaAsignada());
+                    ticketBD.setIdSitios(ticket.getIdSitios());
+                    ticketBD.setDescripcion(ticket.getDescripcion());
+                    ticketBD.setUsuarioSolicitante(ticket.getUsuarioSolicitante());
+                    ticketBD.setPrioridad(ticket.getPrioridad());
+
+                    ticketRepository.save(ticketBD);
+                    return "redirect:/analistaOYM/ticket";
+                }
+                else {
+                    model.addAttribute("listaEmpresa", empresaRepository.noNexus());
+                    model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
+                    System.out.println("se mando en ticket, Binding");
+                    return "AnalistaOYM/oymEditarTicket";
+                }
+            } else {
+
+                return "redirect:/analistaOYM";
+            }
+        } catch (NumberFormatException e){
+            return "redirect:/analistaOYM/ticket";
+        }
+    }
     @GetMapping("/editarTicket")
     public String editarTicket(Model model, @RequestParam("id") int id){
 
@@ -704,7 +770,7 @@ public class AnalistaOYMController {
         if(optTicket.isPresent()){
             Ticket ticket = optTicket.get();
             model.addAttribute("ticket", ticket);
-            model.addAttribute("listaEmpresa", empresaRepository.findAll());
+            model.addAttribute("listaEmpresa", empresaRepository.noNexus());
             model.addAttribute("listaSitios", sitioRepository.listaDeSitios());
             return "AnalistaOYM/oymEditarTicket";
 
