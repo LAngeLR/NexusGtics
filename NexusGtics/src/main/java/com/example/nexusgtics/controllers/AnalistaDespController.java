@@ -47,6 +47,8 @@ public class AnalistaDespController {
     final ArchivoSitioRepository archivoSitioRepository;
     final TecnicosCuadrillaRepository tecnicosCuadrillaRepository;
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private TipoticketRepository tipoticketRepository;
 
 
     public AnalistaDespController(TicketRepository ticketRepository, ComentarioRepository comentarioRepository,
@@ -831,6 +833,45 @@ public class AnalistaDespController {
 
         ticket.setReasignado(0);
         ticketRepository.save(ticket);
+        int a =1;
+        float flotante = (float) a;
+        Archivo archivo = new Archivo();
+
+        Optional<Archivo> optArchivo = archivoRepository.findById(u.getArchivo().getIdArchivos());
+        Archivo arch = optArchivo.get();
+
+        Optional<Tipoticket> opt1 = tipoticketRepository.findById(1);
+        Tipoticket tt1 = opt1.get();
+
+        Formulario formulario = new Formulario();
+        formulario.setFechaLlenado(Instant.now());
+        formulario.setDescripcion("-");
+        formulario.setConfirmacion(Boolean.TRUE);
+        formulario.setTecnico(u);
+        formulario.setArchivo(arch);
+        formulario.setTicket(ticket);
+        formulario.setTipoticket(tt1);
+        formulario.setHrelevantes("-");
+        formulario.setConexion(Boolean.TRUE);
+        formulario.setMovilidad(Boolean.TRUE);
+        formulario.setNomredantario("-");
+        formulario.setDni(1);
+        formulario.setArea(flotante);
+        formulario.setObservaciones("-");
+        formulario.setConstruccion(Boolean.TRUE);
+        formulario.setInstalacion(Boolean.TRUE);
+        formulario.setDespliegue(Boolean.TRUE);
+        formulario.setTrabarealizados("-");
+        formulario.setEquipoencendido(Boolean.TRUE);
+        formulario.setEquipoconectado(Boolean.TRUE);
+        formulario.setSituacion("-");
+        formulario.setAcciones("-");
+        formulario.setBateriasestado(Boolean.TRUE);
+        formulario.setAveria("-");
+
+        formularioRepository.save(formulario);
+
+
         attr.addFlashAttribute("msg1", "El ticket ha sido creado exitosamente por el usuario: " + ticket.getUsuarioSolicitante());
 
         //guardar también en historialTicket

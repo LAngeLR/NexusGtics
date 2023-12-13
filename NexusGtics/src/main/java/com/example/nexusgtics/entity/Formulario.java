@@ -52,8 +52,6 @@ public class Formulario implements Serializable {
     @Size(max = 45)
     @NotNull
     @Column(name = "hrelevantes", nullable = false, length = 45)
-    @NotBlank(message = "El campo no debe estar vacío")
-    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "Los hechos relevantes solo debe contener letras")
     private String hrelevantes;
 
     @NotNull
@@ -67,8 +65,6 @@ public class Formulario implements Serializable {
     @Size(max = 45)
     @NotNull
     @Column(name = "nomredantario", nullable = false, length = 45)
-    @NotBlank(message = "El campo no debe estar vacío")
-    @Pattern(regexp = "^[A-Za-zñáéíóúÁÉÍÓÚ ]+$", message = "El nombre del arrendantario solo debe contener letras")
     private String nomredantario;
 
     @NotNull
