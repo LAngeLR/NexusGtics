@@ -719,6 +719,7 @@ public class AnalistaOYMController {
         Tipoticket tt1 = opt1.get();
 
         Formulario formulario = new Formulario();
+        formulario.setIdFormularios(ticket. getIdTickets());
         formulario.setFechaLlenado(Instant.now());
         formulario.setDescripcion("-");
         formulario.setConfirmacion(Boolean.TRUE);

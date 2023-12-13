@@ -733,6 +733,7 @@ public class TecnicoController {
             if (id <= 0 || !ticketRepository.existsById(id)) {
                 return "redirect:/tecnico/ticketasignado";
             }
+            int idF = 26+ id;
             Optional<Ticket> optionalTicket1 = ticketRepository.findById(id);
             Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
             if (optionalTicket1.isPresent() && optionalFormulario.isPresent()) {
@@ -1566,14 +1567,12 @@ public class TecnicoController {
             }
             Optional<Formulario> optionalFormulario = formularioRepository.findById(id);
             Optional<Sitio> sitioOptional = sitioRepository.findById(id);
-            if (optionalFormulario.isPresent() && sitioOptional.isPresent()) {
+            if (optionalFormulario.isPresent() ) {
                 formulario = optionalFormulario.get();
-                Sitio sitio = sitioOptional.get();
                 Usuario u = (Usuario) httpSession.getAttribute("usuario");
                 Integer idCuadrilla = tecnicosCuadrillaRepository.obtenerCuadrillaId(u.getId());
                 model.addAttribute("cuadrilla",idCuadrilla);
                 model.addAttribute("formulario", formulario);
-                model.addAttribute("sitio", sitio);
                 model.addAttribute("idTick", formularioRepository.obtenerid(id));
                 return "Tecnico/formularioCerrado";
             } else {
